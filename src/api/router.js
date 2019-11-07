@@ -53,7 +53,7 @@ exports.routers = (app) => {
 
         app.models.user.create(body, (err, info) => {
 
-            return err ? errorHandle(res, "An error saving your account", 503): responseHandle(res, info);
+            return err ? errorHandle(res, err, 503): responseHandle(res, info);
 
         });
     });
