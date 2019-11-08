@@ -46,7 +46,7 @@ exports.routers = (app) => {
      * @description Create new user
      * 
      */
-    app.post('/api/users/', (req, res, next) => {
+    app.post('/api/users/register', (req, res, next) => {
 
         const body = req.body;
 
@@ -58,4 +58,47 @@ exports.routers = (app) => {
         });
     });
 
+    /**
+     * @method POST
+     * @endpoint /api/users/login
+     * @description Log in user account and response Token
+     * 
+     */
+    app.post('/api/users/login', (req, res, next) => {
+        console.log("login");
+        const body = req.body;
+
+        app.models.user.login(body, (err, result) => {
+
+            return err ? errorHandle(res, err, 504): responseHandle(res, result);
+        });
+    });
+
+    /**
+     * @method GET
+     * @endpoint /api/users/me
+     * @description Get owner info
+     * 
+     */
+    app.get('/api/users/me', (req, res, next) => {
+
+        let tokenId = req.get('authorization');
+        if(!tokenId){
+            tokenId = req.query.token;
+        }
+
+        if(!tokenId){
+            return errorHandle(res, "Access denied", 505);
+        }
+
+        app.models.token.verify(tokenId, (err, result) =>{
+            
+            if(err){
+                return errorHandle(res, "Access denied");
+            }
+            else{
+                return responseHandle(res, {access: true}, 200)
+            }
+        })
+    })
 };
