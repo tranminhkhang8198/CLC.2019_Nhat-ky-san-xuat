@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# AdminLTE template
+/AdminLTE
+
 # testing
 /coverage
 
