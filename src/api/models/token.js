@@ -10,6 +10,11 @@ class Token{
         this.Tokens = new OrderedMap();
     }
 
+    /**
+     * Add token to cache
+     * @param {string} id 
+     * @param {token object} token 
+     */
     addTokenToCache(id, token){
 
         if(typeof id==='string'){
@@ -19,9 +24,14 @@ class Token{
         this.Tokens = this.Tokens.set(id, token);
     }
 
+    /**
+     * Create new token
+     * @param {string} userId 
+     * @param {callback function} cb 
+     */
     create(userId, cb = () => {}){
 
-        if(typeof(userId)=='string'){
+        if(typeof userId ==='string'){
             userId = _.toString(userId);
         }
 
@@ -42,6 +52,12 @@ class Token{
 
     }
 
+
+    /**
+     * Verify token
+     * @param {string} tokenId 
+     * @param {callback function} cb 
+     */
     verify(tokenId, cb = () => {}){
 
         if(typeof tokenId !== 'string'){

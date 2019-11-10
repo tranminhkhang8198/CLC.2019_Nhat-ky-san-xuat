@@ -12,6 +12,12 @@ class User{
         this.users = new OrderedMap();
     }
 
+    /**
+     * Load user info with id
+     * @param {string} id 
+     * @param {callback function} cb 
+     * @returns {user object}
+     */
     load(id, cb = () => {}){
 
         id = _.toString(id)
@@ -39,16 +45,22 @@ class User{
     }
 
 
+    /**
+     * Save user to cache
+     * @param {string} id 
+     * @param {user object} user 
+     */
     saveUserToCache(id, user){
         if (typeof id === 'string'){
             id = new ObjectID(id);
         }
         this.users = this.users.set(id, user);
     }
+
     /**
      * Validate User infor before add to database
-     * @param {*} user 
-     * @param {*} cb
+     * @param {user object} user 
+     * @param {callback function} cb
      * @returns {cb(err, user)} 
      */
     validateUser(user, cb = () => {}){
@@ -164,9 +176,10 @@ class User{
     
 
     /**
-     * Create new user
-     * @param {*} user 
-     * @param {*} cb 
+     * Create new user and save to database
+     * @param {user object} user 
+     * @param {callback function} cb
+     * @returns {cb(err, user)} 
      */
     create(user = {}, cb = () =>{}){
         
@@ -178,7 +191,7 @@ class User{
             address: _.toString(_.get(user, 'address')),
             phone: _.toString(_.get(user, 'phone')),
             email: _.trim(_.toLower(_.get(user, 'email', ''))),
-            roleId: _.get(user, 'roleId'),
+            user: _.get(user, 'user'),
             HTXId: _.get(user,'HTXId'),
             password: _.get(user, 'password'),
             created: new Date(),
@@ -208,6 +221,12 @@ class User{
 
     }
 
+    /**
+     * Validate user account info
+     * @param {user object} account 
+     * @param {callback function} cb
+     * @returns {cb(err, result)} 
+     */
     validateLogin(account = {}, cb = () => {}){
 
         const phone = _.get(account, 'phone', '');
@@ -222,6 +241,12 @@ class User{
 
     }
     
+    /**
+     * Login user account and create token
+     * @param {user object} account 
+     * @param {callback function} cb
+     * @returns {cb(err, result)}
+     */
     login(account= {}, cb = () => {} ){
 
         this.validateLogin(account, (err, account) => {
@@ -280,6 +305,52 @@ class User{
                 })
             }
         })
+    }
+
+    /**
+     * Get all users info
+     * @param {callback function} cb 
+     * @returns {cb(err, result)}
+     */
+    get(cb = () => {}){
+        const collection = this.app.db.collection('user');
+        const query = {
+
+        }
+        const options = {
+
+        }
+        collection.find(query, collection).toArray((err, result) =>{
+            if(err || !_.get(result, '[0]')){
+                return cb(err, null);
+            }
+            else{
+                return cb(null, result);
+            }
+        })
+    }
+
+    /**
+     * Get user workgroup from id
+     * @param {string} userId 
+     * @param {callback function} cb
+     * @returns {(err, result)} 
+     */
+    workgroup(userId, cb = () => {}){
+        const collection =this.app.db.collection('user');
+
+        console.log("userID",typeof id);
+        collection.findOne({"_id": new ObjectID(_.toString(userId))},(err, result) => {
+            if(err){
+                console.log('result:', result);
+                return cb({err:"error finding workgroup"}, null);
+            }
+            else{
+                const workgroup = result.user;
+                return cb(null, workgroup);
+            }
+        })
+
     }
 }
 module.exports = User;
