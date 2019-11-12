@@ -10,7 +10,7 @@
 ## Installation
 Install Frontend dependencies and packages
 ```
-$ npm run install
+$ npm install
 ```
 
 Install Backend (APIs) dependencies and packages for the first time (running this command once after cloning the repository from github)
