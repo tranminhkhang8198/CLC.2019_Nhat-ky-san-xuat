@@ -29,7 +29,6 @@ class User{
         }
 
         // Find in data base
-        console.log("sdfsdfsfffffffffffffffffff",id);
         const userId = new ObjectID(id);
 
         this.app.db.collection('user').find({_id: userId}).limit(1).toArray((err, result) => {
@@ -66,7 +65,6 @@ class User{
     validateUser(user, cb = () => {}){
 
         const collection = this.app.db.collection('user');
-        let err = null;
         const validations = {
             name:{
                 errorMessage: "Name is required",
@@ -82,8 +80,11 @@ class User{
             personalId:{
                 errorMessage: "Personal id is invalid",
                 doValidate: () => {
-
-                    return true;
+                    const personalId = _.get(user, 'personalId', '');
+                    if (personalId && personalId.length>=9){
+                        return true;
+                    }
+                    return false;
                 }
             },
             address:{
@@ -94,7 +95,7 @@ class User{
                 }
             },
             phone:{
-                errorMessage: "Phone is reqired",
+                errorMessage: "Phone number is reqired",
                 doValidate: () => {
                     const phone = _.get(user, 'phone', '');
                     if (phone && phone.length){
@@ -112,8 +113,8 @@ class User{
                     return emailRegex.test(email)
                 }
             },
-            roleId:{
-                errorMessage: "Role ID is in valid",
+            user:{
+                errorMessage: "User type is in valid",
                 doValidate: () => {
 
                     return true;
@@ -155,7 +156,6 @@ class User{
         });
         if(errors.length){
             const err = _.join(errors, ',');
-            console.log("Validation finally is: ", err);
             return cb(err, user);
         } else {
 
@@ -163,7 +163,6 @@ class User{
             const phone = _.get(user, 'phone', '');
             collection.findOne({phone: {$eq: phone}}, (err, result) =>{
 
-                console.log("Finding phone number in database with result: ", err, result);
                 if(err || result){
                     return cb("Phone number already exist");
                 }
@@ -191,7 +190,7 @@ class User{
             address: _.toString(_.get(user, 'address')),
             phone: _.toString(_.get(user, 'phone')),
             email: _.trim(_.toLower(_.get(user, 'email', ''))),
-            user: _.get(user, 'user'),
+            user: _.get(user, 'user','user'),
             HTXId: _.get(user,'HTXId'),
             password: _.get(user, 'password'),
             created: new Date(),
@@ -260,17 +259,20 @@ class User{
                     phone: `${phone}`
                 };
                 const options = {
-                    _id: true,
-                    name: true,
-                    address: false,
-                    phone: true,
-                    email: false,
-                    roleId: false,
-                    HTXId: false,
-                    password: true,
-                    created: true
+                    projection:{
+                        _id: true,
+                        name: true,
+                        address: false,
+                        phone: true,
+                        email: false,
+                        roleId: false,
+                        HTXId: false,
+                        password: true,
+                        created: true
+                    }
+                    
                 };
-                this.app.db.collection('user').find(query, options).limit(1).toArray((err, result) => {
+                this.app.db.collection('user').find(query).limit(1).toArray((err, result) => {
                     if(err || !_.get(result,'[0]')){
                         return cb("User not found", null);
                     }
@@ -291,8 +293,8 @@ class User{
                                     return cb(err, null);
                                 }
                                 else{
-                                    token.user = user;
-                                    return cb(null, token)
+                                    _.unset(token,'userId')
+                                    return cb(null, token);
                                 }
                             });
 
@@ -312,20 +314,69 @@ class User{
      * @param {callback function} cb 
      * @returns {cb(err, result)}
      */
-    get(cb = () => {}){
+    get(userId, cb = () => {}){
         const collection = this.app.db.collection('user');
-        const query = {
-
-        }
+        let query = {}
+        if(userId!="all"){
+            console.log(userId)
+            let idObj
+            try {
+                idObj = new ObjectID(userId);
+            } catch (err) {
+                return cb({err:"userId is invalid"}, null);
+            }
+            console.log(idObj);
+            query = {
+                "_id": idObj
+            }
+        };
         const options = {
-
+            projection:{
+                password:0
+            }
         }
-        collection.find(query, collection).toArray((err, result) =>{
+        console.log(query)
+        collection.find(query, options).toArray((err, result) =>{
             if(err || !_.get(result, '[0]')){
-                return cb(err, null);
+                console.log(err);
+                console.log(result)
+                return cb({err: "Users are not found"}, null);
             }
             else{
                 return cb(null, result);
+            }
+        })
+    }
+    validateUpdate(user){
+
+        
+    }
+
+    update(body, cb = () => {}){
+        const collection = this.app.db.collection('user');
+        // Validate update info
+        
+
+        let query = body.query;
+        let updateData = body.update;
+
+        // Validate query
+        if(query._id){
+            try {
+                query._id = new ObjectID(query._id);
+            } catch (error) {
+                return cb({errorMessage: "User id is invalid in query block"}, null);
+            }
+        }
+
+        collection.updateMany(query, updateData, {returnNewDocument: true},(err, result) => {
+            if(err){
+                console.log("err: ", err);
+                return cb({errorMessage:"Failed while updating user"}, null)
+            }
+            else{
+                console.log("query result", result);
+                return cb(null, {nModified:`${result.result.nModified}`});
             }
         })
     }
@@ -339,10 +390,8 @@ class User{
     workgroup(userId, cb = () => {}){
         const collection =this.app.db.collection('user');
 
-        console.log("userID",typeof id);
         collection.findOne({"_id": new ObjectID(_.toString(userId))},(err, result) => {
             if(err){
-                console.log('result:', result);
                 return cb({err:"error finding workgroup"}, null);
             }
             else{

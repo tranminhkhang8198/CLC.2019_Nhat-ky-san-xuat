@@ -70,7 +70,6 @@ class Token{
         if(inCache){
             // Get user info
             const userId = inCache.userId.toString();
-            console.log("fsdfsdfrwerwerwerwer",userId)
             this.app.models.user.load(userId, (err, user) => {
                 if(err){
                     return cb(err, null);
@@ -82,10 +81,15 @@ class Token{
             });
         }
         else{
-            console.log("sdfsfsdfsdfdsfsdfsd ",typeof tokenId);
             // Find token in database
-            const tokenObjId = new ObjectID(tokenId);
-            console.log("fsddddddddddddddddddddd")
+            let tokenObjId;
+            try{
+                tokenObjId = new ObjectID(tokenId);
+            }
+            catch(e){
+                return cb({error:"Token is invalid"}, null);
+            }
+            
             this.app.db.collection('token').find({_id: tokenObjId}).limit(1).toArray((err, result) => {
             if(err ||!_.get(result, '[0]')){
                 return cb("Token is invalid", null);
@@ -100,6 +104,7 @@ class Token{
                     }
                     else{
                         token.user = user;
+                        _.unset(token, 'userId');
                         return cb(null,token);
                     }
                 });
