@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
 exports.routers = (app) => {
+    /**
+     * @apiDefine set $set
+     */
 
     /**
      * Error Handle In Response
@@ -98,10 +101,14 @@ exports.routers = (app) => {
 
 
     /**
-     * @api {post} /users/ Create new user
+     * @api {post} /users Create new user
      * @apiName CreateUser
      * @apiGroup User
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users
      *
+     * @apiHeader {String} authorization Token.
+     * 
      * @apiParam {String} name Ten nguoi su dung
      * @apiParam {String} personalId So CMND cua nguoi su dung
      * @apiParam {String} address Dia chi cua nguoi su dung
@@ -110,6 +117,18 @@ exports.routers = (app) => {
      * @apiParam {String} user Chuc vu cua nguoi su dung
      * @apiParam {String} HTXId ID cua hop tac xa
      * @apiParam {String} password Mat khau cua nguoi su dung
+     * 
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *       "name": "Nguyen Van Loi",
+     *       "personalId":"384736273",
+     *       "address": Ninh Kieu, Can Tho,
+     *       "phone": "093827463",
+     *       "email": "admin@gmail.com",
+     *       "user": "user",
+     *       "HTXId": "dowidnfjd",
+     *       "password": "dfjeidjd"
+     *     }
      * 
      * @apiSuccess {String} name Ten nguoi su dung
      * @apiSuccess {String} personalId So CMND cua nguoi su dung
@@ -173,13 +192,21 @@ exports.routers = (app) => {
 
 
     /**
-     * @api {post} /login/ Login user
+     * @api {post} /login Login user
      * @apiName LoginUser
      * @apiGroup User
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/login
+     *
      *
      * @apiParam {String} phone So dien thoai cua nguoi su dung
      * @apiParam {String} password Mat khau cua nguoi su dung
-     * 
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *       "phone": "0847362182",
+     *       "password":"123456",
+     *     }
+     *  
      * @apiSuccess {String} _id ID token
      * @apiSuccess {String} created Ngay login
      *
@@ -214,7 +241,10 @@ exports.routers = (app) => {
      * @apiName CheckToken
      * @apiGroup User
      *
-     * @apiParam {String} token Token ID
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users/me
+     *
+     * @apiHeader {String} authorization Token.
      * 
      * @apiSuccess {String} _id ID token
      * @apiSuccess {String} created Ngay tao token
@@ -278,8 +308,13 @@ exports.routers = (app) => {
 
     /**
      * @api {get} /users/:userId Get user info from id
-     * @apiName GetToken
+     * @apiName GetUser
      * @apiGroup User
+     * 
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users/all
+     *
+     * @apiHeader {String} authorization Token.
      *
      * @apiParam {String} userId User ID hoac gia tri "all" voi yeu cau tat ca user
      * 
@@ -340,6 +375,52 @@ exports.routers = (app) => {
 
     })
 
+    /**
+     * @api {patch} /users Update users info
+     * @apiName PatchUsers
+     * @apiGroup User
+     * 
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Object} Query Bo Loc danh sach nguoi dung cho viec update
+     * @apiParam {String} Query.Params Danh sach thuoc tinh cua bo loc. VD: name, _id, phone, address
+     * @apiParam {Object} update Thong tin can update
+     * @apiParam {Object} update.set Tap hop cac thuoc tinh can update
+     * @apiParam {String} update.set.Params Danh sach thuoc tinh can update. VD: name, address, _id,...
+     * @apiParamExample {json} Request-Example:
+     *      {
+     *          "query":{
+     *              "name":"Nguyen Van Loi"
+     *          },
+     *          "update":{
+     *              "$set":{
+     *                  "HTXfdId": "116"
+     *              }
+     *          }
+     *      }
+     * 
+     * @apiSuccess {String} nModified So luong du lieu da cap nhat
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     *
+     * @apiError Permission-denied Token khong hop le
+     * @apiError User-id-is-invalid-in-query-block User Id khong hop le
+     * @apiError Nothing-to-update Query sai hoac du lieu update da ton tai trong database
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.patch('/api/users', (req, res, next) => {
         const resource = 'user';
         verifyUser(req, resource, (err, allow) => {
@@ -355,29 +436,121 @@ exports.routers = (app) => {
         })
     })
 
+
     /**
-     * @method POST
-     * @endpoint /api/roles/create
-     * @description Create new role
+     * @api {post} /roles Them phuong thuc moi
+     * @apiName PostRole
+     * @apiGroup Role
      * 
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/roles
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {char(1)} _id Ki hieu cua method
+     * @apiParam {String} permission Ten method
+     * 
+     * @apiParamExample {json} Request-Example:
+     *      {
+     *          "_id":"D",
+     *          "permission":"DELETE"
+     *      }
+     * 
+     * @apiSuccess {String} _id ki hieu cua method
+     * @apiSuccess {String} permission Ten method
+     * @apiSuccess {String} created Ngay them vao database
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "D",
+     *          "permission": "DELETE",
+     *          "created": "2019-11-14T07:10:50.507Z"
+     *      }
+     *  ]
+     * @apiError Permission-denied Token khong hop le
+     * @apiError error-creating-new-role Thong tin tao moi sai
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "error creating new role"
+     *     }
+     * 
+     * @apiPermission manager-admin
      */
-    app.post('/api/roles/create', (req, res, next) => {
+    app.post('/api/roles', (req, res, next) => {
         const body = req.body;
         app.models.role.create(body, (err, role) => {
-            return err ? errorHandle(res, "error creating new role", 501) : responseHandle(res, role)
+            return err ? errorHandle(res, err.errorMessage, 501) : responseHandle(res, role)
         })
     })
 
+
     /**
-     * @method POST
-     * @endpoint /api/resources/create
-     * @description Create new resources
+     * @api {post} /resources Them resource can quan ly quyen
+     * @apiName PostResource
+     * @apiGroup Resource
      * 
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/resources
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} name Ten resource can quan ly
+     * @apiParam {Object} role Danh sach role cho nguoi dung
+     * @apiParam {String} role.user Ki hieu quyen cho nguoi dung la user
+     * @apiParam {String} role.manager Ki hieu quyen cho nguoi dung la manager
+     * @apiParam {String} role.administrator Ki hieu quyen cho nguoi dung la administrator
+     * @apiParamExample {json} Request-Example:
+     *      {
+     *          "name":"user",
+     *          "role":{
+     *              "user":"G",
+     *              "manager":"GU",
+     *              "administrator":"GUDP",
+     *          }
+     *      }
+     *
+     * @apiSuccess {String} name Ten resource da quan ly.
+     * @apiSuccess {Object} role danh sach role doi voi tung loai nguoi dung.
+     * @apiSuccess {String} role.user Ki hieu quyen cho nguoi dung la user
+     * @apiSuccess {String} role.manager Ki hieu quyen cho nguoi dung la manager
+     * @apiSuccess {String} role.administrator Ki hieu quyen cho nguoi dung la administrator
+     * @apiSuccess {String} created ngay them moi resource
+     * @apiSuccess {String} _id id cua resource
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "name": "main",
+     *          "role": {
+     *              "user": "",
+     *              "manager": "G",
+     *              "administrator": "GPUD"
+     *          },
+     *          "created": "2019-11-14T07:39:33.888Z",
+     *          "_id": "5dcd04b5e99a6d1c435e6ff1"
+     *      }
+     *  ]
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Resource-already-exist resource da ton tai
+     * 
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "resource already exist"
+     *     }
+     * 
+     * @apiPermission manager-admin
      */
-    app.post('/api/resources/create', (req, res, next) => {
+    app.post('/api/resources', (req, res, next) => {
         body = req.body;
         app.models.resource.create(body, (err, role) => {
-            return err ? errorHandle(res, "error creating new resource", 501) : responseHandle(res, role)
+            return err ? errorHandle(res, err.errorMessage, 501) : responseHandle(res, role)
         })
     })
 

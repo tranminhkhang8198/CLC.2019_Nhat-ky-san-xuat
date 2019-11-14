@@ -370,9 +370,9 @@ class User{
         }
 
         collection.updateMany(query, updateData, {returnNewDocument: true},(err, result) => {
-            if(err){
+            if(err || result.result.nModified==0){
                 console.log("err: ", err);
-                return cb({errorMessage:"Failed while updating user"}, null)
+                return err ? cb({errorMessage:"Failed while updating user"}, null) : cb({errorMessage:"Nothing to update"}, null);
             }
             else{
                 console.log("query result", result);
