@@ -1,0 +1,41 @@
+{
+	// Place your backend workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"Print to console": {
+		"scope": "javascript,typescript",
+		"prefix": "apidoc",
+		"body": [
+			"/**",
+			" * @api {get} /user/:id Request User information",
+			" * @apiName GetUser",
+			" * @apiGroup User",
+			" *",
+			" * @apiParam {Number} id Users unique ID.",
+			" *",
+			" * @apiSuccess {String} firstname Firstname of the User.",
+			" * @apiSuccess {String} lastname  Lastname of the User.",
+			" *",
+			" * @apiSuccessExample Success-Response:",
+			" *  HTTP/1.1 200 OK",
+			" *  {",
+			" *      \"nModified\": \"4\"",
+			" *  }",
+			" * @apiError Permission-denied Token khong hop le",
+			" *",
+			" * @apiErrorExample Error-Response:",
+			" * HTTP/1.1 404 Not Found",
+			" *     {",
+			" *       \"error\": \"Nothing to update\"",
+			" *     }",
+			" * ",
+			" * @apiPermission manager-admin",
+			" */"
+		],
+		"description": "Log output to console"
+	}
+}

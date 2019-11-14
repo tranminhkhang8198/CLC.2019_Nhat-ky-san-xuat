@@ -27,14 +27,13 @@ class Role{
             created: new Date()
         }
 
-
         collection.insertOne(obj, (err, result) =>{
 
             if(err){
                 return cb({error: "error iserting role"}, null);
             }
             else{
-                return cb(null, result);
+                return cb(null, result.ops);
             }
         })
 
