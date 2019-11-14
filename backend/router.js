@@ -571,10 +571,142 @@ exports.routers = (app) => {
     });
 
     /**
-     * @method POST
-     * @endpoint /api/plant-protection-products
-     * @description Create New Plant Protection Product
+     * @api {post} /plant-protection-product Create new plant protection product
+     * @apiName CreatePlantProtectionProduct
+     * @apiGroup PlantProtectionProduct
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/plant-protection-products
+     *
+     * @apiHeader {String} authorization Token.
      * 
+     * @apiParam {String} name Ten thuoc bao ve thuc vat
+     * @apiParam {String} activeIngredients Hoat chat
+     * @apiParam {String} content Ham luong
+     * @apiParam {String} plantProtectionProductGroup Nhom thuoc
+     * @apiParam {Integer} ghs Nhom doc GHS
+     * @apiParam {Integer} who Nhom doc WHO
+     * @apiParam {Array} scopeOfUses Pham vi su dung
+     * @apiParam {String} plant Cay trong
+     * @apiParam {String} pest Dich hai
+     * @apiParam {String} dosage Lieu luong
+     * @apiParam {String} phi
+     * @apiParam {String} usage Cach dung
+     * @apiParam {Array} registrationInfo Thong tin dang ky
+     * @apiParam {String} registrationUnit Don vi dang ky
+     * @apiParam {String} registrationUnitAddress Dia chi
+     * @apiParam {String} manufacturer Nha san xuat
+     * @apiParam {String} manufacturerAddress Dia chi san xuat
+     * 
+     * 
+     * 
+     * 
+     * @apiParamExample {json} Request-Example:
+     * {
+     *     "name": " Ababetter  3.6EC",
+     *     "activeIngredients": "Abamectin",
+     *     "content": "36g/l",
+     *     "plantProtectionProductGroup": "Thuốc trừ sâu",
+     *     "ghs": "7",
+     *     "who": "6",
+     *     "scopeOfUses": [
+     *         {
+     *             "plant": "dưa hấu",
+     *             "pest": "bọ trĩ",
+     *             "dosage": "0.2 - 0.3 lít/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn"
+     *         },
+     *         {
+     *             "plant": "lúa",
+     *             "pest": "sâu cuốn lá",
+     *             "dosage": "200 - 300 ml/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2"
+     *         }
+     *     ],
+     *     "registrationInfo": {
+     *         "registrationUnit": "Công ty TNHH MTV Lucky",
+     *         "registrationUnitAddress": "",
+     *         "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *         "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China."
+     *     }
+     * }
+     * 
+     * @apiParam {String} name Ten thuoc bao ve thuc vat
+     * @apiParam {String} activeIngredients Hoat chat
+     * @apiParam {String} content Ham luong
+     * @apiParam {String} plantProtectionProductGroup Nhom thuoc
+     * @apiParam {Integer} ghs Nhom doc GHS
+     * @apiParam {Integer} who Nhom doc WHO
+     * @apiParam {Array} scopeOfUses Pham vi su dung
+     * @apiParam {String} plant Cay trong
+     * @apiParam {String} pest Dich hai
+     * @apiParam {String} dosage Lieu luong
+     * @apiParam {String} phi
+     * @apiParam {String} usage Cach dung
+     * @apiParam {Array} registrationInfo Thong tin dang ky
+     * @apiParam {String} registrationUnit Don vi dang ky
+     * @apiParam {String} registrationUnitAddress Dia chi
+     * @apiParam {String} manufacturer Nha san xuat
+     * @apiParam {String} manufacturerAddress Dia chi san xuat
+     * @apiParam {ObjectId} pppId ID cua thuoc bao ve thuc vat
+     * @apiParam {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     * 
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "name": " Ababetter  3.6EC",
+     *     "activeIngredients": "Abamectin",
+     *     "content": "36g/l",
+     *     "plantProtectionProductsGroup": "Thuốc trừ sâu",
+     *     "ghs": "7",
+     *     "who": "6",
+     *     "created": "2019-11-14T16:43:16.899Z",
+     *     "_id": "5dcd842416d4391c7f8a4265",
+     *     "scopeOfUses": [
+     *         {
+     *             "pppId": "5dcd842416d4391c7f8a4265",
+     *             "plant": "dưa hấu",
+     *             "pest": "bọ trĩ",
+     *             "dosage": "0.2 - 0.3 lít/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
+     *             "created": "2019-11-14T16:43:16.900Z",
+     *             "_id": "5dcd842416d4391c7f8a4266"
+     *         },
+     *         {
+     *             "pppId": "5dcd842416d4391c7f8a4265",
+     *             "plant": "lúa",
+     *             "pest": "sâu cuốn lá",
+     *             "dosage": "200 - 300 ml/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
+     *             "created": "2019-11-14T16:43:16.900Z",
+     *             "_id": "5dcd842416d4391c7f8a4267"
+     *         }
+     *     ],
+     *     "registrationInfo": {
+     *         "pppId": "5dcd842416d4391c7f8a4265",
+     *         "registrationUnit": "Công ty TNHH MTV Lucky",
+     *         "registrationUnitAddress": "",
+     *         "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *         "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
+     *         "created": "2019-11-14T16:43:16.900Z",
+     *         "_id": "5dcd842416d4391c7f8a4268"
+     *     }
+     * }
+     *
+     * @apiError Name-is-required Thieu truong thuoc bao ve thuc vat
+     * @apiError GHS-must-be-a-number Truong GHS phai la so
+     * @apiError WHO-must-be-a-number Truong WHO phai la so
+     * @apiError PHI-must-be-a-number Truong PHI phai la so
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "error": "Thuốc bảo vệ thực vật với tên '" + name + "' đã tồn tại."
+     *     }
+     * @apiPermission none
      */
     app.post('/api/plant-protection-products', (req, res, next) => {
         const body = req.body;

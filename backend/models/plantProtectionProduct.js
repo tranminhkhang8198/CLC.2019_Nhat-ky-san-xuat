@@ -18,7 +18,8 @@ class PlantProtectionProduct {
         ""
       ),
       manufacturer: _.get(registrationInfo, "manufacturer", ""),
-      manufacturerAddress: _.get(registrationInfo, "manufacturerAddress", "")
+      manufacturerAddress: _.get(registrationInfo, "manufacturerAddress", ""),
+      created: new Date()
     };
 
     // Save Registration Information
@@ -36,22 +37,23 @@ class PlantProtectionProduct {
   createScopeOfUse(id, scopeOfUses, cb = () => {}) {
     const collection = this.app.db.collection("scopeOfUses");
 
-    let data = [];
-    for (var scopeOfUse in scopeOfUses) {
-      let obj = {
-        id: id,
-        plant: _.get(scopeOfUse, "plant", ""),
-        pest: _.get(scopeOfUse, "pest", ""),
-        dosage: _.get(scopeOfUse, "dosage", ""),
-        phi: _.get(scopeOfUse, "phi", ""),
-        usage: _.get(scopeOfUse, "usage", "")
+    let obj = [];
+    for (var i in scopeOfUses) {
+      let data = {
+        pppId: id,
+        plant: _.get(scopeOfUses[i], "plant", ""),
+        pest: _.get(scopeOfUses[i], "pest", ""),
+        dosage: _.get(scopeOfUses[i], "dosage", ""),
+        phi: _.get(scopeOfUses[i], "phi", ""),
+        usage: _.get(scopeOfUses[i], "usage", ""),
+        created: new Date()
       };
 
-      data.push(obj);
+      obj.push(data);
     }
 
     // Save Scope Of Uses
-    collection.insertMany(data, (err, res) => {
+    collection.insertMany(obj, (err, res) => {
       if (err) {
         return cb(err, null);
       }
@@ -106,6 +108,20 @@ class PlantProtectionProduct {
           }
           return true;
         }
+      },
+      phi: {
+        errorMessage: "PHI phải là số",
+        doValidate: () => {
+          for (var i in plantProtectionProduct.scopeOfUses) {
+            const phi = plantProtectionProduct.scopeOfUses[i].phi;
+            if (phi != "") {
+              if (!reg.test(phi)) {
+                return false;
+              }
+            }
+          }
+          return true;
+        }
       }
     };
 
@@ -126,8 +142,7 @@ class PlantProtectionProduct {
       // CHECK IF PLANT PROTECTION PRODUCT EXISTS
       const name = _.get(plantProtectionProduct, "name", "");
 
-      collection.findOne(
-        {
+      collection.findOne({
           name: {
             $eq: name
           }
@@ -163,43 +178,54 @@ class PlantProtectionProduct {
     const collection = this.app.db.collection("plantProtectionProduct");
     var response = {};
 
-    let obj = {
-      name: _.get(plantProtectionProduct, "name", ""),
-      activeIngredients: _.get(plantProtectionProduct, "activeIngredients", ""),
-      content: _.get(plantProtectionProduct, "content", ""),
-      plantProtectionProductsGroup: _.get(
-        plantProtectionProduct,
-        "plantProtectionProductsGroup",
-        ""
-      ),
-      ghs: _.get(plantProtectionProduct, "ghs", ""),
-      who: _.get(plantProtectionProduct, "who", ""),
-      created: new Date()
-    };
-
     // Validate input payloads
-    this.beforeCreate(obj, (err, plantProtectionProduct) => {
+    this.beforeCreate(plantProtectionProduct, (err, plantProtectionProduct) => {
       if (err) {
         return cb(err, null);
       }
+
+      let pppObj = {
+        name: _.get(plantProtectionProduct, "name", ""),
+        activeIngredients: _.get(
+          plantProtectionProduct,
+          "activeIngredients",
+          ""
+        ),
+        content: _.get(plantProtectionProduct, "content", ""),
+        plantProtectionProductsGroup: _.get(
+          plantProtectionProduct,
+          "plantProtectionProductGroup",
+          ""
+        ),
+        ghs: _.get(plantProtectionProduct, "ghs", ""),
+        who: _.get(plantProtectionProduct, "who", ""),
+        created: new Date()
+      };
+
       // Save plant protection product to database
-      collection.insertOne(plantProtectionProduct, (err, res) => {
+      collection.insertOne(pppObj, (err, res) => {
         if (err) {
           return cb(err, null);
         }
-
         // Get plant protection product after created
         const pppId = res.insertedId;
-
         // Add plant protect product info to response
         response = res.ops[0];
 
+        // Save scope of use to database
+        const scopeOfUses = _.get(plantProtectionProduct, "scopeOfUses", []);
+
+        this.createScopeOfUse(pppId, scopeOfUses, (err, scopeOfUses) => {
+          if (err) {
+            return cb(err, null);
+          }
+
+          // Add scope of use to response
+          response["scopeOfUses"] = scopeOfUses;
+        });
+
         // Save registration info to database
         const registrationInfo = plantProtectionProduct.registrationInfo;
-
-        console.log("someting");
-        console.log(plantProtectionProduct);
-        console.log("someting");
 
         this.createRegistrationInfo(
           pppId,
@@ -212,21 +238,9 @@ class PlantProtectionProduct {
             // Add registration info to response
             response["registrationInfo"] = registrationInfo;
 
-            console.log(response);
             return cb(null, response);
           }
         );
-
-        // // Save scope of use to database
-        // const scopeOfUses = _.get(plantProtectionProduct, "scopeOfUses", []);
-        // this.createScopeOfUse(pppId, scopeOfUses, (err, scopeOfUses) => {
-        //   if (err) {
-        //     return cb(err, null);
-        //   }
-
-        //   // Add scope of use to response
-        //   response.push(scopeOfUses);
-        // });
       });
     });
   }
@@ -249,14 +263,11 @@ class PlantProtectionProduct {
         }
 
         // Update Plant Protection Product
-        collection.findOneAndUpdate(
-          {
+        collection.findOneAndUpdate({
             _id: mongoose.Types.ObjectId(id)
-          },
-          {
+          }, {
             $set: obj
-          },
-          {
+          }, {
             returnNewDocument: false
           },
           (err, info) => {
