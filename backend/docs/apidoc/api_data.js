@@ -584,8 +584,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });

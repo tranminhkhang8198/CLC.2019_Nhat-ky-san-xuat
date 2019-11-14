@@ -9,7 +9,7 @@ exports.routers = (app) => {
      * @param {int} code
      * @returns {*|JSON|Promise<any>}
      */
-    const errorHandle = (res, errorMessage, code = 500) =>{
+    const errorHandle = (res, errorMessage, code = 500) => {
 
 
         return res.status(code).json({
@@ -36,36 +36,41 @@ exports.routers = (app) => {
      * @param {callback function} cb 
      * @returns {cb(err, permission<true|false>)}
      */
-    const verifyUser = (req, resource, cb = () => {} ) => {
+    const verifyUser = (req, resource, cb = () => {}) => {
         //Verify token
         let tokenId = req.get('authorization');
-        if(!tokenId){
+        if (!tokenId) {
             tokenId = req.query.token;
         }
-        if(!tokenId){
-            return cb({errorMessage: "Access denied"}, null);
+        if (!tokenId) {
+            return cb({
+                errorMessage: "Access denied"
+            }, null);
         }
 
-        app.models.token.verify(tokenId, (err, token) =>{
-            
-            if(err){
-                return cb({errorMessage: "Access denied"}, null);
-            }
-            else{
+        app.models.token.verify(tokenId, (err, token) => {
+
+            if (err) {
+                return cb({
+                    errorMessage: "Access denied"
+                }, null);
+            } else {
                 _.unset(token.user, 'password')
                 // Check permission
                 app.models.permission.checkPermission(token.user._id, resource, req.method, (err, permission) => {
 
-                    if(err){
-                        return cb({errorMessage: "Access denied"}, null);
-                    }
-                    else{
-                        if(permission){
-                            
+                    if (err) {
+                        return cb({
+                            errorMessage: "Access denied"
+                        }, null);
+                    } else {
+                        if (permission) {
+
                             return cb(null, permission);
-                        }
-                        else{
-                            return cb({errorMessage: "Access denied"}, null);
+                        } else {
+                            return cb({
+                                errorMessage: "Access denied"
+                            }, null);
                         }
                     }
                 })
@@ -86,7 +91,9 @@ exports.routers = (app) => {
      * 
      */
     app.get('/', (req, res) => {
-        return res.json({version: '1.0'});
+        return res.json({
+            version: '1.0'
+        });
     });
 
 
@@ -142,21 +149,21 @@ exports.routers = (app) => {
 
         const body = req.body;
         const resource = 'user';
-        verifyUser(req, resource, (err, result) =>{
-            if(err){
-                _.unset(body,'user');
+        verifyUser(req, resource, (err, result) => {
+            if (err) {
+                _.unset(body, 'user');
                 app.models.user.create(body, (err, info) => {
 
                     console.log(info)
-                    return err ? errorHandle(res, err, 503): responseHandle(res, info);
-        
-                });            }
-            else{
+                    return err ? errorHandle(res, err, 503) : responseHandle(res, info);
+
+                });
+            } else {
                 app.models.user.create(body, (err, info) => {
 
                     console.log(info)
-                    return err ? errorHandle(res, err, 503): responseHandle(res, info);
-        
+                    return err ? errorHandle(res, err, 503) : responseHandle(res, info);
+
                 });
             }
         })
@@ -198,7 +205,7 @@ exports.routers = (app) => {
 
         app.models.user.login(body, (err, result) => {
 
-            return err ? errorHandle(res, err, 504): responseHandle(res, result);
+            return err ? errorHandle(res, err, 504) : responseHandle(res, result);
         });
     });
 
@@ -251,19 +258,18 @@ exports.routers = (app) => {
     app.get('/api/users/me', (req, res, next) => {
 
         let tokenId = req.get('authorization');
-        if(!tokenId){
+        if (!tokenId) {
             tokenId = req.query.token;
         }
 
-        if(!tokenId){
+        if (!tokenId) {
             return errorHandle(res, "Access denied", 505);
         }
 
-        app.models.token.verify(tokenId, (err, result) =>{
-            if(err){
+        app.models.token.verify(tokenId, (err, result) => {
+            if (err) {
                 return errorHandle(res, "Access denied");
-            }
-            else{
+            } else {
                 _.unset(result.user, 'password')
                 return responseHandle(res, result, 200)
             }
@@ -318,15 +324,14 @@ exports.routers = (app) => {
     app.get('/api/users/:userId', (req, res, next) => {
 
         const userId = req.params.userId;
-        if(!userId || userId.length ==0){
+        if (!userId || userId.length == 0) {
             return errorHandle(res, "User ID is invalid", 501);
         }
         const resource = "user"
         verifyUser(req, resource, (err, permission) => {
-            if(err){
+            if (err) {
                 errorHandle(res, "Permission denied");
-            }
-            else{
+            } else {
                 app.models.user.get(userId, (err, data) => {
                     return err ? errorHandle(res, "Users are not found", 503) : responseHandle(res, data);
                 })
@@ -338,13 +343,12 @@ exports.routers = (app) => {
     app.patch('/api/users', (req, res, next) => {
         const resource = 'user';
         verifyUser(req, resource, (err, allow) => {
-            if(err){
+            if (err) {
                 return errorHandle(res, "Access denied", 503);
-            }
-            else {
+            } else {
                 // process task
                 const body = req.body
-                app.models.user.update(body, (err, user) =>{
+                app.models.user.update(body, (err, user) => {
                     return err ? errorHandle(res, err.errorMessage) : responseHandle(res, user);
                 })
             }
@@ -357,12 +361,12 @@ exports.routers = (app) => {
      * @description Create new role
      * 
      */
-     app.post('/api/roles/create', (req, res, next) => {
-         const body = req.body;
-         app.models.role.create(body, (err, role) => {
-             return err ? errorHandle(res, "error creating new role", 501) : responseHandle(res, role)
-         })
-     })
+    app.post('/api/roles/create', (req, res, next) => {
+        const body = req.body;
+        app.models.role.create(body, (err, role) => {
+            return err ? errorHandle(res, "error creating new role", 501) : responseHandle(res, role)
+        })
+    })
 
     /**
      * @method POST
@@ -377,6 +381,32 @@ exports.routers = (app) => {
         })
     })
 
+    // *************************************************************************** //
+    // ROUTES FOR PLANT PROTECTION PRODUCT
 
+    /**
+     * @method GET
+     * @endpoint /api/plant-protection-products
+     * @description Get All Plant Protection Product in Database
+     * 
+     */
+    app.get('/api/plant-protection-products', (req, res, next) => {
+        app.models.plantProtectionProduct.find((err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
 
+    /**
+     * @method POST
+     * @endpoint /api/plant-protection-products
+     * @description Create New Plant Protection Product
+     * 
+     */
+    app.post('/api/plant-protection-products', (req, res, next) => {
+        const body = req.body;
+
+        app.models.plantProtectionProduct.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 201) : responseHandle(res, info);
+        });
+    });
 };
