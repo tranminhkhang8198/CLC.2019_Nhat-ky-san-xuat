@@ -39,7 +39,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "activeIngredients",
+            "field": "activeIngredient",
             "description": "<p>Hoat chat</p>"
           },
           {
@@ -74,7 +74,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Array",
             "optional": false,
-            "field": "scopeOfUses",
+            "field": "scopeOfUse",
             "description": "<p>Pham vi su dung</p>"
           },
           {
@@ -146,16 +146,148 @@ define({ "api": [
             "optional": false,
             "field": "manufacturerAddress",
             "description": "<p>Dia chi san xuat</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"name\": \" Ababetter  3.6EC\",\n    \"activeIngredient\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"scopeOfUse\": [\n        {\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\"\n        },\n        {\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten thuoc bao ve thuc vat</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "activeIngredient",
+            "description": "<p>Hoat chat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Ham luong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plantProtectionProductGroup",
+            "description": "<p>Nhom thuoc</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "ghs",
+            "description": "<p>Nhom doc GHS</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "who",
+            "description": "<p>Nhom doc WHO</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "scopeOfUse",
+            "description": "<p>Pham vi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plant",
+            "description": "<p>Cay trong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "pest",
+            "description": "<p>Dich hai</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dosage",
+            "description": "<p>Lieu luong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phi",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "usage",
+            "description": "<p>Cach dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "registrationInfo",
+            "description": "<p>Thong tin dang ky</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnit",
+            "description": "<p>Don vi dang ky</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnitAddress",
+            "description": "<p>Dia chi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturer",
+            "description": "<p>Nha san xuat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturerAddress",
+            "description": "<p>Dia chi san xuat</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "ObjectId",
             "optional": false,
             "field": "pppId",
             "description": "<p>ID cua thuoc bao ve thuc vat</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Success 200",
             "type": "ObjectId",
             "optional": false,
             "field": "_id",
@@ -165,17 +297,8 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Request-Example:",
-          "content": "{\n    \"name\": \" Ababetter  3.6EC\",\n    \"activeIngredients\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"scopeOfUses\": [\n        {\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\"\n        },\n        {\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\"\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n    \"name\": \" Ababetter  3.6EC\",\n    \"activeIngredients\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductsGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"created\": \"2019-11-14T16:43:16.899Z\",\n    \"_id\": \"5dcd842416d4391c7f8a4265\",\n    \"scopeOfUses\": [\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4266\"\n        },\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4267\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"pppId\": \"5dcd842416d4391c7f8a4265\",\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n        \"created\": \"2019-11-14T16:43:16.900Z\",\n        \"_id\": \"5dcd842416d4391c7f8a4268\"\n    }\n}",
+          "content": " HTTP/1.1 200 OK\n {\n    \"name\": \" Ababetter  3.6EC\",\n    \"activeIngredient\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductsGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"created\": \"2019-11-14T16:43:16.899Z\",\n    \"_id\": \"5dcd842416d4391c7f8a4265\",\n    \"scopeOfUse\": [\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4266\"\n        },\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4267\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"pppId\": \"5dcd842416d4391c7f8a4265\",\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n        \"created\": \"2019-11-14T16:43:16.900Z\",\n        \"_id\": \"5dcd842416d4391c7f8a4268\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -220,6 +343,399 @@ define({ "api": [
     "permission": [
       {
         "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "PlantProtectionProduct"
+  },
+  {
+    "type": "get",
+    "url": "/plant-protection-product",
+    "title": "Get all plant protection product",
+    "name": "GetAllPlantProtectionProduct",
+    "group": "PlantProtectionProduct",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten thuoc bao ve thuc vat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "activeIngredient",
+            "description": "<p>Hoat chat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Ham luong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plantProtectionProductGroup",
+            "description": "<p>Nhom thuoc</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "ghs",
+            "description": "<p>Nhom doc GHS</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "who",
+            "description": "<p>Nhom doc WHO</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "scopeOfUse",
+            "description": "<p>Pham vi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plant",
+            "description": "<p>Cay trong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "pest",
+            "description": "<p>Dich hai</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dosage",
+            "description": "<p>Lieu luong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phi",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "usage",
+            "description": "<p>Cach dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "registrationInfo",
+            "description": "<p>Thong tin dang ky</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnit",
+            "description": "<p>Don vi dang ky</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnitAddress",
+            "description": "<p>Dia chi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturer",
+            "description": "<p>Nha san xuat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturerAddress",
+            "description": "<p>Dia chi san xuat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "pppId",
+            "description": "<p>ID cua thuoc bao ve thuc vat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\",\n        \"name\": \" Ababetter  3.6EC\",\n        \"activeIngredient\": \"Abamectin\",\n        \"content\": \"36g/l\",\n        \"plantProtectionProductsGroup\": \"\",\n        \"ghs\": \"\",\n        \"who\": \"2\",\n        \"created\": \"2019-11-15T08:50:19.842Z\",\n        \"scopeOfUse\": [\n            {\n                \"_id\": \"5dce66cc5c25ee6da0a29ac9\",\n                \"pppId\": \"5dce66cb5c25ee6da0a29ac8\",\n                \"plant\": \"dưa hấu\",\n                \"pest\": \"bọ trĩ\",\n                \"dosage\": \"0.2 - 0.3 lít/ha\",\n                \"phi\": \"7\",\n                \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n                \"created\": \"2019-11-15T08:50:20.100Z\"\n            }\n        ],\n        \"registrationInfo\": {\n            \"_id\": \"5dce66cc5c25ee6da0a29acd\",\n            \"pppId\": \"5dce66cb5c25ee6da0a29ac8\",\n            \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n            \"registrationUnitAddress\": \"\",\n            \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n            \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n            \"created\": \"2019-11-15T08:50:20.107Z\"\n        }\n    },\n    {\n        \"_id\": \"5dce66e25c25ee6da0a29ace\",\n        \"name\": \" Ababetter  5EC\",\n        \"activeIngredient\": \"Abamectin\",\n        \"content\": \"50g/l\",\n        \"plantProtectionProductsGroup\": \"\",\n        \"ghs\": \"\",\n        \"who\": \"2\",\n        \"created\": \"2019-11-15T08:50:42.728Z\",\n        \"scopeOfUse\": [\n            {\n                \"_id\": \"5dce66e25c25ee6da0a29acf\",\n                \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                \"plant\": \"lúa\",\n                \"pest\": \"sâu cuốn lá\",\n                \"dosage\": \"150 - 250 ml/ha\",\n                \"phi\": \"\",\n                \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n                \"created\": \"2019-11-15T08:50:42.728Z\"\n            },\n            {\n                \"_id\": \"5dce66e25c25ee6da0a29ad0\",\n                \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                \"plant\": \"quýt\",\n                \"pest\": \"nhện đỏ\",\n                \"dosage\": \"0.0375 - 0.0625%\",\n                \"phi\": \"\",\n                \"usage\": \"Phun ướt đều plant khi mật độ khoảng \\r\\n5 - 6 con/ lá\",\n                \"created\": \"2019-11-15T08:50:42.728Z\"\n            }\n        ],\n        \"registrationInfo\": {\n            \"_id\": \"5dce66e25c25ee6da0a29ad1\",\n            \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n            \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n            \"registrationUnitAddress\": \"\",\n            \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n            \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n            \"created\": \"2019-11-15T08:50:42.728Z\"\n        }\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Conflict\n{\n  \"error\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "PlantProtectionProduct"
+  },
+  {
+    "type": "get",
+    "url": "/plant-protection-products/:id",
+    "title": "Get plant protection product by id",
+    "name": "GetPlantProtectionProduct",
+    "group": "PlantProtectionProduct",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products/:id",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>ID cua thuoc bao ve thuc vat</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten thuoc bao ve thuc vat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "activeIngredient",
+            "description": "<p>Hoat chat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Ham luong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plantProtectionProductGroup",
+            "description": "<p>Nhom thuoc</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "ghs",
+            "description": "<p>Nhom doc GHS</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "who",
+            "description": "<p>Nhom doc WHO</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "scopeOfUse",
+            "description": "<p>Pham vi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plant",
+            "description": "<p>Cay trong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "pest",
+            "description": "<p>Dich hai</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "dosage",
+            "description": "<p>Lieu luong</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phi",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "usage",
+            "description": "<p>Cach dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "registrationInfo",
+            "description": "<p>Thong tin dang ky</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnit",
+            "description": "<p>Don vi dang ky</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnitAddress",
+            "description": "<p>Dia chi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturer",
+            "description": "<p>Nha san xuat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturerAddress",
+            "description": "<p>Dia chi san xuat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "pppId",
+            "description": "<p>ID cua thuoc bao ve thuc vat</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n    \"name\": \" Ababetter  3.6EC\",\n    \"activeIngredient\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductsGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"created\": \"2019-11-14T16:43:16.899Z\",\n    \"_id\": \"5dcd842416d4391c7f8a4265\",\n    \"scopeOfUse\": [\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4266\"\n        },\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4267\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"pppId\": \"5dcd842416d4391c7f8a4265\",\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n        \"created\": \"2019-11-14T16:43:16.900Z\",\n        \"_id\": \"5dcd842416d4391c7f8a4268\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật với id = '\" + id + \"'\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
       }
     ],
     "version": "0.0.0",

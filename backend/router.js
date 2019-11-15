@@ -559,16 +559,219 @@ exports.routers = (app) => {
     // ROUTES FOR PLANT PROTECTION PRODUCT
 
     /**
-     * @method GET
-     * @endpoint /api/plant-protection-products
-     * @description Get All Plant Protection Product in Database
+     * @api {get} /plant-protection-product Get all plant protection product
+     * @apiName GetAllPlantProtectionProduct
+     * @apiGroup PlantProtectionProduct
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/plant-protection-products
+     *
+     * @apiHeader {String} authorization Token.
      * 
+     * 
+     * @apiSuccess {String} name Ten thuoc bao ve thuc vat
+     * @apiSuccess {String} activeIngredient Hoat chat
+     * @apiSuccess {String} content Ham luong
+     * @apiSuccess {String} plantProtectionProductGroup Nhom thuoc
+     * @apiSuccess {Integer} ghs Nhom doc GHS
+     * @apiSuccess {Integer} who Nhom doc WHO
+     * @apiSuccess {Array} scopeOfUse Pham vi su dung
+     * @apiSuccess {String} plant Cay trong
+     * @apiSuccess {String} pest Dich hai
+     * @apiSuccess {String} dosage Lieu luong
+     * @apiSuccess {String} phi
+     * @apiSuccess {String} usage Cach dung
+     * @apiSuccess {Array} registrationInfo Thong tin dang ky
+     * @apiSuccess {String} registrationUnit Don vi dang ky
+     * @apiSuccess {String} registrationUnitAddress Dia chi
+     * @apiSuccess {String} manufacturer Nha san xuat
+     * @apiSuccess {String} manufacturerAddress Dia chi san xuat
+     * @apiSuccess {ObjectId} pppId ID cua thuoc bao ve thuc vat
+     * @apiSuccess {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     * 
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5dce66cb5c25ee6da0a29ac8",
+     *          "name": " Ababetter  3.6EC",
+     *          "activeIngredient": "Abamectin",
+     *          "content": "36g/l",
+     *          "plantProtectionProductsGroup": "",
+     *          "ghs": "",
+     *          "who": "2",
+     *          "created": "2019-11-15T08:50:19.842Z",
+     *          "scopeOfUse": [
+     *              {
+     *                  "_id": "5dce66cc5c25ee6da0a29ac9",
+     *                  "pppId": "5dce66cb5c25ee6da0a29ac8",
+     *                  "plant": "dưa hấu",
+     *                  "pest": "bọ trĩ",
+     *                  "dosage": "0.2 - 0.3 lít/ha",
+     *                  "phi": "7",
+     *                  "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
+     *                  "created": "2019-11-15T08:50:20.100Z"
+     *              }
+     *          ],
+     *          "registrationInfo": {
+     *              "_id": "5dce66cc5c25ee6da0a29acd",
+     *              "pppId": "5dce66cb5c25ee6da0a29ac8",
+     *              "registrationUnit": "Công ty TNHH MTV Lucky",
+     *              "registrationUnitAddress": "",
+     *              "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *              "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
+     *              "created": "2019-11-15T08:50:20.107Z"
+     *          }
+     *      },
+     *      {
+     *          "_id": "5dce66e25c25ee6da0a29ace",
+     *          "name": " Ababetter  5EC",
+     *          "activeIngredient": "Abamectin",
+     *          "content": "50g/l",
+     *          "plantProtectionProductsGroup": "",
+     *          "ghs": "",
+     *          "who": "2",
+     *          "created": "2019-11-15T08:50:42.728Z",
+     *          "scopeOfUse": [
+     *              {
+     *                  "_id": "5dce66e25c25ee6da0a29acf",
+     *                  "pppId": "5dce66e25c25ee6da0a29ace",
+     *                  "plant": "lúa",
+     *                  "pest": "sâu cuốn lá",
+     *                  "dosage": "150 - 250 ml/ha",
+     *                  "phi": "",
+     *                  "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
+     *                  "created": "2019-11-15T08:50:42.728Z"
+     *              },
+     *              {
+     *                  "_id": "5dce66e25c25ee6da0a29ad0",
+     *                  "pppId": "5dce66e25c25ee6da0a29ace",
+     *                  "plant": "quýt",
+     *                  "pest": "nhện đỏ",
+     *                  "dosage": "0.0375 - 0.0625%",
+     *                  "phi": "",
+     *                  "usage": "Phun ướt đều plant khi mật độ khoảng \r\n5 - 6 con/ lá",
+     *                  "created": "2019-11-15T08:50:42.728Z"
+     *              }
+     *          ],
+     *          "registrationInfo": {
+     *              "_id": "5dce66e25c25ee6da0a29ad1",
+     *              "pppId": "5dce66e25c25ee6da0a29ace",
+     *              "registrationUnit": "Công ty TNHH MTV Lucky",
+     *              "registrationUnitAddress": "",
+     *              "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *              "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
+     *              "created": "2019-11-15T08:50:42.728Z"
+     *          }
+     *      }
+     *  ]
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Conflict
+     *     {
+     *       "error": ""
+     *     }
+     * @apiPermission none
      */
     app.get('/api/plant-protection-products', (req, res, next) => {
         app.models.plantProtectionProduct.find((err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
+
+
+    /**
+     * @api {get} /plant-protection-products/:id Get plant protection product by id
+     * @apiName GetPlantProtectionProduct
+     * @apiGroup PlantProtectionProduct
+     * 
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/plant-protection-products/:id
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} id ID cua thuoc bao ve thuc vat
+     * 
+     * @apiSuccess {String} name Ten thuoc bao ve thuc vat
+     * @apiSuccess {String} activeIngredient Hoat chat
+     * @apiSuccess {String} content Ham luong
+     * @apiSuccess {String} plantProtectionProductGroup Nhom thuoc
+     * @apiSuccess {Integer} ghs Nhom doc GHS
+     * @apiSuccess {Integer} who Nhom doc WHO
+     * @apiSuccess {Array} scopeOfUse Pham vi su dung
+     * @apiSuccess {String} plant Cay trong
+     * @apiSuccess {String} pest Dich hai
+     * @apiSuccess {String} dosage Lieu luong
+     * @apiSuccess {String} phi
+     * @apiSuccess {String} usage Cach dung
+     * @apiSuccess {Array} registrationInfo Thong tin dang ky
+     * @apiSuccess {String} registrationUnit Don vi dang ky
+     * @apiSuccess {String} registrationUnitAddress Dia chi
+     * @apiSuccess {String} manufacturer Nha san xuat
+     * @apiSuccess {String} manufacturerAddress Dia chi san xuat
+     * @apiSuccess {ObjectId} pppId ID cua thuoc bao ve thuc vat
+     * @apiSuccess {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "name": " Ababetter  3.6EC",
+     *     "activeIngredient": "Abamectin",
+     *     "content": "36g/l",
+     *     "plantProtectionProductsGroup": "Thuốc trừ sâu",
+     *     "ghs": "7",
+     *     "who": "6",
+     *     "created": "2019-11-14T16:43:16.899Z",
+     *     "_id": "5dcd842416d4391c7f8a4265",
+     *     "scopeOfUse": [
+     *         {
+     *             "pppId": "5dcd842416d4391c7f8a4265",
+     *             "plant": "dưa hấu",
+     *             "pest": "bọ trĩ",
+     *             "dosage": "0.2 - 0.3 lít/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
+     *             "created": "2019-11-14T16:43:16.900Z",
+     *             "_id": "5dcd842416d4391c7f8a4266"
+     *         },
+     *         {
+     *             "pppId": "5dcd842416d4391c7f8a4265",
+     *             "plant": "lúa",
+     *             "pest": "sâu cuốn lá",
+     *             "dosage": "200 - 300 ml/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
+     *             "created": "2019-11-14T16:43:16.900Z",
+     *             "_id": "5dcd842416d4391c7f8a4267"
+     *         }
+     *     ],
+     *     "registrationInfo": {
+     *         "pppId": "5dcd842416d4391c7f8a4265",
+     *         "registrationUnit": "Công ty TNHH MTV Lucky",
+     *         "registrationUnitAddress": "",
+     *         "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *         "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
+     *         "created": "2019-11-14T16:43:16.900Z",
+     *         "_id": "5dcd842416d4391c7f8a4268"
+     *     }
+     * }
+     *
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Không tìm thấy thuốc bảo vệ thực vật với id = '" + id + "'"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.get('/api/plant-protection-products/:id', (req, res, next) => {
+        const id = req.params.id;
+        app.models.plantProtectionProduct.findById(id, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
 
     /**
      * @api {post} /plant-protection-product Create new plant protection product
@@ -580,12 +783,12 @@ exports.routers = (app) => {
      * @apiHeader {String} authorization Token.
      * 
      * @apiParam {String} name Ten thuoc bao ve thuc vat
-     * @apiParam {String} activeIngredients Hoat chat
+     * @apiParam {String} activeIngredient Hoat chat
      * @apiParam {String} content Ham luong
      * @apiParam {String} plantProtectionProductGroup Nhom thuoc
      * @apiParam {Integer} ghs Nhom doc GHS
      * @apiParam {Integer} who Nhom doc WHO
-     * @apiParam {Array} scopeOfUses Pham vi su dung
+     * @apiParam {Array} scopeOfUse Pham vi su dung
      * @apiParam {String} plant Cay trong
      * @apiParam {String} pest Dich hai
      * @apiParam {String} dosage Lieu luong
@@ -598,17 +801,15 @@ exports.routers = (app) => {
      * @apiParam {String} manufacturerAddress Dia chi san xuat
      * 
      * 
-     * 
-     * 
      * @apiParamExample {json} Request-Example:
      * {
      *     "name": " Ababetter  3.6EC",
-     *     "activeIngredients": "Abamectin",
+     *     "activeIngredient": "Abamectin",
      *     "content": "36g/l",
      *     "plantProtectionProductGroup": "Thuốc trừ sâu",
      *     "ghs": "7",
      *     "who": "6",
-     *     "scopeOfUses": [
+     *     "scopeOfUse": [
      *         {
      *             "plant": "dưa hấu",
      *             "pest": "bọ trĩ",
@@ -632,39 +833,39 @@ exports.routers = (app) => {
      *     }
      * }
      * 
-     * @apiParam {String} name Ten thuoc bao ve thuc vat
-     * @apiParam {String} activeIngredients Hoat chat
-     * @apiParam {String} content Ham luong
-     * @apiParam {String} plantProtectionProductGroup Nhom thuoc
-     * @apiParam {Integer} ghs Nhom doc GHS
-     * @apiParam {Integer} who Nhom doc WHO
-     * @apiParam {Array} scopeOfUses Pham vi su dung
-     * @apiParam {String} plant Cay trong
-     * @apiParam {String} pest Dich hai
-     * @apiParam {String} dosage Lieu luong
-     * @apiParam {String} phi
-     * @apiParam {String} usage Cach dung
-     * @apiParam {Array} registrationInfo Thong tin dang ky
-     * @apiParam {String} registrationUnit Don vi dang ky
-     * @apiParam {String} registrationUnitAddress Dia chi
-     * @apiParam {String} manufacturer Nha san xuat
-     * @apiParam {String} manufacturerAddress Dia chi san xuat
-     * @apiParam {ObjectId} pppId ID cua thuoc bao ve thuc vat
-     * @apiParam {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     * @apiSuccess {String} name Ten thuoc bao ve thuc vat
+     * @apiSuccess {String} activeIngredient Hoat chat
+     * @apiSuccess {String} content Ham luong
+     * @apiSuccess {String} plantProtectionProductGroup Nhom thuoc
+     * @apiSuccess {Integer} ghs Nhom doc GHS
+     * @apiSuccess {Integer} who Nhom doc WHO
+     * @apiSuccess {Array} scopeOfUse Pham vi su dung
+     * @apiSuccess {String} plant Cay trong
+     * @apiSuccess {String} pest Dich hai
+     * @apiSuccess {String} dosage Lieu luong
+     * @apiSuccess {String} phi
+     * @apiSuccess {String} usage Cach dung
+     * @apiSuccess {Array} registrationInfo Thong tin dang ky
+     * @apiSuccess {String} registrationUnit Don vi dang ky
+     * @apiSuccess {String} registrationUnitAddress Dia chi
+     * @apiSuccess {String} manufacturer Nha san xuat
+     * @apiSuccess {String} manufacturerAddress Dia chi san xuat
+     * @apiSuccess {ObjectId} pppId ID cua thuoc bao ve thuc vat
+     * @apiSuccess {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
      * 
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
      *     "name": " Ababetter  3.6EC",
-     *     "activeIngredients": "Abamectin",
+     *     "activeIngredient": "Abamectin",
      *     "content": "36g/l",
      *     "plantProtectionProductsGroup": "Thuốc trừ sâu",
      *     "ghs": "7",
      *     "who": "6",
      *     "created": "2019-11-14T16:43:16.899Z",
      *     "_id": "5dcd842416d4391c7f8a4265",
-     *     "scopeOfUses": [
+     *     "scopeOfUse": [
      *         {
      *             "pppId": "5dcd842416d4391c7f8a4265",
      *             "plant": "dưa hấu",

@@ -34,18 +34,18 @@ class PlantProtectionProduct {
     });
   }
 
-  createScopeOfUse(id, scopeOfUses, cb = () => {}) {
-    const collection = this.app.db.collection("scopeOfUses");
+  createScopeOfUse(id, scopeOfUse, cb = () => {}) {
+    const collection = this.app.db.collection("scopeOfUse");
 
     let obj = [];
-    for (var i in scopeOfUses) {
+    for (var i in scopeOfUse) {
       let data = {
         pppId: id,
-        plant: _.get(scopeOfUses[i], "plant", ""),
-        pest: _.get(scopeOfUses[i], "pest", ""),
-        dosage: _.get(scopeOfUses[i], "dosage", ""),
-        phi: _.get(scopeOfUses[i], "phi", ""),
-        usage: _.get(scopeOfUses[i], "usage", ""),
+        plant: _.get(scopeOfUse[i], "plant", ""),
+        pest: _.get(scopeOfUse[i], "pest", ""),
+        dosage: _.get(scopeOfUse[i], "dosage", ""),
+        phi: _.get(scopeOfUse[i], "phi", ""),
+        usage: _.get(scopeOfUse[i], "usage", ""),
         created: new Date()
       };
 
@@ -60,9 +60,9 @@ class PlantProtectionProduct {
 
       console.log("Number of documents inserted: " + res.insertedCount);
 
-      const scopeOfUses = res.ops;
+      const scopeOfUse = res.ops;
 
-      return cb(null, scopeOfUses);
+      return cb(null, scopeOfUse);
     });
   }
 
@@ -112,8 +112,8 @@ class PlantProtectionProduct {
       phi: {
         errorMessage: "PHI phải là số",
         doValidate: () => {
-          for (var i in plantProtectionProduct.scopeOfUses) {
-            const phi = plantProtectionProduct.scopeOfUses[i].phi;
+          for (var i in plantProtectionProduct.scopeOfUse) {
+            const phi = plantProtectionProduct.scopeOfUse[i].phi;
             if (phi != "") {
               if (!reg.test(phi)) {
                 return false;
@@ -160,16 +160,114 @@ class PlantProtectionProduct {
     }
   }
 
+  getScopeOfUse(plantProtectionProducts, cb = () => {}) {
+    const collection = this.app.db.collection("scopeOfUse");
+    let counter = 0;
+
+    for (let i = 0; i < plantProtectionProducts.length; i++) {
+      const pppId = mongoose.Types.ObjectId(plantProtectionProducts[i]._id);
+      collection.find({
+        pppId: pppId
+      }).toArray((err, scopeOfUses) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        plantProtectionProducts[i]["scopeOfUse"] = scopeOfUses;
+
+        counter++;
+
+        if (counter == plantProtectionProducts.length) {
+          return cb(null, plantProtectionProducts);
+        }
+      });
+    }
+  }
+
+  getRegistrationInfo(plantProtectionProducts, cb = () => {}) {
+    const collection = this.app.db.collection("registrationInfo");
+    let counter = 0;
+
+    for (let i = 0; i < plantProtectionProducts.length; i++) {
+      const pppId = mongoose.Types.ObjectId(plantProtectionProducts[i]._id);
+      collection.findOne({
+        pppId: pppId
+      }, (err, registrationInfo) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        plantProtectionProducts[i]["registrationInfo"] = registrationInfo;
+
+        counter++;
+
+        if (counter == plantProtectionProducts.length) {
+          return cb(null, plantProtectionProducts);
+        }
+      });
+    }
+  }
+
   // FIND ALL PLANT PROTECTION PRODUCT IN DATABASE
   find(cb = () => {}) {
-    const collection = this.app.db.collection("plantProtectionProduct");
+    const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
 
-    collection.find({}).toArray((err, plantProtectionProducts) => {
+    plantProtectionProduct.find({}).toArray((err, plantProtectionProducts) => {
       if (err) {
         return cb(err, null);
       }
 
-      return cb(null, plantProtectionProducts);
+      this.getScopeOfUse(plantProtectionProducts, (err, plantProtectionProducts) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        this.getRegistrationInfo(plantProtectionProducts, (err, plantProtectionProducts) => {
+          if (err) {
+            return cb(err, null);
+          }
+
+          return cb(null, plantProtectionProducts);
+        });
+      });
+    });
+  }
+
+  // FIND PLANT PROTECTION PRODUCT BY ID
+  findById(id, cb = () => {}) {
+    const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
+    plantProtectionProduct.findOne({
+      _id: mongoose.Types.ObjectId(id)
+    }, (err, plantProtectionProducts) => {
+      if (err) {
+        return cb(err, null);
+      }
+
+      // Get scope of use
+      const scopeOfUse = this.app.db.collection("scopeOfUse");
+      scopeOfUse.find({
+        pppId: mongoose.Types.ObjectId(id)
+      }).toArray((err, scopeOfUses) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        plantProtectionProducts["scopeOfUse"] = scopeOfUses;
+
+        // Get registration information
+        const registrationInfo = this.app.db.collection("registrationInfo");
+        registrationInfo.findOne({
+          pppId: mongoose.Types.ObjectId(id)
+        }, (err, registrationInfo) => {
+          if (err) {
+            return cb(err, null);
+          }
+
+          plantProtectionProducts["registrationInfo"] = registrationInfo;
+
+          return cb(null, plantProtectionProducts);
+        });
+      });
     });
   }
 
@@ -186,9 +284,9 @@ class PlantProtectionProduct {
 
       let pppObj = {
         name: _.get(plantProtectionProduct, "name", ""),
-        activeIngredients: _.get(
+        activeIngredient: _.get(
           plantProtectionProduct,
-          "activeIngredients",
+          "activeIngredient",
           ""
         ),
         content: _.get(plantProtectionProduct, "content", ""),
@@ -213,15 +311,16 @@ class PlantProtectionProduct {
         response = res.ops[0];
 
         // Save scope of use to database
-        const scopeOfUses = _.get(plantProtectionProduct, "scopeOfUses", []);
+        const scopeOfUse = _.get(plantProtectionProduct, "scopeOfUse", []);
 
-        this.createScopeOfUse(pppId, scopeOfUses, (err, scopeOfUses) => {
+        this.createScopeOfUse(pppId, scopeOfUse, (err, scopeOfUse) => {
           if (err) {
             return cb(err, null);
           }
 
           // Add scope of use to response
-          response["scopeOfUses"] = scopeOfUses;
+          response["scopeOfUse"] = scopeOfUse;
+
         });
 
         // Save registration info to database
