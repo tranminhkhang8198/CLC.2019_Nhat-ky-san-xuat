@@ -119,10 +119,21 @@ class Token{
         
     }
 
-    verifyJwtToken(refreshToken, cb = ()=>{}){
+    refresh(refreshToken, cb = ()=>{}){
         const collection = this.app.db.collection('token')
         jwt.verify(refreshToken, config.refreshTokenSecret,(err, decoded)=> {
             if(err){
+                //TODO: neu token het hang thi xoa khoi database
+                if(err.message==="jwt expired"){
+                    const collection = this.app.db.collection('token');
+                    collection.deleteOne({refreshToken: refreshToken}, (err, result)=>{
+                        if(err){
+                            return cb({errorMessage: "Some thong went wrong"}, null);
+                        }else{
+                            return cb(null, result);
+                        }
+                    })
+                }
                 return cb({errorMessage:"Refresh token not match"}, null);
             }else{
                 // Get user
@@ -188,6 +199,29 @@ class Token{
 
             }
         })
+    }
+
+    remove(refreshToken, cb = () =>{}){
+        if(!refreshToken){
+            return cb({errorMessage: "Token khong hop le"})
+        }
+        // Verify Token
+        let decoded;
+        try {
+            decoded = jwt.verify(refreshToken, config.refreshTokenSecret)
+        } catch (error) {
+            return cb({errorMessage: "Token khong hop le hoac het hieu luc"});
+        }
+        // Delete token
+        const collection = this.app.db.collection('token');
+        collection.deleteOne({refreshToken:refreshToken},(err, result)=>{
+            if(err){
+                return cb({errorMessage:"Loi xoa du lieu database"},null);
+            }
+            else{
+                return cb(null,{responseMessage:"Xoa thanh cong"});
+            }
+        });
     }
 }
 

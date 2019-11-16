@@ -235,6 +235,22 @@ exports.routers = (app) => {
         });
     });
 
+    app.delete('/api/token', (req, res, next)=>{
+        const {refreshToken} = req.body;
+        if(refreshToken){
+            app.db.models.token.remove(refreshToken, (err, result) =>{
+                if(err){
+                    return errorHandle(res, err.errorMessage, 403);
+                }
+                else{
+                    return responseHandle(res, result);
+                }
+            })
+        }
+
+
+    });
+
     /**
      * TODO: refresh token
      */
@@ -242,7 +258,7 @@ exports.routers = (app) => {
         const {refreshToken} = req.body;
         if(refreshToken){
             // Check refresh token
-            app.models.token.verifyJwtToken(refreshToken, (err, result)=>{
+            app.models.token.refresh(refreshToken, (err, result)=>{
                 if (err){
                     return errorHandle(res, "Verify JWT token falied",403);
                 }else{
@@ -253,6 +269,8 @@ exports.routers = (app) => {
             return errorHandle(res, "Request without refresh token",402);
         }
     })
+
+
 
 
 

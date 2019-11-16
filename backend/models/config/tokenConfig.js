@@ -3,5 +3,5 @@ module.exports = {
     "refreshTokenSecret": "some-s3cret-refre2h-token",
     "port": 3000,
     "tokenLife": 60, // 15 phút
-    "refreshTokenLife": 86400 // một ngày
+    "refreshTokenLife": 120 // một ngày
   }
