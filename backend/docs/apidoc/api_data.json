@@ -542,13 +542,13 @@
   {
     "type": "get",
     "url": "/plant-protection-products/:id",
-    "title": "Get plant protection product by id",
-    "name": "GetPlantProtectionProduct",
+    "title": "Get plant protection product by query",
+    "name": "GetPlantProtectionProductByQuery",
     "group": "PlantProtectionProduct",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-products/:id",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products/query",
         "type": "curl"
       }
     ],
@@ -572,11 +572,64 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "id",
+            "field": "_id",
             "description": "<p>ID cua thuoc bao ve thuc vat</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten cua thuoc bao ve thuc vat</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "plant",
+            "description": "<p>Cay trong</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pest",
+            "description": "<p>Dich hai</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Tìm kiếm bằng ID thuốc bvtv",
+          "content": "{\n    \"query\": {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\"\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tìm kiếm bằng tên",
+          "content": "{\n    \"query\": {\n        \"name\": \" Ababetter  3.6EC\"\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tìm kiếm theo cây",
+          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"plant\": \"lúa\"\n        }\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tìm kiếm theo dịch hại",
+          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"pest\": \"sâu tơ\"\n        }\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tìm kiếm theo cây và dịch hại",
+          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"plant\": \"lúa\",\n            \"pest\": \"bọ trĩ\"\n        }\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tìm kiếm theo cây và đơn vị đăng ký",
+          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"plant\": \"lúa\"\n        },\n        \"registrationInfo\": {\n            \"registrationUnit\": \"Công ty TNHH SX TM Tô Ba\"\n        }\n    }\n}",
+          "type": "json"
+        }
+      ]
     },
     "success": {
       "fields": {
@@ -728,7 +781,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật với id = '\" + id + \"'\"\n    }",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật phù hợp!\"\n    }",
           "type": "json"
         }
       ]
