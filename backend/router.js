@@ -41,30 +41,29 @@ exports.routers = (app) => {
      */
     const verifyUser = (req, resource, cb = () => {}) => {
         //Verify token
-        let tokenId = req.get('authorization');
-        if (!tokenId) {
-            tokenId = req.query.token;
+        let token = req.get('authorization');
+        if (!token) {
+            token = req.query.token;
         }
-        if (!tokenId) {
+        if (!token) {
             return cb({
                 errorMessage: "Access denied"
             }, null);
         }
 
-        app.models.token.verify(tokenId, (err, token) => {
+        app.models.token.verify(token, (err, result) => {
 
             if (err) {
                 return cb({
-                    errorMessage: "Access denied"
+                    err
                 }, null);
             } else {
-                _.unset(token.user, 'password')
                 // Check permission
-                app.models.permission.checkPermission(token.user._id, resource, req.method, (err, permission) => {
+                app.models.permission.checkPermission(result._id, resource, req.method, (err, permission) => {
 
                     if (err) {
                         return cb({
-                            errorMessage: "Access denied"
+                            errorMessage: "Loi trong qua trinh kiem tra quyen truy cap"
                         }, null);
                     } else {
                         if (permission) {
@@ -72,7 +71,7 @@ exports.routers = (app) => {
                             return cb(null, permission);
                         } else {
                             return cb({
-                                errorMessage: "Access denied"
+                                errorMessage: "Ban khong co quyen truy cap vao tai nguyen nay"
                             }, null);
                         }
                     }
@@ -122,12 +121,12 @@ exports.routers = (app) => {
      *     {
      *       "name": "Nguyen Van Loi",
      *       "personalId":"384736273",
-     *       "address": Ninh Kieu, Can Tho,
+     *       "address": "Ninh Kieu, Can Tho",
      *       "phone": "093827463",
      *       "email": "admin@gmail.com",
      *       "user": "user",
      *       "HTXId": "dowidnfjd",
-     *       "password": "dfjeidjd"
+     *       "password": "123456"
      *     }
      * 
      * @apiSuccess {String} name Ten nguoi su dung
@@ -204,7 +203,7 @@ exports.routers = (app) => {
      * @apiParamExample {json} Request-Example:
      *     {
      *       "phone": "0847362182",
-     *       "password":"123456",
+     *       "password":"123456"
      *     }
      *  
      * @apiSuccess {String} _id ID token
@@ -235,6 +234,27 @@ exports.routers = (app) => {
             return err ? errorHandle(res, err, 504) : responseHandle(res, result);
         });
     });
+
+    /**
+     * TODO: refresh token
+     */
+    app.post('/api/refresh_token', (req, res, next)=>{
+        const {refreshToken} = req.body;
+        if(refreshToken){
+            // Check refresh token
+            app.models.token.verifyJwtToken(refreshToken, (err, result)=>{
+                if (err){
+                    return errorHandle(res, "Verify JWT token falied",403);
+                }else{
+                    return responseHandle(res, result);
+                }
+            });
+        }else {
+            return errorHandle(res, "Request without refresh token",402);
+        }
+    })
+
+
 
     /**
      * @api {get} /users/me Get user info from token
@@ -272,8 +292,8 @@ exports.routers = (app) => {
      *          "phone": "0836810112",
      *          "email": "vanloi10c@gmail.com",
      *          "user": "manager",
-     *          "HTXId": "115",
-     *      }
+     *          "HTXId": "115"
+     *      },
      *          "created": "2019-11-12T11:37:03.461Z"
      *  }
      *
@@ -293,12 +313,12 @@ exports.routers = (app) => {
         }
 
         if (!tokenId) {
-            return errorHandle(res, "Access denied", 505);
+            return errorHandle(res, "Request without token", 505);
         }
 
         app.models.token.verify(tokenId, (err, result) => {
             if (err) {
-                return errorHandle(res, "Access denied");
+                return errorHandle(res, err.errorMessage);
             } else {
                 _.unset(result.user, 'password')
                 return responseHandle(res, result, 200)
