@@ -1,18 +1,21 @@
-import React, { Component } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { Component } from 'react';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Login extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+        <nav className="navbar navbar-light navbar-expand-lg  bg-white clean-navbar">
           <div className="container">
-            <a className="navbar-brand logo" href="#">
+            <a className="navbar-brand logo" href="/">
               HTX 4.0
             </a>
             <button
               data-toggle="collapse"
               className="navbar-toggler"
               data-target="#navcol-1"
+              type="button"
             >
               <span className="sr-only">Toggle navigation</span>
               <span className="navbar-toggler-icon" />
@@ -32,7 +35,7 @@ class Login extends Component {
                   chúng tôi
                 </p>
               </div>
-              <form style={{ paddingBottom: "20px" }}>
+              <form style={{ paddingBottom: '20px' }}>
                 <div className="form-group">
                   <label htmlFor="email">Tài khoản</label>
                   <input
@@ -53,7 +56,8 @@ class Login extends Component {
                   Đăng nhập
                 </button>
                 <p className="text-center mt-2">
-                  Quên mật khẩu?,&nbsp;<a href="#">báo cáo quản trị viên.</a>
+                  Quên mật khẩu?,&nbsp;
+                  <a href="/">báo cáo quản trị viên.</a>
                 </p>
               </form>
             </div>
@@ -64,12 +68,12 @@ class Login extends Component {
             className="footer-copyright"
             style={{
               border: 0,
-              backgroundColor: "#fff",
-              color: "#858796",
-              margin: 0
+              backgroundColor: '#fff',
+              color: '#858796',
+              margin: 0,
             }}
           >
-            <p style={{ color: "#858796" }}>Copyright © HTX 4.0 2019</p>
+            <p style={{ color: '#858796' }}>Copyright © HTX 4.0 2019</p>
           </div>
         </footer>
       </div>
