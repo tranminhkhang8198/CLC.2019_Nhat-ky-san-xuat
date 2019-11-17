@@ -94,7 +94,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Xóa dữ liệu thuốc BVTV</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                        <h4 class="modal-title">Xóa dữ liệu phân bón</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
                     <div class="modal-body">
                         <p>Chọn tên các dữ liệu bạn muốn xóa</p>
                         <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Airi Satou</label></div>
@@ -114,9 +114,9 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Thêm mới thuốc BVTV</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                        <h4 class="modal-title">Thêm mới phân bón</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
                     <div class="modal-body modal-add-body">
-                        <div class="form-group"><label for="ten-thuong-pham">Tên thương phẩm<span style="color: rgb(249,15,15);">&nbsp;*</span></label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên thương phẩm"></div>
+                        <div class="form-group"><label for="ten-thuong-pham">Tên phân bón<span style="color: rgb(249,15,15);">&nbsp;*</span></label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên thương phẩm"></div>
                         <div class="form-group"><label for="ten-thuong-pham">Tên hoạt chất</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên hoạt chất"></div>
                         <div class="form-group"><label for="ten-thuong-pham">Tên loại thuốc</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên loại thuốc"></div>
                         <div class="form-group"><label for="ten-thuong-pham">Tên nhóm thuốc</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên nhóm thuốc"></div>
@@ -267,12 +267,12 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Chỉnh sửa thông tin thuốc BVTV</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                        <h4 class="modal-title">Chỉnh sửa thông tin phân bón</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
                     <div class="modal-body modal-add-body">
                         <div class="container" style="padding: 0;">
                             <div class="row">
                                 <div class="col-4">
-                                    <p>Tên thương phẩm</p>
+                                    <p>Tên phân bón</p>
                                 </div>
                                 <div class="col-8"><input class="form-control-plaintext p-0" type="text" value="Lorem issum" style="/*padding: 0;*/"></div>
                             </div>
@@ -375,7 +375,7 @@
         <div class="container-fluid">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <p class="text-primary m-0 font-weight-bold">Danh sách thuốc bảo vệ thực vật</p>
+                    <p class="text-primary m-0 font-weight-bold">Danh sách phân bón</p>
                     <div class="mt-3 d-flex flex-row justify-content-around"><a class="btn btn-success btn-icon-split btn-sm" role="button" data-toggle="modal" data-target="#modal-add"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">Thêm mới dữ liệu</span></a>
                         <a
                             class="btn btn-danger btn-icon-split" role="button" data-toggle="modal" data-target="#modal-delete-items"><span class="text-white-50 icon"><i class="fas fa-trash"></i></span><span class="text-white text">Xóa dữ liệu</span></a>
@@ -387,16 +387,16 @@
                             <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>HIển thị&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
                         </div>
                         <div class="col-md-6">
-                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Tìm thuốc BVTV theo tên" autofocus=""></label></div>
+                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Tìm phân bón theo tên" autofocus=""></label></div>
                         </div>
                     </div>
                     <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                         <table class="table dataTable my-0" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th>Tên thương phẩm</th>
-                                    <th>Tên hoạt chất</th>
-                                    <th>Loại thuốc</th>
+                                    <th>Tên phân bón</th>
+                                    <th>Lorem issum</th>
+                                    <th>Lorem issum</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -470,7 +470,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td><strong>Tên thương phẩm</strong></td>
+                                    <td><strong>Tên phân bón</strong></td>
                                     <td><strong>Tên hoạt chất</strong></td>
                                     <td><strong>Loại thuốc</strong></td>
                                     <td></td>
