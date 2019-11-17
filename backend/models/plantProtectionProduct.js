@@ -182,6 +182,9 @@ class PlantProtectionProduct {
             foreignField: "pppId",
             as: "registrationInfo"
           }
+        },
+        {
+          $unwind: "$registrationInfo"
         }
       ])
       .toArray((err, res) => {
@@ -214,49 +217,49 @@ class PlantProtectionProduct {
           foreignField: "pppId",
           as: "registrationInfo"
         }
+      },
+      {
+        $unwind: "$registrationInfo"
       }
     ];
 
-    // PREPROCESS QUERY
-    if (query._id) {
-      query._id = mongoose.Types.ObjectId(query._id);
+    let queryStr = {
+      ...query
     }
 
-    if (query.scopeOfUse) {
+    // PREPROCESS QUERY
+    if (queryStr._id) {
+      queryStr._id = mongoose.Types.ObjectId(queryStr._id);
+    }
+
+    if (queryStr.scopeOfUse) {
       pipeline.push({
         $unwind: "$scopeOfUse"
       });
-      for (let key in query.scopeOfUse) {
-        query["scopeOfUse." + key] = query.scopeOfUse[key];
+      for (let key in queryStr.scopeOfUse) {
+        queryStr["scopeOfUse." + key] = queryStr.scopeOfUse[key];
       }
-      delete query.scopeOfUse;
+      delete queryStr.scopeOfUse;
     }
 
-    if (query.registrationInfo) {
-      pipeline.push({
-        $unwind: "$registrationInfo"
-      });
-      for (let key in query.registrationInfo) {
-        query["registrationInfo." + key] = query.registrationInfo[key];
+    if (queryStr.registrationInfo) {
+      for (let key in queryStr.registrationInfo) {
+        queryStr["registrationInfo." + key] = queryStr.registrationInfo[key];
       }
-      delete query.registrationInfo;
+      delete queryStr.registrationInfo;
     }
 
     pipeline.push({
-      $match: query
+      $match: queryStr
     });
 
-    console.log(query);
+    plantProtectionProduct.aggregate(pipeline).toArray((err, res) => {
+      if (err) {
+        return cb(err, null);
+      }
 
-    plantProtectionProduct
-      .aggregate(pipeline)
-      .toArray((err, res) => {
-        if (err) {
-          return cb(err, null);
-        }
-
-        return cb(null, res);
-      });
+      return cb(null, res);
+    });
   }
 
   // CREATE NEW PLANT PROTECTION PRODUCT
@@ -327,40 +330,137 @@ class PlantProtectionProduct {
     });
   }
 
-  update(id, plantProtectionProduct = {}, cb = () => {}) {
-    const collection = this.app.db.collection("plantProtectionProduct");
+  updateScopeOfUse(scopeOfUseId, update, cb = () => {}) {
+    const scopeOfUse = this.app.db.collection("scopeOfUse");
 
-    let obj = {};
+    for (let key in update.scopeOfUse) {
+      // process query for update
+      let scopeOfUseQuery = {
+        _id: scopeOfUseId
+      };
+      scopeOfUseQuery[key] = {
+        $exists: true
+      };
 
-    for (var key in plantProtectionProduct) {
-      obj[key] = plantProtectionProduct[key];
+      // process field for update
+      let scopeOfUseUpdate = {
+        $set: {}
+      };
+      scopeOfUseUpdate.$set[key] = update.scopeOfUse[key];
+
+      // Update scope of use
+      scopeOfUse.update(scopeOfUseQuery, scopeOfUseUpdate, (err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+      });
     }
+  }
 
-    this.beforeUpdate(
-      id,
-      plantProtectionProduct,
-      (err, plantProtectionProduct) => {
+  updateRegistrationInfo(registrationInfoId, update, cb = () => {}) {
+    const registrationInfo = this.app.db.collection("registrationInfo");
+
+    for (let key in update.registrationInfo) {
+      // process query for update
+      let registrationInfoQuery = {
+        _id: registrationInfoId
+      };
+      registrationInfoQuery[key] = {
+        $exists: true
+      };
+
+      // process field for update
+      let registrationInfoUpdate = {
+        $set: {}
+      };
+      registrationInfoUpdate.$set[key] = update.registrationInfo[key];
+
+      // Update scope of use
+      registrationInfo.update(registrationInfoQuery, registrationInfoUpdate, (err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+      });
+    }
+  }
+
+  updatePlantProtectionProduct(pppId, update, cb = () => {}) {
+    const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
+
+    for (let key in update) {
+      // process query for update
+      let plantProtectionProductQuery = {
+        _id: pppId
+      };
+      plantProtectionProductQuery[key] = {
+        $exists: true
+      };
+
+      // process field for update
+      let plantProtectionProductUpdate = {
+        $set: {}
+      };
+      plantProtectionProductUpdate.$set[key] = update[key];
+
+      // Update scope of use
+      plantProtectionProduct.update(plantProtectionProductQuery, plantProtectionProductUpdate, (err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+      });
+    }
+  }
+
+  // UPDATE PLANT PROTECTION PRODUCT
+  update(query, update = {}, cb = () => {}) {
+    this.findByQuery(query, (err, res) => {
+      if (err) {
+        return cb(err, null);
+      }
+
+      res.forEach((doc) => {
+        // process for update scopeOfUse if was submitted
+        if (update.scopeOfUse) {
+          /*
+           * Because the response of scope of use can be an object or an array
+           * depending query (findByQuery), therefore it need to be check before update
+           */
+          if (Array.isArray(doc.scopeOfUse)) {
+            doc.scopeOfUse.forEach((scopeOfUseElem) => {
+              const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
+              this.updateScopeOfUse(scopeOfUseId, update);
+            });
+          } else {
+            const scopeOfUseId = mongoose.Types.ObjectId(doc.scopeOfUse._id);
+            this.updateScopeOfUse(scopeOfUseId, update);
+          }
+        }
+
+        // process for update scopeOfUse if was submitted
+        if (update.registrationInfo) {
+          const registrationInfoId = mongoose.Types.ObjectId(doc.registrationInfo._id);
+          this.updateRegistrationInfo(registrationInfoId, update);
+        }
+
+        // remove field after update
+        delete update.scopeOfUse;
+        delete update.registrationInfo;
+
+        // process update for plant protection product
+        for (var key in update) {
+          const pppId = mongoose.Types.ObjectId(doc._id);
+          this.updatePlantProtectionProduct(pppId, update);
+        }
+      });
+
+      this.findByQuery(query, (err, res) => {
         if (err) {
           return cb(err, null);
         }
 
-        // Update Plant Protection Product
-        collection.findOneAndUpdate({
-            _id: mongoose.Types.ObjectId(id)
-          }, {
-            $set: obj
-          }, {
-            returnNewDocument: false
-          },
-          (err, info) => {
-            if (err) {
-              return cb(err, null);
-            }
-            return cb(null, fertilizer);
-          }
-        );
-      }
-    );
+        return cb(null, res);
+      });
+    });
   }
 }
 

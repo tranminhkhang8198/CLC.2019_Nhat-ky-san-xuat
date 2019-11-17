@@ -1,6 +1,6 @@
 const _ = require("lodash");
 
-exports.routers = app => {
+exports.routers = (app) => {
   /**
    * @apiDefine set $set
    */
@@ -43,8 +43,7 @@ exports.routers = app => {
       tokenId = req.query.token;
     }
     if (!tokenId) {
-      return cb(
-        {
+      return cb({
           errorMessage: "Access denied"
         },
         null
@@ -53,8 +52,7 @@ exports.routers = app => {
 
     app.models.token.verify(tokenId, (err, token) => {
       if (err) {
-        return cb(
-          {
+        return cb({
             errorMessage: "Access denied"
           },
           null
@@ -68,8 +66,7 @@ exports.routers = app => {
           req.method,
           (err, permission) => {
             if (err) {
-              return cb(
-                {
+              return cb({
                   errorMessage: "Access denied"
                 },
                 null
@@ -78,8 +75,7 @@ exports.routers = app => {
               if (permission) {
                 return cb(null, permission);
               } else {
-                return cb(
-                  {
+                return cb({
                     errorMessage: "Access denied"
                   },
                   null
@@ -361,9 +357,9 @@ exports.routers = app => {
         errorHandle(res, "Permission denied");
       } else {
         app.models.user.get(userId, (err, data) => {
-          return err
-            ? errorHandle(res, "Users are not found", 503)
-            : responseHandle(res, data);
+          return err ?
+            errorHandle(res, "Users are not found", 503) :
+            responseHandle(res, data);
         });
       }
     });
@@ -424,9 +420,9 @@ exports.routers = app => {
         // process task
         const body = req.body;
         app.models.user.update(body, (err, user) => {
-          return err
-            ? errorHandle(res, err.errorMessage)
-            : responseHandle(res, user);
+          return err ?
+            errorHandle(res, err.errorMessage) :
+            responseHandle(res, user);
         });
       }
     });
@@ -478,9 +474,9 @@ exports.routers = app => {
   app.post("/api/roles", (req, res, next) => {
     const body = req.body;
     app.models.role.create(body, (err, role) => {
-      return err
-        ? errorHandle(res, err.errorMessage, 501)
-        : responseHandle(res, role);
+      return err ?
+        errorHandle(res, err.errorMessage, 501) :
+        responseHandle(res, role);
     });
   });
 
@@ -546,9 +542,9 @@ exports.routers = app => {
   app.post("/api/resources", (req, res, next) => {
     body = req.body;
     app.models.resource.create(body, (err, role) => {
-      return err
-        ? errorHandle(res, err.errorMessage, 501)
-        : responseHandle(res, role);
+      return err ?
+        errorHandle(res, err.errorMessage, 501) :
+        responseHandle(res, role);
     });
   });
 
@@ -961,10 +957,11 @@ exports.routers = app => {
    *     }
    * @apiPermission none
    */
-  app.post("/api/plant-protection-products", (req, res, next) => {
-    const body = req.body;
+  app.patch("/api/plant-protection-products", (req, res, next) => {
+    const query = req.body.query;
+    const update = req.body.update;
 
-    app.models.plantProtectionProduct.create(body, (err, info) => {
+    app.models.plantProtectionProduct.update(query, update, (err, info) => {
       return err ? errorHandle(res, err, 201) : responseHandle(res, info);
     });
   });
