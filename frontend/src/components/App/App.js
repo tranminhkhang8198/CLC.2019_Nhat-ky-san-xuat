@@ -8,7 +8,6 @@ import {
 
 import { NavLink, NavItem, Nav } from 'reactstrap';
 
-import './App.css';
 import Administrator from '../../pages/Administrator';
 import Login from '../../pages/Login';
 import Profile from '../../pages/Profile';
@@ -44,7 +43,10 @@ function App() {
         */}
         <Switch>
           <Route exact path="/">
-            <div />
+            <div>
+              <h1>hello scsss</h1>
+              <h2>hello h2</h2>
+            </div>
           </Route>
           <Route exact path="/admin">
             <Administrator />
