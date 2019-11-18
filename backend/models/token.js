@@ -1,6 +1,8 @@
 const _ = require('lodash');
+const jwt = require('jsonwebtoken');
 const {OrderedMap} = require('immutable');
 const {ObjectID} = require('mongodb');
+const config = require('./config/tokenConfig');
 
 
 class Token{
@@ -15,8 +17,9 @@ class Token{
      * @param {string} id 
      * @param {token object} token 
      */
-    addTokenToCache(id, token){
+    addTokenToCache(token){
 
+        // this.Tokens.append(token)
         if(typeof id==='string'){
             id = new ObjectID(id);
         }
@@ -29,25 +32,41 @@ class Token{
      * @param {string} userId 
      * @param {callback function} cb 
      */
-    create(userId, cb = () => {}){
+    create(user, cb = () => {}){
 
-        if(typeof userId ==='string'){
-            userId = _.toString(userId);
+        // if(typeof userId ==='string'){
+        //     userId = _.toString(userId);
+        // }
+
+        // const token = {
+        //     userId: userId,
+        //     created: new Date()
+        // };
+        // Create new token
+
+        let options = {
+            expiresIn: config.tokenLife
+        };
+        const token = jwt.sign(user, config.secret, options)
+        options = {
+            expiresIn: config.refreshTokenLife
+        }
+        const refreshToken = jwt.sign(user, config.refreshTokenSecret, options);
+
+        const userId = user._id;
+
+
+        const tokenObj = {
+            refreshToken: refreshToken,
+            userId: userId
         }
 
-        const token = {
-            userId: userId,
-            created: new Date()
-        };
-
-        this.app.db.collection('token').insertOne(token, (err, info) => {
-            if (err== null){
-
-                const id = _.toString(token._id);
-                //add token to cache
-                this.addTokenToCache(id, token);
+        this.app.db.collection('token').insertOne(tokenObj, (err, info) => {
+            if (err){
+                return cb("Error creating token", null);
+            }else{
+                return cb(null, {token:token, refreshToken: refreshToken})
             }
-            return err ? cb("Error creating token", null) : cb(null, token);
         })
 
     }
@@ -58,14 +77,11 @@ class Token{
      * @param {string} tokenId 
      * @param {callback function} cb 
      */
-    verify(tokenId, cb = () => {}){
-
-        if(typeof tokenId !== 'string'){
-            tokenId = _.toString(tokenId);
-        }
+    verify(token, cb = () => {}){
 
         // Find token in cache
-        const inCache = this.Tokens.get(tokenId);
+        const inCache = this.Tokens.get(token);
+        // console.log("incache", inCache);
 
         if(inCache){
             // Get user info
@@ -82,39 +98,130 @@ class Token{
         }
         else{
             // Find token in database
-            let tokenObjId;
-            try{
-                tokenObjId = new ObjectID(tokenId);
+            // let tokenObjId;
+            // try{
+            //     tokenObjId = new ObjectID(tokenId);
+            // }
+            // catch(e){
+            //     return cb({error:"Token is invalid"}, null);
+            // }
+            let decoded;
+            try {
+                decoded = jwt.verify(token, config.secret);
+            } catch (error) {
+                cb({errorMessage:"Token khong dung hoac da het han"}, null);
             }
-            catch(e){
-                return cb({error:"Token is invalid"}, null);
-            }
-            
-            this.app.db.collection('token').find({_id: tokenObjId}).limit(1).toArray((err, result) => {
-            if(err ||!_.get(result, '[0]')){
-                return cb("Token is invalid", null);
-            }
-            else{
-                // Find user info
-                const token = _.get(result, '[0]');
-                const userId = token.userId.toString();
-                this.app.models.user.load(userId, (err, user) => {
-                    if(err){
-                        return cb(err, null);
-                    }
-                    else{
-                        token.user = user;
-                        _.unset(token, 'userId');
-                        return cb(null,token);
-                    }
-                });
-                
-            }
-            })
+            _.unset(decoded,'password');
+            cb(null, decoded);
 
         }
 
         
+    }
+
+    refresh(refreshToken, cb = ()=>{}){
+        const collection = this.app.db.collection('token')
+        jwt.verify(refreshToken, config.refreshTokenSecret,(err, decoded)=> {
+            if(err){
+                //TODO: neu token het hang thi xoa khoi database
+                if(err.message==="jwt expired"){
+                    const collection = this.app.db.collection('token');
+                    collection.deleteOne({refreshToken: refreshToken}, (err, result)=>{
+                        if(err){
+                            return cb({errorMessage: "Some thong went wrong"}, null);
+                        }else{
+                            return cb(null, result);
+                        }
+                    })
+                }
+                return cb({errorMessage:"Refresh token not match"}, null);
+            }else{
+                // Get user
+                const query = {
+                    refreshToken : refreshToken
+                }
+                collection.find(query).toArray((err, result)=>{
+                    if(err || !_.get(result,'[0]')){
+                        return cb({errorMessage: "Token is not found"}, null);
+                    }else{
+
+                        const token = _.get(result,'[0]');
+                        const userId = token.userId;
+
+                        // Get user from userId
+                        this.app.models.user.load(userId, (err, user)=>{
+                            if(err){
+
+                                return cb({errorMessage: "user is not found"}, null)
+                            } else {
+
+                                console.log(user);
+                                // Create new token from user
+                                let signOptions = {
+                                    expiresIn: config.tokenLife
+                                }
+                                const token = jwt.sign(user, config.secret, signOptions);
+                                // Create new fresh token
+                                signOptions = {
+                                    expiresIn: config.refreshTokenLife
+                                }
+                                const newRefreshToken = jwt.sign(user, config.refreshTokenSecret, signOptions);
+
+                                // Update token in database
+                                const query = {
+                                    refreshToken: refreshToken
+                                }
+                                const options ={
+                                    $set:{
+                                        refreshToken: newRefreshToken
+                                    }
+                                }
+                                collection.updateOne(query, options, (err, result)=>{
+                                    if(err){
+                                        return cb({errorMessage:"Khong the cap nhat refresh token"},null);
+                                    }
+                                    else{
+
+                                        if(result.result.nModified == 0){
+                                            return cb({errorMessage:"Khong the thay doi refresh token trong database"}, null)
+                                        }else{
+                                            return cb(null, {token:token,refreshToken:newRefreshToken});
+                                        }
+                                    }
+                                })
+
+
+                            }
+                        })
+                    }
+                })
+
+
+            }
+        })
+    }
+
+    remove(refreshToken, cb = () =>{}){
+        if(!refreshToken){
+            return cb({errorMessage: "Token khong hop le"})
+        }
+        // Verify Token
+        let decoded;
+        try {
+            decoded = jwt.verify(refreshToken, config.refreshTokenSecret)
+        } catch (error) {
+            return cb({errorMessage: "Token khong hop le hoac het hieu luc"});
+        }
+        // Delete token
+        const collection = this.app.db.collection('token');
+        collection.deleteOne({refreshToken:refreshToken},(err, result)=>{
+            if(err){
+                return cb({errorMessage:"Loi xoa du lieu database"},null);
+            }
+            else{
+                return cb(null,{responseMessage:"Xoa thanh cong"});
+            }
+        });
     }
 }
 

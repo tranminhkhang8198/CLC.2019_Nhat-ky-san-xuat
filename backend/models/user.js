@@ -159,7 +159,7 @@ class User{
             return cb(err, user);
         } else {
 
-            //find in database make sure this email address is not exits.
+            //find in database make sure this phone number is not exits.
             const phone = _.get(user, 'phone', '');
             collection.findOne({phone: {$eq: phone}}, (err, result) =>{
 
@@ -287,14 +287,14 @@ class User{
                             this.saveUserToCache(id, user);
 
                             // Create token
-                            this.app.models.token.create(user._id, (err, token) => {
+                            this.app.models.token.create(user, (err, tokenObj) => {
 
                                 if(err){
                                     return cb(err, null);
                                 }
                                 else{
-                                    _.unset(token,'userId')
-                                    return cb(null, token);
+                                    // _.unset(token,'userId')
+                                    return cb(null, tokenObj);
                                 }
                             });
 
