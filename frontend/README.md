@@ -47,3 +47,11 @@ Build, minify frontend source code for production mode:
 ```
 $ npm run build
 ```
+
+## Run config linter for development
+
+` npm run eslint `
+
+For more document about linter rules, following repos:
+(https://github.com/yannickcr/eslint-plugin-react)
+(https://github.com/airbnb/javascript)
