@@ -12,6 +12,9 @@ import './App.css';
 import Administrator from '../../pages/Administrator';
 import Login from '../../pages/Login';
 import Profile from '../../pages/Profile';
+import Quantriphanbon from '../../pages/Quantriphanbon';
+import Quantrihtx from '../../pages/Quantrihtx';
+import Quantriquanlyhtx from '../../pages/Quantriquanlyhtx';
 
 
 function App() {
@@ -54,6 +57,15 @@ function App() {
           </Route>
           <Route exact path="/login">
             <Login />
+          </Route>
+          <Route exact path="/quantriphanbon">
+            <Quantriphanbon />
+          </Route>
+          <Route exact path="/quantrihtx">
+            <Quantrihtx />
+          </Route>
+          <Route exact path="/quantriquanlyhtx">
+            <Quantriquanlyhtx />
           </Route>
         </Switch>
       </div>
