@@ -6,7 +6,7 @@ class PlantProtectionProduct {
     this.app = app;
   }
 
-  createRegistrationInfo(id, registrationInfo, cb = () => {}) {
+  createRegistrationInfo(id, registrationInfo, cb = () => { }) {
     const collection = this.app.db.collection("registrationInfo");
 
     let obj = {
@@ -34,7 +34,7 @@ class PlantProtectionProduct {
     });
   }
 
-  createScopeOfUse(id, scopeOfUse, cb = () => {}) {
+  createScopeOfUse(id, scopeOfUse, cb = () => { }) {
     const collection = this.app.db.collection("scopeOfUse");
 
     let obj = [];
@@ -66,7 +66,7 @@ class PlantProtectionProduct {
     });
   }
 
-  beforeCreate(plantProtectionProduct, cb = () => {}) {
+  beforeCreate(plantProtectionProduct, cb = () => { }) {
     const collection = this.app.db.collection("plantProtectionProduct");
     let err = null;
     const reg = /^\d+$/;
@@ -143,10 +143,10 @@ class PlantProtectionProduct {
       const name = _.get(plantProtectionProduct, "name", "");
 
       collection.findOne({
-          name: {
-            $eq: name
-          }
-        },
+        name: {
+          $eq: name
+        }
+      },
         (err, result) => {
           if (err || result) {
             return cb(
@@ -161,48 +161,13 @@ class PlantProtectionProduct {
   }
 
   // FIND ALL PLANT PROTECTION PRODUCT IN DATABASE
-  find(cb = () => {}) {
+  find(cb = () => { }) {
     const plantProtectionProduct = this.app.db.collection(
       "plantProtectionProduct"
     );
 
     plantProtectionProduct
       .aggregate([{
-          $lookup: {
-            from: "scopeOfUse",
-            localField: "_id",
-            foreignField: "pppId",
-            as: "scopeOfUse"
-          }
-        },
-        {
-          $lookup: {
-            from: "registrationInfo",
-            localField: "_id",
-            foreignField: "pppId",
-            as: "registrationInfo"
-          }
-        },
-        {
-          $unwind: "$registrationInfo"
-        }
-      ])
-      .toArray((err, res) => {
-        if (err) {
-          return cb(err, null);
-        }
-
-        return cb(null, res);
-      });
-  }
-
-  // FIND PLANT PROTECTION PRODUCT BY QUERY
-  findByQuery(query, cb = () => {}) {
-    const plantProtectionProduct = this.app.db.collection(
-      "plantProtectionProduct"
-    );
-
-    let pipeline = [{
         $lookup: {
           from: "scopeOfUse",
           localField: "_id",
@@ -221,6 +186,41 @@ class PlantProtectionProduct {
       {
         $unwind: "$registrationInfo"
       }
+      ])
+      .toArray((err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        return cb(null, res);
+      });
+  }
+
+  // FIND PLANT PROTECTION PRODUCT BY QUERY
+  findByQuery(query, cb = () => { }) {
+    const plantProtectionProduct = this.app.db.collection(
+      "plantProtectionProduct"
+    );
+
+    let pipeline = [{
+      $lookup: {
+        from: "scopeOfUse",
+        localField: "_id",
+        foreignField: "pppId",
+        as: "scopeOfUse"
+      }
+    },
+    {
+      $lookup: {
+        from: "registrationInfo",
+        localField: "_id",
+        foreignField: "pppId",
+        as: "registrationInfo"
+      }
+    },
+    {
+      $unwind: "$registrationInfo"
+    }
     ];
 
     let queryStr = {
@@ -253,6 +253,16 @@ class PlantProtectionProduct {
       $match: queryStr
     });
 
+    pipeline.push({
+      $group: {
+        _id: "$scopeOfUse.pest"
+      }
+    });
+
+    // pipeline.push({
+    //   $limit: 20
+    // });
+
     plantProtectionProduct.aggregate(pipeline).toArray((err, res) => {
       if (err) {
         return cb(err, null);
@@ -263,7 +273,7 @@ class PlantProtectionProduct {
   }
 
   // CREATE NEW PLANT PROTECTION PRODUCT
-  create(plantProtectionProduct = {}, cb = () => {}) {
+  create(plantProtectionProduct = {}, cb = () => { }) {
     const collection = this.app.db.collection("plantProtectionProduct");
     var response = {};
 
@@ -330,7 +340,7 @@ class PlantProtectionProduct {
     });
   }
 
-  updateScopeOfUse(scopeOfUseId, update, cb = () => {}) {
+  updateScopeOfUse(scopeOfUseId, update, cb = () => { }) {
     const scopeOfUse = this.app.db.collection("scopeOfUse");
 
     for (let key in update.scopeOfUse) {
@@ -357,7 +367,7 @@ class PlantProtectionProduct {
     }
   }
 
-  updateRegistrationInfo(registrationInfoId, update, cb = () => {}) {
+  updateRegistrationInfo(registrationInfoId, update, cb = () => { }) {
     const registrationInfo = this.app.db.collection("registrationInfo");
 
     for (let key in update.registrationInfo) {
@@ -384,7 +394,7 @@ class PlantProtectionProduct {
     }
   }
 
-  updatePlantProtectionProduct(pppId, update, cb = () => {}) {
+  updatePlantProtectionProduct(pppId, update, cb = () => { }) {
     const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
 
     for (let key in update) {
@@ -412,7 +422,7 @@ class PlantProtectionProduct {
   }
 
   // UPDATE PLANT PROTECTION PRODUCT
-  update(query, update = {}, cb = () => {}) {
+  update(query, update = {}, cb = () => { }) {
     this.findByQuery(query, (err, res) => {
       if (err) {
         return cb(err, null);
