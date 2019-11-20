@@ -8,6 +8,10 @@ import {
 
 import { NavLink, NavItem, Nav } from 'reactstrap';
 
+import TopNavbar from '../Navbars/TopNavbar/TopNavbar';
+import LeftNavbar from '../Navbars/LeftNavbar';
+import Footer from '../Footer/Footer';
+
 import Administrator from '../../pages/Administrator';
 import Login from '../../pages/Login';
 import Profile from '../../pages/Profile';
@@ -32,15 +36,6 @@ function App() {
           </NavItem>
         </Nav>
 
-        <hr />
-
-        {/*
-          A <Switch> looks through all its children <Route>
-          elements and renders the first one whose path
-          matches the current URL. Use a <Switch> any time
-          you have multiple routes, but you want only one
-          of them to render at a time
-        */}
         <Switch>
           <Route exact path="/">
             <div>
@@ -49,10 +44,33 @@ function App() {
             </div>
           </Route>
           <Route exact path="/admin">
-            <Administrator />
+            <div id="wrapper">
+              <div className="d-flex flex-column" id="content-wrapper">
+                <div id="content">
+                  <TopNavbar />
+                  <Administrator />
+                </div>
+                <Footer />
+              </div>
+              <a className="border rounded d-inline scroll-to-top" href="#page-top">
+                <i className="fas fa-angle-up" />
+              </a>
+            </div>
           </Route>
           <Route exact path="/profile">
-            <Profile />
+            <div id="wrapper">
+              <LeftNavbar />
+              <div className="d-flex flex-column" id="content-wrapper">
+                <div id="content">
+                  <TopNavbar />
+                  <Profile />
+                </div>
+                <Footer />
+              </div>
+              <a className="border rounded d-inline scroll-to-top" href="#page-top">
+                <i className="fas fa-angle-up" />
+              </a>
+            </div>
           </Route>
           <Route exact path="/login">
             <Login />
