@@ -9,7 +9,6 @@ import {
 import { NavLink, NavItem, Nav } from 'reactstrap';
 
 import TopNavbar from '../Navbars/TopNavbar/TopNavbar';
-import LeftNavbar from '../Navbars/LeftNavbar';
 import Footer from '../Footer/Footer';
 
 import Administrator from '../../pages/Administrator';
@@ -17,11 +16,11 @@ import Login from '../../pages/Login';
 import Profile from '../../pages/Profile';
 
 function App() {
-  const navItems = [
-    { pageName: 'Admin panel', route: '/admin' },
-    { pageName: 'Login', route: '/login' },
-    { pageName: 'Home', route: '/' },
-  ];
+  // const navItems = [
+  //   { pageName: 'Admin panel', route: '/admin' },
+  //   { pageName: 'Login', route: '/login' },
+  //   { pageName: 'Home', route: '/' },
+  // ];
   return (
     <Router>
       <div>
@@ -63,7 +62,6 @@ function App() {
           </Route>
           <Route exact path="/profile">
             <div id="wrapper">
-              <LeftNavbar navItems={navItems} />
               <div className="d-flex flex-column" id="content-wrapper">
                 <div id="content">
                   <TopNavbar />
