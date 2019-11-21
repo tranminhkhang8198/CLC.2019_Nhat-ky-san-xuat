@@ -475,8 +475,9 @@ class PlantProtectionProduct {
 
   // DELETE PLANT PROTECTION PRODUCT
   delete(query, cb = () => { }) {
-    const plantProtectionProduct = this.db.collection("plantProtectionProduct");
-    const scopeOfUse = this.db.collection("scopeOfUse");
+    const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
+    const scopeOfUse = this.app.db.collection("scopeOfUse");
+    const registrationInfo = this.app.db.collection("registrationInfo");
 
     this.findByQuery(query, (err, res) => {
       if (err) {
@@ -518,7 +519,13 @@ class PlantProtectionProduct {
         }
 
         // Delete registration info
+        registrationInfo.deleteOne({ _id: doc.registrationInfo._id }, (err, res) => {
+          if (err) {
+            return cb(err, null);
+          }
 
+          return cb(null, "no lai la ok");
+        });
       });
     });
   }

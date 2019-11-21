@@ -350,6 +350,91 @@ define({ "api": [
     "groupTitle": "PlantProtectionProduct"
   },
   {
+    "type": "delete",
+    "url": "/plant-protection-products/",
+    "title": "Delete plant protection product by query",
+    "name": "DeletePlantProtectionProductByQuery",
+    "group": "PlantProtectionProduct",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products/",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của thuốc bảo vệ thực vật</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten cua thuoc bao ve thuc vat</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Delete sử dụng _id thuốc bvtv",
+          "content": "{\n    \"query\": {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\"\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Delete sử dụng tên thuốc bvtv",
+          "content": "{\n    \"query\": {\n        \"name\": \" Ababetter  3.6EC\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n    \"successMessage\": \"Xóa thuốc bảo vệ thực vật thành công\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 201 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật phù hợp!\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "PlantProtectionProduct"
+  },
+  {
     "type": "get",
     "url": "/plant-protection-product",
     "title": "Get all plant protection product",
@@ -1347,6 +1432,100 @@ define({ "api": [
     "groupTitle": "Role"
   },
   {
+    "type": "post",
+    "url": "/refresh_token",
+    "title": "Xac thuc lay access token moi",
+    "name": "PostToken",
+    "group": "Token",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/refresh_token",
+        "type": "curl"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "refresh_token",
+            "description": "<p>refresh token cua nguoi dung</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"refresh_token\": \"fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "refresh_token",
+            "description": "<p>refresh token moi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>access token moi</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"refresh_token\": \"fsjdoiwukmvwafojf9wa4rrjirhfelkfsarwjijgerhggjh8reighoighergelrgsfhg\",\n    \"token\": \"sdfhwefdfbnbvsuerisbcfuhriufbwfjbskfheiurhkjfiurtherwgfkjsdhfsg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Verify-JWT-token-failed",
+            "description": "<p>refresh token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Request-without-refresh-token",
+            "description": "<p>Khong tim thay refresh token tren request</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"Request without refresh token\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Token"
+  },
+  {
     "type": "get",
     "url": "/users/me",
     "title": "Get user info from token",
@@ -1930,7 +2109,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"created\": \"2019-11-12T13:43:57.518Z\",\n    \"_id\": \"5dcab71db87686272aeb80f4\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e\n    yJfaWQiOiI1ZGQ2YTVjMWEwYWJkYTcwZmQ2YmZjYzkiLCJuYW\n    1lIjoiTmd1eWVuIHZhbiBsb2kiLCJwZXJzb25hbElkIjoiNDc\n    zNzI2MzcyMiIsImFkZHJlc3MiOiIiLCJwaG9uZSI6IjA4NDcz\n    ODE5MjIxIiwiZW1haWwiOiJsb2lAZ21haWwuY29tIiwidXNlci\n    I6InVzZXIiLCJIVFhJZCI6bnVsbCwicGFzc3dvcmQiOiIkMmI\n    kMTAkVE51bm1UR3poV2FhLjZtOUtSU1Z3LnBTU2JHT284RHZC\n    b3JZZFdZMWJXUmZXQnNiZ1BhTlMiLCJjcmVhdGVkIjoiMjAxO\n    S0xMS0yMVQxNDo1NzowNS4yMDBaIiwiaWF0IjoxNTc0MzQ4Mj\n    g5LCJleHAiOjE1NzQzNDgzNDl9.JeuNFsCBVC30Glz5YsBTb3\n    GzaqwdTfApwrLYIKxWrMU\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX\n    VCJ9.eyJfaWQiOiI1ZGQ2YTVjMWEwYWJkYTcwZmQ2YmZjYzki\n    LCJuYW1lIjoiTmd1eWVuIHZhbiBsb2kiLCJwZXJzb25hbElkI\n    joiNDczNzI2MzcyMiIsImFkZHJlc3MiOiIiLCJwaG9uZSI6Ij\n    A4NDczODE5MjIxIiwiZW1haWwiOiJsb2lAZ21haWwuY29tIiw\n    idXNlciI6InVzZXIiLCJIVFhJZCI6bnVsbCwicGFzc3dvcmQi\n    OiIkMmIkMTAkVE51bm1UR3poV2FhLjZtOUtSU1Z3LnBTU2JHT\n    284RHZCb3JZZFdZMWJXUmZXQnNiZ1BhTlMiLCJjcmVhdGVkIj\n    oiMjAxOS0xMS0yMVQxNDo1NzowNS4yMDBaIiwiaWF0IjoxNTc\n    0MzQ4Mjg5LCJleHAiOjE1NzQzNDg0MDl9.VZKH4yNpTsH0Umi\n    lLNUI45rtsA3QvuiRAy8UHRav__A\"\n}",
           "type": "json"
         }
       ]

@@ -1265,7 +1265,50 @@ exports.routers = app => {
         });
     });
 
-
+    /**
+     * @api {delete} /plant-protection-products/ Delete plant protection product by query
+     * @apiName DeletePlantProtectionProductByQuery
+     * @apiGroup PlantProtectionProduct
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/plant-protection-products/
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} _id ID của thuốc bảo vệ thực vật
+     * @apiParam {String} name Ten cua thuoc bao ve thuc vat
+     * 
+     * 
+     * @apiParamExample {json} Delete sử dụng _id thuốc bvtv
+     * {
+     *     "query": {
+     *         "_id": "5dce66cb5c25ee6da0a29ac8"
+     *     }
+     * }
+     *
+     * @apiParamExample {json} Delete sử dụng tên thuốc bvtv
+     * {
+     *     "query": {
+     *         "name": " Ababetter  3.6EC"
+     *     }
+     * }
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "successMessage": "Xóa thuốc bảo vệ thực vật thành công"
+     * }
+     *
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 201 Not Found
+     *     {
+     *       "error": "Không tìm thấy thuốc bảo vệ thực vật phù hợp!"
+     *     }
+     *
+     * @apiPermission manager-admin
+     */
     app.delete("/api/plant-protection-products", (req, res, next) => {
         const query = req.body.query;
 
