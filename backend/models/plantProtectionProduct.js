@@ -253,11 +253,11 @@ class PlantProtectionProduct {
       $match: queryStr
     });
 
-    pipeline.push({
-      $group: {
-        _id: "$scopeOfUse.pest"
-      }
-    });
+    // pipeline.push({
+    //   $group: {
+    //     _id: "$scopeOfUse.pest"
+    //   }
+    // });
 
     // pipeline.push({
     //   $limit: 20
@@ -287,7 +287,7 @@ class PlantProtectionProduct {
         name: _.get(plantProtectionProduct, "name", ""),
         activeIngredient: _.get(plantProtectionProduct, "activeIngredient", ""),
         content: _.get(plantProtectionProduct, "content", ""),
-        plantProtectionProductsGroup: _.get(
+        plantProtectionProductGroup: _.get(
           plantProtectionProduct,
           "plantProtectionProductGroup",
           ""
@@ -469,6 +469,56 @@ class PlantProtectionProduct {
         }
 
         return cb(null, res);
+      });
+    });
+  }
+
+  // DELETE PLANT PROTECTION PRODUCT
+  delete(query, cb = () => { }) {
+    const plantProtectionProduct = this.db.collection("plantProtectionProduct");
+    const scopeOfUse = this.db.collection("scopeOfUse");
+
+    this.findByQuery(query, (err, res) => {
+      if (err) {
+        return cb(err, null);
+      }
+
+      res.forEach((doc) => {
+        const pppId = mongoose.Types.ObjectId(doc._id);
+
+        // Delete plant protection product
+        plantProtectionProduct.deleteOne({ _id: pppId }, (err, res) => {
+          if (err) {
+            return cb(err, null)
+          }
+        });
+
+        /*
+           * Because the response of scope of use can be an object or an array
+           * depending query (findByQuery), therefore it need to be check before update
+           */
+
+        // Delete scope of use
+        if (Array.isArray(doc.scopeOfUse)) {
+          doc.scopeOfUse.forEach((scopeOfUseElem) => {
+            const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
+            scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
+              if (err) {
+                return cb(err, null);
+              }
+            });
+          });
+        } else {
+          const scopeOfUseId = mongoose.Types.ObjectId(doc.scopeOfUse._id);
+          scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
+            if (err) {
+              return cb(err, null);
+            }
+          });
+        }
+
+        // Delete registration info
+
       });
     });
   }

@@ -116,9 +116,9 @@ exports.routers = app => {
      *
      * @apiParam {String} name Ten nguoi su dung
      * @apiParam {String} personalId So CMND cua nguoi su dung
-     * @apiParam {String} address Dia chi cua nguoi su dung
+     * @apiParam {String} address Địa chỉ cua nguoi su dung
      * @apiParam {String} phone So dien thoai cua nguoi su dung
-     * @apiParam {String} email Dia chi email cua nguoi su dung
+     * @apiParam {String} email Địa chỉ email cua nguoi su dung
      * @apiParam {String} user Chuc vu cua nguoi su dung
      * @apiParam {String} HTXId ID cua hop tac xa
      * @apiParam {String} password Mat khau cua nguoi su dung
@@ -138,7 +138,7 @@ exports.routers = app => {
      * @apiSuccess {String} name Ten nguoi su dung
      * @apiSuccess {String} personalId So CMND cua nguoi su dung
      * @apiSuccess {String} phone So dien thoai cua nguoi su dung
-     * @apiSuccess {String} email Dia chi email cua nguoi su dung
+     * @apiSuccess {String} email Địa chỉ email cua nguoi su dung
      * @apiSuccess {String} user Chuc vu cua nguoi su dung
      * @apiSuccess {String} HTXId ID cua hop tac xa
      * @apiSuccess {String} created Thoi gian nguoi dung duoc tao
@@ -286,9 +286,9 @@ exports.routers = app => {
      * @apiSuccess {String} user._id ID cua user
      * @apiSuccess {String} user.name Ten cua user
      * @apiSuccess {String} user.personalId So CMND cua user
-     * @apiSuccess {String} user.address Dia chi cua user
+     * @apiSuccess {String} user.address Địa chỉ cua user
      * @apiSuccess {String} user.phone So dien thoai cua user
-     * @apiSuccess {String} user.email Dia chi email cua user
+     * @apiSuccess {String} user.email Địa chỉ email cua user
      * @apiSuccess {String} user.user Loai nguoi dung
      * @apiSuccess {String} user.HTXId ID cua hop tac xa
      * @apiSuccess {String} user.created ngay tao account cua user
@@ -354,9 +354,9 @@ exports.routers = app => {
      * @apiSuccess {String} _id ID cua user
      * @apiSuccess {String} name Ten cua user
      * @apiSuccess {String} personalId So CMND cua user
-     * @apiSuccess {String} address Dia chi cua user
+     * @apiSuccess {String} address Địa chỉ cua user
      * @apiSuccess {String} phone So dien thoai cua user
-     * @apiSuccess {String} email Dia chi email cua user
+     * @apiSuccess {String} email Địa chỉ email cua user
      * @apiSuccess {String} user Loai nguoi dung
      * @apiSuccess {String} HTXId ID cua hop tac xa
      * @apiSuccess {String} created ngay tao account cua user
@@ -604,25 +604,25 @@ exports.routers = app => {
      * @apiHeader {String} authorization Token.
      *
      *
-     * @apiSuccess {String} name Ten thuoc bao ve thuc vat
-     * @apiSuccess {String} activeIngredient Hoat chat
-     * @apiSuccess {String} content Ham luong
-     * @apiSuccess {String} plantProtectionProductGroup Nhom thuoc
-     * @apiSuccess {Integer} ghs Nhom doc GHS
-     * @apiSuccess {Integer} who Nhom doc WHO
-     * @apiSuccess {Array} scopeOfUse Pham vi su dung
-     * @apiSuccess {String} plant Cay trong
-     * @apiSuccess {String} pest Dich hai
-     * @apiSuccess {String} dosage Lieu luong
+     * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
+     * @apiSuccess {String} activeIngredient Hoạt chất
+     * @apiSuccess {String} content Hàm lượng
+     * @apiSuccess {String} plantProtectionProductGroup Nhóm thuốc
+     * @apiSuccess {Integer} ghs Nhóm độc GHS
+     * @apiSuccess {Integer} who Nhóm độc WHO
+     * @apiSuccess {Array} scopeOfUse Phạm vi sử dụng
+     * @apiSuccess {String} plant Cây trồng
+     * @apiSuccess {String} pest Dịch hại
+     * @apiSuccess {String} dosage Liều lượng
      * @apiSuccess {String} phi
-     * @apiSuccess {String} usage Cach dung
-     * @apiSuccess {Array} registrationInfo Thong tin dang ky
-     * @apiSuccess {String} registrationUnit Don vi dang ky
-     * @apiSuccess {String} registrationUnitAddress Dia chi
-     * @apiSuccess {String} manufacturer Nha san xuat
-     * @apiSuccess {String} manufacturerAddress Dia chi san xuat
-     * @apiSuccess {ObjectId} pppId ID cua thuoc bao ve thuc vat
-     * @apiSuccess {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     * @apiSuccess {String} usage Cách dùng
+     * @apiSuccess {Array} registrationInfo Thông tin đăng ký
+     * @apiSuccess {String} registrationUnit Đơn vị đăng ký
+     * @apiSuccess {String} registrationUnitAddress Địa chỉ
+     * @apiSuccess {String} manufacturer Nhà sản xuất
+     * @apiSuccess {String} manufacturerAddress Địa chi sản xuất
+     * @apiSuccess {ObjectId} pppId ID của thuốc bảo vệ thực vật
+     * @apiSuccess {ObjectId} _id ID của thuốc bảo vệ thực vật || Phạm vi sử dụng || Thông tin đăng ký
      *
      *
      * @apiSuccessExample Success-Response:
@@ -633,7 +633,7 @@ exports.routers = app => {
      *          "name": " Ababetter  3.6EC",
      *          "activeIngredient": "Abamectin",
      *          "content": "36g/l",
-     *          "plantProtectionProductsGroup": "",
+     *          "plantProtectionProductGroup": "",
      *          "ghs": "",
      *          "who": "2",
      *          "created": "2019-11-15T08:50:19.842Z",
@@ -664,7 +664,7 @@ exports.routers = app => {
      *          "name": " Ababetter  5EC",
      *          "activeIngredient": "Abamectin",
      *          "content": "50g/l",
-     *          "plantProtectionProductsGroup": "",
+     *          "plantProtectionProductGroup": "",
      *          "ghs": "",
      *          "who": "2",
      *          "created": "2019-11-15T08:50:42.728Z",
@@ -729,22 +729,29 @@ exports.routers = app => {
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {String} _id ID cua thuoc bao ve thuc vat
+     * @apiParam {String} _id ID của thuốc bảo vệ thực vật
      * @apiParam {String} name Ten cua thuoc bao ve thuc vat
-     * @apiParam {String} plant Cay trong
-     * @apiParam {String} pest Dich hai
+     * @apiParam {String} plant Cây trồng
+     * @apiParam {String} pest Dịch hại
      *
-     * @apiParamExample {json} Tìm kiếm bằng ID thuốc bvtv
+     * @apiParamExample {json} Tìm kiếm theo ID thuốc bvtv
      * {
      *     "query": {
      *         "_id": "5dce66cb5c25ee6da0a29ac8"
      *     }
      * }
      *
-     * @apiParamExample {json} Tìm kiếm bằng tên
+     * @apiParamExample {json} Tìm kiếm theo tên
      * {
      *     "query": {
      *         "name": " Ababetter  3.6EC"
+     *     }
+     * }
+     * 
+     * @apiParamExample {json} Tìm kiếm theo nhóm thuốc bvtv
+     * {
+     *     "query": {
+     *         "plantProtectionProductGroup": "Thuốc trừ sâu"
      *     }
      * }
      *
@@ -788,25 +795,25 @@ exports.routers = app => {
      *     }
      * }
      *
-     * @apiSuccess {String} name Ten thuoc bao ve thuc vat
-     * @apiSuccess {String} activeIngredient Hoat chat
-     * @apiSuccess {String} content Ham luong
-     * @apiSuccess {String} plantProtectionProductGroup Nhom thuoc
-     * @apiSuccess {Integer} ghs Nhom doc GHS
-     * @apiSuccess {Integer} who Nhom doc WHO
-     * @apiSuccess {Array} scopeOfUse Pham vi su dung
-     * @apiSuccess {String} plant Cay trong
-     * @apiSuccess {String} pest Dich hai
-     * @apiSuccess {String} dosage Lieu luong
+     * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
+     * @apiSuccess {String} activeIngredient Hoạt chất
+     * @apiSuccess {String} content Hàm lượng
+     * @apiSuccess {String} plantProtectionProductGroup Nhóm thuốc
+     * @apiSuccess {Integer} ghs Nhóm độc GHS
+     * @apiSuccess {Integer} who Nhóm độc WHO
+     * @apiSuccess {Array} scopeOfUse Phạm vi sử dụng
+     * @apiSuccess {String} plant Cây trồng
+     * @apiSuccess {String} pest Dịch hại
+     * @apiSuccess {String} dosage Liều lượng
      * @apiSuccess {String} phi
-     * @apiSuccess {String} usage Cach dung
-     * @apiSuccess {Array} registrationInfo Thong tin dang ky
-     * @apiSuccess {String} registrationUnit Don vi dang ky
-     * @apiSuccess {String} registrationUnitAddress Dia chi
-     * @apiSuccess {String} manufacturer Nha san xuat
-     * @apiSuccess {String} manufacturerAddress Dia chi san xuat
-     * @apiSuccess {ObjectId} pppId ID cua thuoc bao ve thuc vat
-     * @apiSuccess {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     * @apiSuccess {String} usage Cách dùng
+     * @apiSuccess {Array} registrationInfo Thông tin đăng ký
+     * @apiSuccess {String} registrationUnit Đơn vị đăng ký
+     * @apiSuccess {String} registrationUnitAddress Địa chỉ
+     * @apiSuccess {String} manufacturer Nhà sản xuất
+     * @apiSuccess {String} manufacturerAddress Địa chi sản xuất
+     * @apiSuccess {ObjectId} pppId ID của thuốc bảo vệ thực vật
+     * @apiSuccess {ObjectId} _id ID của thuốc bảo vệ thực vật || Phạm vi sử dụng || Thông tin đăng ký
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -814,7 +821,7 @@ exports.routers = app => {
      *     "name": " Ababetter  3.6EC",
      *     "activeIngredient": "Abamectin",
      *     "content": "36g/l",
-     *     "plantProtectionProductsGroup": "Thuốc trừ sâu",
+     *     "plantProtectionProductGroup": "Thuốc trừ sâu",
      *     "ghs": "7",
      *     "who": "6",
      *     "created": "2019-11-14T16:43:16.899Z",
@@ -877,23 +884,23 @@ exports.routers = app => {
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {String} name Ten thuoc bao ve thuc vat
-     * @apiParam {String} activeIngredient Hoat chat
-     * @apiParam {String} content Ham luong
-     * @apiParam {String} plantProtectionProductGroup Nhom thuoc
-     * @apiParam {Integer} ghs Nhom doc GHS
-     * @apiParam {Integer} who Nhom doc WHO
-     * @apiParam {Array} scopeOfUse Pham vi su dung
-     * @apiParam {String} plant Cay trong
-     * @apiParam {String} pest Dich hai
-     * @apiParam {String} dosage Lieu luong
+     * @apiParam {String} name Tên thuốc bảo vệ thực vật
+     * @apiParam {String} activeIngredient Hoạt chất
+     * @apiParam {String} content Hàm lượng
+     * @apiParam {String} plantProtectionProductGroup Nhóm thuốc
+     * @apiParam {Integer} ghs Nhóm độc GHS
+     * @apiParam {Integer} who Nhóm độc WHO
+     * @apiParam {Array} scopeOfUse Phạm vi sử dụng
+     * @apiParam {String} plant Cây trồng
+     * @apiParam {String} pest Dịch hại
+     * @apiParam {String} dosage Liều lượng
      * @apiParam {String} phi
-     * @apiParam {String} usage Cach dung
-     * @apiParam {Array} registrationInfo Thong tin dang ky
-     * @apiParam {String} registrationUnit Don vi dang ky
-     * @apiParam {String} registrationUnitAddress Dia chi
-     * @apiParam {String} manufacturer Nha san xuat
-     * @apiParam {String} manufacturerAddress Dia chi san xuat
+     * @apiParam {String} usage Cách dùng
+     * @apiParam {Array} registrationInfo Thông tin đăng ký
+     * @apiParam {String} registrationUnit Đơn vị đăng ký
+     * @apiParam {String} registrationUnitAddress Địa chỉ
+     * @apiParam {String} manufacturer Nhà sản xuất
+     * @apiParam {String} manufacturerAddress Địa chi sản xuất
      *
      *
      * @apiParamExample {json} Request-Example:
@@ -928,25 +935,25 @@ exports.routers = app => {
      *     }
      * }
      *
-     * @apiSuccess {String} name Ten thuoc bao ve thuc vat
-     * @apiSuccess {String} activeIngredient Hoat chat
-     * @apiSuccess {String} content Ham luong
-     * @apiSuccess {String} plantProtectionProductGroup Nhom thuoc
-     * @apiSuccess {Integer} ghs Nhom doc GHS
-     * @apiSuccess {Integer} who Nhom doc WHO
-     * @apiSuccess {Array} scopeOfUse Pham vi su dung
-     * @apiSuccess {String} plant Cay trong
-     * @apiSuccess {String} pest Dich hai
-     * @apiSuccess {String} dosage Lieu luong
+     * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
+     * @apiSuccess {String} activeIngredient Hoạt chất
+     * @apiSuccess {String} content Hàm lượng
+     * @apiSuccess {String} plantProtectionProductGroup Nhóm thuốc
+     * @apiSuccess {Integer} ghs Nhóm độc GHS
+     * @apiSuccess {Integer} who Nhóm độc WHO
+     * @apiSuccess {Array} scopeOfUse Phạm vi sử dụng
+     * @apiSuccess {String} plant Cây trồng
+     * @apiSuccess {String} pest Dịch hại
+     * @apiSuccess {String} dosage Liều lượng
      * @apiSuccess {String} phi
-     * @apiSuccess {String} usage Cach dung
-     * @apiSuccess {Array} registrationInfo Thong tin dang ky
-     * @apiSuccess {String} registrationUnit Don vi dang ky
-     * @apiSuccess {String} registrationUnitAddress Dia chi
-     * @apiSuccess {String} manufacturer Nha san xuat
-     * @apiSuccess {String} manufacturerAddress Dia chi san xuat
-     * @apiSuccess {ObjectId} pppId ID cua thuoc bao ve thuc vat
-     * @apiSuccess {ObjectId} _id ID cua thuoc bao ve thuc vat || pham vi su dung || thong tin dang ky
+     * @apiSuccess {String} usage Cách dùng
+     * @apiSuccess {Array} registrationInfo Thông tin đăng ký
+     * @apiSuccess {String} registrationUnit Đơn vị đăng ký
+     * @apiSuccess {String} registrationUnitAddress Địa chỉ
+     * @apiSuccess {String} manufacturer Nhà sản xuất
+     * @apiSuccess {String} manufacturerAddress Địa chi sản xuất
+     * @apiSuccess {ObjectId} pppId ID của thuốc bảo vệ thực vật
+     * @apiSuccess {ObjectId} _id ID của thuốc bảo vệ thực vật || Phạm vi sử dụng || Thông tin đăng ký
      *
      *
      * @apiSuccessExample Success-Response:
@@ -955,7 +962,7 @@ exports.routers = app => {
      *     "name": " Ababetter  3.6EC",
      *     "activeIngredient": "Abamectin",
      *     "content": "36g/l",
-     *     "plantProtectionProductsGroup": "Thuốc trừ sâu",
+     *     "plantProtectionProductGroup": "Thuốc trừ sâu",
      *     "ghs": "7",
      *     "who": "6",
      *     "created": "2019-11-14T16:43:16.899Z",
@@ -1009,6 +1016,183 @@ exports.routers = app => {
 
         app.models.plantProtectionProduct.create(body, (err, info) => {
             return err ? errorHandle(res, err, 201) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {patch} /plant-protection-products/:id Update plant protection product by query
+     * @apiName UpdatePlantProtectionProductByQuery
+     * @apiGroup PlantProtectionProduct
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/plant-protection-products/
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} _id ID của thuốc bảo vệ thực vật
+     * @apiParam {String} name Ten cua thuoc bao ve thuc vat
+     * @apiParam {String} plant Cây trồng
+     * @apiParam {String} pest Dịch hại
+     * @apiParam {String} registrationUnit Don vi dang ki
+     * @apiParam {String} manufacturer Nhà sản xuất
+     *
+     * @apiParamExample {json} Update sử dụng _id thuốc bvtv
+     * {
+     *     "query": {
+     *         "_id": "5dce66cb5c25ee6da0a29ac8"
+     *     },
+     *     "update": {
+     *         "name": "updated",
+     *         "activeIngredient": "updated",
+     *         "content": "updated",
+     *         "plantProtectionProductGroup": "updated",
+     *         "ghs": "20",
+     *         "who": "20",
+     *         "scopeOfUse": {
+     *             "plant": "updated",
+     *             "pest": "updated",
+     *             "dosage": "updated",
+     *             "phi": "updated",
+     *             "usage": "updated"
+     *         },
+     *         "registrationInfo": {
+     *             "registrationUnit": "updated",
+     *             "registrationUnitAddress": "updated",
+     *             "manufacturer": "updated",
+     *             "manufacturerAddress": "updated"
+     *         }
+     *     }
+     * }
+     *
+     * @apiParamExample {json} Update sử dụng tên thuốc bvtv
+     * {
+     *     "query": {
+     *         "name": " Ababetter  3.6EC"
+     *     },
+     *     "update": {
+     *         "name": "updated",
+     *         "activeIngredient": "updated",
+     *         "content": "updated",
+     *         "plantProtectionProductGroup": "updated",
+     *         "ghs": "20",
+     *         "who": "20",
+     *         "scopeOfUse": {
+     *             "plant": "updated",
+     *             "pest": "updated",
+     *             "dosage": "updated",
+     *             "phi": "updated",
+     *             "usage": "updated"
+     *         },
+     *         "registrationInfo": {
+     *             "registrationUnit": "updated",
+     *             "registrationUnitAddress": "updated",
+     *             "manufacturer": "updated",
+     *             "manufacturerAddress": "updated"
+     *         }
+     *     }
+     * }
+     *
+     * @apiParamExample {json} Update thông tin theo đơn vị đăng kí
+     * {
+     *     "query": {
+     *         "registrationInfo": {
+     *             "registrationUnit": "Công ty TNHH MTV Lucky"
+     *         }
+     *     },
+     *     "update": {
+     *         "registrationUnitAddress": "updated"
+     *     }
+     * }
+     *
+     * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
+     * @apiSuccess {String} activeIngredient Hoạt chất
+     * @apiSuccess {String} content Hàm lượng
+     * @apiSuccess {String} plantProtectionProductGroup Nhóm thuốc
+     * @apiSuccess {Integer} ghs Nhóm độc GHS
+     * @apiSuccess {Integer} who Nhóm độc WHO
+     * @apiSuccess {Array} scopeOfUse Phạm vi sử dụng
+     * @apiSuccess {String} plant Cây trồng
+     * @apiSuccess {String} pest Dịch hại
+     * @apiSuccess {String} dosage Liều lượng
+     * @apiSuccess {String} phi
+     * @apiSuccess {String} usage Cách dùng
+     * @apiSuccess {Array} registrationInfo Thông tin đăng ký
+     * @apiSuccess {String} registrationUnit Đơn vị đăng ký
+     * @apiSuccess {String} registrationUnitAddress Địa chỉ
+     * @apiSuccess {String} manufacturer Nhà sản xuất
+     * @apiSuccess {String} manufacturerAddress Địa chi sản xuất
+     * @apiSuccess {ObjectId} pppId ID của thuốc bảo vệ thực vật
+     * @apiSuccess {ObjectId} _id ID của thuốc bảo vệ thực vật || Phạm vi sử dụng || Thông tin đăng ký
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "name": "Ababetter  3.6EC",
+     *     "activeIngredient": "Abamectin",
+     *     "content": "36g/l",
+     *     "plantProtectionProductGroup": "Thuốc trừ sâu",
+     *     "ghs": "7",
+     *     "who": "6",
+     *     "created": "2019-11-14T16:43:16.899Z",
+     *     "_id": "5dcd842416d4391c7f8a4265",
+     *     "scopeOfUse": [
+     *         {
+     *             "pppId": "5dcd842416d4391c7f8a4265",
+     *             "plant": "dưa hấu",
+     *             "pest": "bọ trĩ",
+     *             "dosage": "0.2 - 0.3 lít/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
+     *             "created": "2019-11-14T16:43:16.900Z",
+     *             "_id": "5dcd842416d4391c7f8a4266"
+     *         },
+     *         {
+     *             "pppId": "5dcd842416d4391c7f8a4265",
+     *             "plant": "lúa",
+     *             "pest": "sâu cuốn lá",
+     *             "dosage": "200 - 300 ml/ha",
+     *             "phi": "7",
+     *             "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
+     *             "created": "2019-11-14T16:43:16.900Z",
+     *             "_id": "5dcd842416d4391c7f8a4267"
+     *         }
+     *     ],
+     *     "registrationInfo": {
+     *         "pppId": "5dcd842416d4391c7f8a4265",
+     *         "registrationUnit": "Công ty TNHH MTV Lucky",
+     *         "registrationUnitAddress": "",
+     *         "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *         "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
+     *         "created": "2019-11-14T16:43:16.900Z",
+     *         "_id": "5dcd842416d4391c7f8a4268"
+     *     }
+     * }
+     *
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Không tìm thấy thuốc bảo vệ thực vật phù hợp!"
+     *     }
+     *
+     * @apiPermission manager-admin
+     */
+    app.patch("/api/plant-protection-products", (req, res, next) => {
+        const query = req.body.query;
+        const update = req.body.update;
+
+        app.models.plantProtectionProduct.update(query, update, (err, info) => {
+            return err ? errorHandle(res, err, 204) : responseHandle(res, info);
+        });
+    });
+
+
+    app.delete("/api/plant-protection-products", (req, res, next) => {
+        const query = req.body.query;
+
+        app.models.plantProtectionProduct.delete(query, (err, info) => {
+            return err ? errorHandle(res, err, 204) : responseHandle(res, info);
         });
     });
 };
