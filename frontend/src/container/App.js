@@ -8,15 +8,15 @@ import {
 
 import { NavLink, NavItem, Nav } from 'reactstrap';
 
-import TopNavbar from '../Navbars/TopNavbar/TopNavbar';
-import Footer from '../Footer/Footer';
+import TopNavbar from '../components/Navbars/TopNavbar/TopNavbar';
+import Footer from '../components/Footer/Footer';
 
-import Administrator from '../../pages/Administrator';
-import Login from '../../pages/Login';
-import Profile from '../../pages/Profile';
-import Quantriphanbon from '../../pages/Quantriphanbon';
-import Quantrihtx from '../../pages/Quantrihtx';
-import Quantriquanlyhtx from '../../pages/Quantriquanlyhtx';
+import QuanTriThuocBVTV from '../pages/QuanTriThuocBVTV';
+import QuanTriPhanBon from '../pages/QuanTriPhanBon';
+import QuanTriHTX from '../pages/QuanTriHTX';
+import QuanTriNhanSuHTX from '../pages/QuanTriNhanSuHTX';
+import Login from '../pages/Login';
+import Profile from '../pages/Profile';
 
 function App() {
   // const navItems = [
@@ -75,16 +75,16 @@ function App() {
             </div>
           </Route>
           <Route exact path="/quantrithuocbvtv">
-            {renderNavItem(<Administrator />)}
+            {renderNavItem(<QuanTriThuocBVTV />)}
           </Route>
           <Route exact path="/quantriphanbon">
-            {renderNavItem(<Quantriphanbon />)}
+            {renderNavItem(<QuanTriPhanBon />)}
           </Route>
           <Route exact path="/quantrihtx">
-            {renderNavItem(<Quantrihtx />)}
+            {renderNavItem(<QuanTriHTX />)}
           </Route>
           <Route exact path="/quantriquanlyhtx">
-            {renderNavItem(<Quantriquanlyhtx />)}
+            {renderNavItem(<QuanTriNhanSuHTX />)}
           </Route>
           <Route exact path="/profile">
             {renderNavItem(<Profile />)}

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { ListItems } from '../components/DataTable/ListItems';
+import { ListItems } from '../components/DataTable/DataTable';
 
 function Quantrihtx() {
   // const navItems = ['Hợp tác xã', 'Quản lý Hợp tác xã', 'Thuốc BVTV', 'Phân bón'];

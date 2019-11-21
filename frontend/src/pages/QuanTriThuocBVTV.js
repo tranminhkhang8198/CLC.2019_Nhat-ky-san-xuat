@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 
-import { ListItems } from '../components/DataTable/ListItems';
+import { ListItems } from '../components/DataTable/DataTable';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Administrator extends Component {
