@@ -23,14 +23,24 @@ class Resource{
             created: new Date()
         };
 
-        collection.insertOne(obj, (err, result) =>{
-            if(err){
-                return cb({error: "error inserting new resource"}, null);
+        // Check resource name in database
+        collection.findOne({name: {$eq: obj.name}}, (err, result)=>{
+            if(err || result){
+                return cb({errorMessage: "resource already exist"}, null);
             }
             else{
-                return cb(null, result);
+                collection.insertOne(obj, (err, result) =>{
+                    if(err){
+                        return cb({errorMessage: "error inserting new resource"}, null);
+                    }
+                    else{
+                        return cb(null, result.ops);
+                    }
+                });
             }
-        });
+
+        })
+
 
     }
 
