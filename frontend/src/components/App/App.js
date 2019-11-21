@@ -24,6 +24,22 @@ function App() {
   //   { pageName: 'Login', route: '/login' },
   //   { pageName: 'Home', route: '/' },
   // ];
+
+  const renderNavItem = (Component) => (
+    <div id="wrapper">
+      <div className="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          <TopNavbar />
+          {Component}
+        </div>
+        <Footer />
+      </div>
+      <a className="border rounded d-inline scroll-to-top" href="#page-top">
+        <i className="fas fa-angle-up" />
+      </a>
+    </div>
+  );
+
   return (
     <Router>
       <div>
@@ -32,7 +48,16 @@ function App() {
             <NavLink to="/" tag={RRNavLink}>Home</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink to="/admin" tag={RRNavLink}>Admin Panel</NavLink>
+            <NavLink to="/quantrithuocbvtv" tag={RRNavLink}>Quản trị thuốc BVTV</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/quantriphanbon" tag={RRNavLink}>Quản trị phân bón</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/quantrihtx" tag={RRNavLink}>Quản trị HTX</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/quantriquanlyhtx" tag={RRNavLink}>Quản trị nhân sự HTX</NavLink>
           </NavItem>
           <NavItem>
             <NavLink to="/profile" tag={RRNavLink}>Profile</NavLink>
@@ -49,45 +74,23 @@ function App() {
               <h2>hello h2</h2>
             </div>
           </Route>
-          <Route exact path="/admin">
-            <div id="wrapper">
-              <div className="d-flex flex-column" id="content-wrapper">
-                <div id="content">
-                  <TopNavbar />
-                  <Administrator />
-                </div>
-                <Footer />
-              </div>
-              <a className="border rounded d-inline scroll-to-top" href="#page-top">
-                <i className="fas fa-angle-up" />
-              </a>
-            </div>
+          <Route exact path="/quantrithuocbvtv">
+            {renderNavItem(<Administrator />)}
+          </Route>
+          <Route exact path="/quantriphanbon">
+            {renderNavItem(<Quantriphanbon />)}
+          </Route>
+          <Route exact path="/quantrihtx">
+            {renderNavItem(<Quantrihtx />)}
+          </Route>
+          <Route exact path="/quantriquanlyhtx">
+            {renderNavItem(<Quantriquanlyhtx />)}
           </Route>
           <Route exact path="/profile">
-            <div id="wrapper">
-              <div className="d-flex flex-column" id="content-wrapper">
-                <div id="content">
-                  <TopNavbar />
-                  <Profile />
-                </div>
-                <Footer />
-              </div>
-              <a className="border rounded d-inline scroll-to-top" href="#page-top">
-                <i className="fas fa-angle-up" />
-              </a>
-            </div>
+            {renderNavItem(<Profile />)}
           </Route>
           <Route exact path="/login">
             <Login />
-          </Route>
-          <Route exact path="/quantriphanbon">
-            <Quantriphanbon />
-          </Route>
-          <Route exact path="/quantrihtx">
-            <Quantrihtx />
-          </Route>
-          <Route exact path="/quantriquanlyhtx">
-            <Quantriquanlyhtx />
           </Route>
         </Switch>
       </div>
