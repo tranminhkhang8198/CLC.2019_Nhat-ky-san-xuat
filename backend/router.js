@@ -36,7 +36,7 @@ exports.routers = app => {
      * @param {callback function} cb
      * @returns {cb(err, permission<true|false>)}
      */
-    const verifyUser = (req, resource, cb = () => {}) => {
+    const verifyUser = (req, resource, cb = () => { }) => {
         //Verify token
         let token = req.get("authorization");
         if (!token) {
@@ -79,7 +79,7 @@ exports.routers = app => {
                                 return cb(null, permission);
                             } else {
                                 return cb(
-                         {
+                                    {
                                         errorMessage:
                                             "Ban khong co quyen truy cap vao tai nguyen nay"
                                     },
@@ -583,13 +583,39 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.post("/api/resources", (req, res, next) => {
-        body = req.body;
+        const body = req.body;
         app.models.resource.create(body, (err, role) => {
             return err
                 ? errorHandle(res, err.errorMessage, 501)
                 : responseHandle(res, role);
         });
     });
+
+    app.post('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        // verifyUser(req, 'cooperative', (err, accept) => {
+        //     if (err) {
+        //         errorHandle(res, "Nguoi dung khong duoc phep truy cap", 405);
+        //     } else {
+        app.models.cooperative.create(body, (err, result) => {
+            if (err) {
+                errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                responseHandle(res, result)
+            }
+            //         })
+            //     }
+        })
+    })
+
+
+
+
+
+
+
+
 
     // *************************************************************************** //
     // ROUTES FOR PLANT PROTECTION PRODUCT
@@ -710,9 +736,9 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-    
-    
-     
+
+
+
     app.get("/api/plant-protection-products", (req, res, next) => {
         app.models.plantProtectionProduct.find((err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
@@ -1004,7 +1030,7 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-      app.post("/api/plant-protection-products", (req, res, next) => {
+    app.post("/api/plant-protection-products", (req, res, next) => {
         const body = req.body;
 
         app.models.plantProtectionProduct.create(body, (err, info) => {

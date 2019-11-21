@@ -4,8 +4,8 @@
  * @field {String} foreignName Ten nuoc ngoai
  * @field {String} abbreviationName Ten viet tat
  * @field {String} logo Bieu tuong
- * @field {String} Status Tinh Trang
- * @field {String} cooperrativeID Ma so HTX
+ * @field {String} status Tinh Trang
+ * @field {String} cooperativeID Ma so HTX
  * @field {String} tax Ma so thue
  * @field {String} surrgate Nguoi dai dien
  * @field {String} director Giam doc
@@ -24,7 +24,7 @@ class Cooperative {
 		this.app = app;
 	}
 
-	validateCooperative(cooperative, cb = () => {}) {
+	validateCooperative(cooperative, cb = () => { }) {
 		const collection = this.app.db.collection("cooperatives");
 		const validateions = {
 			name: {
@@ -69,15 +69,15 @@ class Cooperative {
 					return true;
 				}
 			},
-			cooperrativeID: {
+			cooperativeID: {
 				errMessage: "Ma so HTX thieu hoac khong hop le",
 				doValidate: () => {
-					const cooperrativeID = _.get(
+					const cooperativeID = _.get(
 						cooperative,
 						"cooperativeID",
 						""
 					);
-					if (cooperrativeID && cooperrativeID.length > 0) {
+					if (cooperativeID && cooperativeID.length > 0) {
 						return true;
 					}
 					return false;
@@ -166,13 +166,66 @@ class Cooperative {
 			}
 		};
 
-		errors = [];
+		const errors = [];
 		eval
-		_.each(validateions, (validation, field)=>{
-			if(!validation.doValidate){
-				errors.
+		_.each(validateions, (validation, field) => {
+			const isValid = validation.doValidate
+			if (!isValid) {
+				errors.push(validation.errMessage)
 			}
 		})
+		if (errors.length) {
+			const err = _.join(errors, ',');
+			return cb({ errMessage: err }, null);
+		} else {
+			// Find in database for sure that HTX ID does not exist in database
+			const query = {
+				cooperativeID: cooperative.cooperativeID
+			};
+			const options = {
+
+			};
+			collection.findOne(query, (err, result) => {
+				if (err) {
+					return cb({ errMessage: "Query error" }, null)
+				}
+				return cb(null, cooperative);
+			})
+		}
+	}
+	create(cooperative, cb = () => { }) {
+		const collection = this.app.db.collection('cooperatives')
+		const obj = {
+			name: _.get(cooperative, 'name', ''),
+			foreignName: _.get(cooperative, 'foreignName', ''),
+			abbreviationName: _.get(cooperative, 'abbreviationName', ''),
+			logo: _.get(cooperative, 'logo', ''),
+			status: _.get(cooperative, 'status', ''),
+			cooperativeID: _.get(cooperative, 'cooperativeID', ''),
+			tax: _.get(cooperative, 'tax', ''),
+			surrgate: _.get(cooperative, 'surrgate', ''),
+			director: _.get(cooperative, 'director', ''),
+			address: _.get(cooperative, 'address', ''),
+			phone: _.get(cooperative, 'phone', ''),
+			fax: _.get(cooperative, 'fax', ''),
+			website: _.get(cooperative, 'website', ''),
+			representOffice: _.get(cooperative, 'representOffice', ''),
+			docs: _.get(cooperative, 'docs', null)
+		}
+		this.validateCooperative(obj, (err, ValidCooperative) => {
+			if (err) {
+				return cb(err, null);
+			} else {
+				collection.insertOne(obj, (err, result) => {
+					if (err) {
+						return cb({ errMessage: "Loi trong qua trinh them du lieu vao database" }, null);
+					}
+					else {
+						return cb(null, ValidCooperative);
+					}
+				})
+			}
+		});
 	}
 }
 module.exports = Cooperative;
