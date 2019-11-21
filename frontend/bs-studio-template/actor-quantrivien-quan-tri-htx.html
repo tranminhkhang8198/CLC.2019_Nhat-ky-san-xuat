@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Table - HTX 4.0</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/untitled.css">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="sidebar-brand-text mx-3"><span>HTX 4.0</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="nav navbar-nav text-light" id="accordionSidebar"></ul>
+                <div class="text-center d-none d-md-inline"></div>
+                <div class="d-flex flex-column"><a class="text-white mb-2" href="#">Hợp tác xã</a><a class="text-white mb-2" href="#">Quản lý Hợp tác xã</a><a class="text-white mb-2" href="#">Thuốc BVTV</a><a class="text-white mb-2" href="#">Phân bón</a></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <div class="input-group-append"></div>
+                            </div>
+                        </form>
+                        <ul class="nav navbar-nav flex-nowrap ml-auto">
+                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in" role="menu" aria-labelledby="searchDropdown">
+                                    <form class="form-inline mr-auto navbar-search w-100">
+                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
+                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1" role="presentation">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in"
+                                        role="menu">
+                                        <h6 class="dropdown-header">trung tâm thông báo</h6>
+                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                            <div class="mr-3">
+                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">12 tháng 12, 2019</span>
+                                                <p>Chức năng xem lịch sử quản lý đã được thêm vào hệ thống, dùng thử ngay.</p>
+                                            </div>
+                                        </a>
+                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                            <div class="mr-3">
+                                                <div class="bg-success icon-circle"><i class="fas fa-clipboard-check text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">7 tháng 12, 2019</span>
+                                                <p>Quá trình sao lưu toàn bộ dữ liệu về máy đã thành công.</p>
+                                            </div>
+                                        </a>
+                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                            <div class="mr-3">
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">2 tháng 12, 2019</span>
+                                                <p>Có một yêu cầu tạo mới Hợp tác xã cần được xác thực.</p>
+                                            </div>
+                                        </a><a class="text-center dropdown-item small text-gray-500" href="#">Hiển thị tất cả thông báo</a></div>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1" role="presentation">
+                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown"></div>
+                            </li>
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow" role="presentation">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Nguyễn Văn A</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar5.jpeg"></a>
+                                    <div
+                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Thông tin</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>Lịch sử hoạt động</a>
+                                        <div
+                                            class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Đăng xuất</a></div>
+            </div>
+            </li>
+            </ul>
+        </div>
+        </nav>
+        <div class="modal fade" role="dialog" tabindex="-1" id="modal-delete-items">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Xóa dữ liệu HTX</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                    <div class="modal-body">
+                        <p>Chọn tên các dữ liệu bạn muốn xóa</p>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Airi Satou</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Angelica Ramos</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Ashton Cox</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Bradley Greer</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Brenden Wagner</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Brielle Williamson</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Bruno Nash</label></div>
+                        <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Caesar Vance</label></div>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Đóng</button><button class="btn btn-primary" type="button">Xác nhận xóa</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="modal-add">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thêm mới hợp tác xã</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                    <div class="modal-body modal-add-body">
+                        <div class="form-group"><label for="ten-thuong-pham">Tên hợp tác xã<span style="color: rgb(249,15,15);">&nbsp;*</span></label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên hợp tác xã"></div>
+                        <div class="form-group"><label for="ten-thuong-pham">Địa chỉ</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào địa chỉ HTX"></div>
+                        <div class="form-group"><label for="ten-thuong-pham">Người đại diện</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào tên người đại diện"></div>
+                        <div class="form-group"><label for="ten-thuong-pham">Số điện thoại</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào số điện thoại HTX"></div>
+                        <div class="form-group"><label for="ten-thuong-pham">Loại hình</label><input type="text" id="ten-thuong-pham" class="form-control item" placeholder="Nhập vào loại hình của HTX"></div>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Đóng</button><button class="btn btn-primary" type="button">Xác nhận</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="modal-view">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Thông tin hợp tác xã</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                    <div class="modal-body">
+                        <div class="container" style="padding: 0;">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Tên HTX</p>
+                                </div>
+                                <div class="col-8">
+                                    <p>Lorem issum&nbsp;Lorem issum&nbsp;Lorem issum&nbsp;Lorem issum&nbsp;Lorem issum&nbsp;Lorem issum&nbsp;Lorem issum&nbsp;</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Địa chỉ&nbsp;</p>
+                                </div>
+                                <div class="col-8">
+                                    <p>Lorem issumLorem issumLorem issum&nbsp;Lorem issumLorem issum&nbsp;Lorem issum&nbsp;Lorem issum&nbsp;Lorem issum</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Người đại diện</p>
+                                </div>
+                                <div class="col-8">
+                                    <p>Lorem issum</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Số điện thoại</p>
+                                </div>
+                                <div class="col-8">
+                                    <p>Lorem issum</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Loại hình</p>
+                                </div>
+                                <div class="col-8">
+                                    <p>Lorem issum</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Đóng</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="modal-modify">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Chỉnh sửa thông tin HTX</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                    <div class="modal-body">
+                        <div class="container" style="padding: 0;">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Tên hợp tác xã</p>
+                                </div>
+                                <div class="col-8"><input class="form-control-plaintext p-0" type="text" value="Lorem issum" style="/*padding: 0;*/"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Địa chỉ</p>
+                                </div>
+                                <div class="col-8"><input class="form-control-plaintext p-0" type="text" value="Lorem issum" readonly="" style="/*padding: 0;*/"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Người đại diện</p>
+                                </div>
+                                <div class="col-8"><input class="form-control-plaintext p-0" type="text" value="Lorem issum"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Số điện thoại</p>
+                                </div>
+                                <div class="col-8"><input class="form-control-plaintext p-0" type="text" value="Lorem issum"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>Loại hình sản xuất</p>
+                                </div>
+                                <div class="col-8"><input class="form-control-plaintext p-0" type="text" value="Lorem issum"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Đóng</button><button class="btn btn-primary" type="button">Lưu thay đổi</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" id="modal-delete-item">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Xóa dữ liệu</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                    <div class="modal-body">
+                        <p>Hành động này không thể hoàn tác, bạn chắc chắn muốn xóa hợp tác xã với tên là: lorem issum</p>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Đóng</button><button class="btn btn-primary" type="button">Xác nhận xóa</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <p class="text-primary m-0 font-weight-bold">Danh sách hợp tác xã</p>
+                    <div class="mt-3 d-flex flex-row justify-content-around"><a class="btn btn-success btn-icon-split btn-sm" role="button" data-toggle="modal" data-target="#modal-add"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">Thêm mới dữ liệu</span></a>
+                        <a
+                            class="btn btn-danger btn-icon-split" role="button" data-toggle="modal" data-target="#modal-delete-items"><span class="text-white-50 icon"><i class="fas fa-trash"></i></span><span class="text-white text">Xóa dữ liệu</span></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 text-nowrap">
+                            <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>HIển thị&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Tìm hợp tác xã theo tên" autofocus=""></label></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <table class="table dataTable my-0" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Tên phân bón</th>
+                                    <th>Lorem issum</th>
+                                    <th>Lorem issum</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Airi Satou</td>
+                                    <td>Accountant</td>
+                                    <td>Tokyo</td>
+                                    <td>
+                                        <div class="dropdown"><button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
+                                            <div class="dropdown-menu" role="menu" style="overflow: hidden;padding: 0;"><a class="dropdown-item text-white bg-info" role="presentation" data-toggle="modal" data-target="#modal-view" style="cursor: pointer;">Xem thông tin</a><a class="dropdown-item text-white bg-warning" role="presentation"
+                                                    data-toggle="modal" data-target="#modal-modify" style="cursor: pointer;">Chỉnh sửa</a><a class="dropdown-item text-white bg-danger" role="presentation" data-toggle="modal" data-target="#modal-delete-item"
+                                                    style="cursor: pointer;">Xóa hàng này</a></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Angelica Ramos</td>
+                                    <td>Chief Executive Officer(CEO)</td>
+                                    <td>London</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Ashton Cox</td>
+                                    <td>Junior Technical Author</td>
+                                    <td>San Francisco</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Bradley Greer</td>
+                                    <td>Software Engineer</td>
+                                    <td>London</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Brenden Wagner</td>
+                                    <td>Software Engineer</td>
+                                    <td>San Francisco</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Brielle Williamson</td>
+                                    <td>Integration Specialist</td>
+                                    <td>New York</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Bruno Nash<br></td>
+                                    <td>Software Engineer</td>
+                                    <td>London</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Caesar Vance</td>
+                                    <td>Pre-Sales Support</td>
+                                    <td>New York</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Cara Stevens</td>
+                                    <td>Sales Assistant</td>
+                                    <td>New York</td>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>Cedric Kelly</td>
+                                    <td>Senior JavaScript Developer</td>
+                                    <td>Edinburgh</td>
+                                    <td><br></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td><strong>Tên phân bón</strong></td>
+                                    <td><strong>Tên hoạt chất</strong></td>
+                                    <td><strong>Loại thuốc</strong></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 align-self-center">
+                            <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển thị 1 - 10/27 dữ liệu</p>
+                        </div>
+                        <div class="col-md-6">
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination">
+                                    <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-white sticky-footer">
+        <div class="container my-auto">
+            <div class="text-center my-auto copyright"><span>Copyright © HTX 4.0 2019</span></div>
+        </div>
+    </footer>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="assets/js/theme.js"></script>
+</body>
+
+</html>

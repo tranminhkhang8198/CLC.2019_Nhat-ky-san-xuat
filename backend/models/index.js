@@ -4,6 +4,7 @@ const Role = require("./permission/role");
 const Resource = require("./permission/resource");
 const Permission = require("./permission/permission");
 const PlantProtectionProduct = require("./plantProtectionProduct");
+const Cooperative = require('./cooperative');
 
 class Model {
   constructor(app) {
@@ -14,6 +15,7 @@ class Model {
     this.resource = new Resource(app);
     this.permission = new Permission(app);
     this.plantProtectionProduct = new PlantProtectionProduct(app);
+    this.cooperative = new Cooperative(app);
   }
 }
 module.exports = Model;

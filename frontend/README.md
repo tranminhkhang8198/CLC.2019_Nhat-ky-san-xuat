@@ -26,6 +26,11 @@ $ npm run install:backend
 
 **Available scripts**:
 
+Run config linter for development (run only 1 time)
+```
+$ npm run eslint
+```
+
 Start development environment: (both FE and BE)
 ```
 $ npm run dev
@@ -47,3 +52,7 @@ Build, minify frontend source code for production mode:
 ```
 $ npm run build
 ```
+
+For more document about linter rules, following repos:
+(https://github.com/yannickcr/eslint-plugin-react)
+(https://github.com/airbnb/javascript)

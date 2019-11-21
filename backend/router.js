@@ -212,11 +212,31 @@ exports.routers = app => {
      * @apiSuccess {String} created Ngay login
      *
      * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "created": "2019-11-12T13:43:57.518Z",
-     *      "_id": "5dcab71db87686272aeb80f4"
-     *  }
+     *      HTTP/1.1 200 OK
+     *      {
+     *          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e
+     *          yJfaWQiOiI1ZGQ2YTVjMWEwYWJkYTcwZmQ2YmZjYzkiLCJuYW
+     *          1lIjoiTmd1eWVuIHZhbiBsb2kiLCJwZXJzb25hbElkIjoiNDc
+     *          zNzI2MzcyMiIsImFkZHJlc3MiOiIiLCJwaG9uZSI6IjA4NDcz
+     *          ODE5MjIxIiwiZW1haWwiOiJsb2lAZ21haWwuY29tIiwidXNlci
+     *          I6InVzZXIiLCJIVFhJZCI6bnVsbCwicGFzc3dvcmQiOiIkMmI
+     *          kMTAkVE51bm1UR3poV2FhLjZtOUtSU1Z3LnBTU2JHT284RHZC
+     *          b3JZZFdZMWJXUmZXQnNiZ1BhTlMiLCJjcmVhdGVkIjoiMjAxO
+     *          S0xMS0yMVQxNDo1NzowNS4yMDBaIiwiaWF0IjoxNTc0MzQ4Mj
+     *          g5LCJleHAiOjE1NzQzNDgzNDl9.JeuNFsCBVC30Glz5YsBTb3
+     *          GzaqwdTfApwrLYIKxWrMU",
+     *          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX
+     *          VCJ9.eyJfaWQiOiI1ZGQ2YTVjMWEwYWJkYTcwZmQ2YmZjYzki
+     *          LCJuYW1lIjoiTmd1eWVuIHZhbiBsb2kiLCJwZXJzb25hbElkI
+     *          joiNDczNzI2MzcyMiIsImFkZHJlc3MiOiIiLCJwaG9uZSI6Ij
+     *          A4NDczODE5MjIxIiwiZW1haWwiOiJsb2lAZ21haWwuY29tIiw
+     *          idXNlciI6InVzZXIiLCJIVFhJZCI6bnVsbCwicGFzc3dvcmQi
+     *          OiIkMmIkMTAkVE51bm1UR3poV2FhLjZtOUtSU1Z3LnBTU2JHT
+     *          284RHZCb3JZZFdZMWJXUmZXQnNiZ1BhTlMiLCJjcmVhdGVkIj
+     *          oiMjAxOS0xMS0yMVQxNDo1NzowNS4yMDBaIiwiaWF0IjoxNTc
+     *          0MzQ4Mjg5LCJleHAiOjE1NzQzNDg0MDl9.VZKH4yNpTsH0Umi
+     *          lLNUI45rtsA3QvuiRAy8UHRav__A"
+     *      }
      *
      * @apiError Phone-and-password-are-required Thieu SDT hoac mat khau
      * @apiError User-is-not-found Khong tim thay nguoi su dung
@@ -238,6 +258,8 @@ exports.routers = app => {
         });
     });
 
+
+
     app.delete("/api/token", (req, res, next) => {
         const { refreshToken } = req.body;
         if (refreshToken) {
@@ -252,7 +274,37 @@ exports.routers = app => {
     });
 
     /**
-     * TODO: refresh token
+     * @api {post} /refresh_token Xac thuc lay access token moi
+     * @apiName PostToken
+     * @apiGroup Token
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/refresh_token
+     *
+     *
+     * @apiParam {String} refresh_token refresh token cua nguoi dung
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *       "refresh_token": "fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh"
+     *     }
+     *
+     * @apiSuccess {String} refresh_token refresh token moi
+     * @apiSuccess {String} token access token moi
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "refresh_token": "fsjdoiwukmvwafojf9wa4rrjirhfelkfsarwjijgerhggjh8reighoighergelrgsfhg",
+     *      "token": "sdfhwefdfbnbvsuerisbcfuhriufbwfjbskfheiurhkjfiurtherwgfkjsdhfsg"
+     *  }
+     *
+     * @apiError Verify-JWT-token-failed refresh token khong hop le
+     * @apiError Request-without-refresh-token Khong tim thay refresh token tren request
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Request without refresh token"
+     *     }
+     * @apiPermission none
      */
     app.post("/api/refresh_token", (req, res, next) => {
         const { refreshToken } = req.body;
@@ -583,13 +635,39 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.post("/api/resources", (req, res, next) => {
-        body = req.body;
+        const body = req.body;
         app.models.resource.create(body, (err, role) => {
             return err
                 ? errorHandle(res, err.errorMessage, 501)
                 : responseHandle(res, role);
         });
     });
+
+    app.post('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        // verifyUser(req, 'cooperative', (err, accept) => {
+        //     if (err) {
+        //         errorHandle(res, "Nguoi dung khong duoc phep truy cap", 405);
+        //     } else {
+        app.models.cooperative.create(body, (err, result) => {
+            if (err) {
+                errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                responseHandle(res, result)
+            }
+            //         })
+            //     }
+        })
+    })
+
+
+
+
+
+
+
+
 
     // *************************************************************************** //
     // ROUTES FOR PLANT PROTECTION PRODUCT
