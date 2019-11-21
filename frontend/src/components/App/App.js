@@ -8,7 +8,9 @@ import {
 
 import { NavLink, NavItem, Nav } from 'reactstrap';
 
-import './App.css';
+import TopNavbar from '../Navbars/TopNavbar/TopNavbar';
+import Footer from '../Footer/Footer';
+
 import Administrator from '../../pages/Administrator';
 import Login from '../../pages/Login';
 import Profile from '../../pages/Profile';
@@ -16,8 +18,12 @@ import Quantriphanbon from '../../pages/Quantriphanbon';
 import Quantrihtx from '../../pages/Quantrihtx';
 import Quantriquanlyhtx from '../../pages/Quantriquanlyhtx';
 
-
 function App() {
+  // const navItems = [
+  //   { pageName: 'Admin panel', route: '/admin' },
+  //   { pageName: 'Login', route: '/login' },
+  //   { pageName: 'Home', route: '/' },
+  // ];
   return (
     <Router>
       <div>
@@ -36,24 +42,40 @@ function App() {
           </NavItem>
         </Nav>
 
-        <hr />
-
-        {/*
-          A <Switch> looks through all its children <Route>
-          elements and renders the first one whose path
-          matches the current URL. Use a <Switch> any time
-          you have multiple routes, but you want only one
-          of them to render at a time
-        */}
         <Switch>
           <Route exact path="/">
-            <div />
+            <div>
+              <h1>hello scsss</h1>
+              <h2>hello h2</h2>
+            </div>
           </Route>
           <Route exact path="/admin">
-            <Administrator />
+            <div id="wrapper">
+              <div className="d-flex flex-column" id="content-wrapper">
+                <div id="content">
+                  <TopNavbar />
+                  <Administrator />
+                </div>
+                <Footer />
+              </div>
+              <a className="border rounded d-inline scroll-to-top" href="#page-top">
+                <i className="fas fa-angle-up" />
+              </a>
+            </div>
           </Route>
           <Route exact path="/profile">
-            <Profile />
+            <div id="wrapper">
+              <div className="d-flex flex-column" id="content-wrapper">
+                <div id="content">
+                  <TopNavbar />
+                  <Profile />
+                </div>
+                <Footer />
+              </div>
+              <a className="border rounded d-inline scroll-to-top" href="#page-top">
+                <i className="fas fa-angle-up" />
+              </a>
+            </div>
           </Route>
           <Route exact path="/login">
             <Login />
