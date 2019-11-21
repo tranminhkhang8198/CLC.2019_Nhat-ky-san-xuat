@@ -1,61 +1,58 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable-next-line */
 import React from 'react';
 import {
-  BrowserRouter as Route,
+  BrowserRouter as Router,
   Switch,
-  Router,
+  Route,
   NavLink as RRNavLink,
 } from 'react-router-dom';
 
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
-import Administrator from '../../pages/Administrator';
 import Login from '../../pages/Login';
+import Administrator from '../../pages/Administrator';
 import Profile from '../../pages/Profile';
 
-function NavbarLeft() {
+function LeftNavbar({ navItems }) {
   return (
-    <Router>
-      <Nav className="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-        <div className="container-fluid d-flex flex-column p-0">
-          <a className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/">
-            <div className="sidebar-brand-icon rotate-n-15">
-              <i className="fas fa-laugh-wink" />
-            </div>
-            <div className="sidebar-brand-text mx-3">
-              <span>HTX 4.0</span>
-            </div>
-          </a>
-          <div className="text-center d-none d-md-inline" />
-          <div className="d-flex flex-column">
-            <NavItem>
-              <NavLink to="/administrator" tag={RRNavLink}>Danh sách phân bón</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink to="/login" tag={RRNavLink}>Danh sách HTX</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink to="/profile" tag={RRNavLink}>Danh sách quản lý HTX</NavLink>
-            </NavItem>
+    <nav className="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+      <div className="container-fluid d-flex flex-column p-0">
+        <a className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/">
+          <div className="sidebar-brand-icon rotate-n-15">
+            <i className="fas fa-laugh-wink" />
           </div>
+          <div className="sidebar-brand-text mx-3">
+            <span>HTX 4.0</span>
+          </div>
+        </a>
+        <div className="text-center d-none d-md-inline" />
+        <div className="d-flex flex-column">
+          <Router>
+            <Nav>
+              {navItems.map(({ pageName, route }, index) => (
+                <NavItem key={`${index + 3}`}>
+                  <NavLink to={route} tag={RRNavLink}>{pageName}</NavLink>
+                </NavItem>
+              ))}
+            </Nav>
 
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-          <Switch>
-            <Route exact path="/administrator">
-              <Administrator />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/profile">
-              <Profile />
-            </Route>
-          </Switch>
+            <Switch>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+              <Route exact path="/admin">
+                <Administrator />
+              </Route>
+              <Route exact path="/profile">
+                <Profile />
+              </Route>
+            </Switch>
+          </Router>
         </div>
-      </Nav>
-    </Router>
+      </div>
+    </nav>
   );
 }
 
-export default NavbarLeft;
+export default LeftNavbar;
