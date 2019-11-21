@@ -185,11 +185,17 @@ class Cooperative {
 			const options = {
 
 			};
+
 			collection.findOne(query, (err, result) => {
 				if (err) {
-					return cb({ errMessage: "Query error" }, null)
+					return cb({ errorMessage: "Query error" }, null)
 				}
-				return cb(null, cooperative);
+				if (result) {
+					return cb({ errorMessage: "HTX da ton tai trong csdl" })
+				} else {
+					return cb(null, cooperative);
+				}
+
 			})
 		}
 	}
