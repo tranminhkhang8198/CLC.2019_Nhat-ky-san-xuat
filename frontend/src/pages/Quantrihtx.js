@@ -2,12 +2,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+
 import { ListItems } from '../components/DataTable/DataTable';
+import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 
 function Quantrihtx() {
   // const navItems = ['Hợp tác xã', 'Quản lý Hợp tác xã', 'Thuốc BVTV', 'Phân bón'];
   return (
     <div className="container-fluid">
+      <DeleteItemsModal />
       <div className="card shadow">
         <div className="card-header py-3">
           <p className="text-primary m-0 font-weight-bold">Danh sách hợp tác xã</p>
