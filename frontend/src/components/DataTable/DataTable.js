@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import ViewItemModal from '../Modals/ViewItemModal';
+import ModifyItemModal from '../Modals/ModifyItemModal';
 
 export class ListItems extends Component {
   constructor(props) {
@@ -53,6 +54,7 @@ export class ListItems extends Component {
             </thead>
             <tbody>
               <ViewItemModal />
+              <ModifyItemModal />
               <tr>
                 <td>Airi Satou</td>
                 <td>Accountant</td>
