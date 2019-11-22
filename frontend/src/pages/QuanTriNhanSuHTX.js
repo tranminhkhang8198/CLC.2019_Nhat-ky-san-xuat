@@ -3,10 +3,14 @@
 import React from 'react';
 
 import { ListItems } from '../components/DataTable/DataTable';
+import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
+import AddItemModal from '../components/Modals/AddItemModal';
 
 function Quantrihtx() {
   return (
     <div className="container-fluid">
+      <DeleteItemsModal />
+      <AddItemModal />
       <div className="card shadow">
         <div className="card-header py-3">
           <p className="text-primary m-0 font-weight-bold">Danh sách quản lý hợp tác xã</p>

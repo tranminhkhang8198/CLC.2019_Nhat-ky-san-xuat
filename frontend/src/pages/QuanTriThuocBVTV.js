@@ -3,12 +3,16 @@
 import React, { Component } from 'react';
 
 import { ListItems } from '../components/DataTable/DataTable';
+import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
+import AddItemModal from '../components/Modals/AddItemModal';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Administrator extends Component {
   render() {
     return (
       <div className="container-fluid">
+        <DeleteItemsModal />
+        <AddItemModal />
         <div className="card shadow">
           <div className="card-header py-3">
             <p className="text-primary m-0 font-weight-bold">Danh sách thuốc bảo vệ thực vật</p>
