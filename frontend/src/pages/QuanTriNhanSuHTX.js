@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';

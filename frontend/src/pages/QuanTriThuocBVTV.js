@@ -13,13 +13,15 @@ class Administrator extends Component {
           <div className="card-header py-3">
             <p className="text-primary m-0 font-weight-bold">Danh sách thuốc bảo vệ thực vật</p>
             <div className="mt-3 d-flex flex-row justify-content-around">
-              <a className="btn btn-success btn-icon-split btn-sm" role="button" data-toggle="modal" data-target="#modal-add" href="/">
-                <span className="text-white-50 icon"><i className="fas fa-plus" /></span>
+              <a className="btn btn-success btn-icon-split" role="button" data-toggle="modal" data-target="#modal-add" href="/">
+                <span className="text-white-50 icon">
+                  <i className="fas fa-plus" />
+                </span>
                 <span className="text-white text">Thêm mới dữ liệu</span>
               </a>
               <a className="btn btn-danger btn-icon-split" role="button" data-toggle="modal" data-target="#modal-delete-items" href="/">
                 <span className="text-white-50 icon">
-                  { /*  <Icon className="fas fa-trash" /> */}
+                  <i className="fas fa-trash" />
                 </span>
                 <span className="text-white text">Xóa dữ liệu</span>
               </a>
