@@ -12,8 +12,8 @@ import TopNavbar from '../components/Navbars/TopNavbar/TopNavbar';
 import Footer from '../components/Footer/Footer';
 
 import QuanTriThuocBVTV from '../pages/QuanTriThuocBVTV';
-import QuanTriPhanBon from '../pages/QuanTriPhanBon';
-import QuanTriHTX from '../pages/QuanTriHTX';
+import QuanTriPhanBon from '../pages/QTriPhanBon';
+import QuanTriHTX from '../pages/QTriHTX';
 import QuanTriNhanSuHTX from '../pages/QuanTriNhanSuHTX';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
