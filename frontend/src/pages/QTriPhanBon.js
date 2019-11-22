@@ -7,7 +7,7 @@ import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
-function Quantriphanbon() {
+function QuanTriPhanBon() {
   return (
     <div className="container-fluid">
       <DeleteItemsModal />
@@ -38,4 +38,4 @@ function Quantriphanbon() {
   );
 }
 
-export default Quantriphanbon;
+export default QuanTriPhanBon;

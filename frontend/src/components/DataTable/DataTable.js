@@ -18,13 +18,16 @@ export class ListItems extends Component {
   render() {
     return (
       <div className="card-body">
+        <ViewItemModal />
+        <ModifyItemModal />
+        <DeleteItemModal />
         <div className="row">
           <div className="col-md-6 text-nowrap">
             <div id="dataTable_length" className="dataTables_length" aria-controls="dataTable">
               <label>
                 HIển thị&nbsp;
                 <select className="form-control form-control-sm custom-select custom-select-sm">
-                  <option value={10} selected>10</option>
+                  <option value={10} defaultValue>10</option>
                   <option value={25}>25</option>
                   <option value={50}>50</option>
                   <option value={100}>100</option>
@@ -54,9 +57,6 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
-              <ViewItemModal />
-              <ModifyItemModal />
-              <DeleteItemModal />
               <tr>
                 <td>Airi Satou</td>
                 <td>Accountant</td>

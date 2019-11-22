@@ -6,7 +6,7 @@ import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
-function Quantrihtx() {
+function QuanTriNhanSuHTX() {
   return (
     <div className="container-fluid">
       <DeleteItemsModal />
@@ -35,4 +35,4 @@ function Quantrihtx() {
   );
 }
 
-export default Quantrihtx;
+export default QuanTriNhanSuHTX;

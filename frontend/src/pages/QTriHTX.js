@@ -7,7 +7,7 @@ import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
-function Quantrihtx() {
+function QuanTriHTX() {
   // const navItems = ['Hợp tác xã', 'Quản lý Hợp tác xã', 'Thuốc BVTV', 'Phân bón'];
   return (
     <div className="container-fluid">
@@ -37,4 +37,4 @@ function Quantrihtx() {
   );
 }
 
-export default Quantrihtx;
+export default QuanTriHTX;

@@ -7,7 +7,7 @@ import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
 // eslint-disable-next-line react/prefer-stateless-function
-class Administrator extends Component {
+class QuanTriThuocBVTV extends Component {
   render() {
     return (
       <div className="container-fluid">
@@ -38,4 +38,4 @@ class Administrator extends Component {
   }
 }
 
-export default Administrator;
+export default QuanTriThuocBVTV;
