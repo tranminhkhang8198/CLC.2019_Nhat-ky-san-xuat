@@ -2,6 +2,8 @@
 /* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
 import React, { Component } from 'react';
 
+import ViewItemModal from '../Modals/ViewItemModal';
+
 export class ListItems extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +52,7 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
+              <ViewItemModal />
               <tr>
                 <td>Airi Satou</td>
                 <td>Accountant</td>
@@ -58,9 +61,36 @@ export class ListItems extends Component {
                   <div className="dropdown">
                     <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
-                      <a className="dropdown-item text-white bg-info" href="/" role="presentation" data-toggle="modal" data-target="#modal-view" style={{ cursor: 'pointer' }}>Xem thông tin</a>
-                      <a className="dropdown-item text-white bg-warning" href="/" role="presentation" data-toggle="modal" data-target="#modal-modify" style={{ cursor: 'pointer' }}>Chỉnh sửa</a>
-                      <a className="dropdown-item text-white bg-danger" href="/" role="presentation" data-toggle="modal" data-target="#modal-delete-item" style={{ cursor: 'pointer' }}>Xóa hàng này</a>
+                      <a
+                        className="dropdown-item text-white bg-info"
+                        href="/"
+                        role="presentation"
+                        data-toggle="modal"
+                        data-target="#modal-view-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                      Xem thông tin
+                      </a>
+                      <a
+                        className="dropdown-item text-white bg-warning"
+                        href="/"
+                        role="presentation"
+                        data-toggle="modal"
+                        data-target="#modal-modify-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Chỉnh sửa
+                      </a>
+                      <a
+                        className="dropdown-item text-white bg-danger"
+                        href="/"
+                        role="presentation"
+                        data-toggle="modal"
+                        data-target="#modal-delete-item-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Xóa hàng này
+                      </a>
                     </div>
                   </div>
                 </td>
