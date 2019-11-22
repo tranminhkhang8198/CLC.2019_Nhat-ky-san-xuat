@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 
 import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
+import DeleteItemModal from '../Modals/DeleteItemModal';
 
 export class ListItems extends Component {
   constructor(props) {
@@ -55,6 +56,7 @@ export class ListItems extends Component {
             <tbody>
               <ViewItemModal />
               <ModifyItemModal />
+              <DeleteItemModal />
               <tr>
                 <td>Airi Satou</td>
                 <td>Accountant</td>
