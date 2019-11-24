@@ -2,6 +2,10 @@
 /* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
 import React, { Component } from 'react';
 
+import ViewItemModal from '../Modals/ViewItemModal';
+import ModifyItemModal from '../Modals/ModifyItemModal';
+import DeleteItemModal from '../Modals/DeleteItemModal';
+
 export class ListItems extends Component {
   constructor(props) {
     super(props);
@@ -14,13 +18,16 @@ export class ListItems extends Component {
   render() {
     return (
       <div className="card-body">
+        <ViewItemModal />
+        <ModifyItemModal />
+        <DeleteItemModal />
         <div className="row">
           <div className="col-md-6 text-nowrap">
             <div id="dataTable_length" className="dataTables_length" aria-controls="dataTable">
               <label>
                 HIển thị&nbsp;
                 <select className="form-control form-control-sm custom-select custom-select-sm">
-                  <option value={10} selected>10</option>
+                  <option value={10} defaultValue>10</option>
                   <option value={25}>25</option>
                   <option value={50}>50</option>
                   <option value={100}>100</option>
@@ -58,9 +65,36 @@ export class ListItems extends Component {
                   <div className="dropdown">
                     <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
-                      <a className="dropdown-item text-white bg-info" href="/" role="presentation" data-toggle="modal" data-target="#modal-view" style={{ cursor: 'pointer' }}>Xem thông tin</a>
-                      <a className="dropdown-item text-white bg-warning" href="/" role="presentation" data-toggle="modal" data-target="#modal-modify" style={{ cursor: 'pointer' }}>Chỉnh sửa</a>
-                      <a className="dropdown-item text-white bg-danger" href="/" role="presentation" data-toggle="modal" data-target="#modal-delete-item" style={{ cursor: 'pointer' }}>Xóa hàng này</a>
+                      <a
+                        className="dropdown-item text-white bg-info"
+                        href="/"
+                        role="presentation"
+                        data-toggle="modal"
+                        data-target="#modal-view-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                      Xem thông tin
+                      </a>
+                      <a
+                        className="dropdown-item text-white bg-warning"
+                        href="/"
+                        role="presentation"
+                        data-toggle="modal"
+                        data-target="#modal-modify-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Chỉnh sửa
+                      </a>
+                      <a
+                        className="dropdown-item text-white bg-danger"
+                        href="/"
+                        role="presentation"
+                        data-toggle="modal"
+                        data-target="#modal-delete-item-1"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Xóa hàng này
+                      </a>
                     </div>
                   </div>
                 </td>
