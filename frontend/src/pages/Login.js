@@ -6,7 +6,7 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-light navbar-expand-lg  bg-white clean-navbar">
+        <nav className="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
           <div className="container">
             <a className="navbar-brand logo" href="/">
               HTX 4.0
@@ -25,10 +25,10 @@ class Login extends Component {
             </div>
           </div>
         </nav>
-        <main className="page login-page">
+        <main className="page login-page" style={{ marginTop: '80px' }}>
           <section className="clean-block clean-form dark">
             <div className="container">
-              <div className="block-heading">
+              <div className="block-heading text-center">
                 <h2 className="text-info">Đăng nhập</h2>
                 <p>
                   Đăng nhập vào hệ thống bằng tài khoản và mật khẩu được cấp bởi
@@ -65,7 +65,7 @@ class Login extends Component {
         </main>
         <footer className="page-footer dark" style={{ padding: 0 }}>
           <div
-            className="footer-copyright"
+            className="footer-copyright text-center"
             style={{
               border: 0,
               backgroundColor: '#fff',
