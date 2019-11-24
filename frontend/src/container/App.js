@@ -29,10 +29,10 @@ function App() {
 
   const renderNavItem = (Component) => (
     <div id="wrapper">
+      <LeftNavbar navItems={navItems} />
       <div className="d-flex flex-column" id="content-wrapper">
         <div id="content">
           <TopNavbar />
-          <LeftNavbar navItems={navItems} />
           {Component}
         </div>
         <Footer />
