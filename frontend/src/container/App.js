@@ -8,7 +8,6 @@ import {
 
 import { NavLink, NavItem, Nav } from 'reactstrap';
 
-// import LeftNavBar from '../components/Navbars/LeftNavbar';
 import TopNavbar from '../components/Navbars/TopNavbar/TopNavbar';
 import Footer from '../components/Footer/Footer';
 
@@ -30,7 +29,6 @@ function App() {
 
   const renderNavItem = (Component) => (
     <div id="wrapper">
-      {/* <LeftNavBar /> */}
       <div className="d-flex flex-column" id="content-wrapper">
         <div id="content">
           <TopNavbar />

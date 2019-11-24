@@ -1,0 +1,8 @@
+{
+  "eslint.workingDirectories": [
+    "backend",
+    "frontend"
+  ],
+  "prettier.printWidth": 10000,
+  "prettier.jsxSingleQuote": true
+}
