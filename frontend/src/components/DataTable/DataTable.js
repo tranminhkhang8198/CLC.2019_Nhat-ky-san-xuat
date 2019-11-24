@@ -1,6 +1,9 @@
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
 import React, { Component } from 'react';
+import uuidv4 from 'uuid/v4';
 
 import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
@@ -16,6 +19,7 @@ export class ListItems extends Component {
   }
 
   render() {
+    const { data } = this.props;
     return (
       <div className="card-body">
         <ViewItemModal />
@@ -57,10 +61,10 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Airi Satou</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
+              {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
+                <td>{value['Tên thương phẩm']}</td>
+                <td>{value['Tên hoạt chất']}</td>
+                <td>{value['Loại thuốc']}</td>
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
@@ -73,7 +77,7 @@ export class ListItems extends Component {
                         data-target="#modal-view-1"
                         style={{ cursor: 'pointer' }}
                       >
-                      Xem thông tin
+                        Xem thông tin
                       </a>
                       <a
                         className="dropdown-item text-white bg-warning"
@@ -98,64 +102,7 @@ export class ListItems extends Component {
                     </div>
                   </div>
                 </td>
-              </tr>
-              <tr>
-                <td>Angelica Ramos</td>
-                <td>Chief Executive Officer(CEO)</td>
-                <td>London</td>
-                <td />
-              </tr>
-              <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>Bradley Greer</td>
-                <td>Software Engineer</td>
-                <td>London</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>Brenden Wagner</td>
-                <td>Software Engineer</td>
-                <td>San Francisco</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>Brielle Williamson</td>
-                <td>Integration Specialist</td>
-                <td>New York</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>
-                  Bruno Nash
-                  <br />
-                </td>
-                <td>Software Engineer</td>
-                <td>London</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>Caesar Vance</td>
-                <td>Pre-Sales Support</td>
-                <td>New York</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>Cara Stevens</td>
-                <td>Sales Assistant</td>
-                <td>New York</td>
-                <td><br /></td>
-              </tr>
-              <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior JavaScript Developer</td>
-                <td>Edinburgh</td>
-                <td><br /></td>
-              </tr>
+              </tr>)}
             </tbody>
             <tfoot>
               <tr>

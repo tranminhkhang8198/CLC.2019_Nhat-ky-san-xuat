@@ -17,19 +17,22 @@ import QuanTriHTX from '../pages/QTriHTX';
 import QuanTriNhanSuHTX from '../pages/QuanTriNhanSuHTX';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
+import LeftNavbar from '../components/Navbars/LeftNavbar';
 
 function App() {
-  // const navItems = [
-  //   { pageName: 'Admin panel', route: '/admin' },
-  //   { pageName: 'Login', route: '/login' },
-  //   { pageName: 'Home', route: '/' },
-  // ];
+  const navItems = [
+    { pageName: 'Admin panel', route: '/admin' },
+    { pageName: 'Login', route: '/login' },
+    { pageName: 'Home', route: '/' },
+    { pageName: 'Hợp tác xã', route: '/quantrihtx' },
+  ];
 
   const renderNavItem = (Component) => (
     <div id="wrapper">
       <div className="d-flex flex-column" id="content-wrapper">
         <div id="content">
           <TopNavbar />
+          <LeftNavbar navItems={navItems} />
           {Component}
         </div>
         <Footer />
