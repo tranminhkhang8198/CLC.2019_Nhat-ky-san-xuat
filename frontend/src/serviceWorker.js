@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 /* eslint-disable operator-linebreak */
 /* eslint no-param-reassign: "error" */
+
 
 // This optional code is used to register a service worker.
 // register() is not called by default.
