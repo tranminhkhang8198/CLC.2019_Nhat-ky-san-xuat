@@ -15,6 +15,8 @@ import QuanTriThuocBVTV from '../pages/QuanTriThuocBVTV';
 import QuanTriPhanBon from '../pages/QTriPhanBon';
 import QuanTriHTX from '../pages/QTriHTX';
 import QuanTriNhanSuHTX from '../pages/QuanTriNhanSuHTX';
+import QuanTriSuKienHTX from '../pages/QuanTriSuKienHTX';
+import QuanTriGiongLua from '../pages/QuanTriGiongLua';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import LeftNavbar from '../components/Navbars/LeftNavbar';
@@ -57,10 +59,16 @@ function App() {
             <NavLink to="/quantriphanbon" tag={RRNavLink}>Quản trị phân bón</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink to="/quantrigionglua" tag={RRNavLink}>Quản trị giống lúa</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink to="/quantrihtx" tag={RRNavLink}>Quản trị HTX</NavLink>
           </NavItem>
           <NavItem>
             <NavLink to="/quantriquanlyhtx" tag={RRNavLink}>Quản trị nhân sự HTX</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/quantrisukienhtx" tag={RRNavLink}>Quản trị sự kiện HTX</NavLink>
           </NavItem>
           <NavItem>
             <NavLink to="/profile" tag={RRNavLink}>Profile</NavLink>
@@ -83,11 +91,17 @@ function App() {
           <Route exact path="/quantriphanbon">
             {renderNavItem(<QuanTriPhanBon />)}
           </Route>
+          <Route exact path="/quantrigionglua">
+            {renderNavItem(<QuanTriGiongLua />)}
+          </Route>
           <Route exact path="/quantrihtx">
             {renderNavItem(<QuanTriHTX />)}
           </Route>
           <Route exact path="/quantriquanlyhtx">
             {renderNavItem(<QuanTriNhanSuHTX />)}
+          </Route>
+          <Route exact path="/quantrisukienhtx">
+            {renderNavItem(<QuanTriSuKienHTX />)}
           </Route>
           <Route exact path="/profile">
             {renderNavItem(<Profile />)}

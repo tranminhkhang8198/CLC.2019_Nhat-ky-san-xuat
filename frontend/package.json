@@ -153,5 +153,11 @@
       "react-app"
     ]
   },
+<<<<<<< HEAD
   "devDependencies": {}
 }
+=======
+  "devDependencies": {
+  }
+}
+>>>>>>> master
