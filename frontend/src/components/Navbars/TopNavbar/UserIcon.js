@@ -11,6 +11,7 @@ function UserIcon() {
           <img alt="img" className="border rounded-circle img-profile" src={avatar5} />
         </a>
         <div className="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu">
+          <span className="dropdown-item mr-2 text-gray-600 medium d-lg-none">Nguyễn Văn A</span>
           <a className="dropdown-item" href="/">
             <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
             &nbsp;Thông tin

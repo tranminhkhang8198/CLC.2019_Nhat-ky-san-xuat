@@ -6,36 +6,18 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <nav className="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
-          <div className="container">
-            <a className="navbar-brand logo" href="/">
-              HTX 4.0
-            </a>
-            <button
-              data-toggle="collapse"
-              className="navbar-toggler"
-              data-target="#navcol-1"
-              type="button"
-            >
-              <span className="sr-only">Toggle navigation</span>
-              <span className="navbar-toggler-icon" />
-            </button>
-            <div className="collapse navbar-collapse" id="navcol-1">
-              <ul className="nav navbar-nav ml-auto" />
-            </div>
-          </div>
-        </nav>
-        <main className="page login-page" style={{ marginTop: '80px' }}>
+        <div className="container-fluid" style={{ marginTop: '100px' }} />
+        <main className="page login-page bg-darkv" style={{ width: '35%', margin: 'auto' }}>
           <section className="clean-block clean-form dark">
             <div className="container">
-              <div className="block-heading text-center">
-                <h2 className="text-info">Đăng nhập</h2>
-                <p>
+              <div className="block-heading">
+                <h2 className="text-primary" style={{ textAlign: 'center' }}>Đăng nhập</h2>
+                <p style={{ textAlign: 'center' }}>
                   Đăng nhập vào hệ thống bằng tài khoản và mật khẩu được cấp bởi
                   chúng tôi
                 </p>
               </div>
-              <form style={{ paddingBottom: '20px' }}>
+              <form style={{ paddingBottom: '20px' }} className="jumbotron border-top border-primary">
                 <div className="form-group">
                   <label htmlFor="email">Tài khoản</label>
                   <input
@@ -63,19 +45,6 @@ class Login extends Component {
             </div>
           </section>
         </main>
-        <footer className="page-footer dark" style={{ padding: 0 }}>
-          <div
-            className="footer-copyright text-center"
-            style={{
-              border: 0,
-              backgroundColor: '#fff',
-              color: '#858796',
-              margin: 0,
-            }}
-          >
-            <p style={{ color: '#858796' }}>Copyright © HTX 4.0 2019</p>
-          </div>
-        </footer>
       </div>
     );
   }
