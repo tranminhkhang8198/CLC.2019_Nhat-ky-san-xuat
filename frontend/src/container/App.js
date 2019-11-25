@@ -23,10 +23,13 @@ import LeftNavbar from '../components/Navbars/LeftNavbar';
 
 function App() {
   const navItems = [
-    { pageName: 'Admin panel', route: '/admin' },
-    { pageName: 'Login', route: '/login' },
-    { pageName: 'Home', route: '/' },
-    { pageName: 'Hợp tác xã', route: '/quantrihtx' },
+    { pageName: 'Quản trị thuốc BVTV', route: '/quantrithuocbvtv' },
+    { pageName: 'Quản trị phân bón', route: '/quantriphanbon' },
+    { pageName: 'Quản trị giống lúa', route: '/quantrigionglua' },
+    { pageName: 'Quản trị HTX', route: '/quantrihtx' },
+    { pageName: 'Quản trị nhân sự HTX', route: '/quantriquanlyhtx' },
+    { pageName: 'Quản trị sự kiện HTX', route: '/quantrisukienhtx' },
+    { pageName: 'Profile', route: '/profile' },
   ];
 
   const renderNavItem = (Component) => (
