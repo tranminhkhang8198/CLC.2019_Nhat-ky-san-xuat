@@ -26,8 +26,6 @@ class Role{
             permission: _.get(role, 'permission'),
             created: new Date()
         }
-        console.log("new role is : ",obj);
-
 
         collection.insertOne(obj, (err, result) =>{
 
@@ -35,7 +33,7 @@ class Role{
                 return cb({error: "error iserting role"}, null);
             }
             else{
-                return cb(null, result);
+                return cb(null, result.ops);
             }
         })
 
@@ -50,8 +48,7 @@ class Role{
      */
     compare(method, allowRole, cb = () =>{}){
 
-        console.log("protocol ==", method);
-        console.log("allowProtocol==", allowRole);
+
         // Get protocol id
         const collection = this.app.db.collection('role');
         const query = {
@@ -62,13 +59,10 @@ class Role{
         }
         collection.find(query, options).limit(1).toArray((err, result) => {
             if(err || !_.get(result, '[0]')){
-                console.log("result compare error", result);
                 return cb(err, null);
             }
             else{
-                console.log("result compare", result)
                 const compare = allowRole.indexOf(result[0]._id.toString())
-                console.log("compare eeee",compare);
                 if(compare>-1){
                     return cb(null, true);
                 }
