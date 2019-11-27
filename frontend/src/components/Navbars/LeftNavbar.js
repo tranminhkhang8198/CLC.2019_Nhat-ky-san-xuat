@@ -1,18 +1,13 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable-next-line */
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   NavLink as RRNavLink,
 } from 'react-router-dom';
 
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
-import Login from '../../pages/Login';
-import Administrator from '../../pages/Administrator';
-import Profile from '../../pages/Profile';
 
 function LeftNavbar({ navItems }) {
   return (
@@ -28,16 +23,15 @@ function LeftNavbar({ navItems }) {
         </a>
         <div className="text-center d-none d-md-inline" />
         <div className="d-flex flex-column">
-          <Router>
-            <Nav>
-              {navItems.map(({ pageName, route }, index) => (
-                <NavItem key={`${index + 3}`}>
-                  <NavLink to={route} tag={RRNavLink}>{pageName}</NavLink>
-                </NavItem>
-              ))}
-            </Nav>
+          <Nav>
+            {navItems.map(({ pageName, route }, index) => (
+              <NavItem key={`${index + 3}`}>
+                <NavLink to={route} tag={RRNavLink}>{pageName}</NavLink>
+              </NavItem>
+            ))}
+          </Nav>
 
-            <Switch>
+          { /* <Switch>
               <Route exact path="/login">
                 <Login />
               </Route>
@@ -47,8 +41,7 @@ function LeftNavbar({ navItems }) {
               <Route exact path="/profile">
                 <Profile />
               </Route>
-            </Switch>
-          </Router>
+            </Switch> */ }
         </div>
       </div>
     </nav>

@@ -3,6 +3,6 @@
     "backend",
     "frontend"
   ],
-  "prettier.printWidth": 10000,
-  "prettier.jsxSingleQuote": true
+  "prettier.tabWidth": 2,
+  "editor.formatOnSave": true
 }

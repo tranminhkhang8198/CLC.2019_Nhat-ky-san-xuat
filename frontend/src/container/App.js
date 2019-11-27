@@ -19,16 +19,25 @@ import QuanTriSuKienHTX from '../pages/QuanTriSuKienHTX';
 import QuanTriGiongLua from '../pages/QuanTriGiongLua';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
+import LeftNavbar from '../components/Navbars/LeftNavbar';
 
 function App() {
-  // const navItems = [
-  //   { pageName: 'Admin panel', route: '/admin' },
-  //   { pageName: 'Login', route: '/login' },
-  //   { pageName: 'Home', route: '/' },
-  // ];
+  const navItems = [
+    { pageName: 'Quản trị thuốc BVTV', route: '/quantrithuocbvtv' },
+    { pageName: 'Quản trị phân bón', route: '/quantriphanbon' },
+    { pageName: 'Quản trị giống lúa', route: '/quantrigionglua' },
+    { pageName: 'Quản trị HTX', route: '/quantrihtx' },
+    { pageName: 'Quản trị nhân sự HTX', route: '/quantriquanlyhtx' },
+    { pageName: 'Quản trị sự kiện HTX', route: '/quantrisukienhtx' },
+    { pageName: 'Profile', route: '/profile' },
+  ];
 
   const renderNavItem = (Component) => (
     <div id="wrapper">
+<<<<<<< HEAD
+=======
+      <LeftNavbar navItems={navItems} />
+>>>>>>> 627625dd0ffe8baa8c1681c8cff42ca2a71c9e53
       <div className="d-flex flex-column" id="content-wrapper">
         <div id="content">
           <TopNavbar />
