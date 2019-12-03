@@ -145,40 +145,40 @@ MongoClient.connect(url, function (err, db) {
 
     const plantProtectionProduct = new PlantProtectionProduct(dbo);
 
-    // let count = 0;
-    // for (var i in thuocBvtv) {
-    //     plantProtectionProduct.create(thuocBvtv[i], (err, res) => {
-    //         if (err) {
-    //             console.log("Something wrong");
-    //             return;
-    //         }
-
-    //         count++;
-
-    //         console.log("Create thuoc bao ve thuc " + count);
-
-    //         if (count == thuocBvtv.length) {
-    //             console.log("Import thuoc bvtv successfully");
-    //             db.close();
-    //         }
-    //     });
-    // }
-
-
-    /////////////////////////////////////////////////////////////////////////////
-    // TEST FOR FIRST 100 DOC 
-    var count = 0;
-    for (var i = 1; i <= 100; i++) {
-        console.log("Import thuoc bvtv " + i);
-
+    let count = 0;
+    for (var i in thuocBvtv) {
         plantProtectionProduct.create(thuocBvtv[i], (err, res) => {
+            if (err) {
+                console.log("Something wrong");
+                return;
+            }
+
             count++;
 
-            if (count == 100) {
-                console.log("No lai la ok");
+            console.log("Create thuoc bao ve thuc " + count);
+
+            if (count == thuocBvtv.length) {
+                console.log("Import thuoc bvtv successfully");
                 db.close();
             }
         });
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////
+    // TEST FOR FIRST 100 DOC 
+    // var count = 0;
+    // for (var i = 1; i <= 100; i++) {
+    //     console.log("Import thuoc bvtv " + i);
+
+    //     plantProtectionProduct.create(thuocBvtv[i], (err, res) => {
+    //         count++;
+
+    //         if (count == 100) {
+    //             console.log("No lai la ok");
+    //             db.close();
+    //         }
+    //     });
+    // }
 });
 

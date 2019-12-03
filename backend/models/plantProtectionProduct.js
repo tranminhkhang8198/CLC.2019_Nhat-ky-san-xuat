@@ -196,6 +196,13 @@ class PlantProtectionProduct {
       });
   }
 
+  // TEST FINDBYQUERY
+  findByQuery(query, cb = () => { }) {
+    const plantProductionProduct = this.app.db.collection("plantProtectionProduct");
+
+    return cb(null, "no lai la ok");
+  }
+
   // FIND PLANT PROTECTION PRODUCT BY QUERY
   findByQuery(query, cb = () => { }) {
     const plantProtectionProduct = this.app.db.collection(

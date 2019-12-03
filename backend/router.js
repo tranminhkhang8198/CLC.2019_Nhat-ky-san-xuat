@@ -1316,4 +1316,29 @@ exports.routers = app => {
             return err ? errorHandle(res, err, 204) : responseHandle(res, info);
         });
     });
+
+
+    app.get("/api/scope-of-uses/pest", (req, res, next) => {
+        const query = req.query;
+
+        app.models.scopeOfUse.findPestByPlant(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
+        const query = req.query;
+
+        app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.get("/api/scope-of-uses", (req, res, next) => {
+        const query = req.query;
+
+        app.models.scopeOfUse.findByQuery(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
 };
