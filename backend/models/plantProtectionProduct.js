@@ -227,7 +227,12 @@ class PlantProtectionProduct {
 
     plantProtectionProduct.findOne(query, (err, res) => {
       if (err) {
-        return cb(err, null);
+        throw err;
+      }
+
+      if (!res) {
+        const errorMessage = "Không tìm thấy thuốc bảo vệ thực vật";
+        return cb(errorMessage, null);
       }
 
       responseToClient = res;
@@ -467,48 +472,35 @@ class PlantProtectionProduct {
         return cb(err, null);
       }
 
-      res.forEach((doc) => {
-        const pppId = mongoose.Types.ObjectId(doc._id);
+      const pppId = mongoose.Types.ObjectId(res._id);
 
-        // Delete plant protection product
-        plantProtectionProduct.deleteOne({ _id: pppId }, (err, res) => {
-          if (err) {
-            return cb(err, null)
-          }
-        });
-
-        /*
-           * Because the response of scope of use can be an object or an array
-           * depending query (findByQuery), therefore it need to be check before update
-           */
-
-        // Delete scope of use
-        if (Array.isArray(doc.scopeOfUse)) {
-          doc.scopeOfUse.forEach((scopeOfUseElem) => {
-            const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
-            scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
-              if (err) {
-                return cb(err, null);
-              }
-            });
-          });
-        } else {
-          const scopeOfUseId = mongoose.Types.ObjectId(doc.scopeOfUse._id);
-          scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
-            if (err) {
-              return cb(err, null);
-            }
-          });
+      // Delete plant protection product
+      plantProtectionProduct.deleteOne({ _id: pppId }, (err, res) => {
+        if (err) {
+          return cb(err, null)
         }
+      });
 
-        // Delete registration info
-        registrationInfo.deleteOne({ _id: doc.registrationInfo._id }, (err, res) => {
+      // Delete scope of use
+      res.scopeOfUse.forEach((scopeOfUseElem) => {
+        const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
+        scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
           if (err) {
             return cb(err, null);
           }
-
-          return cb(null, "no lai la ok");
         });
+      });
+
+      // Delete registration info
+      registrationInfo.deleteOne({ _id: res.registrationInfo._id }, (err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        const message = {
+          "success": "Xóa thuốc bảo vệ thực vật thành công"
+        }
+        return cb(null, message);
       });
     });
   }

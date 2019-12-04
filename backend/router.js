@@ -1256,10 +1256,10 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.delete("/api/plant-protection-products", (req, res, next) => {
-        const query = req.body.query;
+        const query = req.query;
 
         app.models.plantProtectionProduct.delete(query, (err, info) => {
-            return err ? errorHandle(res, err, 204) : responseHandle(res, info);
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
 
