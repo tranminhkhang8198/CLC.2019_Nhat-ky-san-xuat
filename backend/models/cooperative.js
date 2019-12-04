@@ -1,5 +1,5 @@
 /**
- * @ModelName cooperatives Hop tac xa
+ * @collectionName cooperatives Hop tac xa
  * @field {String} name Ten
  * @field {String} foreignName Ten nuoc ngoai
  * @field {String} abbreviationName Ten viet tat
