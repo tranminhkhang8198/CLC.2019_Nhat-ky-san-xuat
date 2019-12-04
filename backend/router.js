@@ -677,9 +677,13 @@ exports.routers = app => {
      * @apiName GetAllPlantProtectionProduct
      * @apiGroup PlantProtectionProduct
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products
+     *     curl -i http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20
      *
      * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiParam {Number} pageNumber Số trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      *
      *
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
@@ -792,7 +796,9 @@ exports.routers = app => {
 
 
     app.get("/api/plant-protection-products", (req, res, next) => {
-        app.models.plantProtectionProduct.find((err, info) => {
+        const query = req.query;
+
+        app.models.plantProtectionProduct.find(query, (err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
@@ -803,75 +809,14 @@ exports.routers = app => {
      * @apiGroup PlantProtectionProduct
      *
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products/query
-     *
+     *     curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e
+     *     curl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC
+     *   
      * @apiHeader {String} authorization Token.
      *
      * @apiParam {String} _id ID của thuốc bảo vệ thực vật
-     * @apiParam {String} name Ten cua thuoc bao ve thuc vat
-     * @apiParam {String} plant Cây trồng
-     * @apiParam {String} pest Dịch hại
-     *
-     * @apiParamExample {json} Tìm kiếm theo ID thuốc bvtv
-     * {
-     *     "query": {
-     *         "_id": "5dce66cb5c25ee6da0a29ac8"
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo tên
-     * {
-     *     "query": {
-     *         "name": " Ababetter  3.6EC"
-     *     }
-     * }
-     * 
-     * @apiParamExample {json} Tìm kiếm theo nhóm thuốc bvtv
-     * {
-     *     "query": {
-     *         "plantProtectionProductGroup": "Thuốc trừ sâu"
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo cây
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "plant": "lúa"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo dịch hại
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "pest": "sâu tơ"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo cây và dịch hại
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "plant": "lúa",
-     *             "pest": "bọ trĩ"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo cây và đơn vị đăng ký
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "plant": "lúa"
-     *         },
-     *         "registrationInfo": {
-     *             "registrationUnit": "Công ty TNHH SX TM Tô Ba"
-     *         }
-     *     }
-     * }
+     * @apiParam {String} name Tên thuốc bảo vệ thực vật
+     * @apiParam {String} plantProtectionProductGroup Nhóm thuốc 
      *
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
      * @apiSuccess {String} activeIngredient Hoạt chất
@@ -896,7 +841,7 @@ exports.routers = app => {
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *     "name": " Ababetter  3.6EC",
+     *     "name": " Ababetter 3.6EC",
      *     "activeIngredient": "Abamectin",
      *     "content": "36g/l",
      *     "plantProtectionProductGroup": "Thuốc trừ sâu",
@@ -947,7 +892,8 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.get("/api/plant-protection-products/query", (req, res, next) => {
-        const query = req.body.query;
+        const query = req.query;
+
         app.models.plantProtectionProduct.findByQuery(query, (err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
@@ -1318,7 +1264,7 @@ exports.routers = app => {
     });
 
 
-    app.get("/api/scope-of-uses/pest", (req, res, next) => {
+    app.get("/api/scope-of-uses", (req, res, next) => {
         const query = req.query;
 
         app.models.scopeOfUse.findPestByPlant(query, (err, info) => {
@@ -1326,19 +1272,19 @@ exports.routers = app => {
         });
     });
 
-    app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
-        const query = req.query;
+    // app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
+    //     const query = req.query;
 
-        app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
+    //     app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
+    //         return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+    //     });
+    // });
 
-    app.get("/api/scope-of-uses", (req, res, next) => {
-        const query = req.query;
+    // app.get("/api/scope-of-uses", (req, res, next) => {
+    //     const query = req.query;
 
-        app.models.scopeOfUse.findByQuery(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
+    //     app.models.scopeOfUse.findByQuery(query, (err, info) => {
+    //         return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+    //     });
+    // });
 };
