@@ -57,11 +57,8 @@ class PlantProtectionProduct {
       if (err) {
         return cb(err, null);
       }
-
-      console.log("Number of documents inserted: " + res.insertedCount);
-
+      // console.log("Number of documents inserted: " + res.insertedCount);
       const scopeOfUse = res.ops;
-
       return cb(null, scopeOfUse);
     });
   }
@@ -416,48 +413,39 @@ class PlantProtectionProduct {
         return cb(err, null);
       }
 
-      res.forEach((doc) => {
-        // process for update scopeOfUse if was submitted
-        if (update.scopeOfUse) {
-          /*
-           * Because the response of scope of use can be an object or an array
-           * depending query (findByQuery), therefore it need to be check before update
-           */
-          if (Array.isArray(doc.scopeOfUse)) {
-            doc.scopeOfUse.forEach((scopeOfUseElem) => {
-              const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
-              this.updateScopeOfUse(scopeOfUseId, update);
-            });
-          } else {
-            const scopeOfUseId = mongoose.Types.ObjectId(doc.scopeOfUse._id);
-            this.updateScopeOfUse(scopeOfUseId, update);
-          }
-        }
+      // process for update scopeOfUse if was submitted
+      if (update.scopeOfUse) {
+        res.scopeOfUse.forEach((scopeOfUseElem) => {
+          const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
+          this.updateScopeOfUse(scopeOfUseId, update);
+        });
+      }
 
-        // process for update scopeOfUse if was submitted
-        if (update.registrationInfo) {
-          const registrationInfoId = mongoose.Types.ObjectId(doc.registrationInfo._id);
-          this.updateRegistrationInfo(registrationInfoId, update);
-        }
+      // process for update scopeOfUse if was submitted
+      // if (update.registrationInfo) {
+      //   const registrationInfoId = mongoose.Types.ObjectId(res.registrationInfo._id);
+      //   this.updateRegistrationInfo(registrationInfoId, update);
+      // }
 
-        // remove field after update
-        delete update.scopeOfUse;
-        delete update.registrationInfo;
+      // // remove field after update
+      // delete update.scopeOfUse;
+      // delete update.registrationInfo;
 
-        // process update for plant protection product
-        for (var key in update) {
-          const pppId = mongoose.Types.ObjectId(doc._id);
-          this.updatePlantProtectionProduct(pppId, update);
-        }
-      });
+      // // process update for plant protection product
+      // // if (update._id) {
+      // //   update._id = mongoose.Types.ObjectId(update._id);
+      // // }
+      // this.updatePlantProtectionProduct(res._id, update);
 
-      this.findByQuery(query, (err, res) => {
-        if (err) {
-          return cb(err, null);
-        }
+      // // response to client updated doc
+      // this.findByQuery(query, (err, res) => {
+      //   if (err) {
+      //     return cb(err, null);
+      //   }
 
-        return cb(null, res);
-      });
+      //   return cb(null, res);
+      // });
+      return cb(null, res);
     });
   }
 

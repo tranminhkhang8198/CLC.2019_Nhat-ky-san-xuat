@@ -676,7 +676,7 @@ exports.routers = app => {
      * @api {get} /plant-protection-product Get all plant protection product
      * @apiName GetAllPlantProtectionProduct
      * @apiGroup PlantProtectionProduct
-     * @apiExample {curl} Example usage:
+     * @apiExample {curl} Tìm kiếm thuốc bảo vệ thực vật:
      *     curl -i http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20
      *
      * @apiHeader {String} authorization Token.
@@ -808,8 +808,10 @@ exports.routers = app => {
      * @apiName GetPlantProtectionProductByQuery
      * @apiGroup PlantProtectionProduct
      *
-     * @apiExample {curl} Example usage:
+     * @apiExample {curl} Tìm thuốc bảo vệ thực vật theo _id:
      *     curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e
+     * 
+     * @apiExample {curl} Tìm thuốc bảo vệ thực vật theo tên:
      *     curl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC
      *   
      * @apiHeader {String} authorization Token.
@@ -886,7 +888,7 @@ exports.routers = app => {
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *     {
-     *       "error": "Không tìm thấy thuốc bảo vệ thực vật phù hợp!"
+     *       "error": "Không tìm thấy thuốc bảo vệ thực vật"
      *     }
      *
      * @apiPermission manager-admin
@@ -1203,7 +1205,7 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.patch("/api/plant-protection-products", (req, res, next) => {
-        const query = req.body.query;
+        const query = req.query;
         const update = req.body.update;
 
         app.models.plantProtectionProduct.update(query, update, (err, info) => {
@@ -1216,42 +1218,30 @@ exports.routers = app => {
      * @apiName DeletePlantProtectionProductByQuery
      * @apiGroup PlantProtectionProduct
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products/
-     *
+     * @apiExample {curl} Xóa thuốc bảo vệ thực vật theo _id:
+     *     curl -i http://localhost:3001/api/plant-protection-products?_id=5dd6527842d8944aa7cef4a1
+     *    
+     * @apiExample {curl} Xóa thuốc bảo vệ thực vật theo tên:
+     *     curl -i http://localhost:3001/api/plant-protection-products?name=Abagold 55EC
+     * 
      * @apiHeader {String} authorization Token.
      *
      * @apiParam {String} _id ID của thuốc bảo vệ thực vật
      * @apiParam {String} name Ten cua thuoc bao ve thuc vat
      * 
-     * 
-     * @apiParamExample {json} Delete sử dụng _id thuốc bvtv
-     * {
-     *     "query": {
-     *         "_id": "5dce66cb5c25ee6da0a29ac8"
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Delete sử dụng tên thuốc bvtv
-     * {
-     *     "query": {
-     *         "name": " Ababetter  3.6EC"
-     *     }
-     * }
-     *
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *     "successMessage": "Xóa thuốc bảo vệ thực vật thành công"
-     * }
+     *     "success": "Xóa thuốc bảo vệ thực vật thành công"
+     *  }
      *
      *
      * @apiErrorExample Error-Response:
-     * HTTP/1.1 201 Not Found
-     *     {
-     *       "error": "Không tìm thấy thuốc bảo vệ thực vật phù hợp!"
-     *     }
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "error": "Không tìm thấy thuốc bảo vệ thực vật"
+     * }
      *
      * @apiPermission manager-admin
      */

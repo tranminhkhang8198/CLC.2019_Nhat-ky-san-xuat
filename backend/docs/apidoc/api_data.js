@@ -357,8 +357,13 @@ define({ "api": [
     "group": "PlantProtectionProduct",
     "examples": [
       {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-products/",
+        "title": "Xóa thuốc bảo vệ thực vật theo _id:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products?_id=5dd6527842d8944aa7cef4a1",
+        "type": "curl"
+      },
+      {
+        "title": "Xóa thuốc bảo vệ thực vật theo tên:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products?name=Abagold 55EC",
         "type": "curl"
       }
     ],
@@ -393,25 +398,13 @@ define({ "api": [
             "description": "<p>Ten cua thuoc bao ve thuc vat</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Delete sử dụng _id thuốc bvtv",
-          "content": "{\n    \"query\": {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\"\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Delete sử dụng tên thuốc bvtv",
-          "content": "{\n    \"query\": {\n        \"name\": \" Ababetter  3.6EC\"\n    }\n}",
-          "type": "json"
-        }
-      ]
+      }
     },
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n    \"successMessage\": \"Xóa thuốc bảo vệ thực vật thành công\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"success\": \"Xóa thuốc bảo vệ thực vật thành công\"\n}",
           "type": "json"
         }
       ]
@@ -420,7 +413,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 201 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật phù hợp!\"\n    }",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"error\": \"Không tìm thấy thuốc bảo vệ thực vật\"\n}",
           "type": "json"
         }
       ]
@@ -442,7 +435,7 @@ define({ "api": [
     "group": "PlantProtectionProduct",
     "examples": [
       {
-        "title": "Example usage:",
+        "title": "Tìm kiếm thuốc bảo vệ thực vật:",
         "content": "curl -i http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20",
         "type": "curl"
       }
@@ -652,8 +645,13 @@ define({ "api": [
     "group": "PlantProtectionProduct",
     "examples": [
       {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e\ncurl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC",
+        "title": "Tìm thuốc bảo vệ thực vật theo _id:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e",
+        "type": "curl"
+      },
+      {
+        "title": "Tìm thuốc bảo vệ thực vật theo tên:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC",
         "type": "curl"
       }
     ],
@@ -847,7 +845,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật phù hợp!\"\n    }",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Không tìm thấy thuốc bảo vệ thực vật\"\n    }",
           "type": "json"
         }
       ]

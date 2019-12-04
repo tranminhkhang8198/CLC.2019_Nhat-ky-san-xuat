@@ -2,6 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 const fs = require('fs');
 const _ = require('lodash');
+const path = require("path");
 
 
 function getDatabaseThuocBvtv(file) {
@@ -139,7 +140,7 @@ MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("farm");
 
-    const file = "../docs/database_thuoc_bvtv.json"
+    const file = path.join(__dirname, "../docs/database_thuoc_bvtv.json");
 
     const thuocBvtv = getDatabaseThuocBvtv(file);
 
