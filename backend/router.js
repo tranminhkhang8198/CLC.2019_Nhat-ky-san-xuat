@@ -55,7 +55,7 @@ exports.routers = app => {
             if (err) {
                 return cb(
                     {
-                        err
+                        errorMessage: "Loi xac dinh token"
                     },
                     null
                 );
@@ -383,9 +383,8 @@ exports.routers = app => {
 
         app.models.token.verify(tokenId, (err, result) => {
             if (err) {
-                return errorHandle(res, err.errorMessage);
+                return errorHandle(res, err.errorMessage, 401);
             } else {
-                _.unset(result.user, "password");
                 return responseHandle(res, result, 200);
             }
         });
@@ -643,6 +642,18 @@ exports.routers = app => {
         });
     });
 
+    app.get('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        app.models.cooperative.search(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 401);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
     app.post('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         // verifyUser(req, 'cooperative', (err, accept) => {
@@ -651,13 +662,25 @@ exports.routers = app => {
         //     } else {
         app.models.cooperative.create(body, (err, result) => {
             if (err) {
-                errorHandle(res, err.errorMessage, 404);
+                return errorHandle(res, err.errorMessage, 404);
             }
             else {
-                responseHandle(res, result)
+                return responseHandle(res, result)
             }
             //         })
             //     }
+        })
+    })
+
+    app.delete('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        app.models.cooperative.remove(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
         })
     })
 

@@ -1,13 +1,13 @@
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
-const {OrderedMap} = require('immutable');
-const {ObjectID} = require('mongodb');
+const { OrderedMap } = require('immutable');
+const { ObjectID } = require('mongodb');
 const config = require('./config/tokenConfig');
 
 
-class Token{
+class Token {
 
-    constructor(app){
+    constructor(app) {
         this.app = app;
         this.Tokens = new OrderedMap();
     }
@@ -17,10 +17,10 @@ class Token{
      * @param {string} id 
      * @param {token object} token 
      */
-    addTokenToCache(token){
+    addTokenToCache(token) {
 
         // this.Tokens.append(token)
-        if(typeof id==='string'){
+        if (typeof id === 'string') {
             id = new ObjectID(id);
         }
 
@@ -32,7 +32,7 @@ class Token{
      * @param {string} userId 
      * @param {callback function} cb 
      */
-    create(user, cb = () => {}){
+    create(user, cb = () => { }) {
 
         // if(typeof userId ==='string'){
         //     userId = _.toString(userId);
@@ -62,10 +62,10 @@ class Token{
         }
 
         this.app.db.collection('token').insertOne(tokenObj, (err, info) => {
-            if (err){
+            if (err) {
                 return cb("Error creating token", null);
-            }else{
-                return cb(null, {token:token, refreshToken: refreshToken})
+            } else {
+                return cb(null, { token: token, refreshToken: refreshToken })
             }
         })
 
@@ -77,26 +77,26 @@ class Token{
      * @param {string} tokenId 
      * @param {callback function} cb 
      */
-    verify(token, cb = () => {}){
+    verify(token, cb = () => { }) {
 
         // Find token in cache
         const inCache = this.Tokens.get(token);
         // console.log("incache", inCache);
 
-        if(inCache){
+        if (inCache) {
             // Get user info
             const userId = inCache.userId.toString();
             this.app.models.user.load(userId, (err, user) => {
-                if(err){
+                if (err) {
                     return cb(err, null);
                 }
-                else{
+                else {
                     inCache.user = user
                     return cb(null, inCache);
                 }
             });
         }
-        else{
+        else {
             // Find token in database
             // let tokenObjId;
             // try{
@@ -109,50 +109,50 @@ class Token{
             try {
                 decoded = jwt.verify(token, config.secret);
             } catch (error) {
-                cb({errorMessage:"Token khong dung hoac da het han"}, null);
+                return cb({ errorMessage: "Token khong dung hoac da het han" }, null);
             }
-            _.unset(decoded,'password');
-            cb(null, decoded);
+            _.unset(decoded, 'password');
+            return cb(null, decoded);
 
         }
 
-        
+
     }
 
-    refresh(refreshToken, cb = ()=>{}){
+    refresh(refreshToken, cb = () => { }) {
         const collection = this.app.db.collection('token')
-        jwt.verify(refreshToken, config.refreshTokenSecret,(err, decoded)=> {
-            if(err){
+        jwt.verify(refreshToken, config.refreshTokenSecret, (err, decoded) => {
+            if (err) {
                 //TODO: neu token het hang thi xoa khoi database
-                if(err.message==="jwt expired"){
+                if (err.message === "jwt expired") {
                     const collection = this.app.db.collection('token');
-                    collection.deleteOne({refreshToken: refreshToken}, (err, result)=>{
-                        if(err){
-                            return cb({errorMessage: "Some thong went wrong"}, null);
-                        }else{
+                    collection.deleteOne({ refreshToken: refreshToken }, (err, result) => {
+                        if (err) {
+                            return cb({ errorMessage: "Some thong went wrong" }, null);
+                        } else {
                             return cb(null, result);
                         }
                     })
                 }
-                return cb({errorMessage:"Refresh token not match"}, null);
-            }else{
+                return cb({ errorMessage: "Refresh token not match" }, null);
+            } else {
                 // Get user
                 const query = {
-                    refreshToken : refreshToken
+                    refreshToken: refreshToken
                 }
-                collection.find(query).toArray((err, result)=>{
-                    if(err || !_.get(result,'[0]')){
-                        return cb({errorMessage: "Token is not found"}, null);
-                    }else{
+                collection.find(query).toArray((err, result) => {
+                    if (err || !_.get(result, '[0]')) {
+                        return cb({ errorMessage: "Token is not found" }, null);
+                    } else {
 
-                        const token = _.get(result,'[0]');
+                        const token = _.get(result, '[0]');
                         const userId = token.userId;
 
                         // Get user from userId
-                        this.app.models.user.load(userId, (err, user)=>{
-                            if(err){
+                        this.app.models.user.load(userId, (err, user) => {
+                            if (err) {
 
-                                return cb({errorMessage: "user is not found"}, null)
+                                return cb({ errorMessage: "user is not found" }, null)
                             } else {
 
                                 console.log(user);
@@ -171,21 +171,21 @@ class Token{
                                 const query = {
                                     refreshToken: refreshToken
                                 }
-                                const options ={
-                                    $set:{
+                                const options = {
+                                    $set: {
                                         refreshToken: newRefreshToken
                                     }
                                 }
-                                collection.updateOne(query, options, (err, result)=>{
-                                    if(err){
-                                        return cb({errorMessage:"Khong the cap nhat refresh token"},null);
+                                collection.updateOne(query, options, (err, result) => {
+                                    if (err) {
+                                        return cb({ errorMessage: "Khong the cap nhat refresh token" }, null);
                                     }
-                                    else{
+                                    else {
 
-                                        if(result.result.nModified == 0){
-                                            return cb({errorMessage:"Khong the thay doi refresh token trong database"}, null)
-                                        }else{
-                                            return cb(null, {token:token,refreshToken:newRefreshToken});
+                                        if (result.result.nModified == 0) {
+                                            return cb({ errorMessage: "Khong the thay doi refresh token trong database" }, null)
+                                        } else {
+                                            return cb(null, { token: token, refreshToken: newRefreshToken });
                                         }
                                     }
                                 })
@@ -201,25 +201,25 @@ class Token{
         })
     }
 
-    remove(refreshToken, cb = () =>{}){
-        if(!refreshToken){
-            return cb({errorMessage: "Token khong hop le"})
+    remove(refreshToken, cb = () => { }) {
+        if (!refreshToken) {
+            return cb({ errorMessage: "Token khong hop le" })
         }
         // Verify Token
         let decoded;
         try {
             decoded = jwt.verify(refreshToken, config.refreshTokenSecret)
         } catch (error) {
-            return cb({errorMessage: "Token khong hop le hoac het hieu luc"});
+            return cb({ errorMessage: "Token khong hop le hoac het hieu luc" });
         }
         // Delete token
         const collection = this.app.db.collection('token');
-        collection.deleteOne({refreshToken:refreshToken},(err, result)=>{
-            if(err){
-                return cb({errorMessage:"Loi xoa du lieu database"},null);
+        collection.deleteOne({ refreshToken: refreshToken }, (err, result) => {
+            if (err) {
+                return cb({ errorMessage: "Loi xoa du lieu database" }, null);
             }
-            else{
-                return cb(null,{responseMessage:"Xoa thanh cong"});
+            else {
+                return cb(null, { responseMessage: "Xoa thanh cong" });
             }
         });
     }

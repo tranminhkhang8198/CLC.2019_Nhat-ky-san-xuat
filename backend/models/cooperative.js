@@ -18,6 +18,7 @@
  * @field {Array} docs Tai lieu lien quan
  */
 const _ = require("lodash");
+const { ObjectID } = require("mongodb");
 
 class Cooperative {
 	constructor(app) {
@@ -167,7 +168,6 @@ class Cooperative {
 		};
 
 		const errors = [];
-		eval
 		_.each(validateions, (validation, field) => {
 			const isValid = validation.doValidate
 			if (!isValid) {
@@ -232,6 +232,44 @@ class Cooperative {
 				})
 			}
 		});
+	}
+
+	search(params, cb = () => { }) {
+
+		const collection = this.app.db.collection('cooperatives');
+		const query = _.get(params, 'query', {});
+		const options = _.get(params, 'options', {});
+		const resultNumber = _.get(params, 'resultNumber', 0);
+		const pageNumber = _.get(params, 'pageNumber', 0);
+		collection.find(query, options).limit(resultNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
+			if (err) {
+				return cb({ errMessage: "Loi trong qua trinh tim kiem" }, null);
+			}
+			else {
+				return cb(null, result);
+			}
+		})
+	}
+	remove(params, cb = () => { }) {
+		const collection = this.app.db.collection('cooperatives');
+		const query = _.get(params, 'query', null);
+		if (query == null) {
+			return cb({ errMessage: "Tac vu yeu cau phai co dieu kien" }, null);
+		}
+		try {
+			console.log(query);
+
+			var _id = _.get(query, "_id", null);
+			if (_id != null) {
+				_id = new ObjectID(_id);
+				_.set(query, '_id', _id);
+			}
+			console.log(query);
+			collection.deleteMany(query)
+			return cb(null, query)
+		} catch (error) {
+			return cb({ errMessage: "Loi trong qua trinh xoa HTX" }, null);
+		}
 	}
 }
 module.exports = Cooperative;
