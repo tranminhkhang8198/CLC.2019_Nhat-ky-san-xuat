@@ -443,7 +443,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-products",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20",
         "type": "curl"
       }
     ],
@@ -456,6 +456,26 @@ define({ "api": [
             "optional": false,
             "field": "authorization",
             "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
           }
         ]
       }
@@ -633,7 +653,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-products/query",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e\ncurl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC",
         "type": "curl"
       }
     ],
@@ -665,61 +685,17 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>Ten cua thuoc bao ve thuc vat</p>"
+            "description": "<p>Tên thuốc bảo vệ thực vật</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "plant",
-            "description": "<p>Cây trồng</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "pest",
-            "description": "<p>Dịch hại</p>"
+            "field": "plantProtectionProductGroup",
+            "description": "<p>Nhóm thuốc</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Tìm kiếm theo ID thuốc bvtv",
-          "content": "{\n    \"query\": {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\"\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Tìm kiếm theo tên",
-          "content": "{\n    \"query\": {\n        \"name\": \" Ababetter  3.6EC\"\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Tìm kiếm theo nhóm thuốc bvtv",
-          "content": "{\n    \"query\": {\n        \"plantProtectionProductGroup\": \"Thuốc trừ sâu\"\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Tìm kiếm theo cây",
-          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"plant\": \"lúa\"\n        }\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Tìm kiếm theo dịch hại",
-          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"pest\": \"sâu tơ\"\n        }\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Tìm kiếm theo cây và dịch hại",
-          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"plant\": \"lúa\",\n            \"pest\": \"bọ trĩ\"\n        }\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Tìm kiếm theo cây và đơn vị đăng ký",
-          "content": "{\n    \"query\": {\n        \"scopeOfUse\": {\n            \"plant\": \"lúa\"\n        },\n        \"registrationInfo\": {\n            \"registrationUnit\": \"Công ty TNHH SX TM Tô Ba\"\n        }\n    }\n}",
-          "type": "json"
-        }
-      ]
+      }
     },
     "success": {
       "fields": {
@@ -862,7 +838,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n    \"name\": \" Ababetter  3.6EC\",\n    \"activeIngredient\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"created\": \"2019-11-14T16:43:16.899Z\",\n    \"_id\": \"5dcd842416d4391c7f8a4265\",\n    \"scopeOfUse\": [\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4266\"\n        },\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4267\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"pppId\": \"5dcd842416d4391c7f8a4265\",\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n        \"created\": \"2019-11-14T16:43:16.900Z\",\n        \"_id\": \"5dcd842416d4391c7f8a4268\"\n    }\n}",
+          "content": " HTTP/1.1 200 OK\n {\n    \"name\": \" Ababetter 3.6EC\",\n    \"activeIngredient\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"created\": \"2019-11-14T16:43:16.899Z\",\n    \"_id\": \"5dcd842416d4391c7f8a4265\",\n    \"scopeOfUse\": [\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4266\"\n        },\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4267\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"pppId\": \"5dcd842416d4391c7f8a4265\",\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n        \"created\": \"2019-11-14T16:43:16.900Z\",\n        \"_id\": \"5dcd842416d4391c7f8a4268\"\n    }\n}",
           "type": "json"
         }
       ]
