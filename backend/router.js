@@ -1262,19 +1262,372 @@ exports.routers = app => {
         });
     });
 
-    // app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
-    //     const query = req.query;
+    app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
+        const query = req.query;
 
-    //     app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
-    //         return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-    //     });
-    // });
+        app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
 
-    // app.get("/api/scope-of-uses", (req, res, next) => {
-    //     const query = req.query;
+    app.get("/api/scope-of-uses", (req, res, next) => {
+        const query = req.query;
 
-    //     app.models.scopeOfUse.findByQuery(query, (err, info) => {
-    //         return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-    //     });
-    // });
+        app.models.scopeOfUse.findByQuery(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+
+    // *************************************************************************** //
+    // ROUTES FOR PLANT PROTECTION PRODUCT
+    /**
+     * @api {get} /fertilizers Get all fertilizers with pageNumber and nPerPage
+     * @apiName GetAllFertilizer
+     * @apiGroup Fertilizer
+     * @apiExample {curl} Tìm kiếm phân bón:
+     *     curl -i http://localhost:3001/api/fertilizer?pageNumber=9&nPerPage=20
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiParam {Number} pageNumber Số trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
+     *
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5de75a92f4e889141cc24ee8",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH YARA Việt Nam",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)",
+     *          "ingredient": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
+     *          "lawDocument": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.952Z"
+     *      },
+     *      {
+     *          "_id": "5de75a92f4e889141cc24efd",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH YARA Việt Nam",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân bón NPK 15-9-20+TE",
+     *          "ingredient": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
+     *          "lawDocument": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.956Z"
+     *      },
+     *      {
+     *          "_id": "5de75a92f4e889141cc24f7d",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *          "ingredient": "",
+     *          "lawDocument": "",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.974Z"
+     *      },
+     *      ...
+     *  ]
+     * 
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Conflict
+     *     {
+     *       "error": ""
+     *     }
+     * @apiPermission none
+     */
+
+
+    app.get("/api/fertilizers", (req, res, next) => {
+        const query = req.query;
+
+        app.models.fertilizer.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {get} /fertilizers Get fertilizer by query
+     * @apiName GetFertilizerByQuery
+     * @apiGroup Fertilizer
+     * 
+     * @apiExample {curl} Tìm kiếm phân bón theo _id:
+     *     curl -i http://localhost:3001/api/fertilizer?_id=5de75a92f4e889141cc24ef5
+     * @apiExample {curl} Tìm kiếm phân bón theo tên:
+     *     curl -i http://localhost:3001/api/fertilizer?name=Phân bón Calcium Nitrate( Calcinit)
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiParam {Number} pageNumber Số trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
+     *
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *      {
+     *          "_id": "5de75a92f4e889141cc24ef5",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH YARA Việt Nam",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân bón Calcium Nitrate( Calcinit)",
+     *          "ingredient": "Nts: 15,4%; CaO: 26,5%; Độ ẩm: 0,8%",
+     *          "lawDocument": "Nts: 15,4%; CaO: 26,5%; Độ ẩm: 0,8%",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.955Z"
+     *      }
+     * 
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "error": "Không tìm thấy phân bón"
+     *     }
+     * @apiPermission none
+     */
+
+    app.get("/api/fertilizers/query", (req, res, next) => {
+        const query = req.query;
+
+        app.models.fertilizer.findByQuery(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+
+    /**
+     * @api {post} /fertilizer Create new fertilizer
+     * @apiName CreateFertilizer
+     * @apiGroup Fertilizer
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/fertilizers
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} ministry Bộ
+     * @apiParam {String} province Tỉnh
+     * @apiParam {String} enterprise Tên doanh nghiệp
+     * @apiParam {String} type Loại phân bón
+     * @apiParam {String} name Tên phân bón
+     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": ""
+     *  }
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5de75a92f4e889141cc24f7d",
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": "",
+     *      "created": "2019-12-04T07:04:50.974Z"
+     *  }
+     *
+     * @apiError Name-is-required Thiếu trường tên phân bón
+     * @apiError Fertilizer-exists Phân bón đã tồn tại
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "error": "Phân bón với tên '" + name + "' đã tồn tại."
+     *     }
+     * @apiPermission none
+     */
+    app.post("/api/fertilizers", (req, res, next) => {
+        const body = req.body;
+
+        app.models.fertilizer.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {patch} /fertilizer Update fertilizer
+     * @apiName UpdateFertilizer
+     * @apiGroup Fertilizer
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/fertilizers
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} ministry Bộ
+     * @apiParam {String} province Tỉnh
+     * @apiParam {String} enterprise Tên doanh nghiệp
+     * @apiParam {String} type Loại phân bón
+     * @apiParam {String} name Tên phân bón
+     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "ministry": "updated",
+     *      "province": "updated",
+     *      "enterprise": "updated",
+     *      "type": "updated",
+     *      "name": "updated",
+     *      "ingredient": "updated",
+     *      "lawDocument": "updated",
+     *      "isoCertOrganization": "updated",
+     *      "manufactureAndImport": "updated"
+     *  }
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5de75a92f4e889141cc24f7d",
+     *      "ministry": "updated",
+     *      "province": "updated",
+     *      "enterprise": "updated",
+     *      "type": "updated",
+     *      "name": "updated",
+     *      "ingredient": "updated",
+     *      "lawDocument": "updated",
+     *      "isoCertOrganization": "updated",
+     *      "manufactureAndImport": "updated",
+     *      "created": "2019-12-04T07:04:50.974Z"
+     *  }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Conflict
+     *     {
+     *       "error": "Không tìm thấy phân bón"
+     *     }
+     * @apiPermission none
+     */
+    app.patch("/api/fertilizers", (req, res, next) => {
+        const query = req.query;
+        const update = req.body;
+
+        app.models.fertilizer.update(query, update, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {delete} /fertilizer/ Delete fertilizer by query
+     * @apiName DeleteFertilizerByQuery
+     * @apiGroup PlantProtectionProduct
+     *
+     * @apiExample {curl} Xóa phân bón theo _id:
+     *     curl -i http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24ef5
+     *    
+     * @apiExample {curl} Xóa phân báo theo tên:
+     *     curl -i http://localhost:3001/api/fertilizers?name=Phân bón Calcium Nitrate( Calcinit)
+     * 
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} _id ID của phân bón
+     * @apiParam {String} name Tên của phân bón
+     * 
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "success": "Xóa phân báo thành công"
+     *  }
+     *
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "error": "Không tìm thấy phân báo"
+     * }
+     *
+     * @apiPermission manager-admin
+     */
+    app.delete("/api/fertilizers", (req, res, next) => {
+        const query = req.query;
+
+        app.models.fertilizer.delete(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
 };

@@ -6,6 +6,7 @@ const Permission = require("./permission/permission");
 const PlantProtectionProduct = require("./plantProtectionProduct");
 const Cooperative = require('./cooperative');
 const ScopeOfUse = require('./scopeOfUse');
+const Fertilizer = require('./fertilizer');
 
 class Model {
   constructor(app) {
@@ -18,6 +19,7 @@ class Model {
     this.plantProtectionProduct = new PlantProtectionProduct(app);
     this.cooperative = new Cooperative(app);
     this.scopeOfUse = new ScopeOfUse(app);
+    this.fertilizer = new Fertilizer(app);
   }
 }
 module.exports = Model;
