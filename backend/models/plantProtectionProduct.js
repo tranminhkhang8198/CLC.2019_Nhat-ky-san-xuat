@@ -57,11 +57,8 @@ class PlantProtectionProduct {
       if (err) {
         return cb(err, null);
       }
-
-      console.log("Number of documents inserted: " + res.insertedCount);
-
+      // console.log("Number of documents inserted: " + res.insertedCount);
       const scopeOfUse = res.ops;
-
       return cb(null, scopeOfUse);
     });
   }
@@ -161,114 +158,102 @@ class PlantProtectionProduct {
   }
 
   // FIND ALL PLANT PROTECTION PRODUCT IN DATABASE
-  find(cb = () => { }) {
-    const plantProtectionProduct = this.app.db.collection(
-      "plantProtectionProduct"
-    );
+  find(query = {}, cb = () => { }) {
+    const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
+    const scopeOfUse = this.app.db.collection("scopeOfUse");
+    const registrationInfo = this.app.db.collection("registrationInfo");
 
-    plantProtectionProduct
-      .aggregate([{
-        $lookup: {
-          from: "scopeOfUse",
-          localField: "_id",
-          foreignField: "pppId",
-          as: "scopeOfUse"
-        }
-      },
-      {
-        $lookup: {
-          from: "registrationInfo",
-          localField: "_id",
-          foreignField: "pppId",
-          as: "registrationInfo"
-        }
-      },
-      {
-        $unwind: "$registrationInfo"
-      }
-      ])
+    const pageNumber = query.pageNumber;
+    const nPerPage = query.nPerPage;
+
+    plantProtectionProduct.find()
+      .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
+      .limit(Number(nPerPage))
       .toArray((err, res) => {
         if (err) {
-          return cb(err, null);
+          return cb(err, null)
         }
 
-        return cb(null, res);
+        let count = 0;
+        let length = res.length;
+        let responseToClient = [];
+
+        res.forEach((doc) => {
+          const pppId = mongoose.Types.ObjectId(doc._id);
+          // Get scope of use
+          scopeOfUse.find({ pppId: pppId }).toArray((err, res) => {
+            if (err) {
+              return cb(err, null);
+            }
+            // Add scope of use to response
+            doc["scopeOfUse"] = res;
+
+            // Get registration information
+            registrationInfo.findOne({ pppId: pppId }, (err, res) => {
+              if (err) {
+                return cb(err, null);
+              }
+
+              doc["registrationInfo"] = res;
+
+              responseToClient.push(doc)
+
+              count = count + 1;
+
+              if (count == length) {
+                return cb(null, responseToClient);
+              }
+            });
+          });
+        });
       });
   }
 
+
   // FIND PLANT PROTECTION PRODUCT BY QUERY
   findByQuery(query, cb = () => { }) {
-    const plantProtectionProduct = this.app.db.collection(
-      "plantProtectionProduct"
-    );
+    const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
+    const scopeOfUse = this.app.db.collection("scopeOfUse");
+    const registrationInfo = this.app.db.collection("registrationInfo");
 
-    let pipeline = [{
-      $lookup: {
-        from: "scopeOfUse",
-        localField: "_id",
-        foreignField: "pppId",
-        as: "scopeOfUse"
-      }
-    },
-    {
-      $lookup: {
-        from: "registrationInfo",
-        localField: "_id",
-        foreignField: "pppId",
-        as: "registrationInfo"
-      }
-    },
-    {
-      $unwind: "$registrationInfo"
-    }
-    ];
+    let responseToClient = {}
 
-    let queryStr = {
-      ...query
+    if (query._id) {
+      query._id = mongoose.Types.ObjectId(query._id);
     }
 
-    // PREPROCESS QUERY
-    if (queryStr._id) {
-      queryStr._id = mongoose.Types.ObjectId(queryStr._id);
-    }
-
-    if (queryStr.scopeOfUse) {
-      pipeline.push({
-        $unwind: "$scopeOfUse"
-      });
-      for (let key in queryStr.scopeOfUse) {
-        queryStr["scopeOfUse." + key] = queryStr.scopeOfUse[key];
-      }
-      delete queryStr.scopeOfUse;
-    }
-
-    if (queryStr.registrationInfo) {
-      for (let key in queryStr.registrationInfo) {
-        queryStr["registrationInfo." + key] = queryStr.registrationInfo[key];
-      }
-      delete queryStr.registrationInfo;
-    }
-
-    pipeline.push({
-      $match: queryStr
-    });
-
-    // pipeline.push({
-    //   $group: {
-    //     _id: "$scopeOfUse.pest"
-    //   }
-    // });
-
-    // pipeline.push({
-    //   $limit: 20
-    // });
-
-    plantProtectionProduct.aggregate(pipeline).toArray((err, res) => {
+    plantProtectionProduct.findOne(query, (err, res) => {
       if (err) {
-        return cb(err, null);
+        throw err;
       }
 
-      return cb(null, res);
+      if (!res) {
+        const errorMessage = "Không tìm thấy thuốc bảo vệ thực vật";
+        return cb(errorMessage, null);
+      }
+
+      responseToClient = res;
+
+      const pppId = mongoose.Types.ObjectId(res._id);
+      // Get scope of use
+      scopeOfUse.find({ pppId: pppId }).toArray((err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+        // Add scope of use to response
+        responseToClient["scopeOfUse"] = res;
+
+        // Get registration information
+        registrationInfo.findOne({ pppId: pppId }, (err, res) => {
+          if (err) {
+            return cb(err, null);
+          }
+
+          responseToClient["registrationInfo"] = res;
+
+          return cb(null, responseToClient);
+        });
+      });
     });
   }
 
@@ -302,14 +287,14 @@ class PlantProtectionProduct {
         if (err) {
           return cb(err, null);
         }
-        // Get plant protection product after created
+
+        // Get plant protection product id after created
         const pppId = res.insertedId;
         // Add plant protect product info to response
         response = res.ops[0];
 
         // Save scope of use to database
         const scopeOfUse = _.get(plantProtectionProduct, "scopeOfUse", []);
-
         this.createScopeOfUse(pppId, scopeOfUse, (err, scopeOfUse) => {
           if (err) {
             return cb(err, null);
@@ -428,48 +413,39 @@ class PlantProtectionProduct {
         return cb(err, null);
       }
 
-      res.forEach((doc) => {
-        // process for update scopeOfUse if was submitted
-        if (update.scopeOfUse) {
-          /*
-           * Because the response of scope of use can be an object or an array
-           * depending query (findByQuery), therefore it need to be check before update
-           */
-          if (Array.isArray(doc.scopeOfUse)) {
-            doc.scopeOfUse.forEach((scopeOfUseElem) => {
-              const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
-              this.updateScopeOfUse(scopeOfUseId, update);
-            });
-          } else {
-            const scopeOfUseId = mongoose.Types.ObjectId(doc.scopeOfUse._id);
-            this.updateScopeOfUse(scopeOfUseId, update);
-          }
-        }
+      // process for update scopeOfUse if was submitted
+      if (update.scopeOfUse) {
+        res.scopeOfUse.forEach((scopeOfUseElem) => {
+          const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
+          this.updateScopeOfUse(scopeOfUseId, update);
+        });
+      }
 
-        // process for update scopeOfUse if was submitted
-        if (update.registrationInfo) {
-          const registrationInfoId = mongoose.Types.ObjectId(doc.registrationInfo._id);
-          this.updateRegistrationInfo(registrationInfoId, update);
-        }
+      // process for update scopeOfUse if was submitted
+      // if (update.registrationInfo) {
+      //   const registrationInfoId = mongoose.Types.ObjectId(res.registrationInfo._id);
+      //   this.updateRegistrationInfo(registrationInfoId, update);
+      // }
 
-        // remove field after update
-        delete update.scopeOfUse;
-        delete update.registrationInfo;
+      // // remove field after update
+      // delete update.scopeOfUse;
+      // delete update.registrationInfo;
 
-        // process update for plant protection product
-        for (var key in update) {
-          const pppId = mongoose.Types.ObjectId(doc._id);
-          this.updatePlantProtectionProduct(pppId, update);
-        }
-      });
+      // // process update for plant protection product
+      // // if (update._id) {
+      // //   update._id = mongoose.Types.ObjectId(update._id);
+      // // }
+      // this.updatePlantProtectionProduct(res._id, update);
 
-      this.findByQuery(query, (err, res) => {
-        if (err) {
-          return cb(err, null);
-        }
+      // // response to client updated doc
+      // this.findByQuery(query, (err, res) => {
+      //   if (err) {
+      //     return cb(err, null);
+      //   }
 
-        return cb(null, res);
-      });
+      //   return cb(null, res);
+      // });
+      return cb(null, res);
     });
   }
 
@@ -484,48 +460,35 @@ class PlantProtectionProduct {
         return cb(err, null);
       }
 
-      res.forEach((doc) => {
-        const pppId = mongoose.Types.ObjectId(doc._id);
+      const pppId = mongoose.Types.ObjectId(res._id);
 
-        // Delete plant protection product
-        plantProtectionProduct.deleteOne({ _id: pppId }, (err, res) => {
-          if (err) {
-            return cb(err, null)
-          }
-        });
-
-        /*
-           * Because the response of scope of use can be an object or an array
-           * depending query (findByQuery), therefore it need to be check before update
-           */
-
-        // Delete scope of use
-        if (Array.isArray(doc.scopeOfUse)) {
-          doc.scopeOfUse.forEach((scopeOfUseElem) => {
-            const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
-            scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
-              if (err) {
-                return cb(err, null);
-              }
-            });
-          });
-        } else {
-          const scopeOfUseId = mongoose.Types.ObjectId(doc.scopeOfUse._id);
-          scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
-            if (err) {
-              return cb(err, null);
-            }
-          });
+      // Delete plant protection product
+      plantProtectionProduct.deleteOne({ _id: pppId }, (err, res) => {
+        if (err) {
+          return cb(err, null)
         }
+      });
 
-        // Delete registration info
-        registrationInfo.deleteOne({ _id: doc.registrationInfo._id }, (err, res) => {
+      // Delete scope of use
+      res.scopeOfUse.forEach((scopeOfUseElem) => {
+        const scopeOfUseId = mongoose.Types.ObjectId(scopeOfUseElem._id);
+        scopeOfUse.deleteOne({ _id: scopeOfUseId }, (err, res) => {
           if (err) {
             return cb(err, null);
           }
-
-          return cb(null, "no lai la ok");
         });
+      });
+
+      // Delete registration info
+      registrationInfo.deleteOne({ _id: res.registrationInfo._id }, (err, res) => {
+        if (err) {
+          return cb(err, null);
+        }
+
+        const message = {
+          "success": "Xóa thuốc bảo vệ thực vật thành công"
+        }
+        return cb(null, message);
       });
     });
   }
