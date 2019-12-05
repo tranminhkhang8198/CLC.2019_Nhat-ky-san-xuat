@@ -11,7 +11,7 @@
 
 
 const _ = require('lodash');
-
+const { ObjectID } = require('immutable')
 
 class Diary {
     constructor(app) {
@@ -106,6 +106,23 @@ class Diary {
 
     }
 
+    search(params, cb = () => { }) {
+
+        const collection = this.app.db.collection('diary');
+        const query = _.get(params, 'query', {});
+        const options = _.get(params, 'options', {});
+        const resultNumber = _.get(params, 'resultNumber', 0);
+        const pageNumber = _.get(params, 'pageNumber', 0);
+        collection.find(query, options).limit(resultNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
+            if (err) {
+                return cb({ errMessage: "Loi trong qua trinh tim kiem" }, null);
+            }
+            else {
+                return cb(null, result);
+            }
+        })
+    }
+
     create(params, cb = () =>) {
         const obj = {
             plant_id: params.plant_id,
@@ -131,6 +148,57 @@ class Diary {
                 })
             }
         })
+    }
+
+    update(params, cb = () => { }) {
+        const collection = this.app.db.collection('diary');
+        var query = params.query;
+        var updateData = body.update;
+
+        // TODO: Validate before update
+        if (query._id) {
+            try {
+                query._id = new ObjectID(query._id);
+
+            } catch (error) {
+                return cb({ errorMessage: "ID khong hop le" }, null);
+            }
+        }
+
+        collection.updateMany(query, updateData, { returnNewDocument: true }, (err, result) => {
+            if (err || result.result.nModified == 0) {
+                console.log("err: ", err);
+                return err ? cb({ errorMessage: "Loi trong qua trinh cap nhat thong tin nhat ky" }, null) : cb({ errorMessage: "Nothing to update" }, null);
+            }
+            else {
+                console.log("query result", result);
+                return cb(null, { nModified: `${result.result.nModified}` });
+            }
+        })
+
+
+    }
+
+    remove(params, cb = () => { }) {
+        const collection = this.app.db.collection('diary');
+        const query = _.get(params, 'query', null);
+        if (query == null) {
+            return cb({ errMessage: "Tac vu yeu cau phai co dieu kien" }, null);
+        }
+        try {
+            console.log(query);
+
+            var _id = _.get(query, "_id", null);
+            if (_id != null) {
+                _id = new ObjectID(_id);
+                _.set(query, '_id', _id);
+            }
+            console.log(query);
+            collection.deleteMany(query)
+            return cb(null, query)
+        } catch (error) {
+            return cb({ errMessage: "Loi trong qua trinh xoa HTX" }, null);
+        }
     }
 }
 

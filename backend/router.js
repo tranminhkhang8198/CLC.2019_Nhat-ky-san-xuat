@@ -642,6 +642,37 @@ exports.routers = app => {
         });
     });
 
+    /**
+     * @api {get} /api/cooperatives Tim kiem thong tin HTX
+     * @apiName GetCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * @apiParam {Object} query Dieu kien tim kiem.
+     * @apiParam {Object} options Cau truc ket qua tra ve.
+     * @apiParam {Number} resultNumber so luong ket qua tra ve theo phan trang (tuy chon).
+     * @apiParam {Number} pageNumber trang du lieu can tra ve theo phan trang (tuy chon).
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.get('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         app.models.cooperative.search(body, (err, result) => {
@@ -672,9 +703,69 @@ exports.routers = app => {
         })
     })
 
+    app.patch('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        app.models.cooperative.update(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
     app.delete('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         app.models.cooperative.remove(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.post('/api/diary', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.create(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.get('/api/diary', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.search(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.patch('/api/diary', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.update(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.delete('/api/diary', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.remove(body, (err, result) => {
             if (err) {
                 return errorHandle(res, err.errorMessage, 404);
             }

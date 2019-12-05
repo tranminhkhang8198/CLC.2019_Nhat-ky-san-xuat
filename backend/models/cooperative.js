@@ -271,5 +271,32 @@ class Cooperative {
 			return cb({ errMessage: "Loi trong qua trinh xoa HTX" }, null);
 		}
 	}
+
+	update(params, cb = () => { }) {
+		const collection = this.app.db.collection('cooperative');
+		var query = params.query;
+		var updateData = body.update;
+
+		// TODO: Validate before update
+		if (query._id) {
+			try {
+				query._id = new ObjectID(query._id);
+
+			} catch (error) {
+				return cb({ errorMessage: "ID khong hop le" }, null);
+			}
+		}
+
+		collection.updateMany(query, updateData, { returnNewDocument: true }, (err, result) => {
+			if (err || result.result.nModified == 0) {
+				console.log("err: ", err);
+				return err ? cb({ errorMessage: "Loi trong qua trinh cap nhat thong tin HTX" }, null) : cb({ errorMessage: "Nothing to update" }, null);
+			}
+			else {
+				console.log("query result", result);
+				return cb(null, { nModified: `${result.result.nModified}` });
+			}
+		})
+	}
 }
 module.exports = Cooperative;
