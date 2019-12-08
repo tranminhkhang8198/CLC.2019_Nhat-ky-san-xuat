@@ -25,31 +25,33 @@ class Cooperative {
 		this.app = app;
 	}
 
-	validateCooperative(cooperative, cb = () => { }) {
+	validate(cooperative, method, cb = () => { }) {
+		console.log(cooperative);
 		const collection = this.app.db.collection("cooperatives");
-		const validateions = {
+		const validatetions = {
 			name: {
-				errMessage: "Ten hop tac xa la bat buoc",
+				errorMessage: "Ten hop tac xa la bat buoc",
 				doValidate: () => {
 					const name = _.get(cooperative, "name", "");
-					if (name && name.length > 0) {
-						return true;
+					console.log("name", name.length);
+					if ((!name || name.length <= 0) && method == "post") {
+						return false;
 					}
-					return false;
+					return true;
 				}
 			},
 			foreignName: {
-				errMessage: "Ten nuoc ngoai khong hop le",
+				errorMessage: "Ten nuoc ngoai khong hop le",
 				doValidate: () => {
 					const foreignName = _.get(cooperative, "foreignName", "");
 					return true;
 				}
 			},
 			abbreviationName: {
-				errMessage: "Ten viet tat khong hop le",
+				errorMessage: "Ten viet tat khong hop le",
 				doValidate: () => {
 					const abbreviationName = _.get(
-						cooperation,
+						cooperative,
 						"abbreviationName",
 						""
 					);
@@ -57,69 +59,69 @@ class Cooperative {
 				}
 			},
 			logo: {
-				errMessage: "Huy hieu khong hop le",
+				errorMessage: "Huy hieu khong hop le",
 				doValidate: () => {
 					const logo = _.get(cooperative, "logo", "");
 					return true;
 				}
 			},
 			status: {
-				errMessage: "Trang thai khong hop le",
+				errorMessage: "Trang thai khong hop le",
 				doValidate: () => {
 					const status = _.get(cooperative, "status", "");
 					return true;
 				}
 			},
 			cooperativeID: {
-				errMessage: "Ma so HTX thieu hoac khong hop le",
+				errorMessage: "Ma so HTX thieu hoac khong hop le",
 				doValidate: () => {
 					const cooperativeID = _.get(
 						cooperative,
 						"cooperativeID",
 						""
 					);
-					if (cooperativeID && cooperativeID.length > 0) {
-						return true;
+					if ((!cooperativeID || cooperativeID.length <= 0) && method == "post") {
+						return false;
 					}
-					return false;
+					return true;
 				}
 			},
 			tax: {
-				errMessage: "Ma so thue khong hop le",
+				errorMessage: "Ma so thue khong hop le",
 				doValidate: () => {
 					const tax = _.get(cooperative, "tax", "");
 					return true;
 				}
 			},
 			surrgate: {
-				errMessage: "Ten nguoi dai dien thieu hoac khong hop le",
+				errorMessage: "Ten nguoi dai dien thieu hoac khong hop le",
 				doValidate: () => {
 					const surrgate = _.get(cooperative, "surrgate", "");
-					if (surrgate && surrgate.length > 0) {
-						return true;
+					if ((!surrgate || surrgate.length <= 0) && method == "post") {
+						return false;
 					}
-					return false;
+					return true;
 				}
 			},
 			director: {
-				errMessage: "Ten giam doc thieu hoac khong hop le",
+				errorMessage: "Ten giam doc thieu hoac khong hop le",
 				doValidate: () => {
 					const director = _.get(cooperative, "director", "");
-					if (director && director.length > 0) {
-						return true;
+					if ((!director || director.length <= 0) && method == "post") {
+						return false;
 					}
-					return false;
+					return true;
 				}
 			},
 			address: {
-				errMessage: "dia chi khong hop le",
+				errorMessage: "dia chi khong hop le",
 				doValidate: () => {
 					const address = _.get(cooperative, "address", "");
 					return true;
 				}
 			},
 			phone: {
-				errMessage: "So dien thoai khong hop le",
+				errorMessage: "So dien thoai khong hop le",
 				doValidate: () => {
 					const phone = _.get(cooperative, "phone", "");
 					return true;
@@ -127,28 +129,28 @@ class Cooperative {
 			},
 
 			emai: {
-				errMessage: "Dia chi email khong hop le",
+				errorMessage: "Dia chi email khong hop le",
 				doValidate: () => {
 					const email = _.get(cooperative, "email", "");
 					return true;
 				}
 			},
 			fax: {
-				errMessage: "Dia chi fax khong hop le",
+				errorMessage: "Dia chi fax khong hop le",
 				doValidate: () => {
 					const fax = _.get(cooperative, "fax", "");
 					return true;
 				}
 			},
 			website: {
-				errMessage: "Website khong hop le",
+				errorMessage: "Website khong hop le",
 				doValidate: () => {
 					const website = _.get(cooperative, "website", "");
 					return true;
 				}
 			},
 			representOffice: {
-				errMessage: "Van phong dai dien khong hop le",
+				errorMessage: "Van phong dai dien khong hop le",
 				doValidate: () => {
 					const representOffice = _.get(
 						cooperative,
@@ -159,7 +161,7 @@ class Cooperative {
 				}
 			},
 			docs: {
-				errMessage: "Danh sach tai lieu khong hop le",
+				errorMessage: "Danh sach tai lieu khong hop le",
 				doValidate: () => {
 					const docs = _.get(cooperative, "docs", "");
 					return true;
@@ -168,38 +170,64 @@ class Cooperative {
 		};
 
 		const errors = [];
-		_.each(validateions, (validation, field) => {
-			const isValid = validation.doValidate
+		_.each(validatetions, (validation, field) => {
+			// console.log(field);
+			const isValid = validation.doValidate();
 			if (!isValid) {
-				errors.push(validation.errMessage)
+				errors.push(validation.errorMessage)
 			}
 		})
 		if (errors.length) {
 			const err = _.join(errors, ',');
-			return cb({ errMessage: err }, null);
+			return cb({ errorMessage: err }, null);
 		} else {
-			// Find in database for sure that HTX ID does not exist in database
-			const query = {
-				cooperativeID: cooperative.cooperativeID
-			};
-			const options = {
+			return cb(null, cooperative);
+			// // Find in database for sure that HTX ID does not exist in database
+			// const query = {
+			// 	cooperativeID: cooperative.cooperativeID
+			// };
+			// const options = {
 
-			};
+			// };
 
-			collection.findOne(query, (err, result) => {
-				if (err) {
-					return cb({ errorMessage: "Query error" }, null)
-				}
-				if (result) {
-					return cb({ errorMessage: "HTX da ton tai trong csdl" })
-				} else {
-					return cb(null, cooperative);
-				}
+			// collection.findOne(query, (err, result) => {
+			// 	if (err) {
+			// 		return cb({ errorMessage: "Query error" }, null)
+			// 	}
+			// 	if (result) {
+			// 		return cb({ errorMessage: "HTX da ton tai trong csdl" })
+			// 	} else {
+			// 		return cb(null, cooperative);
+			// 	}
 
-			})
+			// })
 		}
 	}
+	isExist(cooperative, cb = () => { }) {
+		const collection = this.app.db.collection('cooperatives');
+		// Find in database for sure that HTX ID does not exist in database
+		const query = {
+			cooperativeID: cooperative.cooperativeID
+		};
+		const options = {
+
+		};
+
+		collection.findOne(query, (err, result) => {
+			if (err) {
+				return cb({ errorMessage: "Query error" }, null)
+			}
+			if (result) {
+				return cb({ errorMessage: "HTX da ton tai trong csdl" })
+			} else {
+				return cb(null, cooperative);
+			}
+
+		})
+
+	}
 	create(cooperative, cb = () => { }) {
+		const method = "post";
 		const collection = this.app.db.collection('cooperatives')
 		const obj = {
 			name: _.get(cooperative, 'name', ''),
@@ -218,18 +246,27 @@ class Cooperative {
 			representOffice: _.get(cooperative, 'representOffice', ''),
 			docs: _.get(cooperative, 'docs', null)
 		}
-		this.validateCooperative(obj, (err, ValidCooperative) => {
+		this.validate(obj, method, (err, ValidCooperative) => {
 			if (err) {
 				return cb(err, null);
 			} else {
-				collection.insertOne(obj, (err, result) => {
+				this.isExist(ValidCooperative, (err, noneExistCooperative) => {
+
 					if (err) {
-						return cb({ errMessage: "Loi trong qua trinh them du lieu vao database" }, null);
+						return cb({ errorMessage: err.errorMessage }, null);
 					}
 					else {
-						return cb(null, ValidCooperative);
+						collection.insertOne(obj, (err, result) => {
+							if (err) {
+								return cb({ errorMessage: "Loi trong qua trinh them du lieu vao database" }, null);
+							}
+							else {
+								return cb(null, noneExistCooperative);
+							}
+						})
 					}
 				})
+
 			}
 		});
 	}
@@ -241,12 +278,23 @@ class Cooperative {
 		const options = _.get(params, 'options', {});
 		const resultNumber = _.get(params, 'resultNumber', 0);
 		const pageNumber = _.get(params, 'pageNumber', 0);
+		var _id = _.get(query, "_id", null);
+		if (_id != null) {
+			try {
+				_id = new ObjectID(_id);
+				_.set(query, '_id', _id);
+			} catch (error) {
+				return cb({ errorMessage: "ID không hợp lệ" });
+			}
+
+		}
+
 		collection.find(query, options).limit(resultNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
 			if (err) {
 				return cb({ errMessage: "Loi trong qua trinh tim kiem" }, null);
 			}
 			else {
-				return cb(null, result);
+				return cb(null, { records: result });
 			}
 		})
 	}
@@ -256,47 +304,62 @@ class Cooperative {
 		if (query == null) {
 			return cb({ errMessage: "Tac vu yeu cau phai co dieu kien" }, null);
 		}
-		try {
-			console.log(query);
-
-			var _id = _.get(query, "_id", null);
-			if (_id != null) {
-				_id = new ObjectID(_id);
-				_.set(query, '_id', _id);
-			}
-			console.log(query);
-			collection.deleteMany(query)
-			return cb(null, query)
-		} catch (error) {
-			return cb({ errMessage: "Loi trong qua trinh xoa HTX" }, null);
+		var _id = _.get(query, "_id", null);
+		if (_id != null) {
+			_id = new ObjectID(_id);
+			_.set(query, '_id', _id);
 		}
+
+		collection.deleteMany(query, (err, result) => {
+			if (err || result.result.n == 0) {
+				return err ? cb({ errorMessage: "Lỗi trong qua trình xóa dữ liệu" }, null) : cb({
+					errorMessage: "Dữ liệu không tồn tại"
+				});
+			}
+			else {
+				console.log(result);
+				return cb(null, { responseMessage: "Xóa thành công" });
+			}
+		})
+
+
+
+
 	}
 
 	update(params, cb = () => { }) {
-		const collection = this.app.db.collection('cooperative');
+		const collection = this.app.db.collection('cooperatives');
+		const method = "patch";
 		var query = params.query;
-		var updateData = body.update;
-
-		// TODO: Validate before update
-		if (query._id) {
-			try {
-				query._id = new ObjectID(query._id);
-
-			} catch (error) {
-				return cb({ errorMessage: "ID khong hop le" }, null);
-			}
-		}
-
-		collection.updateMany(query, updateData, { returnNewDocument: true }, (err, result) => {
-			if (err || result.result.nModified == 0) {
-				console.log("err: ", err);
-				return err ? cb({ errorMessage: "Loi trong qua trinh cap nhat thong tin HTX" }, null) : cb({ errorMessage: "Nothing to update" }, null);
+		var updateData = params.update;
+		const updateObj = _.get(updateData, '$set', '');
+		this.validate(updateObj, method, (err, validUpdateObj) => {
+			if (err) {
+				return cb({ errorMessage: err.errorMessage }, null);
 			}
 			else {
-				console.log("query result", result);
-				return cb(null, { nModified: `${result.result.nModified}` });
+				if (query._id) {
+					try {
+						query._id = new ObjectID(query._id);
+
+					} catch (error) {
+						return cb({ errorMessage: "ID khong hop le" }, null);
+					}
+				}
+
+				collection.updateMany(query, updateData, { returnNewDocument: true }, (err, result) => {
+					if (err || result.result.nModified == 0) {
+						console.log("err: ", result);
+						return err ? cb({ errorMessage: "Loi trong qua trinh cap nhat thong tin HTX" }, null) : cb({ errorMessage: "Nothing to update" }, null);
+					}
+					else {
+						console.log("query result", result);
+						return cb(null, { nModified: `${result.result.nModified}` });
+					}
+				})
 			}
-		})
+		});
+
 	}
 }
 module.exports = Cooperative;

@@ -643,7 +643,7 @@ exports.routers = app => {
     });
 
     /**
-     * @api {get} /api/cooperatives Tim kiem thong tin HTX
+     * @api {get} /api/cooperatives Tìm kiếm thông tin HTX.
      * @apiName GetCooperatives
      * @apiGroup Cooperatives
      *
@@ -656,19 +656,57 @@ exports.routers = app => {
      * @apiParam {Number} resultNumber so luong ket qua tra ve theo phan trang (tuy chon).
      * @apiParam {Number} pageNumber trang du lieu can tra ve theo phan trang (tuy chon).
      *
-     * @apiSuccess {String} firstname Firstname of the User.
+     * @apiSuccess (Response Fileds) {Object[]} records Danh sach HTX.
+     * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
+     * @apiSuccess (Response Fileds) {String} records.name Tên gọi của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.foreignName Tên nước ngoài của HTX.
+     * @apiSuccess (Response Fileds) {String} records.abbreviationName Tên viết tắt.
+     * @apiSuccess (Response Fileds) {String} records.logo Logo của HTX.
+     * @apiSuccess (Response Fileds) {String} records.status Thông tin trạng thái của HTX.
+     * @apiSuccess (Response Fileds) {String} records.cooperativeID Mã số HTX.
+     * @apiSuccess (Response Fileds) {String} records.tax Mã số thuế của HTX.
+     * @apiSuccess (Response Fileds) {String} records.surrgate Người đại diện.
+     * @apiSuccess (Response Fileds) {String} records.director Giám đốc.
+     * @apiSuccess (Response Fileds) {String} records.address Địa chỉ của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.phone Số điện thoại của HTX.
+     * @apiSuccess (Response Fileds) {String} records.fax Địa chỉ fax của HTX.
+     * @apiSuccess (Response Fileds) {String} records.website Đia chỉ website của HTX.
+     * @apiSuccess (Response Fileds) {String} records.representOffice Văn phòng đại diện.
+     * @apiSuccess (Response Fileds) {String[]} records.docs Danh sách tài liệu.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "nModified": "4"
+     *      "records": [
+     *          {
+     *              "_id": "5de653f18a92cd1e06fc0b59",
+     *              "name": "Hop tac xa nga nam",
+     *              "foreignName": "Hop tac xa nga nam",
+     *              "abbreviationName": "NN",
+     *              "logo": "",
+     *              "status": "Dang hoat dong",
+     *              "cooperativeID": "HTXNN",
+     *              "tax": "NN23442",
+     *              "surrgate": "Nguyen Tan Vu",
+     *              "director": "Huynh Van Tan",
+     *              "address": "",
+     *              "phone": "0836738223",
+     *              "fax": "NN341",
+     *              "website": "nn.com",
+     *              "representOffice": "",
+     *              "docs": ""
+     *          }
+     *      ]
      *  }
+     * 
      * @apiError Permission-denied Token khong hop le
-     *
+     * @apiError Loi-Trong-qua-trinh-tim-kiem   Lỗi trong quá trình tìm kiếm.
+     * @apiError ID-khong-hop-le ID không hợp lệ
+     * 
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *     {
-     *       "error": "Nothing to update"
+     *       "error": "ID không hợp lệ"
      *     }
      * 
      * @apiPermission manager-admin
@@ -685,6 +723,101 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {post} /api/cooperatives Thêm HTX mới
+     * @apiName PostCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {String} name Tên của HTX.
+     * @apiParam {String} foreignName Tên nước ngoài của HTX.
+     * @apiParam {String} abbreviationName Tên viết tắt của HTX.
+     * @apiParam {String} logo Logo của HTX.
+     * @apiParam {String} status Tình trạng họat động của HTX.
+     * @apiParam {String} cooperativeID Mã số của HTX.
+     * @apiParam {String} tax Mã số thuế của HTX.
+     * @apiParam {String} surrgate Tên người đại diện của HTX.
+     * @apiParam {String} director Tên giams đốc của HTX.
+     * @apiParam {String} phone Số điện thoại của HTX.
+     * @apiParam {String} email Địa chỉ email của HTX.
+     * @apiParam {String} fax Địa chỉ fax của HTX.
+     * @apiParam {String} website Địa chỉ website của HTX.
+     * @apiParam {String} representOffice Địa chỉ văn phòng đại diện của HTX.
+     * @apiParam {Array} docs Danh sách file tài liệu liên quan đến HTX.
+     *
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"foreignName":"Hop tac xa u minh ha3",
+     *  	"abbreviationName":"UMH3",
+     *  	"logo":"",
+     *  	"status":"Dang hoat dong",
+     *  	"cooperativeID":"HTXUMH3",
+     *  	"tax":"NN23446",
+     *  	"surrgate":"Nguyen Tan Vu",
+     *  	"director":"Huynh Van Tan",
+     *  	"phone":"0836738224",
+     *  	"email":"nn@gmail.com",
+     *  	"fax":"NN344",
+     *  	"website":"nn.com",
+     *  	"represendOffice":"",
+     *  	"docs":""
+     *  }
+     * 
+     * 
+     * @apiSuccess {String} name Tên của HTX.
+     * @apiSuccess {String} foreignName Tên nước ngoài của HTX.
+     * @apiSuccess {String} abbreviationName Tên viết tắt của HTX.
+     * @apiSuccess {String} logo Logo của HTX.
+     * @apiSuccess {String} status Tình trạng họat động của HTX.
+     * @apiSuccess {String} cooperativeID Mã số của HTX.
+     * @apiSuccess {String} tax Mã số thuế của HTX.
+     * @apiSuccess {String} surrgate Tên người đại diện của HTX.
+     * @apiSuccess {String} director Tên giams đốc của HTX.
+     * @apiSuccess {String} phone Số điện thoại của HTX.
+     * @apiSuccess {String} email Địa chỉ email của HTX.
+     * @apiSuccess {String} fax Địa chỉ fax của HTX.
+     * @apiSuccess {String} website Địa chỉ website của HTX.
+     * @apiSuccess {String} representOffice Địa chỉ văn phòng đại diện của HTX.
+     * @apiSuccess {Array} docs Danh sách file tài liệu liên quan đến HTX.     
+     * @apiSuccess {String} _id ID của htx trong csdl.
+     * 
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "name": "Hop tac xa U Minh Ha",
+     *      "foreignName": "Hop tac xa u minh ha",
+     *      "abbreviationName": "UMH",
+     *      "logo": "",
+     *      "status": "Dang hoat dong",
+     *      "cooperativeID": "HTXUMH",
+     *      "tax": "NN23445",
+     *      "surrgate": "Nguyen Tan Vu",
+     *      "director": "Huynh Van Tan",
+     *      "address": "",
+     *      "phone": "0836738224",
+     *      "fax": "NN344",
+     *      "website": "nn.com",
+     *      "representOffice": "",
+     *      "docs": "",
+     *      "_id": "5decdd74e8296d17b3e7a5a0"
+     *  }
+     * @apiError Permission-denied Token khong hop le.
+     * @apiError HTX-da-ton-tai-trong-csdl Hợp tác xã đã tồn tại trong csdl
+     *
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "HTX da ton tai trong csdl"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.post('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         // verifyUser(req, 'cooperative', (err, accept) => {
@@ -703,6 +836,52 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {patch} /api/cooperatives Cập nhật thông tin của HTX.
+     * @apiName PatchCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Object} query filter cho tác vụ update.
+     * @apiParam {Object} update Update object.
+     * @apiParam {Object} update.set phương thức update.
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"query":{
+     *  		"_id": "5dece63aa343bc1aad4b2565"
+     *  	},
+     *  	"update":{
+     *  		"$set":{
+     *  			"name":"Hop tac xa nong thon moi2"
+     *  
+     *  		}
+     *  	}
+     *  }
+     *
+     * @apiSuccess {Number} nModified Số documents đã được update.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token không hợp lệ.
+     * @apiError ID-khong-hop-le ID không hợp lệ.
+     * @apiError Nothing-to-update Query không kết quả hoặc dữ liệu đã được update.
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.patch('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         app.models.cooperative.update(body, (err, result) => {
@@ -727,6 +906,42 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {delete} /api/cooperatives Xóa HTX.
+     * @apiName DeleteCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/Cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Object} query Chọn các dữ liệu cần xóa theo filer.
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"query":{
+     *          "_id": "5de66297c78c93258003b0d0"
+     *  	}
+     *  }
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.post('/api/diary', (req, res, next) => {
         const body = req.body;
         app.models.diary.create(body, (err, result) => {
