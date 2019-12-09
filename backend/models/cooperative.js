@@ -301,8 +301,9 @@ class Cooperative {
 	remove(params, cb = () => { }) {
 		const collection = this.app.db.collection('cooperatives');
 		const query = _.get(params, 'query', null);
-		if (query == null) {
-			return cb({ errMessage: "Tac vu yeu cau phai co dieu kien" }, null);
+		console.log(query);
+		if (query === null || Object.getOwnPropertyNames(query).length === 0) {
+			return cb({ errorMessage: "Tác vụ yêu cầu phải có điều kiện" }, null);
 		}
 		var _id = _.get(query, "_id", null);
 		if (_id != null) {
@@ -317,8 +318,8 @@ class Cooperative {
 				});
 			}
 			else {
-				console.log(result);
-				return cb(null, { responseMessage: "Xóa thành công" });
+
+				return cb(null, { responseMessage: `Xóa thành công: ${result.result.n} dữ liệu` });
 			}
 		})
 

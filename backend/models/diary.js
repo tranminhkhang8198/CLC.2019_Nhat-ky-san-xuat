@@ -1,7 +1,7 @@
 /**
  * @collectionName diaries Nhat ky canh tac
  * @field plant_id ID loai giong cay
- * @field area_id ID khu vuc trong cay
+ * @field fields Danh sach cac field
  * @field HTX_id Id cua HTX
  * @field begin Ngay bat day
  * @field end Ngay ket thuc
@@ -11,7 +11,7 @@
 
 
 const _ = require('lodash');
-const { ObjectID } = require('immutable')
+const { ObjectID } = require('mongodb')
 
 class Diary {
     constructor(app) {
@@ -22,7 +22,7 @@ class Diary {
     validate(diary, cb = () => { }) {
 
         const collection = this.app.db.collection('diaries');
-
+        console.log(diary)
         const validations = {
             plant_id: {
                 errorMessage: "Loai cay trong khong hop le",
@@ -34,11 +34,11 @@ class Diary {
                     return true
                 }
             },
-            area_id: {
+            fields: {
                 errorMessage: "Khu vuc khong hop le",
                 doValidate: () => {
-                    const area_id = _.get(diary, 'area_id', null);
-                    if (area_id == null) {
+                    const fields = _.get(diary, 'fields', []);
+                    if (fields.length === 0) {
                         return false;
                     }
                     return true;
@@ -74,41 +74,62 @@ class Diary {
         var errors = [];
 
         _.each(validations, (validation, field) => {
-            const isValid = validation.doValidate;
-            if (isValid) {
+            const isValid = validation.doValidate();
+            if (!isValid) {
                 errors.push(validation.errorMessage)
             }
         })
         if (errors.length) {
+            const err = _.join(errors, ',');
+            return cb({ errorMessage: err }, null);
+        }
+        else {
             // Kiem tra trang thai cua khu vuc la trong hay dang trong
-            const collection = this.app.db.collection('area');
+            const collection = this.app.db.collection('fields');
+            var fields = []
+            _.forEach(diary.fields, field => {
+                fields.push(new ObjectID(field));
+            })
             const query = {
-
+                _id: {
+                    $in: fields
+                }
             }
+            console.log(typeof (fields[0]))
             const options = {
 
             }
-            collection.findOne(query, options).toArray((err, result) => {
-                if (err || !_.get(result, '[0]')) {
-                    return cb({ errorMessage: "Khu vuc khong hop le" }, null);
+            collection.find(query, options).toArray((err, result) => {
+                console.log("result is", result);
+                if (err || result.length <= 0) {
+                    return err ? cb({ errorMessage: "Khu vực không hợp lệ" }, null) : cb({ errorMessage: "Khu vực gieo trồng không tồn tại" }, null);
                 }
-                if (result) {
-                    const area = _.get(result, '[0]');
-                    if (area.isBusy) {
-                        return cb({ errorMessage: "Khu vuc dang duoc su dung" }, null)
+                else {
+                    var busy = [];
+                    _.forEach(result, field => {
+                        if (field.status) {
+                            // return cb({ errorMessage: "Khu vực đang được sử dụng" }, null)
+                            busy.push(field._id);
+                        }
+                        if (busy.length) {
+                            const err = _.join(busy, ',');
+                            return cb({ errorMessage: `thửa ${err} đang được sử dụng` }, null);
+                        }
+                        else {
+                            return cb(null, diary);
+                        }
+                    })
 
-                    } else {
-                        return cb(null, diary);
-                    }
                 }
             })
         }
+
 
     }
 
     search(params, cb = () => { }) {
 
-        const collection = this.app.db.collection('diary');
+        const collection = this.app.db.collection('diaries');
         const query = _.get(params, 'query', {});
         const options = _.get(params, 'options', {});
         const resultNumber = _.get(params, 'resultNumber', 0);
@@ -123,10 +144,10 @@ class Diary {
         })
     }
 
-    create(params, cb = () =>) {
+    create(params, cb = () => { }) {
         const obj = {
             plant_id: params.plant_id,
-            area_id: params.area_id,
+            fields: params.fields,
             HTX_id: params.HTX_id,
             begin: params.begin,
             end: params.end
@@ -137,13 +158,13 @@ class Diary {
                 return cb({ errorMessage: err.errorMessage }, null);
             }
             else {
-                const collection = this.app.db.collection('diary');
+                const collection = this.app.db.collection('diaries');
                 collection.insert(diary, (err, result) => {
                     if (err) {
-                        return cb({ errorMessage: "Loi trong qua trinh them vao csdl", null})
+                        return cb({ errorMessage: "Loi trong qua trinh them vao csdl" }, null)
                     }
                     else {
-                        return cb(null, result);
+                        return cb(null, result.ops[0]);
                     }
                 })
             }
@@ -151,7 +172,7 @@ class Diary {
     }
 
     update(params, cb = () => { }) {
-        const collection = this.app.db.collection('diary');
+        const collection = this.app.db.collection('diaries');
         var query = params.query;
         var updateData = body.update;
 
@@ -180,7 +201,7 @@ class Diary {
     }
 
     remove(params, cb = () => { }) {
-        const collection = this.app.db.collection('diary');
+        const collection = this.app.db.collection('diaries');
         const query = _.get(params, 'query', null);
         if (query == null) {
             return cb({ errMessage: "Tac vu yeu cau phai co dieu kien" }, null);
@@ -201,4 +222,6 @@ class Diary {
         }
     }
 }
+
+module.exports = Diary;
 

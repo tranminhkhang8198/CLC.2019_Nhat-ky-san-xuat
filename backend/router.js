@@ -894,6 +894,44 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {delete} /api/cooperatives Request User information
+     * @apiName DeleteCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Object} query Lọc danh sách các dữ liệu cần xóa.
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"query":{
+     *          "_id": "5de66297c78c93258003b0d0"
+     *  	}
+     *  }
+     *
+     * @apiSuccess {String} responseMessage Thông báo đã xóa thành công dữ liệu.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "responseMessage": "Xóa thành công: 1 dữ liệu"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Du-lieu-khong-ton-tai Dữ liệu không tồn tại.
+     * @apiError Tac-vu-eyu-cau-phai-co-dieu-kien Tác vụ yêu cầu phải có điều kiện.
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *      "error": "Dữ liệu không tồn tại"
+     *  }
+     * 
+     * @apiPermission manager-admin
+     */
     app.delete('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         app.models.cooperative.remove(body, (err, result) => {
@@ -907,16 +945,20 @@ exports.routers = app => {
     })
 
     /**
-     * @api {delete} /api/cooperatives Xóa HTX.
-     * @apiName DeleteCooperatives
-     * @apiGroup Cooperatives
+     * @api {post} /api/diaries Xóa HTX.
+     * @apiName PostDiaries
+     * @apiGroup Diaries
      *
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/Cooperatives
+     *     curl -i http://localhost:3001/api/Diaries
      *
      * @apiHeader {String} authorization Token.
      * 
-     * @apiParam {Object} query Chọn các dữ liệu cần xóa theo filer.
+     * @apiParam {String} plant_id ID của loại cây trồng.
+     * @apiParam {String[]} area_id ID của khu vực gieo trồng.
+     * @apiParam {String} HTX_id ID của HTX.
+     * @apiParam {Number} begin Thời gian bắt đầu mùa vụ (dạng time-stem-unix)).
+     * @apiParam {Number} end Thời gian kết thúc mùa vụ (dạng time-stem-unix)).  
      * 
      * @apiParamExample {json} Request-Example:
      *  {
@@ -942,7 +984,7 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.post('/api/diary', (req, res, next) => {
+    app.post('/api/diaries', (req, res, next) => {
         const body = req.body;
         app.models.diary.create(body, (err, result) => {
             if (err) {
@@ -954,7 +996,7 @@ exports.routers = app => {
         })
     })
 
-    app.get('/api/diary', (req, res, next) => {
+    app.get('/api/diaries', (req, res, next) => {
         const body = req.body;
         app.models.diary.search(body, (err, result) => {
             if (err) {
@@ -966,7 +1008,7 @@ exports.routers = app => {
         })
     })
 
-    app.patch('/api/diary', (req, res, next) => {
+    app.patch('/api/diaries', (req, res, next) => {
         const body = req.body;
         app.models.diary.update(body, (err, result) => {
             if (err) {
@@ -978,9 +1020,22 @@ exports.routers = app => {
         })
     })
 
-    app.delete('/api/diary', (req, res, next) => {
+    app.delete('/api/diaries', (req, res, next) => {
         const body = req.body;
         app.models.diary.remove(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+
+    app.post('/api/fields', (req, res, next) => {
+        const body = req.body;
+        app.models.field.create(body, (err, result) => {
             if (err) {
                 return errorHandle(res, err.errorMessage, 404);
             }
