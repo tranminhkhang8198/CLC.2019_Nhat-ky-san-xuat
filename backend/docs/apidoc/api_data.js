@@ -1,6 +1,699 @@
 define({ "api": [
   {
     "type": "post",
+    "url": "/fertilizer",
+    "title": "Create new fertilizer",
+    "name": "CreateFertilizer",
+    "group": "Fertilizer",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/fertilizers",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"ministry\": \"Công thương\",\n    \"province\": \"Bà Rịa - Vũng Tàu\",\n    \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n    \"type\": \"Phân vô cơ\",\n    \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n    \"ingredient\": \"\",\n    \"lawDocument\": \"\",\n    \"isoCertOrganization\": \"\",\n    \"manufactureAndImport\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5de75a92f4e889141cc24f7d\",\n    \"ministry\": \"Công thương\",\n    \"province\": \"Bà Rịa - Vũng Tàu\",\n    \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n    \"type\": \"Phân vô cơ\",\n    \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n    \"ingredient\": \"\",\n    \"lawDocument\": \"\",\n    \"isoCertOrganization\": \"\",\n    \"manufactureAndImport\": \"\",\n    \"created\": \"2019-12-04T07:04:50.974Z\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Name-is-required",
+            "description": "<p>Thiếu trường tên phân bón</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Fertilizer-exists",
+            "description": "<p>Phân bón đã tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"error\": \"Phân bón với tên '\" + name + \"' đã tồn tại.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Fertilizer"
+  },
+  {
+    "type": "get",
+    "url": "/fertilizers",
+    "title": "Get all fertilizers with pageNumber and nPerPage",
+    "name": "GetAllFertilizer",
+    "group": "Fertilizer",
+    "examples": [
+      {
+        "title": "Tìm kiếm phân bón:",
+        "content": "curl -i http://localhost:3001/api/fertilizer?pageNumber=9&nPerPage=20",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5de75a92f4e889141cc24ee8\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)\",\n        \"ingredient\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n        \"lawDocument\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.952Z\"\n    },\n    {\n        \"_id\": \"5de75a92f4e889141cc24efd\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân bón NPK 15-9-20+TE\",\n        \"ingredient\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n        \"lawDocument\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.956Z\"\n    },\n    {\n        \"_id\": \"5de75a92f4e889141cc24f7d\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n        \"ingredient\": \"\",\n        \"lawDocument\": \"\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.974Z\"\n    },\n    ...\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Conflict\n{\n  \"error\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Fertilizer"
+  },
+  {
+    "type": "get",
+    "url": "/fertilizers",
+    "title": "Get fertilizer by query",
+    "name": "GetFertilizerByQuery",
+    "group": "Fertilizer",
+    "examples": [
+      {
+        "title": "Tìm kiếm phân bón theo _id:",
+        "content": "curl -i http://localhost:3001/api/fertilizer?_id=5de75a92f4e889141cc24ef5",
+        "type": "curl"
+      },
+      {
+        "title": "Tìm kiếm phân bón theo tên:",
+        "content": "curl -i http://localhost:3001/api/fertilizer?name=Phân bón Calcium Nitrate( Calcinit)",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n    {\n        \"_id\": \"5de75a92f4e889141cc24ef5\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân bón Calcium Nitrate( Calcinit)\",\n        \"ingredient\": \"Nts: 15,4%; CaO: 26,5%; Độ ẩm: 0,8%\",\n        \"lawDocument\": \"Nts: 15,4%; CaO: 26,5%; Độ ẩm: 0,8%\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.955Z\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"error\": \"Không tìm thấy phân bón\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Fertilizer"
+  },
+  {
+    "type": "patch",
+    "url": "/fertilizer",
+    "title": "Update fertilizer",
+    "name": "UpdateFertilizer",
+    "group": "Fertilizer",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/fertilizers",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"ministry\": \"updated\",\n    \"province\": \"updated\",\n    \"enterprise\": \"updated\",\n    \"type\": \"updated\",\n    \"name\": \"updated\",\n    \"ingredient\": \"updated\",\n    \"lawDocument\": \"updated\",\n    \"isoCertOrganization\": \"updated\",\n    \"manufactureAndImport\": \"updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5de75a92f4e889141cc24f7d\",\n    \"ministry\": \"updated\",\n    \"province\": \"updated\",\n    \"enterprise\": \"updated\",\n    \"type\": \"updated\",\n    \"name\": \"updated\",\n    \"ingredient\": \"updated\",\n    \"lawDocument\": \"updated\",\n    \"isoCertOrganization\": \"updated\",\n    \"manufactureAndImport\": \"updated\",\n    \"created\": \"2019-12-04T07:04:50.974Z\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Conflict\n{\n  \"error\": \"Không tìm thấy phân bón\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Fertilizer"
+  },
+  {
+    "type": "post",
     "url": "/plant-protection-product",
     "title": "Create new plant protection product",
     "name": "CreatePlantProtectionProduct",
@@ -343,6 +1036,84 @@ define({ "api": [
     "permission": [
       {
         "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "PlantProtectionProduct"
+  },
+  {
+    "type": "delete",
+    "url": "/fertilizer/",
+    "title": "Delete fertilizer by query",
+    "name": "DeleteFertilizerByQuery",
+    "group": "PlantProtectionProduct",
+    "examples": [
+      {
+        "title": "Xóa phân bón theo _id:",
+        "content": "curl -i http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24ef5",
+        "type": "curl"
+      },
+      {
+        "title": "Xóa phân báo theo tên:",
+        "content": "curl -i http://localhost:3001/api/fertilizers?name=Phân bón Calcium Nitrate( Calcinit)",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của phân bón</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên của phân bón</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"success\": \"Xóa phân báo thành công\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"error\": \"Không tìm thấy phân báo\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
       }
     ],
     "version": "0.0.0",
