@@ -164,22 +164,5 @@ MongoClient.connect(url, function (err, db) {
             }
         });
     }
-
-
-    /////////////////////////////////////////////////////////////////////////////
-    // TEST FOR FIRST 100 DOC 
-    // var count = 0;
-    // for (var i = 1; i <= 100; i++) {
-    //     console.log("Import thuoc bvtv " + i);
-
-    //     plantProtectionProduct.create(thuocBvtv[i], (err, res) => {
-    //         count++;
-
-    //         if (count == 100) {
-    //             console.log("No lai la ok");
-    //             db.close();
-    //         }
-    //     });
-    // }
 });
 

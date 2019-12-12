@@ -2,13 +2,13 @@ define({ "api": [
   {
     "type": "delete",
     "url": "/api/cooperatives",
-    "title": "Xóa HTX.",
+    "title": "Request User information",
     "name": "DeleteCooperatives",
     "group": "Cooperatives",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/Cooperatives",
+        "content": "curl -i http://localhost:3001/api/cooperatives",
         "type": "curl"
       }
     ],
@@ -33,7 +33,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "query",
-            "description": "<p>Chọn các dữ liệu cần xóa theo filer.</p>"
+            "description": "<p>Lọc danh sách các dữ liệu cần xóa.</p>"
           }
         ]
       },
@@ -52,15 +52,15 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
+            "field": "responseMessage",
+            "description": "<p>Thông báo đã xóa thành công dữ liệu.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"responseMessage\": \"Xóa thành công: 1 dữ liệu\"\n}",
           "type": "json"
         }
       ]
@@ -73,13 +73,25 @@ define({ "api": [
             "optional": false,
             "field": "Permission-denied",
             "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Du-lieu-khong-ton-tai",
+            "description": "<p>Dữ liệu không tồn tại.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Tac-vu-eyu-cau-phai-co-dieu-kien",
+            "description": "<p>Tác vụ yêu cầu phải có điều kiện.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Nothing to update\"\n    }",
+          "content": "HTTP/1.1 404 Not Found\n {\n     \"error\": \"Dữ liệu không tồn tại\"\n }",
           "type": "json"
         }
       ]
@@ -747,6 +759,128 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Cooperatives"
+  },
+  {
+    "type": "post",
+    "url": "/api/diaries",
+    "title": "Xóa HTX.",
+    "name": "PostDiaries",
+    "group": "Diaries",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/Diaries",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "plant_id",
+            "description": "<p>ID của loại cây trồng.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String[]",
+            "optional": false,
+            "field": "area_id",
+            "description": "<p>ID của khu vực gieo trồng.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "HTX_id",
+            "description": "<p>ID của HTX.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "begin",
+            "description": "<p>Thời gian bắt đầu mùa vụ (dạng time-stem-unix)).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "end",
+            "description": "<p>Thời gian kết thúc mùa vụ (dạng time-stem-unix)).</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n\t\"query\":{\n        \"_id\": \"5de66297c78c93258003b0d0\"\n\t}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "firstname",
+            "description": "<p>Firstname of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Nothing to update\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Diaries"
   },
   {
     "type": "post",
@@ -3806,8 +3940,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });
