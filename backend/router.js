@@ -1431,27 +1431,38 @@ exports.routers = app => {
 
 
     /**
-     * @api {patch} /plant-protection-products/:id Update plant protection product by query
+     * @api {patch} /plant-protection-products/ Update plant protection product by query
      * @apiName UpdatePlantProtectionProductByQuery
      * @apiGroup PlantProtectionProduct
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products/
+     * @apiExample {curl} Update thuoc bvtv theo _id:
+     *     curl -i http://localhost:3001/api/plant-protection-products?_id=5df1d86fadb2472bffdde52c
+     * 
+     * @apiExample {curl} Update thuoc bvtv theo tên:
+     *     curl -i http://localhost:3001/api/plant-protection-products?name=Alfatin 1.8EC
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {String} _id ID của thuốc bảo vệ thực vật
-     * @apiParam {String} name Ten cua thuoc bao ve thuc vat
+     * @apiParam {String} name Tên thuốc bảo vệ thực vật
+     * @apiParam {String} activeIngredient Hoạt chất
+     * @apiParam {String} content Hàm lượng
+     * @apiParam {String} plantProtectionProductGroup Nhóm thuốc
+     * @apiParam {Integer} ghs Nhóm độc GHS
+     * @apiParam {Integer} who Nhóm độc WHO
+     * @apiParam {Array} scopeOfUse Phạm vi sử dụng
      * @apiParam {String} plant Cây trồng
      * @apiParam {String} pest Dịch hại
-     * @apiParam {String} registrationUnit Don vi dang ki
+     * @apiParam {String} dosage Liều lượng
+     * @apiParam {String} phi
+     * @apiParam {String} usage Cách dùng
+     * @apiParam {Array} registrationInfo Thông tin đăng ký
+     * @apiParam {String} registrationUnit Đơn vị đăng ký
+     * @apiParam {String} registrationUnitAddress Địa chỉ
      * @apiParam {String} manufacturer Nhà sản xuất
+     * @apiParam {String} manufacturerAddress Địa chi sản xuất
      *
-     * @apiParamExample {json} Update sử dụng _id thuốc bvtv
+     * @apiParamExample {json} Update JSON example
      * {
-     *     "query": {
-     *         "_id": "5dce66cb5c25ee6da0a29ac8"
-     *     },
      *     "update": {
      *         "name": "updated",
      *         "activeIngredient": "updated",
@@ -1459,14 +1470,29 @@ exports.routers = app => {
      *         "plantProtectionProductGroup": "updated",
      *         "ghs": "20",
      *         "who": "20",
-     *         "scopeOfUse": {
-     *             "plant": "updated",
-     *             "pest": "updated",
-     *             "dosage": "updated",
-     *             "phi": "updated",
-     *             "usage": "updated"
-     *         },
+     *         "scopeOfUse": [
+     *             {
+     *                 "_id": "5df1d870adb2472bffde2f09",
+     *                 "pppId": "5df1d86fadb2472bffdde52c",
+     *                 "plant": "updated",
+     *                 "pest": "updated",
+     *                 "dosage": "updated",
+     *                 "phi": "9",
+     *                 "usage": "updated"
+     *             },
+     *             {
+     *                 "_id": "5df1d870adb2472bffde2f0a",
+     *                 "pppId": "5df1d86fadb2472bffdde52c",
+     *                 "plant": "updated",
+     *                 "pest": "updated",
+     *                 "dosage": "updated",
+     *                 "phi": "9",
+     *                 "usage": "updated"
+     *             }
+     *         ],
      *         "registrationInfo": {
+     *             "_id": "5df1d870adb2472bffde2f0b",
+                   "pppId": "5df1d86fadb2472bffdde52c",
      *             "registrationUnit": "updated",
      *             "registrationUnitAddress": "updated",
      *             "manufacturer": "updated",
@@ -1475,45 +1501,6 @@ exports.routers = app => {
      *     }
      * }
      *
-     * @apiParamExample {json} Update sử dụng tên thuốc bvtv
-     * {
-     *     "query": {
-     *         "name": " Ababetter  3.6EC"
-     *     },
-     *     "update": {
-     *         "name": "updated",
-     *         "activeIngredient": "updated",
-     *         "content": "updated",
-     *         "plantProtectionProductGroup": "updated",
-     *         "ghs": "20",
-     *         "who": "20",
-     *         "scopeOfUse": {
-     *             "plant": "updated",
-     *             "pest": "updated",
-     *             "dosage": "updated",
-     *             "phi": "updated",
-     *             "usage": "updated"
-     *         },
-     *         "registrationInfo": {
-     *             "registrationUnit": "updated",
-     *             "registrationUnitAddress": "updated",
-     *             "manufacturer": "updated",
-     *             "manufacturerAddress": "updated"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Update thông tin theo đơn vị đăng kí
-     * {
-     *     "query": {
-     *         "registrationInfo": {
-     *             "registrationUnit": "Công ty TNHH MTV Lucky"
-     *         }
-     *     },
-     *     "update": {
-     *         "registrationUnitAddress": "updated"
-     *     }
-     * }
      *
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
      * @apiSuccess {String} activeIngredient Hoạt chất
@@ -1538,44 +1525,44 @@ exports.routers = app => {
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *     "name": "Ababetter  3.6EC",
-     *     "activeIngredient": "Abamectin",
-     *     "content": "36g/l",
-     *     "plantProtectionProductGroup": "Thuốc trừ sâu",
-     *     "ghs": "7",
-     *     "who": "6",
-     *     "created": "2019-11-14T16:43:16.899Z",
-     *     "_id": "5dcd842416d4391c7f8a4265",
+     *     "_id": "5df1d86fadb2472bffdde52c",
+     *     "name": "updated",
+     *     "activeIngredient": "updated",
+     *     "content": "updated",
+     *     "plantProtectionProductGroup": "updated",
+     *     "ghs": "20",
+     *     "who": "20",
+     *     "created": "2019-12-12T06:04:31.587Z",
      *     "scopeOfUse": [
      *         {
-     *             "pppId": "5dcd842416d4391c7f8a4265",
-     *             "plant": "dưa hấu",
-     *             "pest": "bọ trĩ",
-     *             "dosage": "0.2 - 0.3 lít/ha",
-     *             "phi": "7",
-     *             "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
-     *             "created": "2019-11-14T16:43:16.900Z",
-     *             "_id": "5dcd842416d4391c7f8a4266"
+     *             "_id": "5df1d870adb2472bffde2f09",
+     *             "pppId": "5df1d86fadb2472bffdde52c",
+     *             "plant": "updated",
+     *             "pest": "updated",
+     *             "dosage": "updated",
+     *             "phi": "9",
+     *             "usage": "updated",
+     *             "created": "2019-12-12T06:04:32.858Z"
      *         },
      *         {
-     *             "pppId": "5dcd842416d4391c7f8a4265",
-     *             "plant": "lúa",
-     *             "pest": "sâu cuốn lá",
-     *             "dosage": "200 - 300 ml/ha",
-     *             "phi": "7",
-     *             "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
-     *             "created": "2019-11-14T16:43:16.900Z",
-     *             "_id": "5dcd842416d4391c7f8a4267"
+     *             "_id": "5df1d870adb2472bffde2f0a",
+     *             "pppId": "5df1d86fadb2472bffdde52c",
+     *             "plant": "updated",
+     *             "pest": "updated",
+     *             "dosage": "updated",
+     *             "phi": "9",
+     *             "usage": "updated",
+     *             "created": "2019-12-12T06:04:32.858Z"
      *         }
      *     ],
      *     "registrationInfo": {
-     *         "pppId": "5dcd842416d4391c7f8a4265",
-     *         "registrationUnit": "Công ty TNHH MTV Lucky",
-     *         "registrationUnitAddress": "",
-     *         "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
-     *         "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
-     *         "created": "2019-11-14T16:43:16.900Z",
-     *         "_id": "5dcd842416d4391c7f8a4268"
+     *         "_id": "5df1d870adb2472bffde2f0b",
+     *         "pppId": "5df1d86fadb2472bffdde52c",
+     *         "registrationUnit": "updated",
+     *         "registrationUnitAddress": "updated",
+     *         "manufacturer": "updated",
+     *         "manufacturerAddress": "updated",
+     *         "created": "2019-12-12T06:04:32.858Z"
      *     }
      * }
      *
@@ -1638,30 +1625,15 @@ exports.routers = app => {
     });
 
 
-    app.get("/api/scope-of-uses", (req, res, next) => {
+    // *************************************************************************** //
+    // ROUTES FOR SCOPE OF USE
+    app.get("/api/scope-of-uses/plant-protection-products", (req, res, next) => {
         const query = req.query;
 
-        app.models.scopeOfUse.findPestByPlant(query, (err, info) => {
+        app.models.scopeOfUse.findAllProducts(query, (err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
-
-    app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
-        const query = req.query;
-
-        app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
-
-    app.get("/api/scope-of-uses", (req, res, next) => {
-        const query = req.query;
-
-        app.models.scopeOfUse.findByQuery(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
-
 
 
     // *************************************************************************** //

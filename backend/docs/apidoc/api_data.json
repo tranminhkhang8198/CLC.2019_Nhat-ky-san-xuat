@@ -2515,14 +2515,19 @@
   },
   {
     "type": "patch",
-    "url": "/plant-protection-products/:id",
+    "url": "/plant-protection-products/",
     "title": "Update plant protection product by query",
     "name": "UpdatePlantProtectionProductByQuery",
     "group": "PlantProtectionProduct",
     "examples": [
       {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-products/",
+        "title": "Update thuoc bvtv theo _id:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products?_id=5df1d86fadb2472bffdde52c",
+        "type": "curl"
+      },
+      {
+        "title": "Update thuoc bvtv theo tên:",
+        "content": "curl -i http://localhost:3001/api/plant-protection-products?name=Alfatin 1.8EC",
         "type": "curl"
       }
     ],
@@ -2546,15 +2551,50 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "_id",
-            "description": "<p>ID của thuốc bảo vệ thực vật</p>"
+            "field": "name",
+            "description": "<p>Tên thuốc bảo vệ thực vật</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "name",
-            "description": "<p>Ten cua thuoc bao ve thuc vat</p>"
+            "field": "activeIngredient",
+            "description": "<p>Hoạt chất</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Hàm lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "plantProtectionProductGroup",
+            "description": "<p>Nhóm thuốc</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "ghs",
+            "description": "<p>Nhóm độc GHS</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "who",
+            "description": "<p>Nhóm độc WHO</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "scopeOfUse",
+            "description": "<p>Phạm vi sử dụng</p>"
           },
           {
             "group": "Parameter",
@@ -2574,8 +2614,43 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "dosage",
+            "description": "<p>Liều lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phi",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "usage",
+            "description": "<p>Cách dùng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "registrationInfo",
+            "description": "<p>Thông tin đăng ký</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "registrationUnit",
-            "description": "<p>Don vi dang ki</p>"
+            "description": "<p>Đơn vị đăng ký</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "registrationUnitAddress",
+            "description": "<p>Địa chỉ</p>"
           },
           {
             "group": "Parameter",
@@ -2583,23 +2658,20 @@
             "optional": false,
             "field": "manufacturer",
             "description": "<p>Nhà sản xuất</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "manufacturerAddress",
+            "description": "<p>Địa chi sản xuất</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Update sử dụng _id thuốc bvtv",
-          "content": "{\n    \"query\": {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\"\n    },\n    \"update\": {\n        \"name\": \"updated\",\n        \"activeIngredient\": \"updated\",\n        \"content\": \"updated\",\n        \"plantProtectionProductGroup\": \"updated\",\n        \"ghs\": \"20\",\n        \"who\": \"20\",\n        \"scopeOfUse\": {\n            \"plant\": \"updated\",\n            \"pest\": \"updated\",\n            \"dosage\": \"updated\",\n            \"phi\": \"updated\",\n            \"usage\": \"updated\"\n        },\n        \"registrationInfo\": {\n            \"registrationUnit\": \"updated\",\n            \"registrationUnitAddress\": \"updated\",\n            \"manufacturer\": \"updated\",\n            \"manufacturerAddress\": \"updated\"\n        }\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Update sử dụng tên thuốc bvtv",
-          "content": "{\n    \"query\": {\n        \"name\": \" Ababetter  3.6EC\"\n    },\n    \"update\": {\n        \"name\": \"updated\",\n        \"activeIngredient\": \"updated\",\n        \"content\": \"updated\",\n        \"plantProtectionProductGroup\": \"updated\",\n        \"ghs\": \"20\",\n        \"who\": \"20\",\n        \"scopeOfUse\": {\n            \"plant\": \"updated\",\n            \"pest\": \"updated\",\n            \"dosage\": \"updated\",\n            \"phi\": \"updated\",\n            \"usage\": \"updated\"\n        },\n        \"registrationInfo\": {\n            \"registrationUnit\": \"updated\",\n            \"registrationUnitAddress\": \"updated\",\n            \"manufacturer\": \"updated\",\n            \"manufacturerAddress\": \"updated\"\n        }\n    }\n}",
-          "type": "json"
-        },
-        {
-          "title": "Update thông tin theo đơn vị đăng kí",
-          "content": "{\n    \"query\": {\n        \"registrationInfo\": {\n            \"registrationUnit\": \"Công ty TNHH MTV Lucky\"\n        }\n    },\n    \"update\": {\n        \"registrationUnitAddress\": \"updated\"\n    }\n}",
+          "title": "Update JSON example",
+          "content": "{\n    \"update\": {\n        \"name\": \"updated\",\n        \"activeIngredient\": \"updated\",\n        \"content\": \"updated\",\n        \"plantProtectionProductGroup\": \"updated\",\n        \"ghs\": \"20\",\n        \"who\": \"20\",\n        \"scopeOfUse\": [\n            {\n                \"_id\": \"5df1d870adb2472bffde2f09\",\n                \"pppId\": \"5df1d86fadb2472bffdde52c\",\n                \"plant\": \"updated\",\n                \"pest\": \"updated\",\n                \"dosage\": \"updated\",\n                \"phi\": \"9\",\n                \"usage\": \"updated\"\n            },\n            {\n                \"_id\": \"5df1d870adb2472bffde2f0a\",\n                \"pppId\": \"5df1d86fadb2472bffdde52c\",\n                \"plant\": \"updated\",\n                \"pest\": \"updated\",\n                \"dosage\": \"updated\",\n                \"phi\": \"9\",\n                \"usage\": \"updated\"\n            }\n        ],\n        \"registrationInfo\": {\n            \"_id\": \"5df1d870adb2472bffde2f0b\",\n                   \"pppId\": \"5df1d86fadb2472bffdde52c\",\n            \"registrationUnit\": \"updated\",\n            \"registrationUnitAddress\": \"updated\",\n            \"manufacturer\": \"updated\",\n            \"manufacturerAddress\": \"updated\"\n        }\n    }\n}",
           "type": "json"
         }
       ]
@@ -2745,7 +2817,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n    \"name\": \"Ababetter  3.6EC\",\n    \"activeIngredient\": \"Abamectin\",\n    \"content\": \"36g/l\",\n    \"plantProtectionProductGroup\": \"Thuốc trừ sâu\",\n    \"ghs\": \"7\",\n    \"who\": \"6\",\n    \"created\": \"2019-11-14T16:43:16.899Z\",\n    \"_id\": \"5dcd842416d4391c7f8a4265\",\n    \"scopeOfUse\": [\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"dưa hấu\",\n            \"pest\": \"bọ trĩ\",\n            \"dosage\": \"0.2 - 0.3 lít/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4266\"\n        },\n        {\n            \"pppId\": \"5dcd842416d4391c7f8a4265\",\n            \"plant\": \"lúa\",\n            \"pest\": \"sâu cuốn lá\",\n            \"dosage\": \"200 - 300 ml/ha\",\n            \"phi\": \"7\",\n            \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n            \"created\": \"2019-11-14T16:43:16.900Z\",\n            \"_id\": \"5dcd842416d4391c7f8a4267\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"pppId\": \"5dcd842416d4391c7f8a4265\",\n        \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n        \"registrationUnitAddress\": \"\",\n        \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n        \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n        \"created\": \"2019-11-14T16:43:16.900Z\",\n        \"_id\": \"5dcd842416d4391c7f8a4268\"\n    }\n}",
+          "content": " HTTP/1.1 200 OK\n {\n    \"_id\": \"5df1d86fadb2472bffdde52c\",\n    \"name\": \"updated\",\n    \"activeIngredient\": \"updated\",\n    \"content\": \"updated\",\n    \"plantProtectionProductGroup\": \"updated\",\n    \"ghs\": \"20\",\n    \"who\": \"20\",\n    \"created\": \"2019-12-12T06:04:31.587Z\",\n    \"scopeOfUse\": [\n        {\n            \"_id\": \"5df1d870adb2472bffde2f09\",\n            \"pppId\": \"5df1d86fadb2472bffdde52c\",\n            \"plant\": \"updated\",\n            \"pest\": \"updated\",\n            \"dosage\": \"updated\",\n            \"phi\": \"9\",\n            \"usage\": \"updated\",\n            \"created\": \"2019-12-12T06:04:32.858Z\"\n        },\n        {\n            \"_id\": \"5df1d870adb2472bffde2f0a\",\n            \"pppId\": \"5df1d86fadb2472bffdde52c\",\n            \"plant\": \"updated\",\n            \"pest\": \"updated\",\n            \"dosage\": \"updated\",\n            \"phi\": \"9\",\n            \"usage\": \"updated\",\n            \"created\": \"2019-12-12T06:04:32.858Z\"\n        }\n    ],\n    \"registrationInfo\": {\n        \"_id\": \"5df1d870adb2472bffde2f0b\",\n        \"pppId\": \"5df1d86fadb2472bffdde52c\",\n        \"registrationUnit\": \"updated\",\n        \"registrationUnitAddress\": \"updated\",\n        \"manufacturer\": \"updated\",\n        \"manufacturerAddress\": \"updated\",\n        \"created\": \"2019-12-12T06:04:32.858Z\"\n    }\n}",
           "type": "json"
         }
       ]
