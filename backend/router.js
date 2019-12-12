@@ -55,7 +55,7 @@ exports.routers = app => {
             if (err) {
                 return cb(
                     {
-                        err
+                        errorMessage: "Loi xac dinh token"
                     },
                     null
                 );
@@ -383,9 +383,8 @@ exports.routers = app => {
 
         app.models.token.verify(tokenId, (err, result) => {
             if (err) {
-                return errorHandle(res, err.errorMessage);
+                return errorHandle(res, err.errorMessage, 401);
             } else {
-                _.unset(result.user, "password");
                 return responseHandle(res, result, 200);
             }
         });
@@ -643,6 +642,182 @@ exports.routers = app => {
         });
     });
 
+    /**
+     * @api {get} /api/cooperatives Tìm kiếm thông tin HTX.
+     * @apiName GetCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * @apiParam {Object} query Dieu kien tim kiem.
+     * @apiParam {Object} options Cau truc ket qua tra ve.
+     * @apiParam {Number} resultNumber so luong ket qua tra ve theo phan trang (tuy chon).
+     * @apiParam {Number} pageNumber trang du lieu can tra ve theo phan trang (tuy chon).
+     *
+     * @apiSuccess (Response Fileds) {Object[]} records Danh sach HTX.
+     * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
+     * @apiSuccess (Response Fileds) {String} records.name Tên gọi của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.foreignName Tên nước ngoài của HTX.
+     * @apiSuccess (Response Fileds) {String} records.abbreviationName Tên viết tắt.
+     * @apiSuccess (Response Fileds) {String} records.logo Logo của HTX.
+     * @apiSuccess (Response Fileds) {String} records.status Thông tin trạng thái của HTX.
+     * @apiSuccess (Response Fileds) {String} records.cooperativeID Mã số HTX.
+     * @apiSuccess (Response Fileds) {String} records.tax Mã số thuế của HTX.
+     * @apiSuccess (Response Fileds) {String} records.surrgate Người đại diện.
+     * @apiSuccess (Response Fileds) {String} records.director Giám đốc.
+     * @apiSuccess (Response Fileds) {String} records.address Địa chỉ của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.phone Số điện thoại của HTX.
+     * @apiSuccess (Response Fileds) {String} records.fax Địa chỉ fax của HTX.
+     * @apiSuccess (Response Fileds) {String} records.website Đia chỉ website của HTX.
+     * @apiSuccess (Response Fileds) {String} records.representOffice Văn phòng đại diện.
+     * @apiSuccess (Response Fileds) {String[]} records.docs Danh sách tài liệu.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "records": [
+     *          {
+     *              "_id": "5de653f18a92cd1e06fc0b59",
+     *              "name": "Hop tac xa nga nam",
+     *              "foreignName": "Hop tac xa nga nam",
+     *              "abbreviationName": "NN",
+     *              "logo": "",
+     *              "status": "Dang hoat dong",
+     *              "cooperativeID": "HTXNN",
+     *              "tax": "NN23442",
+     *              "surrgate": "Nguyen Tan Vu",
+     *              "director": "Huynh Van Tan",
+     *              "address": "",
+     *              "phone": "0836738223",
+     *              "fax": "NN341",
+     *              "website": "nn.com",
+     *              "representOffice": "",
+     *              "docs": ""
+     *          }
+     *      ]
+     *  }
+     * 
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Loi-Trong-qua-trinh-tim-kiem   Lỗi trong quá trình tìm kiếm.
+     * @apiError ID-khong-hop-le ID không hợp lệ
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "ID không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.get('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        app.models.cooperative.search(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 401);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    /**
+     * @api {post} /api/cooperatives Thêm HTX mới
+     * @apiName PostCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {String} name Tên của HTX.
+     * @apiParam {String} foreignName Tên nước ngoài của HTX.
+     * @apiParam {String} abbreviationName Tên viết tắt của HTX.
+     * @apiParam {String} logo Logo của HTX.
+     * @apiParam {String} status Tình trạng họat động của HTX.
+     * @apiParam {String} cooperativeID Mã số của HTX.
+     * @apiParam {String} tax Mã số thuế của HTX.
+     * @apiParam {String} surrgate Tên người đại diện của HTX.
+     * @apiParam {String} director Tên giams đốc của HTX.
+     * @apiParam {String} phone Số điện thoại của HTX.
+     * @apiParam {String} email Địa chỉ email của HTX.
+     * @apiParam {String} fax Địa chỉ fax của HTX.
+     * @apiParam {String} website Địa chỉ website của HTX.
+     * @apiParam {String} representOffice Địa chỉ văn phòng đại diện của HTX.
+     * @apiParam {Array} docs Danh sách file tài liệu liên quan đến HTX.
+     *
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"foreignName":"Hop tac xa u minh ha3",
+     *  	"abbreviationName":"UMH3",
+     *  	"logo":"",
+     *  	"status":"Dang hoat dong",
+     *  	"cooperativeID":"HTXUMH3",
+     *  	"tax":"NN23446",
+     *  	"surrgate":"Nguyen Tan Vu",
+     *  	"director":"Huynh Van Tan",
+     *  	"phone":"0836738224",
+     *  	"email":"nn@gmail.com",
+     *  	"fax":"NN344",
+     *  	"website":"nn.com",
+     *  	"represendOffice":"",
+     *  	"docs":""
+     *  }
+     * 
+     * 
+     * @apiSuccess {String} name Tên của HTX.
+     * @apiSuccess {String} foreignName Tên nước ngoài của HTX.
+     * @apiSuccess {String} abbreviationName Tên viết tắt của HTX.
+     * @apiSuccess {String} logo Logo của HTX.
+     * @apiSuccess {String} status Tình trạng họat động của HTX.
+     * @apiSuccess {String} cooperativeID Mã số của HTX.
+     * @apiSuccess {String} tax Mã số thuế của HTX.
+     * @apiSuccess {String} surrgate Tên người đại diện của HTX.
+     * @apiSuccess {String} director Tên giams đốc của HTX.
+     * @apiSuccess {String} phone Số điện thoại của HTX.
+     * @apiSuccess {String} email Địa chỉ email của HTX.
+     * @apiSuccess {String} fax Địa chỉ fax của HTX.
+     * @apiSuccess {String} website Địa chỉ website của HTX.
+     * @apiSuccess {String} representOffice Địa chỉ văn phòng đại diện của HTX.
+     * @apiSuccess {Array} docs Danh sách file tài liệu liên quan đến HTX.     
+     * @apiSuccess {String} _id ID của htx trong csdl.
+     * 
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "name": "Hop tac xa U Minh Ha",
+     *      "foreignName": "Hop tac xa u minh ha",
+     *      "abbreviationName": "UMH",
+     *      "logo": "",
+     *      "status": "Dang hoat dong",
+     *      "cooperativeID": "HTXUMH",
+     *      "tax": "NN23445",
+     *      "surrgate": "Nguyen Tan Vu",
+     *      "director": "Huynh Van Tan",
+     *      "address": "",
+     *      "phone": "0836738224",
+     *      "fax": "NN344",
+     *      "website": "nn.com",
+     *      "representOffice": "",
+     *      "docs": "",
+     *      "_id": "5decdd74e8296d17b3e7a5a0"
+     *  }
+     * @apiError Permission-denied Token khong hop le.
+     * @apiError HTX-da-ton-tai-trong-csdl Hợp tác xã đã tồn tại trong csdl
+     *
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "HTX da ton tai trong csdl"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.post('/api/cooperatives', (req, res, next) => {
         const body = req.body;
         // verifyUser(req, 'cooperative', (err, accept) => {
@@ -651,13 +826,222 @@ exports.routers = app => {
         //     } else {
         app.models.cooperative.create(body, (err, result) => {
             if (err) {
-                errorHandle(res, err.errorMessage, 404);
+                return errorHandle(res, err.errorMessage, 404);
             }
             else {
-                responseHandle(res, result)
+                return responseHandle(res, result)
             }
             //         })
             //     }
+        })
+    })
+
+    /**
+     * @api {patch} /api/cooperatives Cập nhật thông tin của HTX.
+     * @apiName PatchCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Object} query filter cho tác vụ update.
+     * @apiParam {Object} update Update object.
+     * @apiParam {Object} update.set phương thức update.
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"query":{
+     *  		"_id": "5dece63aa343bc1aad4b2565"
+     *  	},
+     *  	"update":{
+     *  		"$set":{
+     *  			"name":"Hop tac xa nong thon moi2"
+     *  
+     *  		}
+     *  	}
+     *  }
+     *
+     * @apiSuccess {Number} nModified Số documents đã được update.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token không hợp lệ.
+     * @apiError ID-khong-hop-le ID không hợp lệ.
+     * @apiError Nothing-to-update Query không kết quả hoặc dữ liệu đã được update.
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.patch('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        app.models.cooperative.update(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    /**
+     * @api {delete} /api/cooperatives Request User information
+     * @apiName DeleteCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Object} query Lọc danh sách các dữ liệu cần xóa.
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"query":{
+     *          "_id": "5de66297c78c93258003b0d0"
+     *  	}
+     *  }
+     *
+     * @apiSuccess {String} responseMessage Thông báo đã xóa thành công dữ liệu.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "responseMessage": "Xóa thành công: 1 dữ liệu"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Du-lieu-khong-ton-tai Dữ liệu không tồn tại.
+     * @apiError Tac-vu-eyu-cau-phai-co-dieu-kien Tác vụ yêu cầu phải có điều kiện.
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *  {
+     *      "error": "Dữ liệu không tồn tại"
+     *  }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.delete('/api/cooperatives', (req, res, next) => {
+        const body = req.body;
+        app.models.cooperative.remove(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    /**
+     * @api {post} /api/diaries Xóa HTX.
+     * @apiName PostDiaries
+     * @apiGroup Diaries
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/Diaries
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {String} plant_id ID của loại cây trồng.
+     * @apiParam {String[]} area_id ID của khu vực gieo trồng.
+     * @apiParam {String} HTX_id ID của HTX.
+     * @apiParam {Number} begin Thời gian bắt đầu mùa vụ (dạng time-stem-unix)).
+     * @apiParam {Number} end Thời gian kết thúc mùa vụ (dạng time-stem-unix)).  
+     * 
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *  	"query":{
+     *          "_id": "5de66297c78c93258003b0d0"
+     *  	}
+     *  }
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.post('/api/diaries', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.create(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.get('/api/diaries', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.search(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.patch('/api/diaries', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.update(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    app.delete('/api/diaries', (req, res, next) => {
+        const body = req.body;
+        app.models.diary.remove(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+
+    app.post('/api/fields', (req, res, next) => {
+        const body = req.body;
+        app.models.field.create(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 404);
+            }
+            else {
+                return responseHandle(res, result);
+            }
         })
     })
 
@@ -676,10 +1060,14 @@ exports.routers = app => {
      * @api {get} /plant-protection-product Get all plant protection product
      * @apiName GetAllPlantProtectionProduct
      * @apiGroup PlantProtectionProduct
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products
+     * @apiExample {curl} Tìm kiếm thuốc bảo vệ thực vật:
+     *     curl -i http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20
      *
      * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiParam {Number} pageNumber Số trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      *
      *
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
@@ -792,7 +1180,9 @@ exports.routers = app => {
 
 
     app.get("/api/plant-protection-products", (req, res, next) => {
-        app.models.plantProtectionProduct.find((err, info) => {
+        const query = req.query;
+
+        app.models.plantProtectionProduct.find(query, (err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
@@ -802,76 +1192,17 @@ exports.routers = app => {
      * @apiName GetPlantProtectionProductByQuery
      * @apiGroup PlantProtectionProduct
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products/query
-     *
+     * @apiExample {curl} Tìm thuốc bảo vệ thực vật theo _id:
+     *     curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e
+     * 
+     * @apiExample {curl} Tìm thuốc bảo vệ thực vật theo tên:
+     *     curl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC
+     *   
      * @apiHeader {String} authorization Token.
      *
      * @apiParam {String} _id ID của thuốc bảo vệ thực vật
-     * @apiParam {String} name Ten cua thuoc bao ve thuc vat
-     * @apiParam {String} plant Cây trồng
-     * @apiParam {String} pest Dịch hại
-     *
-     * @apiParamExample {json} Tìm kiếm theo ID thuốc bvtv
-     * {
-     *     "query": {
-     *         "_id": "5dce66cb5c25ee6da0a29ac8"
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo tên
-     * {
-     *     "query": {
-     *         "name": " Ababetter  3.6EC"
-     *     }
-     * }
-     * 
-     * @apiParamExample {json} Tìm kiếm theo nhóm thuốc bvtv
-     * {
-     *     "query": {
-     *         "plantProtectionProductGroup": "Thuốc trừ sâu"
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo cây
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "plant": "lúa"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo dịch hại
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "pest": "sâu tơ"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo cây và dịch hại
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "plant": "lúa",
-     *             "pest": "bọ trĩ"
-     *         }
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Tìm kiếm theo cây và đơn vị đăng ký
-     * {
-     *     "query": {
-     *         "scopeOfUse": {
-     *             "plant": "lúa"
-     *         },
-     *         "registrationInfo": {
-     *             "registrationUnit": "Công ty TNHH SX TM Tô Ba"
-     *         }
-     *     }
-     * }
+     * @apiParam {String} name Tên thuốc bảo vệ thực vật
+     * @apiParam {String} plantProtectionProductGroup Nhóm thuốc 
      *
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
      * @apiSuccess {String} activeIngredient Hoạt chất
@@ -896,7 +1227,7 @@ exports.routers = app => {
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *     "name": " Ababetter  3.6EC",
+     *     "name": " Ababetter 3.6EC",
      *     "activeIngredient": "Abamectin",
      *     "content": "36g/l",
      *     "plantProtectionProductGroup": "Thuốc trừ sâu",
@@ -941,13 +1272,14 @@ exports.routers = app => {
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *     {
-     *       "error": "Không tìm thấy thuốc bảo vệ thực vật phù hợp!"
+     *       "error": "Không tìm thấy thuốc bảo vệ thực vật"
      *     }
      *
      * @apiPermission manager-admin
      */
     app.get("/api/plant-protection-products/query", (req, res, next) => {
-        const query = req.body.query;
+        const query = req.query;
+
         app.models.plantProtectionProduct.findByQuery(query, (err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
@@ -1257,7 +1589,7 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.patch("/api/plant-protection-products", (req, res, next) => {
-        const query = req.body.query;
+        const query = req.query;
         const update = req.body.update;
 
         app.models.plantProtectionProduct.update(query, update, (err, info) => {
@@ -1270,50 +1602,416 @@ exports.routers = app => {
      * @apiName DeletePlantProtectionProductByQuery
      * @apiGroup PlantProtectionProduct
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-products/
-     *
+     * @apiExample {curl} Xóa thuốc bảo vệ thực vật theo _id:
+     *     curl -i http://localhost:3001/api/plant-protection-products?_id=5dd6527842d8944aa7cef4a1
+     *    
+     * @apiExample {curl} Xóa thuốc bảo vệ thực vật theo tên:
+     *     curl -i http://localhost:3001/api/plant-protection-products?name=Abagold 55EC
+     * 
      * @apiHeader {String} authorization Token.
      *
      * @apiParam {String} _id ID của thuốc bảo vệ thực vật
      * @apiParam {String} name Ten cua thuoc bao ve thuc vat
      * 
-     * 
-     * @apiParamExample {json} Delete sử dụng _id thuốc bvtv
-     * {
-     *     "query": {
-     *         "_id": "5dce66cb5c25ee6da0a29ac8"
-     *     }
-     * }
-     *
-     * @apiParamExample {json} Delete sử dụng tên thuốc bvtv
-     * {
-     *     "query": {
-     *         "name": " Ababetter  3.6EC"
-     *     }
-     * }
-     *
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *     "successMessage": "Xóa thuốc bảo vệ thực vật thành công"
-     * }
+     *     "success": "Xóa thuốc bảo vệ thực vật thành công"
+     *  }
      *
      *
      * @apiErrorExample Error-Response:
-     * HTTP/1.1 201 Not Found
-     *     {
-     *       "error": "Không tìm thấy thuốc bảo vệ thực vật phù hợp!"
-     *     }
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "error": "Không tìm thấy thuốc bảo vệ thực vật"
+     * }
      *
      * @apiPermission manager-admin
      */
     app.delete("/api/plant-protection-products", (req, res, next) => {
-        const query = req.body.query;
+        const query = req.query;
 
         app.models.plantProtectionProduct.delete(query, (err, info) => {
-            return err ? errorHandle(res, err, 204) : responseHandle(res, info);
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    app.get("/api/scope-of-uses", (req, res, next) => {
+        const query = req.query;
+
+        app.models.scopeOfUse.findPestByPlant(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.get("/api/scope-of-uses/plant-protection-product", (req, res, next) => {
+        const query = req.query;
+
+        app.models.scopeOfUse.findAllProductForPest(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.get("/api/scope-of-uses", (req, res, next) => {
+        const query = req.query;
+
+        app.models.scopeOfUse.findByQuery(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+
+    // *************************************************************************** //
+    // ROUTES FOR PLANT PROTECTION PRODUCT
+    /**
+     * @api {get} /fertilizers Get all fertilizers with pageNumber and nPerPage
+     * @apiName GetAllFertilizer
+     * @apiGroup Fertilizer
+     * @apiExample {curl} Tìm kiếm phân bón:
+     *     curl -i http://localhost:3001/api/fertilizer?pageNumber=9&nPerPage=20
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiParam {Number} pageNumber Số trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
+     *
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5de75a92f4e889141cc24ee8",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH YARA Việt Nam",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)",
+     *          "ingredient": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
+     *          "lawDocument": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.952Z"
+     *      },
+     *      {
+     *          "_id": "5de75a92f4e889141cc24efd",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH YARA Việt Nam",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân bón NPK 15-9-20+TE",
+     *          "ingredient": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
+     *          "lawDocument": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.956Z"
+     *      },
+     *      {
+     *          "_id": "5de75a92f4e889141cc24f7d",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *          "ingredient": "",
+     *          "lawDocument": "",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.974Z"
+     *      },
+     *      ...
+     *  ]
+     * 
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Conflict
+     *     {
+     *       "error": ""
+     *     }
+     * @apiPermission none
+     */
+
+
+    app.get("/api/fertilizers", (req, res, next) => {
+        const query = req.query;
+
+        app.models.fertilizer.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {get} /fertilizers Get fertilizer by query
+     * @apiName GetFertilizerByQuery
+     * @apiGroup Fertilizer
+     * 
+     * @apiExample {curl} Tìm kiếm phân bón theo _id:
+     *     curl -i http://localhost:3001/api/fertilizer?_id=5de75a92f4e889141cc24ef5
+     * @apiExample {curl} Tìm kiếm phân bón theo tên:
+     *     curl -i http://localhost:3001/api/fertilizer?name=Phân bón Calcium Nitrate( Calcinit)
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiParam {Number} pageNumber Số trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
+     *
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *      {
+     *          "_id": "5de75a92f4e889141cc24ef5",
+     *          "ministry": "Công thương",
+     *          "province": "Bà Rịa - Vũng Tàu",
+     *          "enterprise": "Công ty TNHH YARA Việt Nam",
+     *          "type": "Phân vô cơ",
+     *          "name": "Phân bón Calcium Nitrate( Calcinit)",
+     *          "ingredient": "Nts: 15,4%; CaO: 26,5%; Độ ẩm: 0,8%",
+     *          "lawDocument": "Nts: 15,4%; CaO: 26,5%; Độ ẩm: 0,8%",
+     *          "isoCertOrganization": "",
+     *          "manufactureAndImport": "",
+     *          "created": "2019-12-04T07:04:50.955Z"
+     *      }
+     * 
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "error": "Không tìm thấy phân bón"
+     *     }
+     * @apiPermission none
+     */
+
+    app.get("/api/fertilizers/query", (req, res, next) => {
+        const query = req.query;
+
+        app.models.fertilizer.findByQuery(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+
+    /**
+     * @api {post} /fertilizer Create new fertilizer
+     * @apiName CreateFertilizer
+     * @apiGroup Fertilizer
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/fertilizers
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} ministry Bộ
+     * @apiParam {String} province Tỉnh
+     * @apiParam {String} enterprise Tên doanh nghiệp
+     * @apiParam {String} type Loại phân bón
+     * @apiParam {String} name Tên phân bón
+     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": ""
+     *  }
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5de75a92f4e889141cc24f7d",
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": "",
+     *      "created": "2019-12-04T07:04:50.974Z"
+     *  }
+     *
+     * @apiError Name-is-required Thiếu trường tên phân bón
+     * @apiError Fertilizer-exists Phân bón đã tồn tại
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "error": "Phân bón với tên '" + name + "' đã tồn tại."
+     *     }
+     * @apiPermission none
+     */
+    app.post("/api/fertilizers", (req, res, next) => {
+        const body = req.body;
+
+        app.models.fertilizer.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {patch} /fertilizer Update fertilizer
+     * @apiName UpdateFertilizer
+     * @apiGroup Fertilizer
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/fertilizers
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} ministry Bộ
+     * @apiParam {String} province Tỉnh
+     * @apiParam {String} enterprise Tên doanh nghiệp
+     * @apiParam {String} type Loại phân bón
+     * @apiParam {String} name Tên phân bón
+     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "ministry": "updated",
+     *      "province": "updated",
+     *      "enterprise": "updated",
+     *      "type": "updated",
+     *      "name": "updated",
+     *      "ingredient": "updated",
+     *      "lawDocument": "updated",
+     *      "isoCertOrganization": "updated",
+     *      "manufactureAndImport": "updated"
+     *  }
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5de75a92f4e889141cc24f7d",
+     *      "ministry": "updated",
+     *      "province": "updated",
+     *      "enterprise": "updated",
+     *      "type": "updated",
+     *      "name": "updated",
+     *      "ingredient": "updated",
+     *      "lawDocument": "updated",
+     *      "isoCertOrganization": "updated",
+     *      "manufactureAndImport": "updated",
+     *      "created": "2019-12-04T07:04:50.974Z"
+     *  }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Conflict
+     *     {
+     *       "error": "Không tìm thấy phân bón"
+     *     }
+     * @apiPermission none
+     */
+    app.patch("/api/fertilizers", (req, res, next) => {
+        const query = req.query;
+        const update = req.body;
+
+        app.models.fertilizer.update(query, update, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {delete} /fertilizer/ Delete fertilizer by query
+     * @apiName DeleteFertilizerByQuery
+     * @apiGroup PlantProtectionProduct
+     *
+     * @apiExample {curl} Xóa phân bón theo _id:
+     *     curl -i http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24ef5
+     *    
+     * @apiExample {curl} Xóa phân báo theo tên:
+     *     curl -i http://localhost:3001/api/fertilizers?name=Phân bón Calcium Nitrate( Calcinit)
+     * 
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} _id ID của phân bón
+     * @apiParam {String} name Tên của phân bón
+     * 
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "success": "Xóa phân báo thành công"
+     *  }
+     *
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     * {
+     *     "error": "Không tìm thấy phân báo"
+     * }
+     *
+     * @apiPermission manager-admin
+     */
+    app.delete("/api/fertilizers", (req, res, next) => {
+        const query = req.query;
+
+        app.models.fertilizer.delete(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
 };
