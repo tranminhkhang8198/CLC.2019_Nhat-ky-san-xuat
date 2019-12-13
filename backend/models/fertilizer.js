@@ -38,6 +38,7 @@ class Fertilizer {
             const err = _.join(errors, ", ");
             console.log("Validation finally is: ", err);
             return cb(err, fertilizer);
+
         } else {
             // CHECK IF PLANT PROTECTION PRODUCT EXISTS
             const name = _.get(fertilizer, "name", "");
@@ -49,9 +50,11 @@ class Fertilizer {
             },
                 (err, result) => {
                     if (err || result) {
-                        return cb(
-                            "Phân bón với tên '" + name + "' đã tồn tại."
-                        );
+                        const errorMessage = {
+                            errorMessage: 'Phân bón với tên ' + name + ' đã tồn tại.'
+                        }
+
+                        return cb(errorMessage, null);
                     }
 
                     return cb(null, fertilizer);
@@ -95,19 +98,6 @@ class Fertilizer {
         });
     }
 
-
-    // FIND ALL FERTILIZER
-    // find(cb = () => { }) {
-    //     const fertilizer = this.app.db.collection('fertilizer');
-
-    //     fertilizer.find({}).toArray((err, res) => {
-    //         if (err) {
-    //             return cb(err, null);
-    //         }
-
-    //         return cb(null, res);
-    //     });
-    // }
 
     // FIND ALL PLANT PROTECTION PRODUCT IN DATABASE
     find(query = {}, cb = () => { }) {
@@ -166,13 +156,13 @@ class Fertilizer {
             // Delete fertilizer
             fertilizer.deleteOne({ _id: fertilizerId }, (err, res) => {
                 if (err) {
-                    return cb(err, null)
+                    return cb(err, null);
                 }
 
-                const message = {
-                    success: "Xóa phân bón thành công"
+                const successMessage = {
+                    successMessage: "Xóa phân bón thành công"
                 };
-                return cb(null, message);
+                return cb(null, successMessage);
             });
         });
     }

@@ -70,7 +70,7 @@ class PlantProtectionProduct {
 
     const validations = {
       name: {
-        errorMessage: "Vui lòng nhập tên phân bón!",
+        errorMessage: "Vui lòng nhập tên thuốc bảo vệ thực vật!",
         doValidate: () => {
           const name = _.get(plantProtectionProduct, "name", "");
 
@@ -81,7 +81,7 @@ class PlantProtectionProduct {
         }
       },
       ghs: {
-        errorMessage: "GHS phải là số!",
+        errorMessage: "GHS phải là số",
         doValidate: () => {
           const ghs = _.get(plantProtectionProduct, "ghs", "");
 
@@ -134,7 +134,7 @@ class PlantProtectionProduct {
     if (errors.length) {
       const err = _.join(errors, ", ");
       console.log("Validation finally is: ", err);
-      return cb(err, plantProtectionProduct);
+      return cb(err, null);
     } else {
       // CHECK IF PLANT PROTECTION PRODUCT EXISTS
       const name = _.get(plantProtectionProduct, "name", "");
@@ -147,7 +147,7 @@ class PlantProtectionProduct {
         (err, result) => {
           if (err || result) {
             return cb(
-              "Thuốc bảo vệ thực vật với tên '" + name + "' đã tồn tại."
+              "Thuốc bảo vệ thực vật với tên " + name + " đã tồn tại."
             );
           }
 
@@ -512,7 +512,7 @@ class PlantProtectionProduct {
           }
 
           const message = {
-            "success": "Xóa thuốc bảo vệ thực vật thành công"
+            "successMessage": "Xóa thuốc bảo vệ thực vật thành công"
           }
           return cb(null, message);
         });
