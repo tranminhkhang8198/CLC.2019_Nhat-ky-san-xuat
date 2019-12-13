@@ -2,6 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 const fs = require('fs');
 const _ = require('lodash');
+const path = require("path");
 
 
 function getDatabaseThuocBvtv(file) {
@@ -139,43 +140,26 @@ MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("farm");
 
-    const file = "../docs/database_thuoc_bvtv.json"
+    const file = path.join(__dirname, "../docs/database_thuoc_bvtv.json");
 
     const thuocBvtv = getDatabaseThuocBvtv(file);
 
     const plantProtectionProduct = new PlantProtectionProduct(dbo);
 
-    // let count = 0;
-    // for (var i in thuocBvtv) {
-    //     plantProtectionProduct.create(thuocBvtv[i], (err, res) => {
-    //         if (err) {
-    //             console.log("Something wrong");
-    //             return;
-    //         }
-
-    //         count++;
-
-    //         console.log("Create thuoc bao ve thuc " + count);
-
-    //         if (count == thuocBvtv.length) {
-    //             console.log("Import thuoc bvtv successfully");
-    //             db.close();
-    //         }
-    //     });
-    // }
-
-
-    /////////////////////////////////////////////////////////////////////////////
-    // TEST FOR FIRST 100 DOC 
-    var count = 0;
-    for (var i = 1; i <= 100; i++) {
-        console.log("Import thuoc bvtv " + i);
-
+    let count = 0;
+    for (var i in thuocBvtv) {
         plantProtectionProduct.create(thuocBvtv[i], (err, res) => {
+            if (err) {
+                console.log("Something wrong");
+                return;
+            }
+
             count++;
 
-            if (count == 100) {
-                console.log("No lai la ok");
+            console.log("Create thuoc bao ve thuc " + count);
+
+            if (count == thuocBvtv.length) {
+                console.log("Import thuoc bvtv successfully");
                 db.close();
             }
         });
