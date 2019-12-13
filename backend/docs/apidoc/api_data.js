@@ -2,16 +2,10 @@ define({ "api": [
   {
     "type": "delete",
     "url": "/api/cooperatives",
-    "title": "Request User information",
+    "title": "Xóa thông tin của HTX.",
+    "version": "0.1.0",
     "name": "DeleteCooperatives",
     "group": "Cooperatives",
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/cooperatives",
-        "type": "curl"
-      }
-    ],
     "header": {
       "fields": {
         "Header": [
@@ -27,32 +21,137 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Parameter": [
+        "query": [
           {
-            "group": "Parameter",
-            "type": "Object",
+            "group": "query",
+            "type": "String",
             "optional": false,
-            "field": "query",
-            "description": "<p>Lọc danh sách các dữ liệu cần xóa.</p>"
+            "field": "_id",
+            "description": "<p>ID của HTX trong CSDL (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "foreignName",
+            "description": "<p>Tên nước ngoài của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "abbreviationName",
+            "description": "<p>Tên viết tắt của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "logo",
+            "description": "<p>Logo của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Tình trạng họat động của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeID",
+            "description": "<p>Mã số của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "tax",
+            "description": "<p>Mã số thuế của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "surrgate",
+            "description": "<p>Người đại diện của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "director",
+            "description": "<p>Giám đốc của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Địa chỉ của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Số điện thoại của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "fax",
+            "description": "<p>Số fax của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "website",
+            "description": "<p>Địa chỉ website của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "representOffice",
+            "description": "<p>Địa chỉ văn phòng đại diện của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String[]",
+            "optional": false,
+            "field": "docs",
+            "description": "<p>Danh sách file liên quan của HTX (tùy chọn).</p>"
           }
         ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n\t\"query\":{\n        \"_id\": \"5de66297c78c93258003b0d0\"\n\t}\n}",
-          "type": "json"
-        }
-      ]
+      }
     },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -X DELETE http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf",
+        "type": "curl"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "json",
             "optional": false,
-            "field": "responseMessage",
+            "field": "successMessage",
             "description": "<p>Thông báo đã xóa thành công dữ liệu.</p>"
           }
         ]
@@ -101,7 +200,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Cooperatives"
   },
@@ -109,6 +207,7 @@ define({ "api": [
     "type": "get",
     "url": "/api/cooperatives",
     "title": "Tìm kiếm thông tin HTX.",
+    "version": "0.1.0",
     "name": "GetCooperatives",
     "group": "Cooperatives",
     "examples": [
@@ -333,7 +432,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Cooperatives"
   },
@@ -341,15 +439,9 @@ define({ "api": [
     "type": "patch",
     "url": "/api/cooperatives",
     "title": "Cập nhật thông tin của HTX.",
+    "version": "0.1.0",
     "name": "PatchCooperatives",
     "group": "Cooperatives",
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/cooperatives",
-        "type": "curl"
-      }
-    ],
     "header": {
       "fields": {
         "Header": [
@@ -365,46 +457,258 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Parameter": [
+        "query": [
           {
-            "group": "Parameter",
-            "type": "Object",
+            "group": "query",
+            "type": "String",
             "optional": false,
-            "field": "query",
-            "description": "<p>filter cho tác vụ update.</p>"
+            "field": "_id",
+            "description": "<p>ID của HTX trong CSDL (tùy chọn).</p>"
           },
           {
-            "group": "Parameter",
-            "type": "Object",
+            "group": "query",
+            "type": "String",
             "optional": false,
-            "field": "update",
-            "description": "<p>Update object.</p>"
+            "field": "name",
+            "description": "<p>Tên của HTX (tùy chọn).</p>"
           },
           {
-            "group": "Parameter",
-            "type": "Object",
+            "group": "query",
+            "type": "String",
             "optional": false,
-            "field": "update.set",
-            "description": "<p>phương thức update.</p>"
+            "field": "foreignName",
+            "description": "<p>Tên nước ngoài của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "abbreviationName",
+            "description": "<p>Tên viết tắt của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "logo",
+            "description": "<p>Logo của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Tình trạng họat động của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeID",
+            "description": "<p>Mã số của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "tax",
+            "description": "<p>Mã số thuế của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "surrgate",
+            "description": "<p>Người đại diện của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "director",
+            "description": "<p>Giám đốc của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Địa chỉ của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Số điện thoại của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "fax",
+            "description": "<p>Số fax của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "website",
+            "description": "<p>Địa chỉ website của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String",
+            "optional": false,
+            "field": "representOffice",
+            "description": "<p>Địa chỉ văn phòng đại diện của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "query",
+            "type": "String[]",
+            "optional": false,
+            "field": "docs",
+            "description": "<p>Danh sách file liên quan của HTX (tùy chọn).</p>"
+          }
+        ],
+        "body": [
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của HTX trong CSDL (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "foreignName",
+            "description": "<p>Tên nước ngoài của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "abbreviationName",
+            "description": "<p>Tên viết tắt của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "logo",
+            "description": "<p>Logo của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Tình trạng họat động của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeID",
+            "description": "<p>Mã số của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "tax",
+            "description": "<p>Mã số thuế của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "surrgate",
+            "description": "<p>Người đại diện của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "director",
+            "description": "<p>Giám đốc của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Địa chỉ của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Số điện thoại của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "fax",
+            "description": "<p>Số fax của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "website",
+            "description": "<p>Địa chỉ website của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String",
+            "optional": false,
+            "field": "representOffice",
+            "description": "<p>Địa chỉ văn phòng đại diện của HTX (tùy chọn).</p>"
+          },
+          {
+            "group": "body",
+            "type": "String[]",
+            "optional": false,
+            "field": "docs",
+            "description": "<p>Danh sách file liên quan của HTX (tùy chọn).</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n\t\"query\":{\n\t\t\"_id\": \"5dece63aa343bc1aad4b2565\"\n\t},\n\t\"update\":{\n\t\t\"$set\":{\n\t\t\t\"name\":\"Hop tac xa nong thon moi2\"\n\n\t\t}\n\t}\n}",
+          "content": "{\n    \"name\": \"Hop tac xa u minh ha\"\n\n}",
           "type": "json"
         }
       ]
     },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf",
+        "type": "curl"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "json",
             "optional": false,
-            "field": "nModified",
+            "field": "successMessage",
             "description": "<p>Số documents đã được update.</p>"
           }
         ]
@@ -412,7 +716,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"successMessage\": \"Số lượng dữ liệu đã chỉnh sửa: 4\"\n}",
           "type": "json"
         }
       ]
@@ -453,7 +757,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Cooperatives"
   },
@@ -461,6 +764,7 @@ define({ "api": [
     "type": "post",
     "url": "/api/cooperatives",
     "title": "Thêm HTX mới",
+    "version": "0.1.0",
     "name": "PostCooperatives",
     "group": "Cooperatives",
     "examples": [
@@ -756,23 +1060,16 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Cooperatives"
   },
   {
     "type": "post",
     "url": "/api/diaries",
-    "title": "Xóa HTX.",
+    "title": "Tạo nhật ký mới.",
+    "version": "0.1.0",
     "name": "PostDiaries",
     "group": "Diaries",
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/Diaries",
-        "type": "curl"
-      }
-    ],
     "header": {
       "fields": {
         "Header": [
@@ -788,48 +1085,48 @@ define({ "api": [
     },
     "parameter": {
       "fields": {
-        "Parameter": [
+        "body": [
           {
-            "group": "Parameter",
+            "group": "body",
             "type": "String",
             "optional": false,
             "field": "plant_id",
             "description": "<p>ID của loại cây trồng.</p>"
           },
           {
-            "group": "Parameter",
+            "group": "body",
             "type": "String[]",
             "optional": false,
             "field": "area_id",
             "description": "<p>ID của khu vực gieo trồng.</p>"
           },
           {
-            "group": "Parameter",
+            "group": "body",
             "type": "String",
             "optional": false,
             "field": "HTX_id",
             "description": "<p>ID của HTX.</p>"
           },
           {
-            "group": "Parameter",
+            "group": "body",
             "type": "Number",
             "optional": false,
             "field": "begin",
-            "description": "<p>Thời gian bắt đầu mùa vụ (dạng time-stem-unix)).</p>"
+            "description": "<p>Thời gian bắt đầu mùa vụ (dạng ISO-8601)).</p>"
           },
           {
-            "group": "Parameter",
+            "group": "body",
             "type": "Number",
             "optional": false,
             "field": "end",
-            "description": "<p>Thời gian kết thúc mùa vụ (dạng time-stem-unix)).</p>"
+            "description": "<p>Thời gian kết thúc mùa vụ (dạng ISO-8601)).</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n\t\"query\":{\n        \"_id\": \"5de66297c78c93258003b0d0\"\n\t}\n}",
+          "content": "{\n\t\"plant_id\":\"dfejdkfsdh\",\n\t\"fields\":[\"5dedc932bad8e32650d38788\",\"5dedc93ebad8e32650d38789\"],\n\t\"HTX_id\":\"UM\",\n\t\"begin\":\"2019-12-13 04:14\",\n\t\"end\":\"2019-12-15 17:20\"\n}",
           "type": "json"
         }
       ]
@@ -841,15 +1138,50 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
+            "field": "plant_id",
+            "description": "<p>ID của loại cây trồng.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "area_id",
+            "description": "<p>ID của khu vực gieo trồng.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "HTX_id",
+            "description": "<p>ID của HTX.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "begin",
+            "description": "<p>Thời gian bắt đầu mùa vụ (dạng ISO-8601)).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "end",
+            "description": "<p>Thời gian kết thúc mùa vụ (dạng ISO-8601)).</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của nhật ký trong CSDL.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"plant_id\": \"dfejdkfsdh\",\n    \"fields\": [\n        \"5dedc932bad8e32650d38788\",\n        \"5dedc93ebad8e32650d38789\"\n    ],\n    \"HTX_id\": \"UM\",\n    \"begin\": \"2019-12-12T21:14:00.000Z\",\n    \"end\": \"2019-12-15T10:20:00.000Z\",\n    \"_id\": \"5df32bce13f76d331d8fa1ec\"\n}",
           "type": "json"
         }
       ]
@@ -861,14 +1193,56 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "Permission-denied",
-            "description": "<p>Token khong hop le</p>"
+            "description": "<p>Token không hợp lệ.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Loai-cay-trong-khong-hop-le",
+            "description": "<p>Loại cây trồng không hợp lệ.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Khu-vuc-khong-hop-le",
+            "description": "<p>Khu vực không hợp lệ.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "HTX-khong-hop-le",
+            "description": "<p>Hợp tác xã không hợp lệ.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ngay-bat-dau-khong-hop-le",
+            "description": "<p>Ngày bắt đầu không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ngay-ket-thuc-khong-hop-le",
+            "description": "<p>Ngày kết thúc không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Thua-",
+            "description": "<p>{}-Dang-duoc-su-dung thửa đang được sử dụng</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Loi-trong-qua-trinh-them-vao-CSDL",
+            "description": "<p>Lỗi trong qúa trình thêm vào CSDL</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Nothing to update\"\n    }",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Lỗi trong qúa trình thêm vào CSDL\"\n    }",
           "type": "json"
         }
       ]
@@ -878,7 +1252,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Diaries"
   },
@@ -2824,6 +3197,7 @@ define({ "api": [
     "type": "post",
     "url": "/resources",
     "title": "Them resource can quan ly quyen",
+    "version": "0.1.0",
     "name": "PostResource",
     "group": "Resource",
     "examples": [
@@ -2986,7 +3360,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Resource"
   },
@@ -2994,6 +3367,7 @@ define({ "api": [
     "type": "post",
     "url": "/roles",
     "title": "Them phuong thuc moi",
+    "version": "0.1.0",
     "name": "PostRole",
     "group": "Role",
     "examples": [
@@ -3107,7 +3481,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Role"
   },
@@ -3115,6 +3488,7 @@ define({ "api": [
     "type": "post",
     "url": "/refresh_token",
     "title": "Xac thuc lay access token moi",
+    "version": "0.1.0",
     "name": "PostToken",
     "group": "Token",
     "examples": [
@@ -3201,7 +3575,6 @@ define({ "api": [
         "name": "none"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "Token"
   },
@@ -3209,6 +3582,7 @@ define({ "api": [
     "type": "get",
     "url": "/users/me",
     "title": "Get user info from token",
+    "version": "0.1.0",
     "name": "CheckToken",
     "group": "User",
     "examples": [
@@ -3352,7 +3726,6 @@ define({ "api": [
         "name": "none"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "User"
   },
@@ -3360,6 +3733,7 @@ define({ "api": [
     "type": "post",
     "url": "/users",
     "title": "Create new user",
+    "version": "0.1.0",
     "name": "CreateUser",
     "group": "User",
     "examples": [
@@ -3391,6 +3765,13 @@ define({ "api": [
             "optional": false,
             "field": "name",
             "description": "<p>Ten nguoi su dung</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ảnh đại diện của user.</p>"
           },
           {
             "group": "Parameter",
@@ -3446,7 +3827,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"name\": \"Nguyen Van Loi\",\n  \"personalId\":\"384736273\",\n  \"address\": \"Ninh Kieu, Can Tho\",\n  \"phone\": \"093827463\",\n  \"email\": \"admin@gmail.com\",\n  \"user\": \"user\",\n  \"HTXId\": \"dowidnfjd\",\n  \"password\": \"123456\"\n}",
+          "content": "{\n  \"name\": \"Nguyen Van Loi\",\n  \"avatar\": file,\n  \"personalId\":\"384736273\",\n  \"address\": \"Ninh Kieu, Can Tho\",\n  \"phone\": \"093827463\",\n  \"email\": \"admin@gmail.com\",\n  \"user\": \"user\",\n  \"HTXId\": \"dowidnfjd\",\n  \"password\": \"123456\"\n}",
           "type": "json"
         }
       ]
@@ -3460,6 +3841,13 @@ define({ "api": [
             "optional": false,
             "field": "name",
             "description": "<p>Ten nguoi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ten file avatar</p>"
           },
           {
             "group": "Success 200",
@@ -3515,7 +3903,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"name\": \"Nguyen Quang Khai\",\n    \"personalId\": \"381823821\",\n    \"address\": \"14/132, 3/2 street, Ninh Kieu, Can Tho\",\n    \"email\": \"vanloi10c@gmail.com\",\n    \"user\": \"user\",\n    \"HTXId\": \"115\",\n    \"created\": \"2019-11-12T12:13:24.216Z\",\n    \"_id\": \"5dcaa1e4e363dc1df58f0317\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"name\": \"Nguyen Quang Khai\",\n    \"avatar\": \"http://localhost:3003/image-1576222546040.png\",\n    \"personalId\": \"381823821\",\n    \"address\": \"14/132, 3/2 street, Ninh Kieu, Can Tho\",\n    \"email\": \"vanloi10c@gmail.com\",\n    \"user\": \"user\",\n    \"HTXId\": \"115\",\n    \"created\": \"2019-11-12T12:13:24.216Z\",\n    \"_id\": \"5dcaa1e4e363dc1df58f0317\"\n}",
           "type": "json"
         }
       ]
@@ -3568,7 +3956,6 @@ define({ "api": [
         "name": "none"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "User"
   },
@@ -3576,6 +3963,7 @@ define({ "api": [
     "type": "get",
     "url": "/users/:userId",
     "title": "Get user info from id",
+    "version": "0.1.0",
     "name": "GetUser",
     "group": "User",
     "examples": [
@@ -3723,7 +4111,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "User"
   },
@@ -3731,6 +4118,7 @@ define({ "api": [
     "type": "post",
     "url": "/login",
     "title": "Login user",
+    "version": "0.1.0",
     "name": "LoginUser",
     "group": "User",
     "examples": [
@@ -3830,7 +4218,6 @@ define({ "api": [
         "name": "none"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "User"
   },
@@ -3838,6 +4225,7 @@ define({ "api": [
     "type": "patch",
     "url": "/users",
     "title": "Update users info",
+    "version": "0.1.0",
     "name": "PatchUsers",
     "group": "User",
     "examples": [
@@ -3964,7 +4352,6 @@ define({ "api": [
         "name": "manager-admin"
       }
     ],
-    "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "User"
   },
@@ -3992,8 +4379,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });

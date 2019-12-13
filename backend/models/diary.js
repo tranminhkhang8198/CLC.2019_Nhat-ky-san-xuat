@@ -22,10 +22,9 @@ class Diary {
     validate(diary, cb = () => { }) {
 
         const collection = this.app.db.collection('diaries');
-        console.log(diary)
         const validations = {
             plant_id: {
-                errorMessage: "Loai cay trong khong hop le",
+                errorMessage: "Loại cây trồng không hợp lệ",
                 doValidate: () => {
                     const plant_id = _.get(diary, 'plant_id', null);
                     if (plant_id == null) {
@@ -35,7 +34,7 @@ class Diary {
                 }
             },
             fields: {
-                errorMessage: "Khu vuc khong hop le",
+                errorMessage: "Khu vực không hợp lệ",
                 doValidate: () => {
                     const fields = _.get(diary, 'fields', []);
                     if (fields.length === 0) {
@@ -45,7 +44,7 @@ class Diary {
                 }
             },
             HTX_id: {
-                errorMessage: "HTX khong hop le",
+                errorMessage: "Hợp tác xã không hợp lệ",
                 doValidate: () => {
                     const HTX_id = _.get(diary, 'HTX_id', null);
                     if (HTX_id == null) {
@@ -55,17 +54,17 @@ class Diary {
                 }
             },
             begin: {
-                errorMessage: "Ngay bat dau khong hop le",
+                errorMessage: "Ngày bắt đầu không hợp lệ",
                 doValidate: () => {
-                    const begin = _.get(diary, 'begin', '');
-                    return true;
+                    const begin = _.get(diary, 'begin', null);
+                    return this.isValidDate(begin) ? true : false;
                 }
             },
             end: {
-                errorMessage: "Ngay ket thuc khong hop le",
+                errorMessage: "Ngày kết thúc không hợp lệ",
                 doValidate: () => {
-                    const end = _.get(diary, 'end', '')
-                    return true;
+                    const end = _.get(diary, 'end', null);
+                    return this.isValidDate(end) ? true : false;
                 }
             }
 
@@ -95,12 +94,10 @@ class Diary {
                     $in: fields
                 }
             }
-            console.log(typeof (fields[0]))
             const options = {
 
             }
             collection.find(query, options).toArray((err, result) => {
-                console.log("result is", result);
                 if (err || result.length <= 0) {
                     return err ? cb({ errorMessage: "Khu vực không hợp lệ" }, null) : cb({ errorMessage: "Khu vực gieo trồng không tồn tại" }, null);
                 }
@@ -111,20 +108,24 @@ class Diary {
                             // return cb({ errorMessage: "Khu vực đang được sử dụng" }, null)
                             busy.push(field._id);
                         }
-                        if (busy.length) {
-                            const err = _.join(busy, ',');
-                            return cb({ errorMessage: `thửa ${err} đang được sử dụng` }, null);
-                        }
-                        else {
-                            return cb(null, diary);
-                        }
+
                     })
+                    if (busy.length) {
+                        const err = _.join(busy, ',');
+                        return cb({ errorMessage: `thửa ${err} đang được sử dụng` }, null);
+                    }
+                    else {
+                        return cb(null, diary);
+                    }
 
                 }
             })
         }
 
 
+    }
+    isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
     }
 
     search(params, cb = () => { }) {
@@ -136,7 +137,7 @@ class Diary {
         const pageNumber = _.get(params, 'pageNumber', 0);
         collection.find(query, options).limit(resultNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
             if (err) {
-                return cb({ errMessage: "Loi trong qua trinh tim kiem" }, null);
+                return cb({ errMessage: "Lỗi trong quá trình tìm kiếm" }, null);
             }
             else {
                 return cb(null, result);
@@ -145,31 +146,35 @@ class Diary {
     }
 
     create(params, cb = () => { }) {
-        const obj = {
-            plant_id: params.plant_id,
-            fields: params.fields,
-            HTX_id: params.HTX_id,
-            begin: params.begin,
-            end: params.end
+
+        let obj = {
+            plant_id: _.get(params, 'plant_id', null),
+            fields: _.get(params, 'fields', []),
+            HTX_id: _.get(params, 'HTX_id', null),
+            begin: new Date(_.get(params, 'begin', null)),
+            end: new Date(_.get(params, 'end', null))
         }
 
-        this.validate(obj, (err, diary) => {
-            if (err) {
-                return cb({ errorMessage: err.errorMessage }, null);
+        this.validate(obj, (validateErr, diary) => {
+            if (validateErr) {
+                return cb({ errorMessage: validateErr.errorMessage }, null);
             }
             else {
                 const collection = this.app.db.collection('diaries');
-                collection.insert(diary, (err, result) => {
+                collection.insertOne(diary, (err, result) => {
                     if (err) {
-                        return cb({ errorMessage: "Loi trong qua trinh them vao csdl" }, null)
+                        console.log("insert error", err);
+                        return cb({ errorMessage: "Lỗi trong qúa trình thêm vào CSDL" }, null)
                     }
                     else {
-                        return cb(null, result.ops[0]);
+                        // TODO: Thay đổi trạng thái của khu vực được gieo trồng
+                        return cb(null, diary);
                     }
                 })
             }
         })
     }
+
 
     update(params, cb = () => { }) {
         const collection = this.app.db.collection('diaries');
