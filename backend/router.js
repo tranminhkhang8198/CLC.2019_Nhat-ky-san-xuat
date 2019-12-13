@@ -1408,10 +1408,34 @@ exports.routers = app => {
      * @apiError GHS-must-be-a-number Trường GHS phải là số
      * @apiError WHO-must-be-a-number Trường WHO phải là số
      * @apiError PHI-must-be-a-number Trường PHI phải là số
-     * @apiErrorExample Error-Response:
+     * @apiErrorExample Thuốc bvtv tồn tại:
      *     HTTP/1.1 409 Conflict
      *     {
      *       "errorMessage": "Thuốc bảo vệ thực vật với tên '" + name + "' đã tồn tại."
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường tên thuốc bvtv:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập tên thuốc bvtv"
+     *     }
+     * 
+     * @apiErrorExample Trường WHO phải là số:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Trường WHO phải là số"
+     *     }
+     * 
+     * @apiErrorExample Trường GHS phải là số:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Trường GHS phải là số"
+     *     }
+     * 
+     * @apiErrorExample Trường PHI phải là số:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Trường PHI phải là số"
      *     }
      * @apiPermission none
      */
@@ -1419,7 +1443,7 @@ exports.routers = app => {
         const body = req.body;
 
         app.models.plantProtectionProduct.create(body, (err, info) => {
-            return err ? errorHandle(res, err, 201) : responseHandle(res, info);
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
         });
     });
 
@@ -1839,10 +1863,16 @@ exports.routers = app => {
      *
      * @apiError Name-is-required Thiếu trường tên phân bón
      * @apiError Fertilizer-exists Phân bón đã tồn tại
-     * @apiErrorExample Error-Response:
+     * @apiErrorExample Phân bón tồn tại:
      *     HTTP/1.1 409 Conflict
      *     {
-     *       "errorMessage": "Phân bón với tên '" + name + "' đã tồn tại."
+     *       "errorMessage": "Phân bón với tên '" + name + "' đã tồn tại"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường tên phân bón:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập tên phân bón"
      *     }
      * @apiPermission none
      */
@@ -1850,7 +1880,7 @@ exports.routers = app => {
         const body = req.body;
 
         app.models.fertilizer.create(body, (err, info) => {
-            return err ? errorHandle(res, err.errorMessage, 404) : responseHandle(res, info);
+            return err ? errorHandle(res, err.errorMessage, 409) : responseHandle(res, info, 201);
         });
     });
 

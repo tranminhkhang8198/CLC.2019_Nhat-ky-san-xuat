@@ -70,7 +70,7 @@ class PlantProtectionProduct {
 
     const validations = {
       name: {
-        errorMessage: "Vui lòng nhập tên phân bón!",
+        errorMessage: "Vui lòng nhập tên thuốc bảo vệ thực vật!",
         doValidate: () => {
           const name = _.get(plantProtectionProduct, "name", "");
 
