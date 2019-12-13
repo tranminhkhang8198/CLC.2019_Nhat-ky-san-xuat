@@ -7,6 +7,6 @@ Command: node importDatabaseThuocBvtv.js
 
 ### Import database phân bón
 ```bash
-Source: /backend/utils/importDatabseThuocBvtv.js
-Command: node importDatabaseThuocBvtv.js
+Source: /backend/utils/importDatabsePhanBon.js
+Command: node importDatabasePhanBon.js
 ```
