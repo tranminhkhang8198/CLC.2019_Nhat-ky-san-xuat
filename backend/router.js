@@ -1,4 +1,6 @@
 const _ = require("lodash");
+const upload = require("./models/multer");
+
 
 exports.routers = app => {
     /**
@@ -107,6 +109,7 @@ exports.routers = app => {
 
     /**
      * @api {post} /users Create new user
+     * @apiVersion 0.1.0
      * @apiName CreateUser
      * @apiGroup User
      * @apiExample {curl} Example usage:
@@ -115,6 +118,7 @@ exports.routers = app => {
      * @apiHeader {String} authorization Token.
      *
      * @apiParam {String} name Ten nguoi su dung
+     * @apiParam {File} avatar Ảnh đại diện của user.
      * @apiParam {String} personalId So CMND cua nguoi su dung
      * @apiParam {String} address Địa chỉ cua nguoi su dung
      * @apiParam {String} phone So dien thoai cua nguoi su dung
@@ -126,6 +130,7 @@ exports.routers = app => {
      * @apiParamExample {json} Request-Example:
      *     {
      *       "name": "Nguyen Van Loi",
+     *       "avatar": file,
      *       "personalId":"384736273",
      *       "address": "Ninh Kieu, Can Tho",
      *       "phone": "093827463",
@@ -136,6 +141,7 @@ exports.routers = app => {
      *     }
      *
      * @apiSuccess {String} name Ten nguoi su dung
+     * @apiSuccess {String} avatar Ten file avatar
      * @apiSuccess {String} personalId So CMND cua nguoi su dung
      * @apiSuccess {String} phone So dien thoai cua nguoi su dung
      * @apiSuccess {String} email Địa chỉ email cua nguoi su dung
@@ -148,6 +154,7 @@ exports.routers = app => {
      *  HTTP/1.1 200 OK
      *  {
      *      "name": "Nguyen Quang Khai",
+     *      "avatar": "http://localhost:3003/image-1576222546040.png",
      *      "personalId": "381823821",
      *      "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
      *      "email": "vanloi10c@gmail.com",
@@ -169,8 +176,13 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-    app.post("/api/users/", (req, res, next) => {
+    app.post("/api/users/", upload.single('avatar'), (req, res, next) => {
+        let avatar = "http://localhost:3003/default.png"
+        if (req.file) {
+            avatar = "http://localhost:3003/" + req.file.filename;
+        }
         const body = req.body;
+        _.set(body, 'avatar', avatar);
         const resource = "user";
         verifyUser(req, resource, (err, result) => {
             if (err) {
@@ -192,8 +204,18 @@ exports.routers = app => {
         });
     });
 
+    app.post('/upload', upload.single('avatar'), (req, res, next) => {
+        console.log(req.file);
+        if (!req.file) {
+            res.status(500);
+            return next(err);
+        }
+        res.json({ fileUrl: 'http://192.168.0.7:3001/images/' + req.file.filename });
+    })
+
     /**
      * @api {post} /login Login user
+     * @apiVersion 0.1.0
      * @apiName LoginUser
      * @apiGroup User
      * @apiExample {curl} Example usage:
@@ -265,7 +287,7 @@ exports.routers = app => {
         if (refreshToken) {
             app.db.models.token.remove(refreshToken, (err, result) => {
                 if (err) {
-                    return errorHandle(res, err.errorMessage, 403);
+                    return errorHandle(res, "err.errorMessage", 403);
                 } else {
                     return responseHandle(res, result);
                 }
@@ -275,6 +297,7 @@ exports.routers = app => {
 
     /**
      * @api {post} /refresh_token Xac thuc lay access token moi
+     * @apiVersion 0.1.0
      * @apiName PostToken
      * @apiGroup Token
      * @apiExample {curl} Example usage:
@@ -324,6 +347,7 @@ exports.routers = app => {
 
     /**
      * @api {get} /users/me Get user info from token
+     * @apiVersion 0.1.0
      * @apiName CheckToken
      * @apiGroup User
      *
@@ -392,6 +416,7 @@ exports.routers = app => {
 
     /**
      * @api {get} /users/:userId Get user info from id
+     * @apiVersion 0.1.0
      * @apiName GetUser
      * @apiGroup User
      *
@@ -461,6 +486,7 @@ exports.routers = app => {
 
     /**
      * @api {patch} /users Update users info
+     * @apiVersion 0.1.0
      * @apiName PatchUsers
      * @apiGroup User
      *
@@ -524,6 +550,7 @@ exports.routers = app => {
 
     /**
      * @api {post} /roles Them phuong thuc moi
+     * @apiVersion 0.1.0
      * @apiName PostRole
      * @apiGroup Role
      *
@@ -576,6 +603,7 @@ exports.routers = app => {
 
     /**
      * @api {post} /resources Them resource can quan ly quyen
+     * @apiVersion 0.1.0
      * @apiName PostResource
      * @apiGroup Resource
      *
@@ -644,6 +672,7 @@ exports.routers = app => {
 
     /**
      * @api {get} /api/cooperatives Tìm kiếm thông tin HTX.
+     * @apiVersion 0.1.0
      * @apiName GetCooperatives
      * @apiGroup Cooperatives
      *
@@ -725,6 +754,7 @@ exports.routers = app => {
 
     /**
      * @api {post} /api/cooperatives Thêm HTX mới
+     * @apiVersion 0.1.0
      * @apiName PostCooperatives
      * @apiGroup Cooperatives
      *
@@ -838,37 +868,61 @@ exports.routers = app => {
 
     /**
      * @api {patch} /api/cooperatives Cập nhật thông tin của HTX.
+     * @apiVersion 0.1.0
      * @apiName PatchCooperatives
      * @apiGroup Cooperatives
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/cooperatives
-     *
      * @apiHeader {String} authorization Token.
      * 
-     * @apiParam {Object} query filter cho tác vụ update.
-     * @apiParam {Object} update Update object.
-     * @apiParam {Object} update.set phương thức update.
+     * @apiParam (query) {String} _id ID của HTX trong CSDL (tùy chọn).
+     * @apiParam (query) {String} name Tên của HTX (tùy chọn).
+     * @apiParam (query) {String} foreignName Tên nước ngoài của HTX (tùy chọn).
+     * @apiParam (query) {String} abbreviationName Tên viết tắt của HTX (tùy chọn).
+     * @apiParam (query) {String} logo Logo của HTX (tùy chọn).
+     * @apiParam (query) {String} status Tình trạng họat động của HTX (tùy chọn).
+     * @apiParam (query) {String} cooperativeID Mã số của HTX (tùy chọn).
+     * @apiParam (query) {String} tax Mã số thuế của HTX (tùy chọn).
+     * @apiParam (query) {String} surrgate Người đại diện của HTX (tùy chọn).
+     * @apiParam (query) {String} director Giám đốc của HTX (tùy chọn).
+     * @apiParam (query) {String} address Địa chỉ của HTX (tùy chọn).
+     * @apiParam (query) {String} phone Số điện thoại của HTX (tùy chọn).
+     * @apiParam (query) {String} fax Số fax của HTX (tùy chọn).
+     * @apiParam (query) {String} website Địa chỉ website của HTX (tùy chọn).
+     * @apiParam (query) {String} representOffice Địa chỉ văn phòng đại diện của HTX (tùy chọn).
+     * @apiParam (query) {String[]} docs Danh sách file liên quan của HTX (tùy chọn).
+     * 
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf
+     * 
+     * @apiParam (body) {String} _id ID của HTX trong CSDL (tùy chọn).
+     * @apiParam (body) {String} name Tên của HTX (tùy chọn).
+     * @apiParam (body) {String} foreignName Tên nước ngoài của HTX (tùy chọn).
+     * @apiParam (body) {String} abbreviationName Tên viết tắt của HTX (tùy chọn).
+     * @apiParam (body) {String} logo Logo của HTX (tùy chọn).
+     * @apiParam (body) {String} status Tình trạng họat động của HTX (tùy chọn).
+     * @apiParam (body) {String} cooperativeID Mã số của HTX (tùy chọn).
+     * @apiParam (body) {String} tax Mã số thuế của HTX (tùy chọn).
+     * @apiParam (body) {String} surrgate Người đại diện của HTX (tùy chọn).
+     * @apiParam (body) {String} director Giám đốc của HTX (tùy chọn).
+     * @apiParam (body) {String} address Địa chỉ của HTX (tùy chọn).
+     * @apiParam (body) {String} phone Số điện thoại của HTX (tùy chọn).
+     * @apiParam (body) {String} fax Số fax của HTX (tùy chọn).
+     * @apiParam (body) {String} website Địa chỉ website của HTX (tùy chọn).
+     * @apiParam (body) {String} representOffice Địa chỉ văn phòng đại diện của HTX (tùy chọn).
+     * @apiParam (body) {String[]} docs Danh sách file liên quan của HTX (tùy chọn).
      * 
      * @apiParamExample {json} Request-Example:
      *  {
-     *  	"query":{
-     *  		"_id": "5dece63aa343bc1aad4b2565"
-     *  	},
-     *  	"update":{
-     *  		"$set":{
-     *  			"name":"Hop tac xa nong thon moi2"
+     *      "name": "Hop tac xa u minh ha"
      *  
-     *  		}
-     *  	}
      *  }
      *
-     * @apiSuccess {Number} nModified Số documents đã được update.
+     * @apiSuccess {json} successMessage Số documents đã được update.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "nModified": "4"
+     *      "successMessage": "Số lượng dữ liệu đã chỉnh sửa: 4"
      *  }
      * @apiError Permission-denied Token không hợp lệ.
      * @apiError ID-khong-hop-le ID không hợp lệ.
@@ -884,7 +938,8 @@ exports.routers = app => {
      */
     app.patch('/api/cooperatives', (req, res, next) => {
         const body = req.body;
-        app.models.cooperative.update(body, (err, result) => {
+        const query = req.query;
+        app.models.cooperative.update(query, body, (err, result) => {
             if (err) {
                 return errorHandle(res, err.errorMessage, 404);
             }
@@ -895,25 +950,36 @@ exports.routers = app => {
     })
 
     /**
-     * @api {delete} /api/cooperatives Request User information
+     * @api {delete} /api/cooperatives Xóa thông tin của HTX.
+     * @apiVersion 0.1.0
      * @apiName DeleteCooperatives
      * @apiGroup Cooperatives
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/cooperatives
+
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {Object} query Lọc danh sách các dữ liệu cần xóa.
-     * 
-     * @apiParamExample {json} Request-Example:
-     *  {
-     *  	"query":{
-     *          "_id": "5de66297c78c93258003b0d0"
-     *  	}
-     *  }
+     * @apiParam (query) {String} _id ID của HTX trong CSDL (tùy chọn).
+     * @apiParam (query) {String} name Tên của HTX (tùy chọn).
+     * @apiParam (query) {String} foreignName Tên nước ngoài của HTX (tùy chọn).
+     * @apiParam (query) {String} abbreviationName Tên viết tắt của HTX (tùy chọn).
+     * @apiParam (query) {String} logo Logo của HTX (tùy chọn).
+     * @apiParam (query) {String} status Tình trạng họat động của HTX (tùy chọn).
+     * @apiParam (query) {String} cooperativeID Mã số của HTX (tùy chọn).
+     * @apiParam (query) {String} tax Mã số thuế của HTX (tùy chọn).
+     * @apiParam (query) {String} surrgate Người đại diện của HTX (tùy chọn).
+     * @apiParam (query) {String} director Giám đốc của HTX (tùy chọn).
+     * @apiParam (query) {String} address Địa chỉ của HTX (tùy chọn).
+     * @apiParam (query) {String} phone Số điện thoại của HTX (tùy chọn).
+     * @apiParam (query) {String} fax Số fax của HTX (tùy chọn).
+     * @apiParam (query) {String} website Địa chỉ website của HTX (tùy chọn).
+     * @apiParam (query) {String} representOffice Địa chỉ văn phòng đại diện của HTX (tùy chọn).
+     * @apiParam (query) {String[]} docs Danh sách file liên quan của HTX (tùy chọn).
+     *  
+     * @apiExample {curl} Example usage:
+     *     curl -X DELETE http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf
      *
-     * @apiSuccess {String} responseMessage Thông báo đã xóa thành công dữ liệu.
+     * @apiSuccess {json} successMessage Thông báo đã xóa thành công dữ liệu.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -933,8 +999,8 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.delete('/api/cooperatives', (req, res, next) => {
-        const body = req.body;
-        app.models.cooperative.remove(body, (err, result) => {
+        const query = req.query;
+        app.models.cooperative.delete(query, (err, result) => {
             if (err) {
                 return errorHandle(res, err.errorMessage, 404);
             }
@@ -945,41 +1011,64 @@ exports.routers = app => {
     })
 
     /**
-     * @api {post} /api/diaries Xóa HTX.
+     * @api {post} /api/diaries Tạo nhật ký mới.
+     * @apiVersion 0.1.0
      * @apiName PostDiaries
      * @apiGroup Diaries
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/Diaries
      *
      * @apiHeader {String} authorization Token.
      * 
-     * @apiParam {String} plant_id ID của loại cây trồng.
-     * @apiParam {String[]} area_id ID của khu vực gieo trồng.
-     * @apiParam {String} HTX_id ID của HTX.
-     * @apiParam {Number} begin Thời gian bắt đầu mùa vụ (dạng time-stem-unix)).
-     * @apiParam {Number} end Thời gian kết thúc mùa vụ (dạng time-stem-unix)).  
+     * @apiParam (body) {String} plant_id ID của loại cây trồng.
+     * @apiParam (body) {String[]} area_id ID của khu vực gieo trồng.
+     * @apiParam (body) {String} HTX_id ID của HTX.
+     * @apiParam (body) {Number} begin Thời gian bắt đầu mùa vụ (dạng ISO-8601)).
+     * @apiParam (body) {Number} end Thời gian kết thúc mùa vụ (dạng ISO-8601)).  
      * 
      * @apiParamExample {json} Request-Example:
      *  {
-     *  	"query":{
-     *          "_id": "5de66297c78c93258003b0d0"
-     *  	}
+     *  	"plant_id":"dfejdkfsdh",
+     *  	"fields":["5dedc932bad8e32650d38788","5dedc93ebad8e32650d38789"],
+     *  	"HTX_id":"UM",
+     *  	"begin":"2019-12-13 04:14",
+     *  	"end":"2019-12-15 17:20"
      *  }
+
      *
-     * @apiSuccess {String} firstname Firstname of the User.
-     *
+     * @apiSuccess {String} plant_id ID của loại cây trồng.
+     * @apiSuccess {String[]} area_id ID của khu vực gieo trồng.
+     * @apiSuccess {String} HTX_id ID của HTX.
+     * @apiSuccess {Number} begin Thời gian bắt đầu mùa vụ (dạng ISO-8601)).
+     * @apiSuccess {Number} end Thời gian kết thúc mùa vụ (dạng ISO-8601)). 
+     * @apiSuccess {String} _id ID của nhật ký trong CSDL.
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "nModified": "4"
+     *      "plant_id": "dfejdkfsdh",
+     *      "fields": [
+     *          "5dedc932bad8e32650d38788",
+     *          "5dedc93ebad8e32650d38789"
+     *      ],
+     *      "HTX_id": "UM",
+     *      "begin": "2019-12-12T21:14:00.000Z",
+     *      "end": "2019-12-15T10:20:00.000Z",
+     *      "_id": "5df32bce13f76d331d8fa1ec"
      *  }
-     * @apiError Permission-denied Token khong hop le
+     * @apiError Permission-denied Token không hợp lệ.
+     * @apiError Loai-cay-trong-khong-hop-le Loại cây trồng không hợp lệ.
+     * @apiError Khu-vuc-khong-hop-le Khu vực không hợp lệ.
+     * @apiError HTX-khong-hop-le Hợp tác xã không hợp lệ.
+     * @apiError Ngay-bat-dau-khong-hop-le Ngày bắt đầu không hợp lệ
+     * @apiError Ngay-ket-thuc-khong-hop-le Ngày kết thúc không hợp lệ
+     * @apiError Khu-vuc-khong-hop-le Khu vực không hợp lệ
+     * @apiError Thua-{}-Dang-duoc-su-dung thửa đang được sử dụng
+     * @apiError Loi-trong-qua-trinh-them-vao-CSDL Lỗi trong qúa trình thêm vào CSDL
      *
+     * 
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *     {
-     *       "error": "Nothing to update"
+     *       "error": "Lỗi trong qúa trình thêm vào CSDL"
      *     }
      * 
      * @apiPermission manager-admin
@@ -987,12 +1076,7 @@ exports.routers = app => {
     app.post('/api/diaries', (req, res, next) => {
         const body = req.body;
         app.models.diary.create(body, (err, result) => {
-            if (err) {
-                return errorHandle(res, err.errorMessage, 404);
-            }
-            else {
-                return responseHandle(res, result);
-            }
+            return err ? errorHandle(res, err.errorMessage, 400) : responseHandle(res, result);
         })
     })
 

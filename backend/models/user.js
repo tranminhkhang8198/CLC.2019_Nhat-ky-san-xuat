@@ -1,3 +1,5 @@
+
+
 const _ = require('lodash');
 const { OrderedMap } = require('immutable');
 const bcrypt = require('bcrypt');
@@ -75,6 +77,13 @@ class User {
                         return true;
                     }
                     return false;
+                }
+            },
+            avatar: {
+                errorMessage: "Logo không hợp lệ",
+                doValidate: () => {
+                    const logo = _.get(user, 'logo', '');
+                    return true
                 }
             },
             personalId: {
@@ -183,9 +192,10 @@ class User {
     create(user = {}, cb = () => { }) {
 
         const collection = this.app.db.collection('user');
-
+        const avatar = user.avatar;
         let obj = {
             name: _.toString(_.get(user, 'name', '')),
+            avatar: _.toString(_.get(user, 'avatar', '')),
             personalId: _.toString(_.get(user, 'personalId')),
             address: _.toString(_.get(user, 'address')),
             phone: _.toString(_.get(user, 'phone')),
