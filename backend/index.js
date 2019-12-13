@@ -1,9 +1,10 @@
 const http = require('http');
 const bodyParser = require('body-parser');
 const express = require('express');
-const {routers} = require('./router')
-const {connect} = require('./db')
-const {dbName} = require('./config')
+const cors = require('cors');
+const { routers } = require('./router')
+const { connect } = require('./db')
+const { dbName } = require('./config')
 const Model = require('./models')
 
 const PORT = 3001;
@@ -17,6 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
 app.use(bodyParser.json());
 
+// allow CORS in header
+app.use(cors());
+
 app.server = http.createServer(app);
 
 
@@ -28,7 +32,7 @@ app.routers = routers(app)
 //connect to mongodb
 connect((err, client) => {
 
-    if(err){
+    if (err) {
         throw err;
     }
 
