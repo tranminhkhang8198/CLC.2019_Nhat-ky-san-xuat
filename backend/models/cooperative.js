@@ -291,24 +291,28 @@ class Cooperative {
 
 		collection.find(query, options).limit(resultNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
 			if (err) {
-				return cb({ errMessage: "Loi trong qua trinh tim kiem" }, null);
+				return cb({ errorMessage: "Loi trong qua trinh tim kiem" }, null);
 			}
 			else {
-				return cb(null, { records: result });
+				return cb(null, result);
 			}
 		})
 	}
-	remove(params, cb = () => { }) {
+	delete(query, cb = () => { }) {
 		const collection = this.app.db.collection('cooperatives');
-		const query = _.get(params, 'query', null);
 		console.log(query);
 		if (query === null || Object.getOwnPropertyNames(query).length === 0) {
 			return cb({ errorMessage: "Tác vụ yêu cầu phải có điều kiện" }, null);
 		}
 		var _id = _.get(query, "_id", null);
 		if (_id != null) {
-			_id = new ObjectID(_id);
-			_.set(query, '_id', _id);
+			try {
+				_id = new ObjectID(_id);
+				_.set(query, '_id', _id);
+			} catch (error) {
+				return cb({ errorMessage: "ID khong hop le" }, null);
+			}
+
 		}
 
 		collection.deleteMany(query, (err, result) => {
@@ -319,7 +323,7 @@ class Cooperative {
 			}
 			else {
 
-				return cb(null, { responseMessage: `Xóa thành công: ${result.result.n} dữ liệu` });
+				return cb(null, { successMessage: `Xóa thành công: ${result.result.n} dữ liệu` });
 			}
 		})
 
@@ -328,20 +332,20 @@ class Cooperative {
 
 	}
 
-	update(params, cb = () => { }) {
+	update(query, update, cb = () => { }) {
 		const collection = this.app.db.collection('cooperatives');
 		const method = "patch";
-		var query = params.query;
-		var updateData = params.update;
-		const updateObj = _.get(updateData, '$set', '');
-		this.validate(updateObj, method, (err, validUpdateObj) => {
+		var updateData = {
+			$set: update
+		};
+		this.validate(update, method, (err, validUpdateObj) => {
 			if (err) {
 				return cb({ errorMessage: err.errorMessage }, null);
 			}
 			else {
 				if (query._id) {
 					try {
-						query._id = new ObjectID(query._id);
+						_.set(query, '_id', new ObjectID(query._id));
 
 					} catch (error) {
 						return cb({ errorMessage: "ID khong hop le" }, null);
@@ -350,12 +354,10 @@ class Cooperative {
 
 				collection.updateMany(query, updateData, { returnNewDocument: true }, (err, result) => {
 					if (err || result.result.nModified == 0) {
-						console.log("err: ", result);
 						return err ? cb({ errorMessage: "Loi trong qua trinh cap nhat thong tin HTX" }, null) : cb({ errorMessage: "Nothing to update" }, null);
 					}
 					else {
-						console.log("query result", result);
-						return cb(null, { nModified: `${result.result.nModified}` });
+						return cb(null, { successMessage: `Số lượng dữ liệu đã chỉnh sửa: ${result.result.nModified}` });
 					}
 				})
 			}

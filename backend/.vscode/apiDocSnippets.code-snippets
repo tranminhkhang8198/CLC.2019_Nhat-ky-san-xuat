@@ -12,11 +12,10 @@
 		"body": [
 			"/**",
 			" * @api {get} /user/:id Request User information",
+			" * @apiVersion 0.1.0",
 			" * @apiName GetUser",
 			" * @apiGroup User",
 			" *",
-			" * @apiExample {curl} Example usage:",
-			" *     curl -i http://localhost:3001/api/resources",
 			" *",
 			" * @apiHeader {String} authorization Token.",
 			" *",
