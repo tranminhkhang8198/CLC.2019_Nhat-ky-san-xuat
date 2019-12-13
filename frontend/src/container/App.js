@@ -34,10 +34,7 @@ function App() {
 
   const renderNavItem = (Component) => (
     <div id="wrapper">
-<<<<<<< HEAD
-=======
       <LeftNavbar navItems={navItems} />
->>>>>>> 627625dd0ffe8baa8c1681c8cff42ca2a71c9e53
       <div className="d-flex flex-column" id="content-wrapper">
         <div id="content">
           <TopNavbar />

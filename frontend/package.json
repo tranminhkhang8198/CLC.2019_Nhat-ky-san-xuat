@@ -22,23 +22,14 @@
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "5.1.0",
-<<<<<<< HEAD
-=======
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",
->>>>>>> 627625dd0ffe8baa8c1681c8cff42ca2a71c9e53
     "eslint-config-react-app": "^5.0.2",
     "eslint-loader": "3.0.2",
     "eslint-plugin-flowtype": "3.13.0",
     "eslint-plugin-react": "^7.16.0",
-    "eslint": "^6.6.0",
-    "eslint-config-airbnb": "^18.0.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-<<<<<<< HEAD
-=======
-    "eslint-plugin-react": "^7.16.0",
->>>>>>> 627625dd0ffe8baa8c1681c8cff42ca2a71c9e53
     "eslint-plugin-react-hooks": "^1.7.0",
     "rimraf": "^3.0.0",
     "file-loader": "3.0.1",
@@ -162,6 +153,5 @@
       "react-app"
     ]
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

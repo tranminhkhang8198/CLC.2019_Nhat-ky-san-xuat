@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-state */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { Component } from 'react';
@@ -5,6 +7,7 @@ import React, { Component } from 'react';
 import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
+
 
 const FAKE_DATA = [
   {
@@ -412,7 +415,55 @@ const FAKE_DATA = [
 
 // eslint-disable-next-line react/prefer-stateless-function
 class QuanTriThuocBVTV extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      items: [],
+    };
+  }
+
+  componentDidMount() {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM3ZDBiMTg1ZGY5NDJmZDQ2ODdkM2EiLCJuYW1lIjoiTmd1eWVuIFZhbiBMb2kiLCJwZXJzb25hbElkIjoiMzgxODIzODIxIiwiYWRkcmVzcyI6IjE0LzEzMiwgMy8yIHN0cmVldCwgTmluaCBLaWV1LCBDYW4gVGhvIiwicGhvbmUiOiIwODM2ODEwMjIxIiwiZW1haWwiOiJ2YW5sb2kxMGNAZ21haWwuY29tIiwidXNlciI6Im1hbmFnZXIiLCJIVFhJZCI6IjExNSIsInBhc3N3b3JkIjoiJDJiJDEwJE4xbzIvT05PZlR5S0xRdGczQ3JwLy5MLnBIU1Nkdy5YSWx6bWVaWVBkMWhCVHdxS3pRMnllIiwiY3JlYXRlZCI6IjIwMTktMTEtMTBUMDg6NTY6MTcuODM1WiIsImlhdCI6MTU3NDg3MjY1OSwiZXhwIjoxNTc0ODcyNzE5fQ.NUdhWOCjMkI57endmlTuRloEwxaxIGD3uPC1CHgQjmM';
+    fetch('http://localhost:3001/api/users/:me5dc7d0b185df942fd4687d3a', {
+      headers: {
+        Authorization: token,
+      },
+    }).then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            items: result,
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error,
+          });
+        },
+      );
+  }
+
+
   render() {
+    const { error, isLoaded, items } = this.state;
+    if (error) {
+      const a = (
+        <div>
+          Error:
+          {error.message}
+        </div>
+      );
+      return a;
+    } if (!isLoaded) {
+      return <div>Loading...</div>;
+    }
     return (
       <div className="container-fluid">
         <DeleteItemsModal />
@@ -435,7 +486,7 @@ class QuanTriThuocBVTV extends Component {
               </a>
             </div>
           </div>
-          <ListItems data={FAKE_DATA} />
+          <ListItems items />
         </div>
       </div>
     );
