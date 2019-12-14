@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unused-state */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable-next-line react/prefer-stateless-function */
@@ -30,7 +32,7 @@ class QuanTriThuocBVTV extends Component {
   async getData() {
     const { data } = await axios({
       method: 'GET',
-      url: 'http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20',
+      url: 'http://localhost:3001/api/plant-protection-products?pageNumber=1&nPerPage=20',
     });
 
     return data;
