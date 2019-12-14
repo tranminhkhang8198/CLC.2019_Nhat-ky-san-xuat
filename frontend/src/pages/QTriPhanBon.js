@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { Component } from 'react';
 
 import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
@@ -410,36 +411,92 @@ const FAKE_DATA = [
     'Loại thuốc': 'laser',
   },
 ];
+class QuanTriPhanBon extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      items: [],
+    };
+  }
 
-function QuanTriPhanBon() {
-  return (
-    <div className="container-fluid">
-      <DeleteItemsModal />
-      <AddItemModal />
-      <div className="card shadow">
-        <div className="card-header py-3">
-          <p className="text-primary m-0 font-weight-bold">Danh sách phân bón</p>
-          <div className="mt-3 d-flex flex-row justify-content-around">
-            <a href="/" className="btn btn-success btn-icon-split" role="button" data-toggle="modal" data-target="#modal-add">
-              <span className="text-white-50 icon">
-                <i className="fas fa-plus" />
-              </span>
-              <span className="text-white text">
-                Thêm mới dữ liệu
-              </span>
-            </a>
-            <a href="/" className="btn btn-danger btn-icon-split" role="button" data-toggle="modal" data-target="#modal-delete-items">
-              <span className="text-white-50 icon">
-                <i className="fas fa-trash" />
-              </span>
-              <span className="text-white text">Xóa dữ liệu</span>
-            </a>
-          </div>
+  componentDidMount() {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM3ZGEwMWI0N2NmNDM2OWIyNGQ4ZjYiLCJuYW1lIjoiTmd1eWVuIFZhbiBMb2kiLCJwZXJzb25hbElkIjoiMzgxODIzODIxIiwiYWRkcmVzcyI6IjE0LzEzMiwgMy8yIHN0cmVldCwgTmluaCBLaWV1LCBDYW4gVGhvIiwicGhvbmUiOiIwODM2ODEwMjIyIiwiZW1haWwiOiJ2YW5sb2kxMGNAZ21haWwuY29tIiwidXNlciI6ImFkbWluaXN0cmF0b3IiLCJIVFhJZCI6IjExNSIsInBhc3N3b3JkIjoiJDJiJDEwJEN0S3hscDQ4dWJ3VWlHMFNlSXdpd09JVE84SWh1c21pYjRIUmVzLk9kSlpXenE2NXV3dWlPIiwiY3JlYXRlZCI6IjIwMTktMTEtMTBUMDk6MzY6MDEuNDc5WiIsImlhdCI6MTU3NjI1MTM1MSwiZXhwIjoxNTc2MjUxNDExfQ.7eaTa9cuQp_KT76D0f8nJ-NJCKy-cZ-45b3vkcjC1kA';
+    fetch('http://localhost:3001/api/fertilizers?pageNumber=1&nPerPage=10', {
+      headers: {
+        Authorization: token,
+      },
+    }).then((res) => {
+      if (res.ok) {
+        console.log();
+      } else {
+        throw new Error('abcd');
+      }
+      return res.json();
+    }).then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          items: result,
+        });
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      // (errorMessage) => {
+      //   this.setState({
+      //     isLoaded: true,
+      //     error: errorMessage,
+      //   });
+      // },
+    ).catch((error) => this.setState({ error, isLoaded: false }));
+  }
+
+  render() {
+    const { error, isLoaded, items } = this.state;
+    // eslint-disable-next-line no-console
+    console.log(items.length);
+    if (error) {
+      const a = (
+        <div>
+          Error:
+          {error.message}
         </div>
-        <ListItems data={FAKE_DATA} />
+      );
+      return a;
+    } if (!isLoaded) {
+      return <div>Loading...</div>;
+    }
+    return (
+      <div className="container-fluid">
+        <DeleteItemsModal />
+        <AddItemModal />
+        <div className="card shadow">
+          <div className="card-header py-3">
+            <p className="text-primary m-0 font-weight-bold">Danh sách phân bón</p>
+            <div className="mt-3 d-flex flex-row justify-content-around">
+              <a href="/" className="btn btn-success btn-icon-split" role="button" data-toggle="modal" data-target="#modal-add">
+                <span className="text-white-50 icon">
+                  <i className="fas fa-plus" />
+                </span>
+                <span className="text-white text">
+                  Thêm mới dữ liệu
+                </span>
+              </a>
+              <a href="/" className="btn btn-danger btn-icon-split" role="button" data-toggle="modal" data-target="#modal-delete-items">
+                <span className="text-white-50 icon">
+                  <i className="fas fa-trash" />
+                </span>
+                <span className="text-white text">Xóa dữ liệu</span>
+              </a>
+            </div>
+          </div>
+          <ListItems data={items} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default QuanTriPhanBon;

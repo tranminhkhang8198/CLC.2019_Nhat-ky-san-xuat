@@ -425,34 +425,42 @@ class QuanTriThuocBVTV extends Component {
   }
 
   componentDidMount() {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM3ZDBiMTg1ZGY5NDJmZDQ2ODdkM2EiLCJuYW1lIjoiTmd1eWVuIFZhbiBMb2kiLCJwZXJzb25hbElkIjoiMzgxODIzODIxIiwiYWRkcmVzcyI6IjE0LzEzMiwgMy8yIHN0cmVldCwgTmluaCBLaWV1LCBDYW4gVGhvIiwicGhvbmUiOiIwODM2ODEwMjIxIiwiZW1haWwiOiJ2YW5sb2kxMGNAZ21haWwuY29tIiwidXNlciI6Im1hbmFnZXIiLCJIVFhJZCI6IjExNSIsInBhc3N3b3JkIjoiJDJiJDEwJE4xbzIvT05PZlR5S0xRdGczQ3JwLy5MLnBIU1Nkdy5YSWx6bWVaWVBkMWhCVHdxS3pRMnllIiwiY3JlYXRlZCI6IjIwMTktMTEtMTBUMDg6NTY6MTcuODM1WiIsImlhdCI6MTU3NDg3MjY1OSwiZXhwIjoxNTc0ODcyNzE5fQ.NUdhWOCjMkI57endmlTuRloEwxaxIGD3uPC1CHgQjmM';
-    fetch('http://localhost:3001/api/users/:me5dc7d0b185df942fd4687d3a', {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM3ZGEwMWI0N2NmNDM2OWIyNGQ4ZjYiLCJuYW1lIjoiTmd1eWVuIFZhbiBMb2kiLCJwZXJzb25hbElkIjoiMzgxODIzODIxIiwiYWRkcmVzcyI6IjE0LzEzMiwgMy8yIHN0cmVldCwgTmluaCBLaWV1LCBDYW4gVGhvIiwicGhvbmUiOiIwODM2ODEwMjIyIiwiZW1haWwiOiJ2YW5sb2kxMGNAZ21haWwuY29tIiwidXNlciI6ImFkbWluaXN0cmF0b3IiLCJIVFhJZCI6IjExNSIsInBhc3N3b3JkIjoiJDJiJDEwJEN0S3hscDQ4dWJ3VWlHMFNlSXdpd09JVE84SWh1c21pYjRIUmVzLk9kSlpXenE2NXV3dWlPIiwiY3JlYXRlZCI6IjIwMTktMTEtMTBUMDk6MzY6MDEuNDc5WiIsImlhdCI6MTU3NjI1MTM1MSwiZXhwIjoxNTc2MjUxNDExfQ.7eaTa9cuQp_KT76D0f8nJ-NJCKy-cZ-45b3vkcjC1kA';
+    fetch('http://localhost:3001/api/users/5dc7da01b47cf4369b24d8f6', {
       headers: {
         Authorization: token,
       },
-    }).then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result,
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        },
-      );
+    }).then((res) => {
+      if (res.ok) {
+        console.log();
+      } else {
+        throw new Error('abcd');
+      }
+      return res.json();
+    }).then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          items: result,
+        });
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      // (errorMessage) => {
+      //   this.setState({
+      //     isLoaded: true,
+      //     error: errorMessage,
+      //   });
+      // },
+    ).catch((error) => this.setState({ error, isLoading: false }));
   }
 
 
   render() {
     const { error, isLoaded, items } = this.state;
+    // eslint-disable-next-line no-console
+    console.log(items.length);
     if (error) {
       const a = (
         <div>
@@ -486,9 +494,16 @@ class QuanTriThuocBVTV extends Component {
               </a>
             </div>
           </div>
-          <ListItems items />
+          <ListItems data={items} />
         </div>
       </div>
+      // <ul>
+      //   {items.map((item) => (
+      //     <li key={item.name}>
+      //       {item.name}
+      //     </li>
+      //   ))}
+      // </ul>
     );
   }
 }

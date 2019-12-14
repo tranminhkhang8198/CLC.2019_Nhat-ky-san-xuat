@@ -63,8 +63,8 @@ export class ListItems extends Component {
             <tbody>
               {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
-                <td>{value.phone}</td>
-                <td>{value.email}</td>
+                <td>{value.ingredient}</td>
+                <td>{value.type}</td>
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
