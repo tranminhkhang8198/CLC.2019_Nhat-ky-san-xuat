@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { ListItems } from '../components/DataTable/DataTable';
+import { ListItems } from '../components/DataTable/QTriPhanBonDataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
@@ -15,7 +15,6 @@ class QuanTriPhanBon extends Component {
     super(props);
     this.state = {
       error: null,
-      isLoaded: false,
       data: [],
     };
 
@@ -25,7 +24,6 @@ class QuanTriPhanBon extends Component {
   async componentDidMount() {
     const fertilizers = await this.getData();
     this.setState({
-      isLoaded: true,
       data: fertilizers,
     });
   }
@@ -49,8 +47,6 @@ class QuanTriPhanBon extends Component {
         </div>
       );
       return a;
-    } if (!isLoaded) {
-      return <div>Loading...</div>;
     }
     return (
       <div className="container-fluid">

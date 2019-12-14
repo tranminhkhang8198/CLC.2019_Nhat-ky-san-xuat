@@ -32,7 +32,7 @@ class QuanTriThuocBVTV extends Component {
   async getData() {
     const { data } = await axios({
       method: 'GET',
-      url: 'http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20',
+      url: 'http://localhost:3001/api/plant-protection-products?pageNumber=1&nPerPage=20',
     });
 
     return data;
@@ -65,13 +65,6 @@ class QuanTriThuocBVTV extends Component {
           <ListItems data={data} />
         </div>
       </div>
-      // <ul>
-      //   {items.map((item) => (
-      //     <li key={item.name}>
-      //       {item.name}
-      //     </li>
-      //   ))}
-      // </ul>
     );
   }
 }
