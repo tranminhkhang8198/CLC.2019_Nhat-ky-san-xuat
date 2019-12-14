@@ -1,6 +1,26 @@
 import React from 'react';
 
-function DataPerPage() {
+function DataPerPage({ type }) {
+  function getSearchPlaceholder(dataType) {
+    let placeholderData = '';
+
+    switch (dataType) {
+      case 'fertilizer':
+        placeholderData = 'Tìm phân bón theo tên';
+        break;
+      case 'plantProductProtection':
+        placeholderData = 'Tìm thuốc bảo thực vật theo tên';
+        break;
+      default:
+        placeholderData = 'Tìm kiếm dữ liệu theo tên';
+        break;
+    }
+
+    return { placeholderData };
+  }
+
+  const { placeholderData } = getSearchPlaceholder(type);
+
   return (
     <div className="row">
       <div className="col-md-6 text-nowrap">
@@ -25,7 +45,7 @@ function DataPerPage() {
               type="search"
               className="form-control form-control-sm"
               aria-controls="dataTable"
-              placeholder="Tìm thuốc BVTV theo tên"
+              placeholder={placeholderData}
             />
           </label>
         </div>
