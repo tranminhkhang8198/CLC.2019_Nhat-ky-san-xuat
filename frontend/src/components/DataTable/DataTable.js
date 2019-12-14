@@ -5,6 +5,9 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 
+import DataPerPage from './Pagination/DataPerPage';
+import Paginator from './Pagination/Paginator';
+
 import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
 import DeleteItemModal from '../Modals/DeleteItemModal';
@@ -25,29 +28,8 @@ export class ListItems extends Component {
         <ViewItemModal />
         <ModifyItemModal />
         <DeleteItemModal />
-        <div className="row">
-          <div className="col-md-6 text-nowrap">
-            <div id="dataTable_length" className="dataTables_length" aria-controls="dataTable">
-              <label>
-                HIển thị&nbsp;
-                <select className="form-control form-control-sm custom-select custom-select-sm">
-                  <option value={10} defaultValue>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                </select>
-                &nbsp;
-              </label>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="text-md-right dataTables_filter" id="dataTable_filter">
-              <label>
-                <input type="search" className="form-control form-control-sm" aria-controls="dataTable" placeholder="Tìm thuốc BVTV theo tên" />
-              </label>
-            </div>
-          </div>
-        </div>
+
+        <DataPerPage />
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
             <thead>
@@ -67,7 +49,14 @@ export class ListItems extends Component {
                 <td>{value['Loại thuốc']}</td>
                 <td>
                   <div className="dropdown">
-                    <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
+                    <button
+                      className="btn btn-secondary btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                      type="button"
+                    >
+                      Hành động&nbsp;
+                    </button>
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
                       <a
                         className="dropdown-item text-white bg-info"
@@ -114,38 +103,8 @@ export class ListItems extends Component {
             </tfoot>
           </table>
         </div>
-        <div className="row">
-          <div className="col-md-6 align-self-center">
-            <p id="dataTable_info" className="dataTables_info" role="status" aria-live="polite">Hiển thị 1 - 10/27 dữ liệu</p>
-          </div>
-          <div className="col-md-6">
-            <nav className="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-              <ul className="pagination">
-                <li className="page-item disabled">
-                  <a className="page-link" href="/" aria-label="Previous">
-                    &nbsp;
-                    <span aria-hidden="true">«</span>
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link" href="/">1</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/">2</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/">3</a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/" aria-label="Next">
-                    <span aria-hidden="true">»</span>
-                    &nbsp;
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+
+        <Paginator />
       </div>
     );
   }
