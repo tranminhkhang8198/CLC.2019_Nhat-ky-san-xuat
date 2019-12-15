@@ -1,6 +1,102 @@
 import React from 'react';
+import uuidv4 from 'uuid/v4';
 
-function AddItemModal() {
+function AddItemModal({ type }) {
+  function getLabelTitlesByType(dataType) {
+    let labelTitles = [];
+    switch (dataType) {
+      case 'fertilizer':
+        labelTitles = [
+          '',
+        ];
+        break;
+      case 'plantProductProtection':
+        labelTitles = [
+          {
+            name: 'ten-thuong-pham',
+            value: 'Tên thương phẩm',
+            required: true,
+            notes: [
+              'Tên các thương phẩm phải cách nhau bằng dấu ,',
+              'Ví dụ: Thương phẩm 1, Thương phẩm 2',
+            ],
+          },
+          {
+            name: 'ten-hoat-chat',
+            value: 'Tên hoạt chất',
+            required: false,
+            notes: [
+              'Tên các thương phẩm phải cách nhau bằng dấu ,',
+              'Ví dụ: Thương phẩm 1, Thương phẩm 2',
+            ],
+          },
+          {
+            name: 'ten-loai-thuoc',
+            value: 'Tên loại thuốc',
+            required: false,
+            notes: [
+              'Tên các thương phẩm phải cách nhau bằng dấu ,',
+              'Ví dụ: Thương phẩm 1, Thương phẩm 2',
+            ],
+          },
+          {
+            name: 'ten-nhom-thuoc',
+            value: 'Tên nhóm thuốc',
+            required: false,
+            notes: [],
+          },
+          {
+            name: 'danh-muc-thuoc',
+            value: 'Danh mục thuốc',
+            required: true,
+            notes: [],
+          },
+        ];
+        break;
+      default:
+        labelTitles = [];
+        break;
+    }
+
+    return labelTitles;
+  }
+
+  function renderRequiredFields() {
+    return (
+      <span style={{ color: 'rgb(249,15,15)' }}>
+        &nbsp;*
+      </span>
+    );
+  }
+
+  function renderNotesFields(notes) {
+    return notes.map((item) => (
+      <small className="form-text text-muted" key={uuidv4()}>
+        {item}
+      </small>
+    ));
+  }
+
+  function renderLabels(labelsData) {
+    return labelsData.map((item) => (
+      <div className="form-group" key={uuidv4()}>
+        <label htmlFor={item.value} className="w-100">
+          {item.value}
+          {item.required === true && renderRequiredFields()}
+          <input
+            type="text"
+            id={item.value}
+            className="form-control item"
+            placeholder={item.value}
+          />
+          {item.notes.length > 0 && renderNotesFields(item.notes)}
+        </label>
+      </div>
+    ));
+  }
+
+  const labelTitles = getLabelTitlesByType(type);
+
   return (
     <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
       <div className="modal-dialog" role="document">
@@ -12,114 +108,7 @@ function AddItemModal() {
             </button>
           </div>
           <div className="modal-body modal-add-body">
-            <div className="form-group">
-              <label htmlFor="ten-thuong-pham" className="w-100">
-                Tên thương phẩm
-                <span style={{ color: 'rgb(249,15,15)' }}>
-                  &nbsp;*
-                </span>
-                <input type="text" id="ten-thuong-pham" className="form-control item" placeholder="Nhập vào tên thương phẩm" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="ten-hoat-chat" className="w-100">
-                Tên hoạt chất
-                <input type="text" id="ten-hoat-chat" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="ten-loai-thuoc" className="w-100">
-                Tên loại thuốc
-                <input type="text" id="ten-loai-thuoc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="ten-nhom-thuoc" className="w-100">
-                Tên nhóm thuốc
-                <input type="text" id="ten-nhom-thuoc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="danh-muc-thuoc" className="w-100">
-                Danh mục thuốc
-                <input type="text" id="danh-muc-thuoc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="dang-thuoc" className="w-100">
-                Dạng thuốc
-                <input type="text" id="dang-thuoc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="doi-tuong-phong-tru" className="w-100">
-                Đối tượng phòng trừ
-                <input type="text" id="doi-tuong-phong-tru" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-              <small>Ví dụ: Rầy nâu 1,Rầy nâu 2,Rầy nâu 3</small>
-            </div>
-            <div className="form-group">
-              <label htmlFor="tac-dong-cua-thuoc" className="w-100">
-                Tác động của thuốc
-                <input type="text" id="tac-dong-cua-thuoc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-              <small>Ví dụ: Bảo vệ cây trồng,Giết sâu bọ</small>
-            </div>
-            <div className="form-group">
-              <label htmlFor="nhom-doc" className="w-100">
-                Nhóm độc
-                <input type="text" id="nhom-doc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="lieu-luong" className="w-100">
-                Liều lượng sử dụng
-                <input type="text" id="lieu-luong" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="cach-su-dung" className="w-100">
-                Cách sử dụng
-                <textarea id="cach-su-dung" className="form-control item" rows={5} placeholder="Mô tả chi tiết cách dùng của thuốc" defaultValue="" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="thoi-gian-cach-ly" className="w-100">
-                Thời gian cách ly
-                <input type="text" id="thoi-gian-cach-ly" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-              <small>Ví dụ: 1 ngày</small>
-            </div>
-            <div className="form-group">
-              <label htmlFor="kha-nang-hon-hop" className="w-100">
-                Khả năng hỗn hợp
-                <input type="text" id="kha-nang-hon-hop" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="dac-diem-chung" className="w-100">
-                Đặc điểm chung
-                <input type="text" id="dac-diem-chung" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="to-chuc-dang-ky" className="w-100">
-                Tổ chức xin đăng ký
-                <input type="text" id="to-chuc-dang-ky" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="nhan-thuoc" className="w-100">
-                Nhãn thuốc
-                <input type="text" id="nhan-thuoc" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="cong-ty-phan-phoi" className="w-100">
-                Công ty phân phối
-                <input type="text" id="cong-ty-phan-phoi" className="form-control item" placeholder="Nhập vào tên hoạt chất" />
-              </label>
-            </div>
+            {renderLabels(labelTitles)}
           </div>
           <div className="modal-footer">
             <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
