@@ -1,11 +1,42 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
-import image2 from '../image/logo.svg';
+import Axios from 'axios';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      avatar: '',
+      fullname: '',
+      phone: '',
+      username: '',
+      address: '',
+    };
+  }
+
+  async componentDidMount() {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGY1ZDJkMTc1MTc4NjM2MmNhNjY1MGIiLCJuYW1lIjoiY2hvIG1pbmggdG9hbiIsImF2YXRhciI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMy9pbWFnZS0xNTc2MzkxMzc3MjQ0LmpwZyIsInBlcnNvbmFsSWQiOiIzODQ3MzYyNzYiLCJhZGRyZXNzIjoiRHVvaSBjaGFuIGNhdSBxdWFuZyB0cnVuZyIsInBob25lIjoiMDkzODI3NDYzIiwiZW1haWwiOiJzdWN2YXRAZ21haWwuY29tIiwidXNlciI6InVzZXIiLCJIVFhJZCI6ImRvd2lkbmRuZiIsInBhc3N3b3JkIjoiJDJiJDEwJFVSdVZkSUh0ZHpkRzZhRnQ2V1JGSXVVMWhQeGpWNWVBdWR6UW1TNmJkUWpGUHZrZzM0R3NLIiwiY3JlYXRlZCI6IjIwMTktMTItMTVUMDY6Mjk6MzcuMjU1WiIsImlhdCI6MTU3NjM5NDE3NCwiZXhwIjoxNTc2Mzk0MjM0fQ.hqPsBAst1E84togr8ocVz7Kkcn8tAc4ALoM09OcgDCY';
+    const response = await Axios.get('/api/users/me', {
+      headers: { Authorization: token },
+    });
+    if (response.status === 200) {
+      const user = response.data;
+      this.setState(() => ({
+        avatar: user.avatar,
+        fullname: user.name,
+        phone: user.phone,
+        username: user.user,
+        address: user.address,
+      }));
+    }
+  }
+
   render() {
+    const {
+      avatar, username, address, phone, fullname,
+    } = this.state;
     return (
       <div className="container-fluid">
         <h3 className="text-dark mb-4">Thông tin cá nhân</h3>
@@ -13,7 +44,7 @@ class Profile extends Component {
           <div className="col-lg-4">
             <div className="card mb-3">
               <div className="card-body text-center shadow">
-                <img alt="img" className="rounded-circle mb-3 mt-4" src={image2} width={160} height={160} />
+                <img alt="img" className="rounded-circle mb-3 mt-4" src={avatar} width={160} height={160} />
                 <div className="mb-3">
                   <button className="btn btn-primary btn-sm" type="button">Thay đổi ảnh đại diện</button>
                 </div>
@@ -68,31 +99,31 @@ class Profile extends Component {
                       <div className="form-row">
                         <div className="col">
                           <div className="form-group">
-                            <label htmlFor="username">
+                            <label htmlFor="fullname">
                               <strong>Họ và tên</strong>
                               <br />
                             </label>
-                            <input className="form-control" type="text" placeholder="Nguyễn Văn A" name="username" />
+                            <input className="form-control" type="text" placeholder={fullname || 'Nguyễn Văn A'} name="fullname" />
                           </div>
                         </div>
                         <div className="col">
                           <div className="form-group">
                             <label htmlFor="phone"><strong>Số điện thoại</strong></label>
-                            <input className="form-control" type="email" placeholder={1234567890} name="phone" />
+                            <input className="form-control" type="email" placeholder={phone || '123456789'} name="phone" />
                           </div>
                         </div>
                       </div>
                       <div className="form-row">
                         <div className="col">
                           <div className="form-group">
-                            <label htmlFor="account"><strong>Tài khoản</strong></label>
-                            <input className="form-control" type="text" placeholder="taikhoan123456" name="account" disabled readOnly />
+                            <label htmlFor="username"><strong>Tài khoản</strong></label>
+                            <input className="form-control" type="text" placeholder={username || 'taikhoan123456'} name="username" disabled readOnly />
                           </div>
                         </div>
                         <div className="col">
                           <div className="form-group">
-                            <label htmlFor="pwd"><strong>Mật khẩu</strong></label>
-                            <input className="form-control" type="text" placeholder="E2058gspg29@" name="pwd" required minLength={6} maxLength={128} />
+                            <label htmlFor="address"><strong>Mật khẩu</strong></label>
+                            <input className="form-control" type="text" placeholder={address || 'Ninh Kiều Cần Thơ'} name="address" required maxLength={128} />
                           </div>
                         </div>
                       </div>
