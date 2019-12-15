@@ -2,6 +2,23 @@ import React from 'react';
 import uuidv4 from 'uuid/v4';
 
 function AddItemModal({ type }) {
+  function renderTypeTitle(typeData) {
+    let typeTitle = '';
+    switch (typeData) {
+      case 'fertilizer':
+        typeTitle = ' phân bón';
+        break;
+      case 'plantProductProtection':
+        typeTitle = ' thuốc bảo vệ thực vật';
+        break;
+      default:
+        typeTitle = ' dữ liệu';
+        break;
+    }
+
+    return typeTitle;
+  }
+
   function getLabelTitlesByType(dataType) {
     let labelTitles = [];
     switch (dataType) {
@@ -102,7 +119,10 @@ function AddItemModal({ type }) {
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h4 className="modal-title">Thêm mới thuốc BVTV</h4>
+            <h4 className="modal-title">
+              Thêm mới
+              {renderTypeTitle(type)}
+            </h4>
             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
