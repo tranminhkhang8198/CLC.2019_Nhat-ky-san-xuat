@@ -4,6 +4,7 @@
     ["renderTypeTitle", "renderItemsToDelete"]
   }
 ] */
+/* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
 import uuidv4 from 'uuid';
@@ -56,9 +57,9 @@ class DeleteItemsModal extends Component {
   renderItemsToDelete(items) {
     return items.map((item) => (
       <div className="form-check" key={uuidv4()}>
-        <label className="form-check-label" htmlFor="del-name1">
-          <input className="form-check-input" id={`delete-item-${item.name}`} type="checkbox" />
-          {item.value}
+        <label className="form-check-label" htmlFor={`delete-${item._id}`}>
+          <input className="form-check-input" id={`delete-${item._id}`} type="checkbox" />
+          {item.name}
         </label>
       </div>
     ));
@@ -66,7 +67,7 @@ class DeleteItemsModal extends Component {
 
   render() {
     const { data, type } = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-items">
         <div className="modal-dialog" role="document">
