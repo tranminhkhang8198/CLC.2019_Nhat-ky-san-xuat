@@ -42,7 +42,7 @@ class QuanTriThuocBVTV extends Component {
     const { data } = this.state;
     return (
       <div className="container-fluid">
-        <DeleteItemsModal />
+        <DeleteItemsModal type="plantProductProtection" data={data} />
         <AddItemModal type="plantProductProtection" />
         <div className="card shadow">
           <div className="card-header py-3">

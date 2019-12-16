@@ -30,7 +30,7 @@ function AddItemModal({ type }) {
       case 'plantProductProtection':
         labelTitles = [
           {
-            name: 'ten-thuong-pham',
+            name: 'add-ten-thuong-pham',
             value: 'Tên thương phẩm',
             required: true,
             notes: [
@@ -39,7 +39,7 @@ function AddItemModal({ type }) {
             ],
           },
           {
-            name: 'ten-hoat-chat',
+            name: 'add-ten-hoat-chat',
             value: 'Tên hoạt chất',
             required: false,
             notes: [
@@ -48,7 +48,7 @@ function AddItemModal({ type }) {
             ],
           },
           {
-            name: 'ten-loai-thuoc',
+            name: 'add-ten-loai-thuoc',
             value: 'Tên loại thuốc',
             required: false,
             notes: [
@@ -57,13 +57,13 @@ function AddItemModal({ type }) {
             ],
           },
           {
-            name: 'ten-nhom-thuoc',
+            name: 'add-ten-nhom-thuoc',
             value: 'Tên nhóm thuốc',
             required: false,
             notes: [],
           },
           {
-            name: 'danh-muc-thuoc',
+            name: 'add-danh-muc-thuoc',
             value: 'Danh mục thuốc',
             required: true,
             notes: [],
@@ -97,12 +97,12 @@ function AddItemModal({ type }) {
   function renderLabels(labelsData) {
     return labelsData.map((item) => (
       <div className="form-group" key={uuidv4()}>
-        <label htmlFor={item.value} className="w-100">
+        <label htmlFor={item.name} className="w-100">
           {item.value}
           {item.required === true && renderRequiredFields()}
           <input
             type="text"
-            id={item.value}
+            id={item.name}
             className="form-control item"
             placeholder={item.value}
           />

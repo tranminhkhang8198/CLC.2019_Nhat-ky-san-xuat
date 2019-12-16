@@ -1,76 +1,98 @@
-import React from 'react';
+/* eslint class-methods-use-this: [
+  "error",
+  { "exceptMethods":
+    ["renderTypeTitle", "renderItemsToDelete"]
+  }
+] */
 
+import React, { Component } from 'react';
+import uuidv4 from 'uuid';
 
-function DeleteItemsModal() {
-  return (
-    <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-items">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h4 className="modal-title">Xóa dữ liệu thuốc BVTV</h4>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <p>Chọn tên các dữ liệu bạn muốn xóa</p>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name1">
-                <input className="form-check-input" id="del-name1" type="checkbox" />
-                Airi Satou
-              </label>
+class DeleteItemsModal extends Component {
+  constructor(props) {
+    super();
+
+    this.state = {
+      type: props.type,
+      data: props.data,
+    };
+
+    this.renderTypeTitle = this.renderTypeTitle.bind(this);
+    this.renderItemsToDelete = this.renderItemsToDelete.bind(this);
+    this.updateDataWhenRendered = this.updateDataWhenRendered.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { data } = this.props;
+    if (data.length !== prevProps.data.length) {
+      this.updateDataWhenRendered(data);
+    }
+  }
+
+  async updateDataWhenRendered(updatedData) {
+    await this.setState({
+      data: updatedData,
+    });
+    return updatedData;
+  }
+
+  renderTypeTitle(typeData) {
+    let typeTitle = '';
+    switch (typeData) {
+      case 'fertilizer':
+        typeTitle = ' phân bón';
+        break;
+      case 'plantProductProtection':
+        typeTitle = ' thuốc bảo vệ thực vật';
+        break;
+      default:
+        typeTitle = '';
+        break;
+    }
+
+    return typeTitle;
+  }
+
+  renderItemsToDelete(items) {
+    return items.map((item) => (
+      <div className="form-check" key={uuidv4()}>
+        <label className="form-check-label" htmlFor="del-name1">
+          <input className="form-check-input" id={`delete-item-${item.name}`} type="checkbox" />
+          {item.value}
+        </label>
+      </div>
+    ));
+  }
+
+  render() {
+    const { data, type } = this.state;
+    console.log(this.state);
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-items">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                Xóa dữ liệu
+                {this.renderTypeTitle(type)}
+              </h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
             </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name2">
-                <input className="form-check-input" id="del-name2" type="checkbox" />
-                Angelica Ramos
-              </label>
+            <div className="modal-body">
+              <p>Chọn tên các dữ liệu bạn muốn xóa</p>
+              {this.renderItemsToDelete(data)}
             </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name3">
-                <input className="form-check-input" id="del-name3" type="checkbox" />
-                Ashton Cox
-              </label>
+            <div className="modal-footer">
+              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+              <button className="btn btn-primary" type="button">Xác nhận xóa</button>
             </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name4">
-                <input className="form-check-input" id="del-name4" type="checkbox" />
-                Bradley Greer
-              </label>
-            </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name5">
-                <input className="form-check-input" id="del-name5" type="checkbox" />
-                Brenden Wagner
-              </label>
-            </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name6">
-                <input className="form-check-input" id="del-name6" type="checkbox" />
-                Brielle Williamson
-              </label>
-            </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name7">
-                <input className="form-check-input" id="del-name7" type="checkbox" />
-                Bruno Nash
-              </label>
-            </div>
-            <div className="form-check">
-              <label className="form-check-label" htmlFor="del-name8">
-                <input className="form-check-input" id="del-name8" type="checkbox" />
-                Caesar Vance
-              </label>
-            </div>
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button">Xác nhận xóa</button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default DeleteItemsModal;
