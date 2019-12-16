@@ -51,7 +51,7 @@ class QuanTriPhanBon extends Component {
     return (
       <div className="container-fluid">
         <DeleteItemsModal />
-        <AddItemModal />
+        <AddItemModal type="fertilizer" />
         <div className="card shadow">
           <div className="card-header py-3">
             <p className="text-primary m-0 font-weight-bold">Danh sách phân bón</p>
