@@ -1452,8 +1452,13 @@
       },
       "examples": [
         {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Phân bón với tên '\" + name + \"' đã tồn tại.\"\n}",
+          "title": "Phân bón tồn tại:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Phân bón với tên '\" + name + \"' đã tồn tại\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Thiếu trường tên phân bón:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập tên phân bón\"\n}",
           "type": "json"
         }
       ]
@@ -2357,8 +2362,28 @@
       },
       "examples": [
         {
-          "title": "Error-Response:",
+          "title": "Thuốc bvtv tồn tại:",
           "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Thuốc bảo vệ thực vật với tên '\" + name + \"' đã tồn tại.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Thiếu trường tên thuốc bvtv:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập tên thuốc bvtv\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Trường WHO phải là số:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Trường WHO phải là số\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Trường GHS phải là số:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Trường GHS phải là số\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Trường PHI phải là số:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Trường PHI phải là số\"\n}",
           "type": "json"
         }
       ]
