@@ -17,7 +17,7 @@ class Profile extends Component {
   }
 
   async componentDidMount() {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGY1ZDJkMTc1MTc4NjM2MmNhNjY1MGIiLCJuYW1lIjoiY2hvIG1pbmggdG9hbiIsImF2YXRhciI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMy9pbWFnZS0xNTc2MzkxMzc3MjQ0LmpwZyIsInBlcnNvbmFsSWQiOiIzODQ3MzYyNzYiLCJhZGRyZXNzIjoiRHVvaSBjaGFuIGNhdSBxdWFuZyB0cnVuZyIsInBob25lIjoiMDkzODI3NDYzIiwiZW1haWwiOiJzdWN2YXRAZ21haWwuY29tIiwidXNlciI6InVzZXIiLCJIVFhJZCI6ImRvd2lkbmRuZiIsInBhc3N3b3JkIjoiJDJiJDEwJFVSdVZkSUh0ZHpkRzZhRnQ2V1JGSXVVMWhQeGpWNWVBdWR6UW1TNmJkUWpGUHZrZzM0R3NLIiwiY3JlYXRlZCI6IjIwMTktMTItMTVUMDY6Mjk6MzcuMjU1WiIsImlhdCI6MTU3NjM5NDE3NCwiZXhwIjoxNTc2Mzk0MjM0fQ.hqPsBAst1E84togr8ocVz7Kkcn8tAc4ALoM09OcgDCY';
+    const token = localStorage.getItem('user');
     const response = await Axios.get('/api/users/me', {
       headers: { Authorization: token },
     });
@@ -103,13 +103,13 @@ class Profile extends Component {
                               <strong>Họ và tên</strong>
                               <br />
                             </label>
-                            <input className="form-control" type="text" placeholder={fullname || 'Nguyễn Văn A'} name="fullname" />
+                            <input className="form-control" type="text" placeholder={fullname} name="fullname" />
                           </div>
                         </div>
                         <div className="col">
                           <div className="form-group">
                             <label htmlFor="phone"><strong>Số điện thoại</strong></label>
-                            <input className="form-control" type="email" placeholder={phone || '123456789'} name="phone" />
+                            <input className="form-control" type="email" placeholder={phone} name="phone" />
                           </div>
                         </div>
                       </div>
@@ -117,13 +117,13 @@ class Profile extends Component {
                         <div className="col">
                           <div className="form-group">
                             <label htmlFor="username"><strong>Tài khoản</strong></label>
-                            <input className="form-control" type="text" placeholder={username || 'taikhoan123456'} name="username" disabled readOnly />
+                            <input className="form-control" type="text" placeholder={username} name="username" disabled readOnly />
                           </div>
                         </div>
                         <div className="col">
                           <div className="form-group">
                             <label htmlFor="address"><strong>Mật khẩu</strong></label>
-                            <input className="form-control" type="text" placeholder={address || 'Ninh Kiều Cần Thơ'} name="address" required maxLength={128} />
+                            <input className="form-control" type="text" placeholder={address} name="address" required maxLength={128} />
                           </div>
                         </div>
                       </div>
