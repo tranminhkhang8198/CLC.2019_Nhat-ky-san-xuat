@@ -7,6 +7,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
+
 // eslint-disable-next-line react/prefer-stateless-function
 
 class Login extends Component {
@@ -45,6 +46,7 @@ class Login extends Component {
       .then((res) => {
         localStorage.setItem('user', res.data.token);
         // Redirect here
+        this.props.history.push('/');
       })
       .catch((err) => {
         alert("Vui lòng nhập lại.");

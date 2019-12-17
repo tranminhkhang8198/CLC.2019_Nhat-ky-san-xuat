@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
+import { Redirect } from 'react-router-dom';
 import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
@@ -411,6 +412,10 @@ const FAKE_DATA = [
 ];
 
 function QuanTriNhanSuHTX() {
+  if (localStorage.getItem('user') === null) {
+    // console.log('Profile');
+    return <Redirect to="/login" />;
+  }
   return (
     <div className="container-fluid">
       <DeleteItemsModal />

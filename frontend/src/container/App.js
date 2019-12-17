@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import { NavLink, NavItem, Nav } from 'reactstrap';
-
+import Home from '../pages/Home';
 import TopNavbar from '../components/Navbars/TopNavbar/TopNavbar';
 import Footer from '../components/Footer/Footer';
 
@@ -48,6 +48,11 @@ function App() {
     </div>
   );
 
+  const Logout = (props) => {
+    localStorage.clear();
+    props.history.push('/login');
+  };
+
   return (
     <Router>
       <div>
@@ -79,39 +84,31 @@ function App() {
           <NavItem>
             <NavLink to="/login" tag={RRNavLink}>Login</NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink to="/logout" tag={RRNavLink}>Logout</NavLink>
+          </NavItem>
         </Nav>
 
         <Switch>
-          <Route exact path="/">
-            <div>
-              <h1>hello scsss</h1>
-              <h2>hello h2</h2>
-            </div>
-          </Route>
-          <Route exact path="/quantrithuocbvtv">
-            {renderNavItem(<QuanTriThuocBVTV />)}
-          </Route>
-          <Route exact path="/quantriphanbon">
-            {renderNavItem(<QuanTriPhanBon />)}
-          </Route>
-          <Route exact path="/quantrigionglua">
-            {renderNavItem(<QuanTriGiongLua />)}
-          </Route>
-          <Route exact path="/quantrihtx">
-            {renderNavItem(<QuanTriHTX />)}
-          </Route>
-          <Route exact path="/quantriquanlyhtx">
-            {renderNavItem(<QuanTriNhanSuHTX />)}
-          </Route>
-          <Route exact path="/quantrisukienhtx">
-            {renderNavItem(<QuanTriSuKienHTX />)}
-          </Route>
-          <Route exact path="/profile">
-            {renderNavItem(<Profile />)}
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
+          <Route exact path="/">{renderNavItem(<Home />)}</Route>
+          <Route exact path="/quantrithuocbvtv">{renderNavItem(<QuanTriThuocBVTV />)}</Route>
+
+          <Route exact path="/quantriphanbon">{renderNavItem(<QuanTriPhanBon />)}</Route>
+
+          <Route exact path="/quantrigionglua">{renderNavItem(<QuanTriGiongLua />)}</Route>
+
+          <Route exact path="/quantrihtx">{renderNavItem(<QuanTriHTX />)}</Route>
+
+          <Route exact path="/quantriquanlyhtx">{renderNavItem(<QuanTriNhanSuHTX />)}</Route>
+
+          <Route exact path="/quantrisukienhtx">{renderNavItem(<QuanTriSuKienHTX />)}</Route>
+
+          <Route exact path="/profile">{renderNavItem(<Profile />)}</Route>
+
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/logout">{Logout}</Route>
+          {/* not found */}
+          <Route path="*" component={() => '404 NOT FOUND'} />
         </Switch>
       </div>
     </Router>

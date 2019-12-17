@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { Component } from 'react';
 
+import { Redirect } from 'react-router-dom';
 import { ListItems } from '../components/DataTable/DataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
@@ -413,6 +414,10 @@ const FAKE_DATA = [
 // eslint-disable-next-line react/prefer-stateless-function
 class QuanTriThuocBVTV extends Component {
   render() {
+    if (localStorage.getItem('user') === null) {
+      // console.log('Profile');
+      return <Redirect to="/login" />;
+    }
     return (
       <div className="container-fluid">
         <DeleteItemsModal />
