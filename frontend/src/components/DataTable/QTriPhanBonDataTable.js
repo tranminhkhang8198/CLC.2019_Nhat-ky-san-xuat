@@ -17,23 +17,55 @@ export class ListItems extends Component {
     super(props);
     this.state = {
       // eslint-disable-next-line react/no-unused-state
-      Items: [],
+      data: props.data,
+      parentComponent: props.parentComponent,
+      selectedItem: null,
     };
+    this.selectTableItemEventHandler = this.selectTableItemEventHandler.bind(this);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getItemBaseOnId(itemList, itemId) {
+    let result = null;
+    for (let i = 0; i < itemList.length; i += 1) {
+      if (itemList[i]._id === itemId) {
+        result = itemList[i];
+        break;
+      }
+    }
+    return result;
+  }
+
+  selectTableItemEventHandler(e) {
+    // eslint-disable-next-line no-unused-vars
+    e.preventDefault();
+    const { data } = this.props;
+    const selectedItemId = e.target.getAttribute('href');
+    // console.log();
+    const item = this.getItemBaseOnId(data, selectedItemId);
+    this.setState({ selectedItem: item });
   }
 
   render() {
     const { data } = this.props;
+    const { selectedItem, parentComponent } = this.state;
+
     if (!data.length) {
       return <h1>Loading....</h1>;
+    }
+
+    let passedItem = selectedItem;
+    if (passedItem === null) {
+      // eslint-disable-next-line prefer-destructuring
+      passedItem = data[0];
     }
 
     return (
       <div className="card-body">
         <ViewItemModal />
         <ModifyItemModal />
-        <DeleteItemModal />
-
-        <DataPerPage type="fertilizer" />
+        <DeleteItemModal type="fertilizer" parentComponent={parentComponent} selectedItem={passedItem} />
+        <DataPerPage type="fertilizer" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
@@ -78,11 +110,12 @@ export class ListItems extends Component {
                       </a>
                       <a
                         className="dropdown-item text-white bg-danger"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
                         data-target="#modal-delete-item-1"
                         style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xóa hàng này
                       </a>

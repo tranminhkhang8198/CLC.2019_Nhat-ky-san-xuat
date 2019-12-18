@@ -1,6 +1,6 @@
 import React from 'react';
 
-function DataPerPage({ type }) {
+function DataPerPage({ type, parentComponent }) {
   function getSearchPlaceholder(dataType) {
     let placeholderData = '';
 
@@ -19,15 +19,28 @@ function DataPerPage({ type }) {
     return { placeholderData };
   }
 
+  let optionRef = null;
+  async function changeDataPerPageEventHandler(e) {
+    e.preventDefault();
+    const dataPerPage = optionRef.options[optionRef.selectedIndex].value;
+    parentComponent.setState({
+      refresh: true,
+      dataPerpage: dataPerPage,
+    });
+  }
   const { placeholderData } = getSearchPlaceholder(type);
-
   return (
     <div className="row">
       <div className="col-md-6 text-nowrap">
         <div id="dataTable_length" className="dataTables_length" aria-controls="dataTable">
           <label htmlFor="data-per-page-picker">
             HIển thị&nbsp;
-            <select id="data-per-page-picker" className="form-control form-control-sm custom-select custom-select-sm">
+            <select
+              id="data-per-page-picker"
+              className="form-control form-control-sm custom-select custom-select-sm"
+              ref={(element) => { optionRef = element; }}
+              onChange={changeDataPerPageEventHandler}
+            >
               <option value={10} defaultValue>10</option>
               <option value={25}>25</option>
               <option value={50}>50</option>

@@ -16,6 +16,9 @@ class QuanTriPhanBon extends Component {
     this.state = {
       error: null,
       data: [],
+      refresh: false,
+      pageNum: 1,
+      dataPerpage: 10,
     };
 
     this.getData = this.getData.bind(this);
@@ -28,17 +31,34 @@ class QuanTriPhanBon extends Component {
     });
   }
 
+  async componentDidUpdate(prevProps, prevState) {
+    const { refresh } = this.state;
+    if (refresh) {
+      const fertilizers = await this.getData();
+      this.updateDataWhenRendered(fertilizers);
+    }
+  }
+
   async getData() {
+    const { pageNum, dataPerpage } = this.state;
     const { data } = await axios({
       method: 'GET',
-      url: 'http://localhost:3001/api/fertilizers?pageNumber=1&nPerPage=10',
+      url: `http://localhost:3001/api/fertilizers?pageNumber=${pageNum}&nPerPage=${dataPerpage}`,
     });
     return data;
   }
 
+  async updateDataWhenRendered(updatedData) {
+    await this.setState({
+      refresh: false,
+      data: updatedData,
+    });
+    return updatedData;
+  }
+
 
   render() {
-    const { error, isLoaded, data } = this.state;
+    const { error, data } = this.state;
     if (error) {
       const a = (
         <div>
@@ -50,7 +70,7 @@ class QuanTriPhanBon extends Component {
     }
     return (
       <div className="container-fluid">
-        <DeleteItemsModal />
+        <DeleteItemsModal type="fertilizer" data={data} parentComponent={this} />
         <AddItemModal type="fertilizer" />
         <div className="card shadow">
           <div className="card-header py-3">
@@ -72,7 +92,7 @@ class QuanTriPhanBon extends Component {
               </a>
             </div>
           </div>
-          <ListItems data={data} />
+          <ListItems data={data} parentComponent={this} />
         </div>
       </div>
     );

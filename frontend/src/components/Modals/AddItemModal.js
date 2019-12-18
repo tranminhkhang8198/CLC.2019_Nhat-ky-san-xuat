@@ -3,6 +3,7 @@
 import React from 'react';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
+import httpStatus from 'http-status';
 
 function AddItemModal({ type }) {
   function renderTypeTitle(typeData) {
@@ -22,19 +23,19 @@ function AddItemModal({ type }) {
   }
 
   function getApiURLByType(dataType) {
-    let ApiURL = '';
+    let ApiUrl = '';
     switch (dataType) {
       case 'fertilizer':
-        ApiURL = 'http://localhost:3001/api/fertilizers';
+        ApiUrl = 'http://localhost:3001/api/fertilizers';
         break;
       case 'plantProductProtection':
-        ApiURL = '';
+        ApiUrl = '';
         break;
       default:
-        ApiURL = '';
+        ApiUrl = '';
         break;
     }
-    return ApiURL;
+    return ApiUrl;
   }
 
   function getLabelTitlesByType(dataType) {
@@ -170,12 +171,15 @@ function AddItemModal({ type }) {
   const apiUrl = getApiURLByType(type);
   const inputFieldRefs = [];
 
-  async function getData(api, bodyFormData) {
-    const data = await axios({
-      method: 'post',
-      url: api,
-      data: bodyFormData,
-    }).catch((error) => {
+  async function callApiToCreateNewItem(api, bodyFormData) {
+    try {
+      const data = await axios({
+        method: 'post',
+        url: api,
+        data: bodyFormData,
+      });
+      return data;
+    } catch (error) {
       if (error.response) {
         // Request made and server responded
         // console.log(error.response.data.errorMessage);
@@ -189,28 +193,27 @@ function AddItemModal({ type }) {
         // console.log('Error', error.message);
       }
       return error.response;
-    });
-    return data;
+    }
   }
 
   const labelTitles = getLabelTitlesByType(type);
 
-  function clearAllInputField() {
-    for (let i = 0; i < labelTitles.length; i += 1) {
-      const { name } = labelTitles[i];
+  function clearAllInputField(titles) {
+    for (let i = 0; i < titles.length; i += 1) {
+      const { name } = titles[i];
       inputFieldRefs[name].value = '';
     }
   }
 
   function hanldeResponseFromServer(result) {
-    if (result.status === 404) {
+    if (result.status === httpStatus.Not_Found) {
       alert(result.data.errorMessage);
     }
-    if (result.status === 200) {
+    if (result.status === httpStatus.OK) {
       switch (type) {
         case 'fertilizer':
           alert(`Thêm phân bón ${result.data.name} thành công`);
-          clearAllInputField();
+          clearAllInputField(labelTitles);
           break;
         case 'plantProductProtection':
           alert('Thêm thuốc bảo vệ thực vật mới thành công');
@@ -236,7 +239,7 @@ function AddItemModal({ type }) {
     return true;
   }
 
-  async function createNewItemEventHandler(e) {
+  async function createNewItemEventHandler(e, titles) {
     e.preventDefault();
     const api = apiUrl;
     // const fake_data = {
@@ -251,18 +254,18 @@ function AddItemModal({ type }) {
     //   manufactureAndImport: '',
     // };
     const data = {};
-    console.log(labelTitles.length);
-    for (let i = 0; i < labelTitles.length; i += 1) {
-      const { name } = labelTitles[i];
-      const { required } = labelTitles[i];
+    console.log(titles.length);
+    for (let i = 0; i < titles.length; i += 1) {
+      const { name } = titles[i];
+      const { required } = titles[i];
       const userInputValue = inputFieldRefs[name].value;
-      const { value } = labelTitles[i];
+      const { value } = titles[i];
       if (!validateUserInput(required, userInputValue, value)) {
         return;
       }
       data[name] = userInputValue;
     }
-    const result = await getData(api, data);
+    const result = await callApiToCreateNewItem(api, data);
     console.log(result.status);
     console.log(result.data.errorMessage);
     hanldeResponseFromServer(result);
@@ -306,7 +309,7 @@ function AddItemModal({ type }) {
           </div>
           <div className="modal-footer">
             <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button" onClick={createNewItemEventHandler}>Xác nhận</button>
+            <button className="btn btn-primary" type="button" onClick={(e) => createNewItemEventHandler(e, labelTitles)}>Xác nhận</button>
           </div>
         </div>
       </div>
