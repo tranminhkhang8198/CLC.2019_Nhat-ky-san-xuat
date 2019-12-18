@@ -104,8 +104,10 @@ function AddItemModal({ type }) {
       case 'plantProductProtection':
         labelTitles = [
           {
-            name: 'add-ten-thuong-pham',
+            type: 'text',
+            name: 'name',
             value: 'Tên thương phẩm',
+            placeholder: 'Nhập vào tên thương phẩm',
             required: true,
             notes: [
               'Tên các thương phẩm phải cách nhau bằng dấu ,',
@@ -113,8 +115,10 @@ function AddItemModal({ type }) {
             ],
           },
           {
-            name: 'add-ten-hoat-chat',
+            type: 'text',
+            name: 'activeIngredient',
             value: 'Tên hoạt chất',
+            placeholder: 'Nhập vào tên hoạt chất',
             required: false,
             notes: [
               'Tên các thương phẩm phải cách nhau bằng dấu ,',
@@ -122,23 +126,36 @@ function AddItemModal({ type }) {
             ],
           },
           {
-            name: 'add-ten-loai-thuoc',
-            value: 'Tên loại thuốc',
+            type: 'text',
+            name: 'content',
+            value: 'Hàm lượng',
+            placeholder: 'Nhập hàm lượng của thuốc',
             required: false,
             notes: [
-              'Tên các thương phẩm phải cách nhau bằng dấu ,',
-              'Ví dụ: Thương phẩm 1, Thương phẩm 2',
+              'Ví dụ: 50g/1 liều',
             ],
           },
           {
-            name: 'add-ten-nhom-thuoc',
+            type: 'text',
+            name: 'plantProtectionProductGroup',
             value: 'Tên nhóm thuốc',
+            placeholder: 'Nhập vào tên nhóm thuốc',
             required: false,
             notes: [],
           },
           {
-            name: 'add-danh-muc-thuoc',
-            value: 'Danh mục thuốc',
+            type: 'number',
+            name: 'ghs',
+            value: 'Nhóm độc ghs',
+            placeholder: 'Nhập vào nhóm độc GHS',
+            required: true,
+            notes: [],
+          },
+          {
+            type: 'number',
+            name: 'who',
+            value: 'Nhóm độc who',
+            placeholder: 'Nhập vào nhóm độc WHO',
             required: true,
             notes: [],
           },
@@ -236,6 +253,66 @@ function AddItemModal({ type }) {
     return true;
   }
 
+  function RegistrationInfoInputModal() {
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-registration-info">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                Thêm thông tin nơi mua thương phẩm
+              </h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body modal-add-body">
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-registration-unit" className="w-100">
+                  Nhập vào tên cửa hàng
+                  <input
+                    type="text"
+                    name="add-registration-unit"
+                    id="add-registration-unit"
+                    className="form-control item"
+                    placeholder="Nhập vào tên cửa hàng"
+                  />
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-registration-add" className="w-100">
+                  Địa chỉ cửa hàng
+                  <input
+                    type="text"
+                    name="add-registration-add"
+                    id="add-registration-add"
+                    className="form-control item"
+                    placeholder="Nhập vào địa chỉ cửa hàng"
+                  />
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="manufacturer" className="w-100">
+                  Nhà sản xuất
+                  <input
+                    type="text"
+                    name="manufacturer"
+                    id="manufacturer"
+                    className="form-control item"
+                    placeholder="Nhà sản xuất"
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   async function createNewItemEventHandler(e) {
     e.preventDefault();
     const api = apiUrl;
@@ -275,11 +352,11 @@ function AddItemModal({ type }) {
           {item.value}
           {item.required === true && renderRequiredFields()}
           <input
-            type="text"
-            name={item.name}
+            type={item.type}
+            name={`add-${item.name}`}
             id={item.value}
             className="form-control item"
-            placeholder={item.value}
+            placeholder={item.placeholder}
             ref={(element) => { inputFieldRefs[item.name] = element; }}
           />
           {item.notes.length > 0 && renderNotesFields(item.notes)}
@@ -289,28 +366,40 @@ function AddItemModal({ type }) {
   }
 
   return (
-    <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h4 className="modal-title">
-              Thêm mới
-              {renderTypeTitle(type)}
-            </h4>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div className="modal-body modal-add-body">
-            {renderLabels(labelTitles)}
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button" onClick={createNewItemEventHandler}>Xác nhận</button>
+    <React.Fragment key="hey">
+      <RegistrationInfoInputModal />
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                Thêm mới
+                {renderTypeTitle(type)}
+              </h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body modal-add-body">
+              {renderLabels(labelTitles)}
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+              <button
+                className="btn btn-info"
+                type="button"
+                data-dismiss="modal"
+                data-toggle="modal"
+                data-target="#modal-add-registration-info"
+              >
+                Tiếp theo
+              </button>
+              <button className="btn btn-primary" type="button" onClick={createNewItemEventHandler}>Lưu</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
