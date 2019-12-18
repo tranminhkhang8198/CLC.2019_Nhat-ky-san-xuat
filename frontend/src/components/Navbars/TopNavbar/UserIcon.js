@@ -1,17 +1,18 @@
 import React from 'react';
 
-import avatar5 from '../../../image/avatar5.jpeg';
 
 function UserIcon() {
+  const name = localStorage.getItem('name');
+  const avatar = localStorage.getItem('data');
   return (
     <li className="nav-item dropdown no-arrow" role="presentation">
       <div className="nav-item dropdown no-arrow">
         <a className="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="/">
-          <span className="d-none d-lg-inline mr-2 text-gray-600 small">Nguyễn Văn A</span>
-          <img alt="img" className="border rounded-circle img-profile" src={avatar5} />
+          <span className="d-none d-lg-inline mr-2 text-gray-600 small">{name}</span>
+          <img alt="img" className="border rounded-circle img-profile" src={avatar} />
         </a>
         <div className="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu">
-          <span className="dropdown-item mr-2 text-gray-600 medium d-lg-none">Nguyễn Văn A</span>
+          <span className="dropdown-item mr-2 text-gray-600 medium d-lg-none">{name}</span>
           <a className="dropdown-item" href="/">
             <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
             &nbsp;Thông tin

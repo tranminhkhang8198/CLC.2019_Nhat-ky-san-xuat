@@ -7,6 +7,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
+
 // eslint-disable-next-line react/prefer-stateless-function
 
 class Login extends Component {
@@ -33,7 +34,7 @@ class Login extends Component {
     });
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     e.preventDefault();
 
     // create isValid to check fields
@@ -41,14 +42,26 @@ class Login extends Component {
       phone: this.state.phone,
       password: this.state.password,
     };
-    axios.post('http://localhost:3001/api/login', user)
-      .then((res) => {
-        localStorage.setItem('user', res.data.token);
-        // Redirect here
-      })
-      .catch((err) => {
-        alert("Vui lòng nhập lại.");
+
+    const res = await axios.post('/api/login', user);
+
+    if (res.status === 200) {
+      const { token } = res.data;
+      localStorage.setItem('user', token);
+      const resInfor = await axios.get('/api/users/me', {
+        headers: { Authorization: token },
       });
+      if (resInfor.status === 200) {
+        const { name, avatar } = resInfor.data;
+        localStorage.setItem('name', name);
+        localStorage.setItem('avatar', avatar);
+      }
+      // Redirect here
+      this.props.history.push('/');
+    } else {
+      // eslint-disable-next-line no-alert
+      alert("Vui lòng nhập lại.");
+    }
 
     this.setState({
       phone: '',

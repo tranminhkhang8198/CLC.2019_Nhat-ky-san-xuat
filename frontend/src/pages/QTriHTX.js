@@ -413,6 +413,7 @@ const FAKE_DATA = [
 
 function QuanTriHTX() {
   // const navItems = ['Hợp tác xã', 'Quản lý Hợp tác xã', 'Thuốc BVTV', 'Phân bón'];
+
   return (
     <div className="container-fluid">
       <DeleteItemsModal />
