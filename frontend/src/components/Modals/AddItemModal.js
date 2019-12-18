@@ -23,19 +23,19 @@ function AddItemModal({ type }) {
   }
 
   function getApiURLByType(dataType) {
-    let ApiUrl = '';
+    let apiUrl = '';
     switch (dataType) {
       case 'fertilizer':
-        ApiUrl = 'http://localhost:3001/api/fertilizers';
+        apiUrl = 'http://localhost:3001/api/fertilizers';
         break;
       case 'plantProductProtection':
-        ApiUrl = '';
+        apiUrl = '';
         break;
       default:
-        ApiUrl = '';
+        apiUrl = '';
         break;
     }
-    return ApiUrl;
+    return apiUrl;
   }
 
   function getLabelTitlesByType(dataType) {
@@ -168,9 +168,6 @@ function AddItemModal({ type }) {
     ));
   }
 
-  const apiUrl = getApiURLByType(type);
-  const inputFieldRefs = [];
-
   async function callApiToCreateNewItem(api, bodyFormData) {
     try {
       const data = await axios({
@@ -196,8 +193,7 @@ function AddItemModal({ type }) {
     }
   }
 
-  const labelTitles = getLabelTitlesByType(type);
-
+  const inputFieldRefs = [];
   function clearAllInputField(titles) {
     for (let i = 0; i < titles.length; i += 1) {
       const { name } = titles[i];
@@ -205,15 +201,15 @@ function AddItemModal({ type }) {
     }
   }
 
-  function hanldeResponseFromServer(result) {
-    if (result.status === httpStatus.Not_Found) {
+  function hanldeResponseFromServer(result, dataType, titles) {
+    if (result.status === httpStatus.NOT_FOUND) {
       alert(result.data.errorMessage);
     }
     if (result.status === httpStatus.OK) {
-      switch (type) {
+      switch (dataType) {
         case 'fertilizer':
           alert(`Thêm phân bón ${result.data.name} thành công`);
-          clearAllInputField(labelTitles);
+          clearAllInputField(titles);
           break;
         case 'plantProductProtection':
           alert('Thêm thuốc bảo vệ thực vật mới thành công');
@@ -239,9 +235,14 @@ function AddItemModal({ type }) {
     return true;
   }
 
-  async function createNewItemEventHandler(e, titles) {
+  async function createNewItemEventHandler(e, createItemHanlderParametersList) {
     e.preventDefault();
-    const api = apiUrl;
+    const {
+      titles,
+      api,
+      dataType,
+      fieldRefs,
+    } = createItemHanlderParametersList;
     // const fake_data = {
     //   ministry: 'Công thương',
     //   province: 'Bà Rịa - Vũng Tàu',
@@ -258,7 +259,7 @@ function AddItemModal({ type }) {
     for (let i = 0; i < titles.length; i += 1) {
       const { name } = titles[i];
       const { required } = titles[i];
-      const userInputValue = inputFieldRefs[name].value;
+      const userInputValue = fieldRefs[name].value;
       const { value } = titles[i];
       if (!validateUserInput(required, userInputValue, value)) {
         return;
@@ -268,8 +269,9 @@ function AddItemModal({ type }) {
     const result = await callApiToCreateNewItem(api, data);
     console.log(result.status);
     console.log(result.data.errorMessage);
-    hanldeResponseFromServer(result);
+    hanldeResponseFromServer(result, dataType, titles);
   }
+
 
   function renderLabels(labelsData) {
     return labelsData.map((item) => (
@@ -291,6 +293,16 @@ function AddItemModal({ type }) {
     ));
   }
 
+
+  const apiUrl = getApiURLByType(type);
+  const labelTitles = getLabelTitlesByType(type);
+  const createItemHanlderParameters = {
+    titles: labelTitles,
+    api: apiUrl,
+    dataType: type,
+    fieldRefs: inputFieldRefs,
+  };
+
   return (
     <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
       <div className="modal-dialog" role="document">
@@ -309,7 +321,7 @@ function AddItemModal({ type }) {
           </div>
           <div className="modal-footer">
             <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button" onClick={(e) => createNewItemEventHandler(e, labelTitles)}>Xác nhận</button>
+            <button className="btn btn-primary" type="button" onClick={(e) => createNewItemEventHandler(e, createItemHanlderParameters)}>Xác nhận</button>
           </div>
         </div>
       </div>

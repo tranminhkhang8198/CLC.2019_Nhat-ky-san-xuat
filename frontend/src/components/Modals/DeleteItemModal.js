@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import axios from 'axios';
+import httpStatus from 'http-status';
 
 // eslint-disable-next-line no-unused-vars
 function DeleteItemModal({ type, parentComponent, selectedItem }) {
@@ -64,17 +65,13 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
   }
 
   async function deleteItemBaseOnId(itemToDelete) {
-    // eslint-disable-next-line prefer-template
-    const apiUrl = getApiURLByType(type) + '?_id=' + itemToDelete._id;
+    const apiUrl = `${getApiURLByType(type)}?_id=${itemToDelete._id}`;
     const result = await callApiToDelete(apiUrl);
-    // console.log(apiUrl);
-    console.log(result);
-    console.log(result.status);
     return result;
   }
 
   async function handleDeleteResult(result) {
-    if (result != null && result.data != null && result.data.status === 404) {
+    if (result != null && result.data != null && result.data.status === httpStatus.NOT_FOUND) {
       // alert(results[i].data.errorMessage);
       alert('Xóa thất bại');
       return;
@@ -83,10 +80,9 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
     parentComponent.setState({ refresh: true });
   }
 
-  async function deleteHandler(e) {
+  async function deleteHandler(e, item) {
     e.preventDefault();
-    console.log(selectedItem.name);
-    const result = await deleteItemBaseOnId(selectedItem);
+    const result = await deleteItemBaseOnId(item);
     handleDeleteResult(result);
   }
 
@@ -113,7 +109,7 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
           </div>
           <div className="modal-footer">
             <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button" onClick={deleteHandler}>Xác nhận xóa</button>
+            <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => deleteHandler(e, selectedItem)}>Xác nhận xóa</button>
           </div>
         </div>
       </div>
