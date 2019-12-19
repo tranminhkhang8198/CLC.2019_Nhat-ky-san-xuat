@@ -18,22 +18,55 @@ export class ListItems extends Component {
     this.state = {
       // eslint-disable-next-line react/no-unused-state
       Items: [],
+      // eslint-disable-next-line react/no-unused-state
+      data: props.data,
+      parentComponent: props.parentComponent,
+      selectedItem: null,
     };
+    this.selectTableItemEventHandler = this.selectTableItemEventHandler.bind(this);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getItemBaseOnId(itemList, itemId) {
+    let result = null;
+    for (let i = 0; i < itemList.length; i += 1) {
+      if (itemList[i]._id === itemId) {
+        result = itemList[i];
+        break;
+      }
+    }
+    return result;
+  }
+
+  selectTableItemEventHandler(e) {
+    e.preventDefault();
+    const { data } = this.props;
+    const selectedItemId = e.target.getAttribute('href');
+    const item = this.getItemBaseOnId(data, selectedItemId);
+    this.setState({ selectedItem: item });
   }
 
   render() {
     const { data } = this.props;
+    const { selectedItem, parentComponent } = this.state;
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
 
+    const viewItemModal = <ViewItemModal />;
+    const modifyItemModal = <ModifyItemModal />;
+    const deleteItemModal = <DeleteItemModal
+      type="plantProductProtection"
+      parentComponent={parentComponent}
+      selectedItem={selectedItem}
+    />;
+
     return (
       <div className="card-body">
-        <ViewItemModal />
-        <ModifyItemModal />
-        <DeleteItemModal />
-
-        <DataPerPage type="plantProductProtection" />
+        {viewItemModal}
+        {modifyItemModal}
+        {deleteItemModal}
+        <DataPerPage type="plantProductProtection" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
@@ -78,11 +111,12 @@ export class ListItems extends Component {
                       </a>
                       <a
                         className="dropdown-item text-white bg-danger"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
                         data-target="#modal-delete-item-1"
                         style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xóa hàng này
                       </a>

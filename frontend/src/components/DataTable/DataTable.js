@@ -28,7 +28,6 @@ export class ListItems extends Component {
         <ViewItemModal />
         <ModifyItemModal />
         <DeleteItemModal />
-
         <DataPerPage />
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
