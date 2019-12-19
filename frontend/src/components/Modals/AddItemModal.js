@@ -312,7 +312,7 @@ function AddItemModal({ type }) {
     );
   }
 
-  async function createNewItemEventHandler(e) {
+  async function createNewItemEventHandler(e, createItemHanlderParametersList) {
     e.preventDefault();
     const {
       titles,
