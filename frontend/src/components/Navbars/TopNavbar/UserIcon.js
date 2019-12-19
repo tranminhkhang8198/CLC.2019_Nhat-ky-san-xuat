@@ -1,9 +1,14 @@
 import React from 'react';
 
-
 function UserIcon() {
   const name = localStorage.getItem('name');
   const avatar = localStorage.getItem('data');
+
+  const Logout = (props) => {
+    localStorage.clear();
+    props.history.push('/login');
+  };
+
   return (
     <li className="nav-item dropdown no-arrow" role="presentation">
       <div className="nav-item dropdown no-arrow">
@@ -19,10 +24,15 @@ function UserIcon() {
           </a>
           <a className="dropdown-item" href="/">
             <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400" />
-              Lịch sử hoạt động
+            Lịch sử hoạt động
           </a>
           <div className="dropdown-divider" />
-          <a className="dropdown-item" href="/">
+
+          <a
+            className="dropdown-item"
+            onClick={Logout}
+            href="/login"
+          >
             <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
             &nbsp;Đăng xuất
           </a>

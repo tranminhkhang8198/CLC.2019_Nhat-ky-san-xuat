@@ -51,11 +51,6 @@ function App() {
     </div>
   );
 
-  const Logout = (props) => {
-    localStorage.clear();
-    props.history.push('/login');
-  };
-
   return (
     <Router>
       <div>
@@ -84,12 +79,9 @@ function App() {
           <NavItem>
             <NavLink to="/profile" tag={RRNavLink}>Profile</NavLink>
           </NavItem>
-          <NavItem>
+          {/* <NavItem>
             <NavLink to="/login" tag={RRNavLink}>Login</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/logout" tag={RRNavLink}>Logout</NavLink>
-          </NavItem>
+          </NavItem> */}
         </Nav>
 
         <Switch>
@@ -102,7 +94,6 @@ function App() {
           <PrivateRoute exact path="/quantrisukienhtx" component={() => renderNavItem(<QuanTriSuKienHTX />)} />
           <PrivateRoute exact path="/profile" component={() => renderNavItem(<Profile />)} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/logout">{Logout}</Route>
           {/* not found */}
           <Route path="*" component={() => '404 NOT FOUND'} />
         </Switch>

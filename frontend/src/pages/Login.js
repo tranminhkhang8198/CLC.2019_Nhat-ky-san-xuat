@@ -43,7 +43,9 @@ class Login extends Component {
       password: this.state.password,
     };
 
-    const res = await axios.post('/api/login', user);
+    const res = await axios.post('/api/login', user)
+      .then(response => response)
+      .catch(error => error);
 
     if (res.status === 200) {
       const { token } = res.data;
@@ -60,7 +62,7 @@ class Login extends Component {
       this.props.history.push('/');
     } else {
       // eslint-disable-next-line no-alert
-      alert("Vui lòng nhập lại.");
+      alert("Vui lòng kiểm tra server và nhập lại.");
     }
 
     this.setState({
@@ -91,6 +93,7 @@ class Login extends Component {
                     type="text"
                     id="phone"
                     name="phone"
+                    placeholder="Nhập số điện thoại hoặc tài khoản"
                     value={this.state.phone}
                     onChange={this.onChangePhone}
                   />
