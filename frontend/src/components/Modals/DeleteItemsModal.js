@@ -38,23 +38,19 @@ class DeleteItemsModal extends Component {
     const { data } = this.props;
     if (data.length !== prevProps.data.length) {
       this.updateDataWhenRendered(data);
+      return;
+    }
+    for (let i = 0; i < data.length; i += 1) {
+      if (data[i]._id !== prevProps.data[i]._id) {
+        this.updateDataWhenRendered(data);
+        return;
+      }
     }
   }
 
   getToken() {
     const token = localStorage.getItem('itemName');
     return token;
-  }
-
-  async getData() {
-    const { type } = this.state;
-    // eslint-disable-next-line prefer-template
-    const apiUrl = this.getApiURLByType(type) + '?pageNumber=1&nPerPage=10';
-    const { data } = await axios({
-      method: 'GET',
-      url: apiUrl,
-    });
-    return data;
   }
 
   getApiURLByType(typeData) {
@@ -74,6 +70,7 @@ class DeleteItemsModal extends Component {
   }
 
   async updateDataWhenRendered(updatedData) {
+    // console.log('event 2');
     await this.setState({
       data: updatedData,
     });
@@ -108,8 +105,8 @@ class DeleteItemsModal extends Component {
     const apiUrl = `${this.getApiURLByType(type)}?_id=${itemToDelete._id}`;
     const result = await this.callApiToDelete(apiUrl);
     // console.log(apiUrl);
-    console.log(result);
-    console.log(result.status);
+    // console.log(result);
+    // console.log(result.status);
     return result;
   }
 
@@ -145,12 +142,8 @@ class DeleteItemsModal extends Component {
         results.push(result);
       }
     }
-    const currData = await this.getData();
-    this.setState(() => ({
-      data: currData,
-    }));
     parrent.setState(() => ({
-      data: currData,
+      refresh: true,
     }));
     this.handleDeleteResult(results);
   }
@@ -204,7 +197,7 @@ class DeleteItemsModal extends Component {
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body modal-add-body">
               <p>Chọn tên các dữ liệu bạn muốn xóa</p>
               {this.renderItemsToDelete(data)}
             </div>
