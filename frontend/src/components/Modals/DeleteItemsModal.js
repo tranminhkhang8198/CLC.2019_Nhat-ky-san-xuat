@@ -13,6 +13,7 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid';
 import axios from 'axios';
+import httpStatus from 'http-status';
 
 class DeleteItemsModal extends Component {
   constructor(props) {
@@ -104,8 +105,7 @@ class DeleteItemsModal extends Component {
 
   async deleteItemBaseOnId(itemToDelete) {
     const { type } = this.state;
-    // eslint-disable-next-line prefer-template
-    const apiUrl = this.getApiURLByType(type) + '?_id=' + itemToDelete._id;
+    const apiUrl = `${this.getApiURLByType(type)}?_id=${itemToDelete._id}`;
     const result = await this.callApiToDelete(apiUrl);
     // console.log(apiUrl);
     console.log(result);
@@ -114,8 +114,7 @@ class DeleteItemsModal extends Component {
   }
 
   async deleteItemBaseOnItemName(itemToDelete) {
-    // eslint-disable-next-line prefer-template
-    const apiUrl = this.getApiURLByType(this.type) + '?name=' + itemToDelete.name;
+    const apiUrl = `${this.getApiURLByType(this.type)}?name=${itemToDelete.name}`;
     const result = await this.callApiToDelete(apiUrl);
     return result;
   }
@@ -125,13 +124,11 @@ class DeleteItemsModal extends Component {
       return;
     }
     for (let i = 0; i < results.length; i += 1) {
-      if (results[i] != null && results[i].data != null && results[i].data.status === 404) {
-        // alert(results[i].data.errorMessage);
-        alert('Xóa thất bại');
+      if (results[i].status === httpStatus.NOT_FOUND) {
+        alert(`Xóa thất bại: ${results[i].data.errorMessage}`);
         return;
       }
     }
-    // console.log(results[results.length - 1]);
     alert('Xóa thành công');
   }
 
@@ -145,16 +142,16 @@ class DeleteItemsModal extends Component {
       if (isChecked) {
         // eslint-disable-next-line no-await-in-loop
         const result = await this.deleteItemBaseOnId(data[i]);
-        // if (result.status === 200) {
-        //   console.log('delete');
-        // }
         results.push(result);
-        // console.log(data[i].name);
       }
     }
     const currData = await this.getData();
-    this.setState({ data: currData });
-    parrent.setState({ data: currData });
+    this.setState(() => ({
+      data: currData,
+    }));
+    parrent.setState(() => ({
+      data: currData,
+    }));
     this.handleDeleteResult(results);
   }
 

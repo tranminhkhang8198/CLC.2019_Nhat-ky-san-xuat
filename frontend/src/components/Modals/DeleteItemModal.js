@@ -71,13 +71,18 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
   }
 
   async function handleDeleteResult(result) {
-    if (result != null && result.data != null && result.data.status === httpStatus.NOT_FOUND) {
+    if (result == null) {
+      return;
+    }
+    if (result.status === httpStatus.NOT_FOUND) {
       // alert(results[i].data.errorMessage);
       alert('Xóa thất bại');
       return;
     }
     alert('Xóa thành công');
-    parentComponent.setState({ refresh: true });
+    parentComponent.setState(() => ({
+      refresh: true,
+    }));
   }
 
   async function deleteHandler(e, item) {
@@ -103,7 +108,7 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
               {renderTypeTitle(type)}
               với tên là:
               <strong>
-                {` ${selectedItem.name}`}
+                {` ${selectedItem !== null ? selectedItem.name : ''}`}
               </strong>
             </p>
           </div>

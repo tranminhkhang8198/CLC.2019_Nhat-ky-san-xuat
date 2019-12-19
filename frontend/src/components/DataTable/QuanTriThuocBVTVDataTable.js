@@ -39,11 +39,9 @@ export class ListItems extends Component {
   }
 
   selectTableItemEventHandler(e) {
-    // eslint-disable-next-line no-unused-vars
     e.preventDefault();
     const { data } = this.props;
     const selectedItemId = e.target.getAttribute('href');
-    // console.log();
     const item = this.getItemBaseOnId(data, selectedItemId);
     this.setState({ selectedItem: item });
   }
@@ -55,17 +53,19 @@ export class ListItems extends Component {
       return <h1>Loading....</h1>;
     }
 
-    let passedItem = selectedItem;
-    if (passedItem === null) {
-      // eslint-disable-next-line prefer-destructuring
-      passedItem = data[0];
-    }
+    const viewItemModal = <ViewItemModal />;
+    const modifyItemModal = <ModifyItemModal />;
+    const deleteItemModal = <DeleteItemModal
+      type="plantProductProtection"
+      parentComponent={parentComponent}
+      selectedItem={selectedItem}
+    />;
 
     return (
       <div className="card-body">
-        <ViewItemModal />
-        <ModifyItemModal />
-        <DeleteItemModal type="plantProductProtection" parentComponent={parentComponent} selectedItem={passedItem} />
+        {viewItemModal}
+        {modifyItemModal}
+        {deleteItemModal}
         <DataPerPage type="plantProductProtection" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -111,7 +111,7 @@ export class ListItems extends Component {
                       </a>
                       <a
                         className="dropdown-item text-white bg-danger"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
                         data-target="#modal-delete-item-1"

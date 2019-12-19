@@ -20,13 +20,13 @@ function DataPerPage({ type, parentComponent }) {
   }
 
   let optionRef = null;
-  async function changeDataPerPageEventHandler(e) {
+  async function changeDataPerPageEventHandler(e, fieldRef) {
     e.preventDefault();
-    const dataPerPage = optionRef.options[optionRef.selectedIndex].value;
-    parentComponent.setState({
+    const dataPerPage = fieldRef.options[fieldRef.selectedIndex].value;
+    parentComponent.setState(() => ({
       refresh: true,
       dataPerpage: dataPerPage,
-    });
+    }));
   }
   const { placeholderData } = getSearchPlaceholder(type);
   return (
@@ -39,7 +39,7 @@ function DataPerPage({ type, parentComponent }) {
               id="data-per-page-picker"
               className="form-control form-control-sm custom-select custom-select-sm"
               ref={(element) => { optionRef = element; }}
-              onChange={changeDataPerPageEventHandler}
+              onChange={(e) => (changeDataPerPageEventHandler(e, optionRef))}
             >
               <option value={10} defaultValue>10</option>
               <option value={25}>25</option>
