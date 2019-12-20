@@ -7,6 +7,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
+import decode from 'jwt-decode';
 
 // eslint-disable-next-line react/prefer-stateless-function
 
@@ -49,6 +50,7 @@ class Login extends Component {
 
     if (res.status === 200) {
       const { token } = res.data;
+      // console.log(decode(token).exp);
       localStorage.setItem('user', token);
       const resInfor = await axios.get('/api/users/me', {
         headers: { Authorization: token },
