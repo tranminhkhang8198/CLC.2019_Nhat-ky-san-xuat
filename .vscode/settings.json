@@ -1,0 +1,8 @@
+{
+  "eslint.workingDirectories": [
+    "backend",
+    "frontend"
+  ],
+  "prettier.tabWidth": 2,
+  "editor.formatOnSave": true
+}
