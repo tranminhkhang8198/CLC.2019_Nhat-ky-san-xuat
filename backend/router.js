@@ -1725,6 +1725,194 @@ exports.routers = app => {
     });
 
 
+
+    // *************************************************************************** //
+    // ROUTES FOR PLANT PROTECTION PRODUCT WAREHOUSE
+
+    /**
+     * @api {post} /plant-protection-product-warehouses Create new plant protection product warehouse
+     * @apiName CreatePlantProtectionProductWarehouse
+     * @apiGroup PlantProtectionProductWarehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} plantProtectionProductId Id thuốc bảo vệ thực vật
+     * @apiParam {Date} tradeDate Ngày mua (ISO8601 Format)
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
+     * @apiParam {Date} expiryDate Hạn sử dụng (ISO8601 Format)
+     * @apiParam {String} distributionAgent Đại lý phân phối
+     * @apiParam {Number} quarantineDate Thời gian cách ly
+     *
+     * @apiParamExample {json} Request-Example:
+     * {
+     *     "plantProtectionProductId": "5df20540e2b16e4d09842e26",
+     *     "tradeDate": "2019-01-14",
+     *     "quantity": "2",
+     *     "manufacturingDate": "2019-02-18",
+     *     "expiryDate": "2019-04-28",
+     *     "distributionAgent": "Cty Thuoc Diet Co",
+     *     "quarantineDate": "2",
+     *     "cooperativeId": "HTXUMH3"
+     * }
+     *
+     * @apiParam {String} plantProtectionProductId Id thuốc bảo vệ thực vật
+     * @apiParam {Date} tradeDate Ngày mua (ISO8601 Format)
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
+     * @apiParam {Date} expiryDate Hạn sử dụng (ISO8601 Format)
+     * @apiParam {String} distributionAgent Đại lý phân phối
+     * @apiParam {Number} quarantineDate Thời gian cách ly
+     * @apiParam {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
+     * @apiParam {Date} created Thời gian dữ liệu mới được lưu vào db
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *     "plantProtectionProductId": "5df20540e2b16e4d09842e26",
+     *     "tradeDate": "2019-01-14",
+     *     "quantity": "2",
+     *     "manufacturingDate": "2019-02-18",
+     *     "expiryDate": "2019-04-28",
+     *     "quarantineDate": "2",
+     *     "distributionAgent": "Cty Thuoc Diet Co",
+     *     "cooperativeId": "HTXUMH3",
+     *     "created": "2019-12-20T15:56:40.048Z",
+     *     "_id": "5dfcef3b83ec1418baf42a34"
+     * }
+     *
+     * @apiError plantProtectionProductId-is-required Trường id thuốc bvtv là bắt buộc
+     * @apiError CooperativeId-is-required Trường id hợp tác xã là bắt buộc
+     * @apiError tradeDate-must-be-a-date Trường tradeDate phải là ngày với định dạng ISO8601
+     * @apiError manufacturingDate-must-be-a-date Trường manufacturingDate phải là ngày với định dạng ISO8601
+     * @apiError expiryDate-must-be-a-date Trường expiryDate phải là ngày với định dạng ISO8601
+     * @apiError quantity-must-be-a-number Trường quantity phải là số nguyên dương
+     * @apiError quarantineDate-must-be-a-number Trường quarantineDate phải là số nguyên dương
+     * @apiErrorExample Thuốc bvtv không tồn tại:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Thuốc bảo vệ thực vật không tồn tại trong danh mục"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường id thuốc bvtv:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập id thuốc bảo vệ thực vật"
+     *     }
+     * 
+     * @apiErrorExample HTX không tồn tại:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Hợp tác xã không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường id HTX:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập id họp tác xã"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường quantity:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập số lượng"
+     *     }
+     * 
+     * @apiErrorExample Trường quantity phải là số nguyên dương:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Số lượng phải là số nguyên dương"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường quarantineDate:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập thời gian cách ly"
+     *     }
+     * 
+     * @apiErrorExample Trường quarantineDate phải là số nguyên dương:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Thời gian cách ly phải là số nguyên dương"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường manufacturingDate:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập ngày sản xuất"
+     *     }
+     * 
+     * @apiErrorExample Trường manufacturingDate phải là định dạng ngày:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày sản xuất không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường expiryDate:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập hạn sử dụng"
+     *     }
+     * 
+     * @apiErrorExample Trường expiryDate phải là định dạng ngày:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Hạn sử dụng không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Trường tradeDate phải là định dạng ngày:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày mua không hợp lệ"
+     *     }
+     * 
+     *
+     * @apiPermission none
+     */
+
+    app.post('/api/plant-protection-product-warehouses', (req, res, next) => {
+        const body = req.body;
+
+        app.models.plantProtectionProductWarehouse.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info);
+        });
+    })
+
+
+
+    app.get('/api/plant-protection-product-warehouses', (req, res, next) => {
+        const query = req.query;
+
+        app.models.plantProtectionProductWarehouse.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    app.get('/api/plant-protection-product-warehouses/:id', (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.plantProtectionProductWarehouse.findById(id, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    app.delete('/api/plant-protection-product-warehouses/:id', (req, res, next) => {
+        console.log("ok");
+        const id = req.params.id;
+
+        app.models.plantProtectionProductWarehouse.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+
+
     // *************************************************************************** //
     // ROUTES FOR SCOPE OF USE
     app.get("/api/scope-of-uses/plant-protection-products", (req, res, next) => {
@@ -1737,7 +1925,7 @@ exports.routers = app => {
 
 
     // *************************************************************************** //
-    // ROUTES FOR PLANT PROTECTION PRODUCT
+    // ROUTES FOR FERTILIZER
     /**
      * @api {get} /fertilizers Get all fertilizers with pageNumber and nPerPage
      * @apiName GetAllFertilizers
