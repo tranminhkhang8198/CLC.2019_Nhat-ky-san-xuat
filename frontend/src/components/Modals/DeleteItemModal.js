@@ -3,7 +3,6 @@ import React from 'react';
 import axios from 'axios';
 import * as httpStatus from 'http-status';
 
-// eslint-disable-next-line no-unused-vars
 function DeleteItemModal({ type, parentComponent, selectedItem }) {
   function getToken() {
     const token = localStorage.getItem('itemName');
