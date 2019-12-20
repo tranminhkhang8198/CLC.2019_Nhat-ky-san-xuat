@@ -252,6 +252,52 @@ function AddItemModal({ type }) {
     return true;
   }
 
+  async function createNewItemEventHandler(e, createItemHanlderParametersList) {
+    e.preventDefault();
+    const {
+      titles,
+      api,
+      dataType,
+      fieldRefs,
+    } = createItemHanlderParametersList;
+    // const fake_data = {
+    //   ministry: 'Công thương',
+    //   province: 'Bà Rịa - Vũng Tàu',
+    //   enterprise: 'Công ty TNHH Sản xuất NGÔI SAO VÀNG',
+    //   type: 'Phân vô cơ',
+    //   name: 'Phân bón XYZ',
+    //   ingredient: '',
+    //   lawDocument: '',
+    //   isoCertOrganization: '',
+    //   manufactureAndImport: '',
+    // };
+    const data = {};
+    console.log(titles.length);
+    for (let i = 0; i < titles.length; i += 1) {
+      const { name } = titles[i];
+      const { required } = titles[i];
+      const userInputValue = fieldRefs[name].value;
+      const { value } = titles[i];
+      if (!validateUserInput(required, userInputValue, value)) {
+        return;
+      }
+      data[name] = userInputValue;
+    }
+    const result = await callApiToCreateNewItem(api, data);
+    console.log(result.status);
+    console.log(result.data.errorMessage);
+    hanldeResponseFromServer(result, dataType, titles);
+  }
+
+  const apiUrl = getApiURLByType(type);
+  const labelTitles = getLabelTitlesByType(type);
+  const createItemHanlderParameters = {
+    titles: labelTitles,
+    api: apiUrl,
+    dataType: type,
+    fieldRefs: inputFieldRefs,
+  };
+
   function RegistrationInfoInputModal() {
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-registration-info">
@@ -259,7 +305,7 @@ function AddItemModal({ type }) {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">
-                Thêm thông tin nơi mua thương phẩm
+                Thông tin địa chỉ mua hàng
               </h4>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
@@ -304,7 +350,25 @@ function AddItemModal({ type }) {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+              <button
+                className="btn btn-light"
+                type="button"
+                data-dismiss="modal"
+                data-toggle="modal"
+                data-target="#modal-add"
+              >
+                Trở lại
+              </button>
+              <button
+                className="btn btn-info"
+                type="button"
+                data-dismiss="modal"
+                data-toggle="modal"
+                data-target="#modal-add-scope-of-use"
+              >
+                Tiếp theo
+              </button>
             </div>
           </div>
         </div>
@@ -312,43 +376,97 @@ function AddItemModal({ type }) {
     );
   }
 
-  async function createNewItemEventHandler(e, createItemHanlderParametersList) {
-    e.preventDefault();
-    const {
-      titles,
-      api,
-      dataType,
-      fieldRefs,
-    } = createItemHanlderParametersList;
-    // const fake_data = {
-    //   ministry: 'Công thương',
-    //   province: 'Bà Rịa - Vũng Tàu',
-    //   enterprise: 'Công ty TNHH Sản xuất NGÔI SAO VÀNG',
-    //   type: 'Phân vô cơ',
-    //   name: 'Phân bón XYZ',
-    //   ingredient: '',
-    //   lawDocument: '',
-    //   isoCertOrganization: '',
-    //   manufactureAndImport: '',
-    // };
-    const data = {};
-    console.log(titles.length);
-    for (let i = 0; i < titles.length; i += 1) {
-      const { name } = titles[i];
-      const { required } = titles[i];
-      const userInputValue = fieldRefs[name].value;
-      const { value } = titles[i];
-      if (!validateUserInput(required, userInputValue, value)) {
-        return;
-      }
-      data[name] = userInputValue;
-    }
-    const result = await callApiToCreateNewItem(api, data);
-    console.log(result.status);
-    console.log(result.data.errorMessage);
-    hanldeResponseFromServer(result, dataType, titles);
+  function ScopeOfUseInputModal() {
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-scope-of-use">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                Thông tin phạm vi sử dụng
+              </h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body modal-add-body">
+              <fieldset>
+                <legend>Tác dụng 1:</legend>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="plant-name" className="w-100">
+                    Tên nông phẩm
+                    <input
+                      type="text"
+                      name="plant-name"
+                      id="plant-name"
+                      className="form-control item"
+                      placeholder="Nhập vào tên nông phẩm"
+                    />
+                  </label>
+                </div>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="pest" className="w-100">
+                    Sâu bọ diệt trừ
+                    <input
+                      type="text"
+                      name="pest"
+                      id="pest"
+                      className="form-control item"
+                      placeholder="Nhập vào tên sâu bọ khắc chế"
+                    />
+                  </label>
+                </div>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="dosage" className="w-100">
+                    Liều lượng
+                    <input
+                      type="text"
+                      name="dosage"
+                      id="dosage"
+                      className="form-control item"
+                      placeholder="Liều lượng sử dụng"
+                    />
+                  </label>
+                </div>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="usage" className="w-100">
+                    Cách sử dụng
+                    <textarea
+                      rows="4"
+                      name="usage"
+                      id="usage"
+                      className="form-control item"
+                      placeholder="Mô tả cách sử dụng chi tiết"
+                    />
+                  </label>
+                </div>
+              </fieldset>
+              <button className="btn btn-info w-100" type="button">Thêm mới</button>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+              <button
+                className="btn btn-light"
+                type="button"
+                data-dismiss="modal"
+                data-toggle="modal"
+                data-target="#modal-add-registration-info"
+              >
+                Trở lại
+              </button>
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={(e) => createNewItemEventHandler(e, createItemHanlderParameters)}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
-
 
   function renderLabels(labelsData) {
     return labelsData.map((item) => (
@@ -370,19 +488,10 @@ function AddItemModal({ type }) {
     ));
   }
 
-
-  const apiUrl = getApiURLByType(type);
-  const labelTitles = getLabelTitlesByType(type);
-  const createItemHanlderParameters = {
-    titles: labelTitles,
-    api: apiUrl,
-    dataType: type,
-    fieldRefs: inputFieldRefs,
-  };
-
   return (
     <React.Fragment key="hey">
       <RegistrationInfoInputModal />
+      <ScopeOfUseInputModal />
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -399,13 +508,15 @@ function AddItemModal({ type }) {
               {renderLabels(labelTitles)}
             </div>
             <div className="modal-footer">
-              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
               <button
-                className="btn btn-primary"
+                className="btn btn-info"
                 type="button"
-                onClick={(e) => createNewItemEventHandler(e, createItemHanlderParameters)}
+                data-toggle="modal"
+                data-target="#modal-add-registration-info"
+                data-dismiss="modal"
               >
-                Lưu
+                Tiếp theo
               </button>
             </div>
           </div>
