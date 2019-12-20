@@ -7,7 +7,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
-import decode from 'jwt-decode';
 
 // eslint-disable-next-line react/prefer-stateless-function
 
@@ -17,6 +16,7 @@ class Login extends Component {
     this.state = {
       phone: '',
       password: '',
+      error: '',
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -36,44 +36,51 @@ class Login extends Component {
   }
 
   async onSubmit(e) {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    // create isValid to check fields
-    const user = {
-      phone: this.state.phone,
-      password: this.state.password,
-    };
+      // create isValid to check fields
+      const user = {
+        phone: this.state.phone,
+        password: this.state.password,
+      };
 
-    const res = await axios.post('/api/login', user)
-      .then(response => response)
-      .catch(error => error);
+      const res = await axios.post('/api/login', user);
 
-    if (res.status === 200) {
-      const { token } = res.data;
-      // console.log(decode(token).exp);
-      localStorage.setItem('user', token);
-      const resInfor = await axios.get('/api/users/me', {
-        headers: { Authorization: token },
-      });
-      if (resInfor.status === 200) {
-        const { name, avatar } = resInfor.data;
-        localStorage.setItem('name', name);
-        localStorage.setItem('avatar', avatar);
+      if (res.status === 200) {
+        const { token } = res.data;
+        // console.log(decode(token).exp);
+        localStorage.setItem('user', token);
+        const resInfor = await axios.get('/api/users/me', {
+          headers: { Authorization: token },
+        });
+        if (resInfor.status === 200) {
+          const { name, avatar } = resInfor.data;
+          localStorage.setItem('name', name);
+          localStorage.setItem('avatar', avatar);
+        }
+        // Redirect here
+        this.props.history.push('/');
+      } else {
+        // eslint-disable-next-line no-alert
+        this.setState({
+          error: "Số điện thoại hoặc mật khẩu không dúng",
+        });
       }
-      // Redirect here
-      this.props.history.push('/');
-    } else {
-      // eslint-disable-next-line no-alert
-      alert("Vui lòng kiểm tra server và nhập lại.");
-    }
 
-    this.setState({
-      phone: '',
-      password: '',
-    });
+      this.setState({
+        phone: '',
+        password: '',
+      });
+    } catch (error) {
+      this.setState({
+        error: "Số điện thoại hoặc mật khẩu không dúng",
+      });
+    }
   }
 
   render() {
+    const { error } = this.state;
     return (
       <div>
         <div className="container-fluid" style={{ marginTop: '100px' }} />
@@ -87,6 +94,7 @@ class Login extends Component {
                   chúng tôi
                 </p>
               </div>
+              <div className="text-danger text-center">{error}</div>
               <form onSubmit={this.onSubmit} style={{ paddingBottom: '20px' }} className="jumbotron border-top border-primary">
                 <div className="form-group">
                   <label htmlFor="phone">Tài khoản</label>
