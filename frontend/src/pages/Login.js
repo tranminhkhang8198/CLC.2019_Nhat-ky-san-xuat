@@ -7,7 +7,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
-import decode from 'jwt-decode';
+// import decode from 'jwt-decode';
 
 // eslint-disable-next-line react/prefer-stateless-function
 
