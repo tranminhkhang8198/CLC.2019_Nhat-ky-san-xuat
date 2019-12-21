@@ -9,6 +9,7 @@ const Diary = require('./diary');
 const ScopeOfUse = require('./scopeOfUse');
 const Fertilizer = require('./fertilizer');
 const Field = require('./field');
+const PlantProtectionProductWarehouse = require('./plantProtectionProductWarehouse');
 
 class Model {
   constructor(app) {
@@ -24,6 +25,7 @@ class Model {
     this.fertilizer = new Fertilizer(app);
     this.diary = new Diary(app);
     this.field = new Field(app)
+    this.plantProtectionProductWarehouse = new PlantProtectionProductWarehouse(app);
   }
 }
 module.exports = Model;

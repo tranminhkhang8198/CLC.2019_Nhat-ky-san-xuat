@@ -178,6 +178,11 @@ class PlantProtectionProduct {
         let length = res.length;
         let responseToClient = [];
 
+        if (length == 0) {
+          const message = 'Trang tìm kiếm không tồn tại';
+          return cb(message, null);
+        }
+
         res.forEach((doc) => {
           const pppId = mongoose.Types.ObjectId(doc._id);
           // Get scope of use
