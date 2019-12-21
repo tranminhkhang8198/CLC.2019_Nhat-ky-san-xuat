@@ -31,10 +31,9 @@ class PlantProtectionProductWarehouse {
         this.model.cooperativeId = _.trim(_.get(obj, 'cooperativeId', null));
     }
 
-    validate(cb = () => { }) {
+    validate(model, cb = () => { }) {
         let errors = [];
 
-        const model = this.model;
         const reg = /^\d+$/;
 
         const plantProtectionProduct = this.app.db.collection("plantProtectionProduct");
@@ -134,12 +133,10 @@ class PlantProtectionProductWarehouse {
         // Create new warehouse with req body
         this.initWithObject(body);
 
-        console.log(this.model);
-
         let model = this.model;
         const db = this.app.db;
 
-        this.validate((errors) => {
+        this.validate(model, (errors) => {
             let messages = [];
 
             if (errors.length > 0) {
@@ -163,10 +160,46 @@ class PlantProtectionProductWarehouse {
 
     find(query, cb = () => { }) {
         const plantProtectionProductWarehouse = this.app.db.collection('plantProtectionProductWarehouse');
+        const plantProtectionProduct = this.app.db.collection('plantProtectionProduct');
 
-        plantProtectionProductWarehouse.find(query).toArray()
+        const pageNumber = query.pageNumber;
+        const nPerPage = query.nPerPage;
+
+        delete query.pageNumber;
+        delete query.nPerPage;
+
+        plantProtectionProductWarehouse.find(query)
+            .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
+            .limit(Number(nPerPage))
+            .toArray()
             .then((plantProtectionProductWarehouses) => {
-                return cb(null, plantProtectionProductWarehouses);
+
+                // Get plant protection product name
+                let count = 0;
+                let length = plantProtectionProductWarehouses.length;
+                let responseToClient = [];
+
+                if (length == 0) {
+                    const message = 'Trang tìm kiếm không tồn tại';
+                    return cb(message, null);
+                }
+
+                plantProtectionProductWarehouses.forEach((elem) => {
+                    plantProtectionProduct.findOne({ _id: mongoose.Types.ObjectId(elem.plantProtectionProductId) })
+                        .then((plantProtectionProduct) => {
+                            elem['plantProtectionProductName'] = plantProtectionProduct.name;
+
+                            responseToClient.push(elem);
+
+                            count = count + 1;
+
+                            if (count == length) {
+                                return cb(null, responseToClient);
+                            }
+                        }).catch(err => {
+                            return cb(err, null);
+                        });
+                });
             }).catch((err) => {
                 return cb(err, null);
             });
@@ -197,7 +230,6 @@ class PlantProtectionProductWarehouse {
             } else {
                 plantProtectionProductWarehouse.deleteOne({ _id: mongoose.Types.ObjectId(id) })
                     .then((plantProtectionProductWarehouse) => {
-
                         const message = {
                             successMessage: 'Thuốc bảo vệ thực vật được xóa khỏi kho thành công'
                         }
@@ -210,6 +242,56 @@ class PlantProtectionProductWarehouse {
             }
         });
     }
+
+    updateById(id, update, cb = () => { }) {
+        const plantProtectionProductWarehouse = this.app.db.collection("plantProtectionProductWarehouse");
+
+        this.findById(id, (err, res) => {
+            if (err) {
+                return cb(err, null);
+            } else {
+                this.initWithObject(res);
+
+                let model = this.model;
+
+                // Update model
+                for (let key in update) {
+                    if (model[key]) {
+                        model[key] = update[key];
+                    }
+                }
+
+                // Validate
+                this.validate(model, (errors) => {
+                    let messages = [];
+
+                    if (errors.length > 0) {
+                        _.each(errors, (err) => {
+                            messages.push(err.message);
+                        });
+
+                        return cb(_.join(messages, ', '), null);
+
+                    } else {
+                        // Update to database
+                        plantProtectionProductWarehouse.update({ _id: mongoose.Types.ObjectId(id) }, model)
+                            .then(() => {
+                                this.findById(id, (err, res) => {
+                                    if (err) {
+                                        return cb(err, null);
+                                    }
+
+                                    return cb(null, res);
+                                });
+                            }).catch(err => {
+                                return cb(err, null);
+                            });
+                    }
+                });
+            }
+        });
+    }
+
 }
 
 module.exports = PlantProtectionProductWarehouse;
