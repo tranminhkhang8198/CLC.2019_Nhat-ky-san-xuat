@@ -1730,11 +1730,11 @@ exports.routers = app => {
     // ROUTES FOR PLANT PROTECTION PRODUCT WAREHOUSE
 
     /**
-     * @api {post} /plant-protection-product-warehouses Create new plant protection product warehouse
+     * @api {post} /warehouse/plant-protection-products Create new plant protection product warehouse
      * @apiName CreatePlantProtectionProductWarehouse
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses
+     *     curl -i http://localhost:3001/warehouse/plant-protection-products
      *
      * @apiHeader {String} authorization Token.
      *
@@ -1876,7 +1876,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.post('/api/plant-protection-product-warehouses', (req, res, next) => {
+    app.post('/warehouse/plant-protection-products', (req, res, next) => {
         const body = req.body;
 
         app.models.plantProtectionProductWarehouse.create(body, (err, info) => {
@@ -1886,14 +1886,14 @@ exports.routers = app => {
 
 
     /**
-     * @api {get} /plant-protection-product-warehouses Get all plant protection product warehourses with pageNumber and nPerPage
+     * @api {get} /warehouse/plant-protection-products Get all plant protection product warehourses with pageNumber and nPerPage
      * @apiName GetAllPlantProtectionProductWarehouses
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Tìm kiếm tất cả thuốc bvtv và phân trang:
-     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses?pageNumber=1&nPerPage=20
+     *     curl -i http://localhost:3001/warehouse/plant-protection-products?pageNumber=1&nPerPage=20
      * 
      * @apiExample {curl} Tìm kiếm tất cả thuốc bvtv theo HTX và phân trang:
-     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses?cooperativeId=HTXNN&pageNumber=1&nPerPage=20
+     *     curl -i http://localhost:3001/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20
      *
      * @apiHeader {String} authorization Token.
      * 
@@ -1970,7 +1970,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.get('/api/plant-protection-product-warehouses', (req, res, next) => {
+    app.get('/warehouse/plant-protection-products', (req, res, next) => {
         const query = req.query;
 
         app.models.plantProtectionProductWarehouse.find(query, (err, info) => {
@@ -1980,11 +1980,11 @@ exports.routers = app => {
 
 
     /**
-     * @api {get} /plant-protection-product-warehouses/:id Get plant protection product warehourses by id
+     * @api {get} /warehouse/plant-protection-products/:id Get plant protection product warehourses by id
      * @apiName GetPlantProtectionProductWarehousesById
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Tìm kiếm thuốc bvtv trong kho theo id:
-     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses/5dfd66fc2ea5880f577c38a4
+     *     curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
      *
      * @apiHeader {String} authorization Token.
      * 
@@ -2034,7 +2034,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.get('/api/plant-protection-product-warehouses/:id', (req, res, next) => {
+    app.get('/warehouse/plant-protection-products/:id', (req, res, next) => {
         const id = req.params.id;
 
         app.models.plantProtectionProductWarehouse.findById(id, (err, info) => {
@@ -2044,12 +2044,12 @@ exports.routers = app => {
 
 
     /**
-     * @api {delete} /plant-protection-product-warehouse/:id Delete plant protection product warehouse by id
+     * @api {delete} /warehouse/plant-protection-products/:id Delete plant protection product warehouse by id
      * @apiName DeletePlantProtectionProductWarehouseById
      * @apiGroup PlantProtectionProductWarehouses
      *
      * @apiExample {curl} Xóa thuốc bvtv trong kho theo _id:
-     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses/5dfd66fc2ea5880f577c38a4
+     *     curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
      * 
      * 
      * @apiHeader {String} authorization Token.
@@ -2073,7 +2073,7 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
 
-    app.delete('/api/plant-protection-product-warehouses/:id', (req, res, next) => {
+    app.delete('/warehouse/plant-protection-products/:id', (req, res, next) => {
         const id = req.params.id;
 
         app.models.plantProtectionProductWarehouse.deleteById(id, (err, info) => {
@@ -2083,11 +2083,11 @@ exports.routers = app => {
 
 
     /**
-     * @api {patch} /plant-protection-product-warehouses/:id Update plant protection product warehouse by id
+     * @api {patch} /warehouse/plant-protection-products/:id Update plant protection product warehouse by id
      * @apiName UpdatePlantProtectionProductWarehouseById
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/plant-protection-product-warehouses/5dfd66fc2ea5880f577c38a4
+     *     curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
      *
      * @apiHeader {String} authorization Token.
      *
@@ -2196,7 +2196,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.patch('/api/plant-protection-product-warehouses/:id', (req, res, next) => {
+    app.patch('/warehouse/plant-protection-products/:id', (req, res, next) => {
         const id = req.params.id;
         const update = req.body;
 
