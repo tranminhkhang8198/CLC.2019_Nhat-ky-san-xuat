@@ -1,5 +1,6 @@
 import React from 'react';
 import uuidv4 from 'uuid/v4';
+// import axios from 'axios';
 
 function AddItemModal({ type }) {
   function renderTypeTitle(typeData) {
@@ -114,6 +115,11 @@ function AddItemModal({ type }) {
 
   const labelTitles = getLabelTitlesByType(type);
 
+  function handleDataSubmit(event) {
+    event.preventDefault();
+    console.log(event);
+  }
+
   return (
     <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
       <div className="modal-dialog" role="document">
@@ -132,7 +138,13 @@ function AddItemModal({ type }) {
           </div>
           <div className="modal-footer">
             <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button">Xác nhận</button>
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={(event) => handleDataSubmit(event)}
+            >
+              Xác nhận
+            </button>
           </div>
         </div>
       </div>
