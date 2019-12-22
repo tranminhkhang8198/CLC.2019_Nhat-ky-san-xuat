@@ -623,7 +623,7 @@ exports.routers = app => {
      *          "role":{
      *              "user":"G",
      *              "manager":"GU",
-     *              "administrator":"GUDP",
+     *              "administrator":"GUDP"
      *          }
      *      }
      *
@@ -669,6 +669,28 @@ exports.routers = app => {
                 : responseHandle(res, role);
         });
     });
+
+
+    app.get("/api/resources", (req, res, next) => {
+        app.models.resource.get((err, resources) => {
+            return err ? errorHandle(res, err.errorMessage, 401) : responseHandle(res, resources);
+        })
+    })
+
+    app.delete("/api/resources", (req, res, next) => {
+        const query = req.query;
+        app.models.resource.delete(query, (err, responseMessage) => {
+            return err ? errorHandle(res, err.errorMessage, 401) : responseHandle(res, responseMessage);
+        })
+    })
+
+    app.patch('/api/resources', (req, res, next) => {
+        const query = req.query;
+        const body = req.body;
+        app.models.resource.update(query, body, (err, responseMessage) => {
+            return err ? errorHandle(res, err.errorMessage, 401) : responseHandle(res, responseMessage);
+        })
+    })
 
     /**
      * @api {get} /api/cooperatives Tìm kiếm thông tin HTX.
@@ -1117,6 +1139,7 @@ exports.routers = app => {
     })
 
 
+
     app.post('/api/fields', (req, res, next) => {
         const body = req.body;
         app.models.field.create(body, (err, result) => {
@@ -1128,6 +1151,7 @@ exports.routers = app => {
             }
         })
     })
+
 
 
 
