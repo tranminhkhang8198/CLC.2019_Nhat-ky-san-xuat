@@ -2029,14 +2029,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/plant-protection-product-warehouses",
+    "url": "/warehouse/plant-protection-products",
     "title": "Create new plant protection product warehouse",
     "name": "CreatePlantProtectionProductWarehouse",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-product-warehouses",
+        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products",
         "type": "curl"
       }
     ],
@@ -2329,14 +2329,14 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/plant-protection-product-warehouse/:id",
+    "url": "/warehouse/plant-protection-products/:id",
     "title": "Delete plant protection product warehouse by id",
     "name": "DeletePlantProtectionProductWarehouseById",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Xóa thuốc bvtv trong kho theo _id:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-product-warehouses/5dfd66fc2ea5880f577c38a4",
+        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
         "type": "curl"
       }
     ],
@@ -2395,19 +2395,19 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/plant-protection-product-warehouses",
+    "url": "/warehouse/plant-protection-products",
     "title": "Get all plant protection product warehourses with pageNumber and nPerPage",
     "name": "GetAllPlantProtectionProductWarehouses",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Tìm kiếm tất cả thuốc bvtv và phân trang:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-product-warehouses?pageNumber=1&nPerPage=20",
+        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products?pageNumber=1&nPerPage=20",
         "type": "curl"
       },
       {
         "title": "Tìm kiếm tất cả thuốc bvtv theo HTX và phân trang:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-product-warehouses?cooperativeId=HTXNN&pageNumber=1&nPerPage=20",
+        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20",
         "type": "curl"
       }
     ],
@@ -2490,14 +2490,14 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/plant-protection-product-warehouses/:id",
+    "url": "/warehouse/plant-protection-products/:id",
     "title": "Get plant protection product warehourses by id",
     "name": "GetPlantProtectionProductWarehousesById",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Tìm kiếm thuốc bvtv trong kho theo id:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-product-warehouses/5dfd66fc2ea5880f577c38a4",
+        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
         "type": "curl"
       }
     ],
@@ -2580,14 +2580,14 @@ define({ "api": [
   },
   {
     "type": "patch",
-    "url": "/plant-protection-product-warehouses/:id",
+    "url": "/warehouse/plant-protection-products/:id",
     "title": "Update plant protection product warehouse by id",
     "name": "UpdatePlantProtectionProductWarehouseById",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/plant-protection-product-warehouses/5dfd66fc2ea5880f577c38a4",
+        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
         "type": "curl"
       }
     ],
