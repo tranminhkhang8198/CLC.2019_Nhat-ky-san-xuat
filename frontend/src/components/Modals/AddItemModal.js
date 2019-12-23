@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useState } from 'react';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
 import * as httpStatus from 'http-status';
 
 function AddItemModal({ type }) {
+  const [input, setInput] = useState({});
+
   function renderTypeTitle(typeData) {
     let typeTitle = '';
     switch (typeData) {
@@ -20,22 +22,6 @@ function AddItemModal({ type }) {
         break;
     }
     return typeTitle;
-  }
-
-  function getApiURLByType(dataType) {
-    let apiUrl = '';
-    switch (dataType) {
-      case 'fertilizer':
-        apiUrl = 'http://localhost:3001/api/fertilizers';
-        break;
-      case 'plantProductProtection':
-        apiUrl = '';
-        break;
-      default:
-        apiUrl = '';
-        break;
-    }
-    return apiUrl;
   }
 
   function getLabelTitlesByType(dataType) {
@@ -205,287 +191,188 @@ function AddItemModal({ type }) {
     ));
   }
 
-  async function callApiToCreateNewItem(api, bodyFormData) {
-    try {
-      const data = await axios({
-        method: 'post',
-        url: api,
-        data: bodyFormData,
-      });
-      return data;
-    } catch (error) {
-      if (error.response) {
-        // Request made and server responded
-        // console.log(error.response.data.errorMessage);
-        // console.log(error.response.status);
-        // console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
-      }
-      return error.response;
-    }
-  }
-
-  const inputFieldRefs = [];
-  function clearAllInputField(titles) {
-    for (let i = 0; i < titles.length; i += 1) {
-      const { name } = titles[i];
-      inputFieldRefs[name].value = '';
-    }
-  }
-
-  function hanldeResponseFromServer(result, dataType, titles) {
-    if (result.status === httpStatus.NOT_FOUND) {
-      alert(result.data.errorMessage);
-    }
-    if (result.status === httpStatus.OK) {
-      switch (dataType) {
-        case 'fertilizer':
-          alert(`Thêm phân bón ${result.data.name} thành công`);
-          clearAllInputField(titles);
-          break;
-        case 'plantProductProtection':
-          alert('Thêm thuốc bảo vệ thực vật mới thành công');
-          break;
-        default:
-      }
-    }
-  }
-
-  function validateUserInput(isRequired, userInputValue, inputFieldName) {
-    // eslint-disable-next-line no-useless-escape
-    const simpleRegex = /[!@#$%^&*()_+\-=\[\]{}':"\\|,.<>\/?]/;
-    if (isRequired && userInputValue.length === 0) {
-      // eslint-disable-next-line prefer-template
-      alert('Trường ' + inputFieldName + ' không được để trống');
-      return false;
-    }
-    if (simpleRegex.test(userInputValue)) {
-      // eslint-disable-next-line prefer-template
-      alert('Dữ liệu trường ' + inputFieldName + ' không hợp lệ');
-      return false;
-    }
-    return true;
-  }
-
-  async function createNewItemEventHandler(e, createItemHanlderParametersList) {
-    e.preventDefault();
-    const {
-      titles,
-      api,
-      dataType,
-      fieldRefs,
-    } = createItemHanlderParametersList;
-    // const fake_data = {
-    //   ministry: 'Công thương',
-    //   province: 'Bà Rịa - Vũng Tàu',
-    //   enterprise: 'Công ty TNHH Sản xuất NGÔI SAO VÀNG',
-    //   type: 'Phân vô cơ',
-    //   name: 'Phân bón XYZ',
-    //   ingredient: '',
-    //   lawDocument: '',
-    //   isoCertOrganization: '',
-    //   manufactureAndImport: '',
-    // };
-    const data = {};
-    console.log(titles.length);
-    for (let i = 0; i < titles.length; i += 1) {
-      const { name } = titles[i];
-      const { required } = titles[i];
-      const userInputValue = fieldRefs[name].value;
-      const { value } = titles[i];
-      if (!validateUserInput(required, userInputValue, value)) {
-        return;
-      }
-      data[name] = userInputValue;
-    }
-    const result = await callApiToCreateNewItem(api, data);
-    console.log(result.status);
-    console.log(result.data.errorMessage);
-    hanldeResponseFromServer(result, dataType, titles);
-  }
-
-  const apiUrl = getApiURLByType(type);
   const labelTitles = getLabelTitlesByType(type);
-  const createItemHanlderParameters = {
-    titles: labelTitles,
-    api: apiUrl,
-    dataType: type,
-    fieldRefs: inputFieldRefs,
-  };
 
-  function RegistrationInfoInputModal() {
+  const handleInputChange = (e) => setInput({
+    ...input,
+    [e.currentTarget.name]: e.currentTarget.value,
+  });
+
+  function renderAdditionalPlantProtectionProductInput() {
     return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-registration-info">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">
-                Thông tin địa chỉ mua hàng
-              </h4>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body modal-add-body">
-              <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-registration-unit" className="w-100">
-                  Nhập vào tên cửa hàng
-                  <input
-                    type="text"
-                    name="add-registration-unit"
-                    id="add-registration-unit"
-                    className="form-control item"
-                    placeholder="Nhập vào tên cửa hàng"
-                  />
-                </label>
+      <React.Fragment key="hey">
+        <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-additional-info-1">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">
+                  Thông tin địa chỉ mua hàng
+                </h4>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
               </div>
-              <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-registration-add" className="w-100">
-                  Địa chỉ cửa hàng
-                  <input
-                    type="text"
-                    name="add-registration-add"
-                    id="add-registration-add"
-                    className="form-control item"
-                    placeholder="Nhập vào địa chỉ cửa hàng"
-                  />
-                </label>
+              <div className="modal-body modal-add-body">
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="add-registration-unit" className="w-100">
+                    Nhập vào tên cửa hàng
+                    <input
+                      type="text"
+                      name="add-registration-unit"
+                      id="add-registration-unit"
+                      className="form-control item"
+                      placeholder="Nhập vào tên cửa hàng"
+                    />
+                  </label>
+                </div>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="add-registration-add" className="w-100">
+                    Địa chỉ cửa hàng
+                    <input
+                      type="text"
+                      name="add-registration-add"
+                      id="add-registration-add"
+                      className="form-control item"
+                      placeholder="Nhập vào địa chỉ cửa hàng"
+                    />
+                  </label>
+                </div>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="manufacturer" className="w-100">
+                    Nhà sản xuất
+                    <input
+                      type="text"
+                      name="manufacturer"
+                      // id="manufacturer"
+                      className="form-control item"
+                      placeholder="Nhà sản xuất"
+                      onChange={handleInputChange}
+                    />
+                  </label>
+                </div>
               </div>
-              <div className="form-group" key={uuidv4()}>
-                <label htmlFor="manufacturer" className="w-100">
-                  Nhà sản xuất
-                  <input
-                    type="text"
-                    name="manufacturer"
-                    id="manufacturer"
-                    className="form-control item"
-                    placeholder="Nhà sản xuất"
-                  />
-                </label>
+              <div className="modal-footer">
+                <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+                <button
+                  className="btn btn-light"
+                  type="button"
+                  data-dismiss="modal"
+                  data-toggle="modal"
+                  data-target="#modal-add"
+                >
+                  Trở lại
+                </button>
+                <button
+                  className="btn btn-info"
+                  type="button"
+                  data-dismiss="modal"
+                  data-toggle="modal"
+                  data-target="#modal-add-additional-info-2"
+                >
+                  Tiếp theo
+                </button>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
-              <button
-                className="btn btn-light"
-                type="button"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target="#modal-add"
-              >
-                Trở lại
-              </button>
-              <button
-                className="btn btn-info"
-                type="button"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target="#modal-add-scope-of-use"
-              >
-                Tiếp theo
-              </button>
             </div>
           </div>
         </div>
-      </div>
+
+        <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-additional-info-2">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">
+                  Thông tin phạm vi sử dụng
+                </h4>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div className="modal-body modal-add-body">
+                <fieldset>
+                  <legend>Tác dụng 1:</legend>
+                  <div className="form-group" key={uuidv4()}>
+                    <label htmlFor="plant-name" className="w-100">
+                      Tên nông phẩm
+                      <input
+                        type="text"
+                        name="plant-name"
+                        id="plant-name"
+                        className="form-control item"
+                        placeholder="Nhập vào tên nông phẩm"
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group" key={uuidv4()}>
+                    <label htmlFor="pest" className="w-100">
+                      Sâu bọ diệt trừ
+                      <input
+                        type="text"
+                        name="pest"
+                        id="pest"
+                        className="form-control item"
+                        placeholder="Nhập vào tên sâu bọ khắc chế"
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group" key={uuidv4()}>
+                    <label htmlFor="dosage" className="w-100">
+                      Liều lượng
+                      <input
+                        type="text"
+                        name="dosage"
+                        id="dosage"
+                        className="form-control item"
+                        placeholder="Liều lượng sử dụng"
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group" key={uuidv4()}>
+                    <label htmlFor="usage" className="w-100">
+                      Cách sử dụng
+                      <textarea
+                        rows="4"
+                        className="form-control item"
+                        placeholder="Mô tả cách sử dụng chi tiết"
+                      />
+                    </label>
+                  </div>
+                </fieldset>
+                <button className="btn btn-info w-100" type="button">Thêm mới</button>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+                <button
+                  className="btn btn-light"
+                  type="button"
+                  data-dismiss="modal"
+                  data-toggle="modal"
+                  data-target="#modal-add-registration-info"
+                >
+                  Trở lại
+                </button>
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                >
+                  Lưu
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 
-  function ScopeOfUseInputModal() {
-    return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-scope-of-use">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">
-                Thông tin phạm vi sử dụng
-              </h4>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body modal-add-body">
-              <fieldset>
-                <legend>Tác dụng 1:</legend>
-                <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="plant-name" className="w-100">
-                    Tên nông phẩm
-                    <input
-                      type="text"
-                      name="plant-name"
-                      id="plant-name"
-                      className="form-control item"
-                      placeholder="Nhập vào tên nông phẩm"
-                    />
-                  </label>
-                </div>
-                <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="pest" className="w-100">
-                    Sâu bọ diệt trừ
-                    <input
-                      type="text"
-                      name="pest"
-                      id="pest"
-                      className="form-control item"
-                      placeholder="Nhập vào tên sâu bọ khắc chế"
-                    />
-                  </label>
-                </div>
-                <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="dosage" className="w-100">
-                    Liều lượng
-                    <input
-                      type="text"
-                      name="dosage"
-                      id="dosage"
-                      className="form-control item"
-                      placeholder="Liều lượng sử dụng"
-                    />
-                  </label>
-                </div>
-                <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="usage" className="w-100">
-                    Cách sử dụng
-                    <textarea
-                      rows="4"
-                      name="usage"
-                      id="usage"
-                      className="form-control item"
-                      placeholder="Mô tả cách sử dụng chi tiết"
-                    />
-                  </label>
-                </div>
-              </fieldset>
-              <button className="btn btn-info w-100" type="button">Thêm mới</button>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
-              <button
-                className="btn btn-light"
-                type="button"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target="#modal-add-registration-info"
-              >
-                Trở lại
-              </button>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={(e) => createNewItemEventHandler(e, createItemHanlderParameters)}
-              >
-                Lưu
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  function renderAdditionalInput(componentStyle) {
+    switch (componentStyle) {
+      case 'fertilizer':
+        return renderAdditionalPlantProtectionProductInput();
+      case 'plantProtectionProduct':
+        return renderAdditionalPlantProtectionProductInput();
+      default:
+        return renderAdditionalPlantProtectionProductInput();
+    }
   }
 
   function renderLabels(labelsData) {
@@ -500,7 +387,6 @@ function AddItemModal({ type }) {
             id={item.value}
             className="form-control item"
             placeholder={item.placeholder}
-            ref={(element) => { inputFieldRefs[item.name] = element; }}
           />
           {item.notes.length > 0 && renderNotesFields(item.notes)}
         </label>
@@ -510,8 +396,7 @@ function AddItemModal({ type }) {
 
   return (
     <React.Fragment key="hey">
-      <RegistrationInfoInputModal />
-      <ScopeOfUseInputModal />
+      {renderAdditionalInput(type)}
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -533,7 +418,7 @@ function AddItemModal({ type }) {
                 className="btn btn-info"
                 type="button"
                 data-toggle="modal"
-                data-target="#modal-add-registration-info"
+                data-target="#modal-add-additional-info-1"
                 data-dismiss="modal"
               >
                 Tiếp theo
