@@ -9,18 +9,14 @@ class AddItemModal extends Component {
     super(props);
 
     this.state = {
-      type: props.type,
       data: '',
     };
 
-    this.renderTypeTitle = this.renderTypeTitle.bind(this);
-    this.getLabelTitlesByType = this.getLabelTitlesByType.bind(this);
-    this.renderRequiredFields = this.renderRequiredFields.bind(this);
-    this.renderNotesFields = this.renderNotesFields.bind(this);
-    this.renderLabels = this.renderLabels.bind(this);
-    this.renderAdditionalPPP = this.renderAdditionalPPP.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleDataSubmit = this.handleDataSubmit.bind(this);
+
+    this.renderAdditionalPPP = this.renderAdditionalPPP.bind(this);
+    this.renderMainModalPPP = this.renderMainModalPPP.bind(this);
   }
 
   getLabelTitlesByType(dataType) {
@@ -184,6 +180,86 @@ class AddItemModal extends Component {
 
   handleDataSubmit() {
     console.log(this.state);
+  }
+
+  renderMainModalPPP() {
+    const { type } = this.props;
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                Thêm mới thuốc bảo vệ thực vật
+              </h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body modal-add-body">
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-product-name" className="w-100">
+                  Tên thương phẩm
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    required
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-name"
+                    data-type={type}
+                    placeholder="Nhập vào tên thuốc bảo vệ thực vật"
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Tên các thương phẩm phải cách nhau bằng dấu &apos;,&apos;
+                  </small>
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Ví dụ: Thương phẩm 1, Thương phẩm 2
+                  </small>
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-product-name" className="w-100">
+                  Tên hoạt chất
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-activeIngredient"
+                    data-type={type}
+                    placeholder="Nhập vào tên hoạt chất"
+                  />
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-product-name" className="w-100">
+                  Hàm lượng sử dụng
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-content"
+                    data-type={type}
+                    placeholder="Hàm lượng sử dụng của thuốc"
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+              <button
+                className="btn btn-info"
+                type="button"
+                data-dismiss="modal"
+                data-toggle="modal"
+                data-target="#modal-add-addition-1"
+              >
+                Tiếp theo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   renderAdditionalPPP() {
@@ -355,107 +431,6 @@ class AddItemModal extends Component {
     );
   }
 
-  renderMainModalPPP() {
-    return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-addition-1">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">
-                Thêm mới thuốc bảo vệ thực vật
-                </h4>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body modal-add-body">
-              <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-registration-unit" className="w-100">
-                  Nhập vào tên cửa hàng
-                    <input
-                    type="text"
-                    name="add-registration-unit"
-                    id="add-registration-unit"
-                    className="form-control item"
-                    placeholder="Nhập vào tên cửa hàng"
-                  />
-                </label>
-              </div>
-              <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-registration-add" className="w-100">
-                  Địa chỉ cửa hàng
-                    <input
-                    type="text"
-                    name="add-registration-add"
-                    id="add-registration-add"
-                    className="form-control item"
-                    placeholder="Nhập vào địa chỉ cửa hàng"
-                  />
-                </label>
-              </div>
-              <div className="form-group" key={uuidv4()}>
-                <label htmlFor="manufacturer" className="w-100">
-                  Nhà sản xuất
-                    <input
-                    type="text"
-                    name="manufacturer"
-                    id="manufacturer"
-                    className="form-control item"
-                    placeholder="Nhà sản xuất"
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
-              <button
-                className="btn btn-info"
-                type="button"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target="#modal-add-addition-1"
-              >
-                Tiếp theo
-                </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  renderRequiredFields() {
-    return (
-      <span style={{ color: 'rgb(249,15,15)' }}>
-        &nbsp;*
-      </span>
-    );
-  }
-
-  renderNotesFields(notes) {
-    return notes.map((item) => (
-      <small className="form-text text-muted" key={uuidv4()}>
-        {item}
-      </small>
-    ));
-  }
-
-  renderTypeTitle(typeData) {
-    let typeTitle = '';
-    switch (typeData) {
-      case 'fertilizer':
-        typeTitle = ' phân bón';
-        break;
-      case 'plantProductProtection':
-        typeTitle = ' thuốc bảo vệ thực vật';
-        break;
-      default:
-        typeTitle = ' dữ liệu';
-        break;
-    }
-    return typeTitle;
-  }
-
   renderLabels(labelsData) {
     const { data } = this.state;
     return labelsData.map((item) => (
@@ -479,41 +454,10 @@ class AddItemModal extends Component {
   }
 
   render() {
-    const { type } = this.state;
-    const labelTitles = this.getLabelTitlesByType(type);
     return (
       <React.Fragment key="hey">
+        {this.renderMainModalPPP()}
         {this.renderAdditionalPPP()}
-        <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">
-                  Thêm mới
-                  {this.renderTypeTitle(type)}
-                </h4>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body modal-add-body">
-                {this.renderLabels(labelTitles)}
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
-                <button
-                  className="btn btn-info"
-                  type="button"
-                  data-toggle="modal"
-                  data-target="#modal-add-addition-1"
-                  data-dismiss="modal"
-                >
-                  Tiếp theo
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </React.Fragment>
     );
   }
