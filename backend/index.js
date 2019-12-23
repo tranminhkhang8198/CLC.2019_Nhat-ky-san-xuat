@@ -2,6 +2,7 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const { routers } = require('./router')
 const { connect } = require('./db')
 const { dbName } = require('./config')
@@ -17,6 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Parse application/json
 app.use(bodyParser.json());
+
+// APIs logger
+app.use(morgan('dev'));
 
 // allow CORS in header
 app.use(cors());

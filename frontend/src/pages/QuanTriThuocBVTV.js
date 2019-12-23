@@ -15,6 +15,10 @@ class QuanTriThuocBVTV extends Component {
     super();
     this.state = {
       data: [],
+      error: null,
+      refresh: false,
+      pageNum: 1,
+      dataPerpage: 10,
     };
 
     this.getData = this.getData.bind(this);
@@ -28,20 +32,36 @@ class QuanTriThuocBVTV extends Component {
     });
   }
 
+  async componentDidUpdate() {
+    const { refresh } = this.state;
+    if (refresh) {
+      const fertilizers = await this.getData();
+      this.updateDataWhenRendered(fertilizers);
+    }
+  }
+
   async getData() {
+    const { pageNum, dataPerpage } = this.state;
     const { data } = await axios({
       method: 'GET',
-      url: 'http://localhost:3001/api/plant-protection-products?pageNumber=1&nPerPage=20',
+      url: `http://localhost:3001/api/plant-protection-products?${pageNum}&nPerPage=${dataPerpage}`,
     });
-
     return data;
+  }
+
+  async updateDataWhenRendered(updatedData) {
+    await this.setState({
+      refresh: false,
+      data: updatedData,
+    });
+    return updatedData;
   }
 
   render() {
     const { data } = this.state;
     return (
       <div className="container-fluid">
-        <DeleteItemsModal />
+        <DeleteItemsModal type="plantProductProtection" data={data} parentComponent={this} />
         <AddItemModal type="plantProductProtection" />
         <div className="card shadow">
           <div className="card-header py-3">
@@ -61,7 +81,7 @@ class QuanTriThuocBVTV extends Component {
               </a>
             </div>
           </div>
-          <ListItems data={data} />
+          <ListItems data={data} parentComponent={this} />
         </div>
       </div>
     );
