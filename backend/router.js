@@ -2047,16 +2047,16 @@ exports.routers = app => {
      * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      * @apiParam {String} cooperativeId Id của hợp tác xã
      *
-     * @apiSucess {Number} totalPages Tổng số lượng trang
-     * @apiSucess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSucess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSucess {Number} quantity Số lượng
-     * @apiSucess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSucess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSucess {String} distributionAgent Đại lý phân phối
-     * @apiSucess {Number} quarantineDate Thời gian cách ly
-     * @apiSucess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSucess {Date} created Thời gian dữ liệu mới được lưu vào db
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
+     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
+     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
+     * @apiSuccess {String} distributionAgent Đại lý phân phối
+     * @apiSuccess {Number} quarantineDate Thời gian cách ly
+     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
+     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
      *
      *
      * @apiSuccessExample Success-Response:
@@ -2143,15 +2143,15 @@ exports.routers = app => {
      * @apiParam {String} cooperativeId Id của hợp tác xã
      *
      *
-     * @apiSucess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSucess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSucess {Number} quantity Số lượng
-     * @apiSucess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSucess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSucess {String} distributionAgent Đại lý phân phối
-     * @apiSucess {Number} quarantineDate Thời gian cách ly
-     * @apiSucess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSucess {Date} created Thời gian dữ liệu mới được lưu vào db
+     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
+     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
+     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
+     * @apiSuccess {String} distributionAgent Đại lý phân phối
+     * @apiSuccess {Number} quarantineDate Thời gian cách ly
+     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
+     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
      *
      *
      * @apiSuccessExample Success-Response:

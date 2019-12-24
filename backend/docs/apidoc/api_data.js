@@ -1,5 +1,180 @@
 define({ "api": [
   {
+    "type": "post",
+    "url": "/api/auth/register",
+    "title": "User request creating new account",
+    "version": "0.1.0",
+    "name": "authRegister",
+    "group": "Auth",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/auth/register",
+        "type": "curl"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten nguoi su dung</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>So CMND cua nguoi su dung</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Địa chỉ cua nguoi su dung</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>So dien thoai cua nguoi su dung</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Địa chỉ email cua nguoi su dung</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mat khau cua nguoi su dung</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"name\": \"Nguyen Van Loi\",\n  \"personalId\":\"384736273\",\n  \"address\": \"Ninh Kieu, Can Tho\",\n  \"phone\": \"093827463\",\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"123456\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Ten nguoi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>So CMND cua nguoi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>So dien thoai cua nguoi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Địa chỉ email cua nguoi su dung</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "created",
+            "description": "<p>Thoi gian nguoi dung duoc tao</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID cua nguoi su dung</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"name\": \"Nguyen Quang Khai\",\n    \"avatar\": \"http://localhost:3003/image-1576222546040.png\",\n    \"personalId\": \"381823821\",\n    \"address\": \"14/132, 3/2 street, Ninh Kieu, Can Tho\",\n    \"email\": \"vanloi10c@gmail.com\",\n    \"user\": \"user\",\n    \"HTXId\": \"115\",\n    \"created\": \"2019-11-12T12:13:24.216Z\",\n    \"_id\": \"5dcaa1e4e363dc1df58f0317\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Name-is-required",
+            "description": "<p>Thieu truong ten nguoi dung</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Personal-id-is-invalid",
+            "description": "<p>So CMND sai</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Phone-number-already-exist",
+            "description": "<p>Nguoi dung da ton tai trong CSDL</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Phone-number-is-reqired",
+            "description": "<p>Thieu SDT</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Passsword-is-required-and-more-than-3-characters",
+            "description": "<p>Khong co ma khau hoac mat khau qua ngan</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"Phone number already exist\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Auth"
+  },
+  {
     "type": "delete",
     "url": "/api/cooperatives",
     "title": "Xóa thông tin của HTX.",
@@ -2459,6 +2634,80 @@ define({ "api": [
       }
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plantProtectionProductId",
+            "description": "<p>Id thuốc bảo vệ thực vật</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "tradeDate",
+            "description": "<p>Ngày mua (ISO8601 Format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "manufacturingDate",
+            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "expiryDate",
+            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "distributionAgent",
+            "description": "<p>Đại lý phân phối</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quarantineDate",
+            "description": "<p>Thời gian cách ly</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của dữ liệu thuốc vừa được thêm vào kho</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "created",
+            "description": "<p>Thời gian dữ liệu mới được lưu vào db</p>"
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Success-Response:",
@@ -2549,6 +2798,73 @@ define({ "api": [
       }
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "plantProtectionProductId",
+            "description": "<p>Id thuốc bảo vệ thực vật</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "tradeDate",
+            "description": "<p>Ngày mua (ISO8601 Format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "manufacturingDate",
+            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "expiryDate",
+            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "distributionAgent",
+            "description": "<p>Đại lý phân phối</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quarantineDate",
+            "description": "<p>Thời gian cách ly</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của dữ liệu thuốc vừa được thêm vào kho</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "created",
+            "description": "<p>Thời gian dữ liệu mới được lưu vào db</p>"
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Success-Response:",
@@ -4269,7 +4585,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"_id\":\"D\",\n    \"permission\":\"DELETE\"\n}",
+          "content": "{\n    \"_id\":\"D\",\n    \"method\":\"DELETE\"\n}",
           "type": "json"
         }
       ]
@@ -4303,7 +4619,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"D\",\n        \"permission\": \"DELETE\",\n        \"created\": \"2019-11-14T07:10:50.507Z\"\n    }\n]",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"D\",\n        \"method\": \"DELETE\",\n        \"created\": \"2019-11-14T07:10:50.507Z\"\n    }\n]",
           "type": "json"
         }
       ]
@@ -4828,6 +5144,11 @@ define({ "api": [
         "title": "Example usage:",
         "content": "curl -i http://localhost:3001/api/users/all",
         "type": "curl"
+      },
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/users/fsdlkfjsdoeijfsdlsdfj",
+        "type": "curl"
       }
     ],
     "header": {
@@ -4973,7 +5294,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/login",
+    "url": "/api/auth/login",
     "title": "Login user",
     "version": "0.1.0",
     "name": "LoginUser",
@@ -5236,8 +5557,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_khangtmk_SCHOOL_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });
