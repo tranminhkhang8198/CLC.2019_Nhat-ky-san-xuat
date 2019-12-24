@@ -1,6 +1,8 @@
 const http = require('http');
 const bodyParser = require('body-parser');
 const express = require('express');
+const cors = require('cors');
+
 const { routers } = require('./router')
 const { connect } = require('./db')
 const { dbName } = require('./config')
@@ -18,9 +20,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
 app.use(bodyParser.json());
 
+
 app.use(morgan('dev'));
 
 app.use(express.static('./images'));
+
+// allow CORS in header
+app.use(cors());
 
 
 app.server = http.createServer(app);
