@@ -47,7 +47,7 @@ exports.routers = app => {
         if (!token) {
             return cb(
                 {
-                    errorMessage: "Access denied"
+                    errorMessage: "Không tìm thấy token trên request"
                 },
                 null
             );
@@ -57,13 +57,14 @@ exports.routers = app => {
             if (err) {
                 return cb(
                     {
-                        errorMessage: "Loi xac dinh token"
+                        errorMessage: "Token không hợp lệ"
                     },
                     null
                 );
             } else {
+
                 // Check permission
-                app.models.permission.checkPermission(
+                app.models.permission.check(
                     result._id,
                     resource,
                     req.method,
@@ -72,7 +73,8 @@ exports.routers = app => {
                             return cb(
                                 {
                                     errorMessage:
-                                        "Loi trong qua trinh kiem tra quyen truy cap"
+                                        "Lỗi trong quá trình kiểm tra quyền truy cập",
+                                    errorCode: 501
                                 },
                                 null
                             );
@@ -83,7 +85,8 @@ exports.routers = app => {
                                 return cb(
                                     {
                                         errorMessage:
-                                            "Ban khong co quyen truy cap vao tai nguyen nay"
+                                            "Bạn không có quyền truy cập vào tài nguyên này",
+                                        errorCode: 401
                                     },
                                     null
                                 );
@@ -177,9 +180,9 @@ exports.routers = app => {
      * @apiPermission none
      */
     app.post("/api/users/", upload.single('avatar'), (req, res, next) => {
-        let avatar = "http://localhost:3003/default.png"
+        let avatar = "http://localhost:3001/avatar/default.png"
         if (req.file) {
-            avatar = "http://localhost:3003/" + req.file.filename;
+            avatar = "http://localhost:3001/avatar/" + req.file.filename;
         }
         const body = req.body;
         _.set(body, 'avatar', avatar);
@@ -188,14 +191,12 @@ exports.routers = app => {
             if (err) {
                 _.unset(body, "user");
                 app.models.user.create(body, (err, info) => {
-                    console.log(info);
                     return err
                         ? errorHandle(res, err, 503)
                         : responseHandle(res, info);
                 });
             } else {
                 app.models.user.create(body, (err, info) => {
-                    console.log(info);
                     return err
                         ? errorHandle(res, err, 503)
                         : responseHandle(res, info);
@@ -204,17 +205,10 @@ exports.routers = app => {
         });
     });
 
-    app.post('/upload', upload.single('avatar'), (req, res, next) => {
-        console.log(req.file);
-        if (!req.file) {
-            res.status(500);
-            return next(err);
-        }
-        res.json({ fileUrl: 'http://192.168.0.7:3001/images/' + req.file.filename });
-    })
+
 
     /**
-     * @api {post} /login Login user
+     * @api {post} /api/auth/login Login user
      * @apiVersion 0.1.0
      * @apiName LoginUser
      * @apiGroup User
@@ -270,13 +264,98 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-    app.post("/api/login", (req, res, next) => {
+    app.post("/api/auth/login", (req, res, next) => {
         const body = req.body;
 
         app.models.user.login(body, (err, result) => {
             return err
                 ? errorHandle(res, err, 504)
                 : responseHandle(res, result);
+        });
+    });
+
+    /**
+ * @api {post} /api/auth/register User request creating new account
+ * @apiVersion 0.1.0
+ * @apiName authRegister
+ * @apiGroup Auth
+ * @apiExample {curl} Example usage:
+ *     curl -i http://localhost:3001/api/auth/register
+ *
+ *
+ * @apiParam {String} name Ten nguoi su dung
+ * @apiParam {String} personalId So CMND cua nguoi su dung
+ * @apiParam {String} address Địa chỉ cua nguoi su dung
+ * @apiParam {String} phone So dien thoai cua nguoi su dung
+ * @apiParam {String} email Địa chỉ email cua nguoi su dung
+ * @apiParam {String} password Mat khau cua nguoi su dung
+ *
+ * @apiParamExample {json} Request-Example:
+ *     {
+ *       "name": "Nguyen Van Loi",
+ *       "personalId":"384736273",
+ *       "address": "Ninh Kieu, Can Tho",
+ *       "phone": "093827463",
+ *       "email": "admin@gmail.com",
+ *       "password": "123456"
+ *     }
+ *
+ * @apiSuccess {String} name Ten nguoi su dung
+ * @apiSuccess {String} personalId So CMND cua nguoi su dung
+ * @apiSuccess {String} phone So dien thoai cua nguoi su dung
+ * @apiSuccess {String} email Địa chỉ email cua nguoi su dung
+ * @apiSuccess {String} created Thoi gian nguoi dung duoc tao
+ * @apiSuccess {String} _id ID cua nguoi su dung
+ *
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      "name": "Nguyen Quang Khai",
+ *      "avatar": "http://localhost:3003/image-1576222546040.png",
+ *      "personalId": "381823821",
+ *      "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+ *      "email": "vanloi10c@gmail.com",
+ *      "user": "user",
+ *      "HTXId": "115",
+ *      "created": "2019-11-12T12:13:24.216Z",
+ *      "_id": "5dcaa1e4e363dc1df58f0317"
+ *  }
+ *
+ * @apiError Name-is-required Thieu truong ten nguoi dung
+ * @apiError Personal-id-is-invalid So CMND sai
+ * @apiError Phone-number-already-exist Nguoi dung da ton tai trong CSDL
+ * @apiError Phone-number-is-reqired Thieu SDT
+ * @apiError Passsword-is-required-and-more-than-3-characters Khong co ma khau hoac mat khau qua ngan
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Phone number already exist"
+ *     }
+ * @apiPermission none
+ */
+    app.post("/api/auth/register", upload.single('avatar'), (req, res, next) => {
+        let avatar = "http://localhost:3003/default.png"
+        if (req.file) {
+            avatar = "http://localhost:3003/" + req.file.filename;
+        }
+        const body = req.body;
+        _.set(body, 'avatar', avatar);
+        const resource = "user";
+        verifyUser(req, resource, (err, result) => {
+            if (err) {
+                _.unset(body, "user");
+                app.models.user.create(body, (err, info) => {
+                    return err
+                        ? errorHandle(res, err, 503)
+                        : responseHandle(res, info);
+                });
+            } else {
+                app.models.user.create(body, (err, info) => {
+                    return err
+                        ? errorHandle(res, err, 503)
+                        : responseHandle(res, info);
+                });
+            }
         });
     });
 
@@ -422,6 +501,8 @@ exports.routers = app => {
      *
      * @apiExample {curl} Example usage:
      *     curl -i http://localhost:3001/api/users/all
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users/fsdlkfjsdoeijfsdlsdfj
      *
      * @apiHeader {String} authorization Token.
      *
@@ -473,7 +554,7 @@ exports.routers = app => {
         const resource = "user";
         verifyUser(req, resource, (err, permission) => {
             if (err) {
-                errorHandle(res, "Permission denied");
+                errorHandle(res, err.errorMessage);
             } else {
                 app.models.user.get(userId, (err, data) => {
                     return err
@@ -565,7 +646,7 @@ exports.routers = app => {
      * @apiParamExample {json} Request-Example:
      *      {
      *          "_id":"D",
-     *          "permission":"DELETE"
+     *          "method":"DELETE"
      *      }
      *
      * @apiSuccess {String} _id ki hieu cua method
@@ -577,7 +658,7 @@ exports.routers = app => {
      *  [
      *      {
      *          "_id": "D",
-     *          "permission": "DELETE",
+     *          "method": "DELETE",
      *          "created": "2019-11-14T07:10:50.507Z"
      *      }
      *  ]
@@ -600,6 +681,20 @@ exports.routers = app => {
                 : responseHandle(res, role);
         });
     });
+
+    app.get('/api/roles', (req, res, next) => {
+        app.models.role.get((err, roles) => {
+            return err ? errorHandle(res, err.errorMessage, err.errorCode) : responseHandle(res, roles)
+        })
+    })
+
+    app.delete('/api/roles', (req, res, next) => {
+        const query = req.query;
+        app.models.role.delete(query, (err, result) => {
+            return err ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
 
     /**
      * @api {post} /resources Them resource can quan ly quyen
@@ -1152,6 +1247,24 @@ exports.routers = app => {
         })
     })
 
+    app.post('/api/goodReceipts', (req, res, next) => {
+        const body = req.body;
+        app.models.goodReceipt.create(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.delete('/api/goodReceipts', (req, res, next) => {
+        const query = req.query;
+        app.models.goodReceipt.delete(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
 
 
 
@@ -1165,7 +1278,7 @@ exports.routers = app => {
     // ROUTES FOR PLANT PROTECTION PRODUCT
 
     /**
-     * @api {get} /plant-protection-products Get all plant protection products
+     * @api {get} /api/plant-protection-products Get all plant protection products
      * @apiName GetAllPlantProtectionProducts
      * @apiGroup PlantProtectionProducts
      * @apiExample {curl} Tìm kiếm thuốc bảo vệ thực vật:
@@ -1173,11 +1286,10 @@ exports.routers = app => {
      *
      * @apiHeader {String} authorization Token.
      * 
-     * 
      * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
      * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      *
-     *
+     * @apiSuccess {Number} totalPages Tổng số lượng trang 
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
      * @apiSuccess {String} activeIngredient Hoạt chất
      * @apiSuccess {String} content Hàm lượng
@@ -1201,81 +1313,90 @@ exports.routers = app => {
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
-     *  [
-     *      {
-     *          "_id": "5dce66cb5c25ee6da0a29ac8",
-     *          "name": " Ababetter  3.6EC",
-     *          "activeIngredient": "Abamectin",
-     *          "content": "36g/l",
-     *          "plantProtectionProductGroup": "",
-     *          "ghs": "",
-     *          "who": "2",
-     *          "created": "2019-11-15T08:50:19.842Z",
-     *          "scopeOfUse": [
-     *              {
-     *                  "_id": "5dce66cc5c25ee6da0a29ac9",
+     * {
+     *      "totalPages": 317,
+     *      "data": [
+     *          {
+     *              "_id": "5dce66cb5c25ee6da0a29ac8",
+     *              "name": " Ababetter  3.6EC",
+     *              "activeIngredient": "Abamectin",
+     *              "content": "36g/l",
+     *              "plantProtectionProductGroup": "",
+     *              "ghs": "",
+     *              "who": "2",
+     *              "created": "2019-11-15T08:50:19.842Z",
+     *              "scopeOfUse": [
+     *                  {
+     *                      "_id": "5dce66cc5c25ee6da0a29ac9",
+     *                      "pppId": "5dce66cb5c25ee6da0a29ac8",
+     *                      "plant": "dưa hấu",
+     *                      "pest": "bọ trĩ",
+     *                      "dosage": "0.2 - 0.3 lít/ha",
+     *                      "phi": "7",
+     *                      "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
+     *                      "created": "2019-11-15T08:50:20.100Z"
+     *                  }
+     *              ],
+     *              "registrationInfo": {
+     *                  "_id": "5dce66cc5c25ee6da0a29acd",
      *                  "pppId": "5dce66cb5c25ee6da0a29ac8",
-     *                  "plant": "dưa hấu",
-     *                  "pest": "bọ trĩ",
-     *                  "dosage": "0.2 - 0.3 lít/ha",
-     *                  "phi": "7",
-     *                  "usage": "Lượng nước phun 400 lít/ha. Phun tkhi mật độ \r\nbọ trĩ  2-3 con/ ngọn",
-     *                  "created": "2019-11-15T08:50:20.100Z"
+     *                  "registrationUnit": "Công ty TNHH MTV Lucky",
+     *                  "registrationUnitAddress": "",
+     *                  "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *                  "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
+     *                  "created": "2019-11-15T08:50:20.107Z"
      *              }
-     *          ],
-     *          "registrationInfo": {
-     *              "_id": "5dce66cc5c25ee6da0a29acd",
-     *              "pppId": "5dce66cb5c25ee6da0a29ac8",
-     *              "registrationUnit": "Công ty TNHH MTV Lucky",
-     *              "registrationUnitAddress": "",
-     *              "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
-     *              "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
-     *              "created": "2019-11-15T08:50:20.107Z"
-     *          }
-     *      },
-     *      {
-     *          "_id": "5dce66e25c25ee6da0a29ace",
-     *          "name": " Ababetter  5EC",
-     *          "activeIngredient": "Abamectin",
-     *          "content": "50g/l",
-     *          "plantProtectionProductGroup": "",
-     *          "ghs": "",
-     *          "who": "2",
-     *          "created": "2019-11-15T08:50:42.728Z",
-     *          "scopeOfUse": [
-     *              {
-     *                  "_id": "5dce66e25c25ee6da0a29acf",
+     *          },
+     *          {
+     *              "_id": "5dce66e25c25ee6da0a29ace",
+     *              "name": " Ababetter  5EC",
+     *              "activeIngredient": "Abamectin",
+     *              "content": "50g/l",
+     *              "plantProtectionProductGroup": "",
+     *              "ghs": "",
+     *              "who": "2",
+     *              "created": "2019-11-15T08:50:42.728Z",
+     *              "scopeOfUse": [
+     *                  {
+     *                      "_id": "5dce66e25c25ee6da0a29acf",
+     *                      "pppId": "5dce66e25c25ee6da0a29ace",
+     *                      "plant": "lúa",
+     *                      "pest": "sâu cuốn lá",
+     *                      "dosage": "150 - 250 ml/ha",
+     *                      "phi": "",
+     *                      "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
+     *                      "created": "2019-11-15T08:50:42.728Z"
+     *                  },
+     *                  {
+     *                      "_id": "5dce66e25c25ee6da0a29ad0",
+     *                      "pppId": "5dce66e25c25ee6da0a29ace",
+     *                      "plant": "quýt",
+     *                      "pest": "nhện đỏ",
+     *                      "dosage": "0.0375 - 0.0625%",
+     *                      "phi": "",
+     *                      "usage": "Phun ướt đều plant khi mật độ khoảng \r\n5 - 6 con/ lá",
+     *                      "created": "2019-11-15T08:50:42.728Z"
+     *                  }
+     *              ],
+     *              "registrationInfo": {
+     *                  "_id": "5dce66e25c25ee6da0a29ad1",
      *                  "pppId": "5dce66e25c25ee6da0a29ace",
-     *                  "plant": "lúa",
-     *                  "pest": "sâu cuốn lá",
-     *                  "dosage": "150 - 250 ml/ha",
-     *                  "phi": "",
-     *                  "usage": "Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2",
-     *                  "created": "2019-11-15T08:50:42.728Z"
-     *              },
-     *              {
-     *                  "_id": "5dce66e25c25ee6da0a29ad0",
-     *                  "pppId": "5dce66e25c25ee6da0a29ace",
-     *                  "plant": "quýt",
-     *                  "pest": "nhện đỏ",
-     *                  "dosage": "0.0375 - 0.0625%",
-     *                  "phi": "",
-     *                  "usage": "Phun ướt đều plant khi mật độ khoảng \r\n5 - 6 con/ lá",
+     *                  "registrationUnit": "Công ty TNHH MTV Lucky",
+     *                  "registrationUnitAddress": "",
+     *                  "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
+     *                  "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
      *                  "created": "2019-11-15T08:50:42.728Z"
      *              }
-     *          ],
-     *          "registrationInfo": {
-     *              "_id": "5dce66e25c25ee6da0a29ad1",
-     *              "pppId": "5dce66e25c25ee6da0a29ace",
-     *              "registrationUnit": "Công ty TNHH MTV Lucky",
-     *              "registrationUnitAddress": "",
-     *              "manufacturer": "Hebei Yetian Agrochemicals Co., Ltd.",
-     *              "manufacturerAddress": "Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.",
-     *              "created": "2019-11-15T08:50:42.728Z"
      *          }
-     *      }
-     *      ...
-     *  ]
+     *          ...
+     *      ]
+     * } 
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
      * 
      * @apiPermission none
      */
@@ -1291,7 +1412,7 @@ exports.routers = app => {
     });
 
     /**
-     * @api {get} /plant-protection-products Get plant protection product by query
+     * @api {get} /api/plant-protection-products Get plant protection product by query
      * @apiName GetPlantProtectionProductByQuery
      * @apiGroup PlantProtectionProducts
      *
@@ -1388,7 +1509,7 @@ exports.routers = app => {
     });
 
     /**
-     * @api {post} /plant-protection-products Create new plant protection product
+     * @api {post} /api/plant-protection-products Create new plant protection product
      * @apiName CreatePlantProtectionProduct
      * @apiGroup PlantProtectionProducts
      * @apiExample {curl} Example usage:
@@ -1557,7 +1678,7 @@ exports.routers = app => {
 
 
     /**
-     * @api {patch} /plant-protection-products Update plant protection product
+     * @api {patch} /api/plant-protection-products Update plant protection product
      * @apiName UpdatePlantProtectionProduct
      * @apiGroup PlantProtectionProducts
      *
@@ -1709,7 +1830,7 @@ exports.routers = app => {
     });
 
     /**
-     * @api {delete} /plant-protection-products/ Delete plant protection product
+     * @api {delete} /api/plant-protection-products/ Delete plant protection product
      * @apiName DeletePlantProtectionProduct
      * @apiGroup PlantProtectionProducts
      *
@@ -1754,11 +1875,11 @@ exports.routers = app => {
     // ROUTES FOR PLANT PROTECTION PRODUCT WAREHOUSE
 
     /**
-     * @api {post} /warehouse/plant-protection-products Create new plant protection product warehouse
+     * @api {post} /api/warehouse/plant-protection-products Create new plant protection product warehouse
      * @apiName CreatePlantProtectionProductWarehouse
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/warehouse/plant-protection-products
+     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products
      *
      * @apiHeader {String} authorization Token.
      *
@@ -1900,7 +2021,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.post('/warehouse/plant-protection-products', (req, res, next) => {
+    app.post('/api/warehouse/plant-protection-products', (req, res, next) => {
         const body = req.body;
 
         app.models.plantProtectionProductWarehouse.create(body, (err, info) => {
@@ -1910,14 +2031,14 @@ exports.routers = app => {
 
 
     /**
-     * @api {get} /warehouse/plant-protection-products Get all plant protection product warehourses with pageNumber and nPerPage
+     * @api {get} /api/warehouse/plant-protection-products Get all plant protection product warehourses with pageNumber and nPerPage
      * @apiName GetAllPlantProtectionProductWarehouses
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Tìm kiếm tất cả thuốc bvtv và phân trang:
-     *     curl -i http://localhost:3001/warehouse/plant-protection-products?pageNumber=1&nPerPage=20
+     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products?pageNumber=1&nPerPage=20
      * 
      * @apiExample {curl} Tìm kiếm tất cả thuốc bvtv theo HTX và phân trang:
-     *     curl -i http://localhost:3001/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20
+     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20
      *
      * @apiHeader {String} authorization Token.
      * 
@@ -1926,62 +2047,66 @@ exports.routers = app => {
      * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      * @apiParam {String} cooperativeId Id của hợp tác xã
      *
-     *
-     * @apiSucess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSucess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSucess {Number} quantity Số lượng
-     * @apiSucess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSucess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSucess {String} distributionAgent Đại lý phân phối
-     * @apiSucess {Number} quarantineDate Thời gian cách ly
-     * @apiSucess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSucess {Date} created Thời gian dữ liệu mới được lưu vào db
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
+     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
+     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
+     * @apiSuccess {String} distributionAgent Đại lý phân phối
+     * @apiSuccess {Number} quarantineDate Thời gian cách ly
+     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
+     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
      *
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
-     *  [
-     *      {
-     *          "_id": "5dfd66fc2ea5880f577c38a4",
-     *          "plantProtectionProductId": "5df20540e2b16e4d09842e24",
-     *          "tradeDate": "2019-01-14",
-     *          "quantity": "2",
-     *          "manufacturingDate": "2019-02-18",
-     *          "expiryDate": "2019-04-28",
-     *          "quarantineDate": "2",
-     *          "distributionAgent": "Cty Thuoc Diet Co",
-     *          "cooperativeId": "HTXUMH3",
-     *          "created": "2019-12-21T00:25:12.075Z",
-     *          "plantProtectionProductName": "Abagold 55EC"
-     *      },
-     *      {
-     *          "_id": "5dfd67d3cdb9e2106e3df625",
-     *          "plantProtectionProductId": "5df20540e2b16e4d09842e2e",
-     *          "tradeDate": "2019-01-14",
-     *          "quantity": "2",
-     *          "manufacturingDate": "2019-02-18",
-     *          "expiryDate": "2019-04-28",
-     *          "quarantineDate": "2",
-     *          "distributionAgent": "Cty Thuoc Diet Co",
-     *          "cooperativeId": "HTXNN",
-     *          "created": "2019-12-21T00:31:12.409Z",
-     *          "plantProtectionProductName": "Aba-navi 5.5EC"
-     *      },
-     *      {
-     *          "_id": "5dfd67575953c80fe78f9645",
-     *          "plantProtectionProductId": "5df20540e2b16e4d09842e33",
-     *          "tradeDate": "2019-01-14",
-     *          "quantity": "2",
-     *          "manufacturingDate": "2019-02-18",
-     *          "expiryDate": "2019-04-28",
-     *          "quarantineDate": "2",
-     *          "distributionAgent": "Cty Thuoc Diet Co",
-     *          "cooperativeId": "HTXNN",
-     *          "created": "2019-12-21T00:28:03.627Z",
-     *          "plantProtectionProductName": "Abasuper 3.6EC"
-     *      }   
-     *      ...
-     *  ]
+     *  {
+     *      "totalPages": 10,
+     *      "data": [
+     *          {
+     *              "_id": "5dfd66fc2ea5880f577c38a4",
+     *              "plantProtectionProductId": "5df20540e2b16e4d09842e24",
+     *              "tradeDate": "2019-01-14",
+     *              "quantity": "2",
+     *              "manufacturingDate": "2019-02-18",
+     *              "expiryDate": "2019-04-28",
+     *              "quarantineDate": "2",
+     *              "distributionAgent": "Cty Thuoc Diet Co",
+     *              "cooperativeId": "HTXUMH3",
+     *              "created": "2019-12-21T00:25:12.075Z",
+     *              "plantProtectionProductName": "Abagold 55EC"
+     *          },
+     *          {
+     *              "_id": "5dfd67d3cdb9e2106e3df625",
+     *              "plantProtectionProductId": "5df20540e2b16e4d09842e2e",
+     *              "tradeDate": "2019-01-14",
+     *              "quantity": "2",
+     *              "manufacturingDate": "2019-02-18",
+     *              "expiryDate": "2019-04-28",
+     *              "quarantineDate": "2",
+     *              "distributionAgent": "Cty Thuoc Diet Co",
+     *              "cooperativeId": "HTXNN",
+     *              "created": "2019-12-21T00:31:12.409Z",
+     *              "plantProtectionProductName": "Aba-navi 5.5EC"
+     *          },
+     *          {
+     *              "_id": "5dfd67575953c80fe78f9645",
+     *              "plantProtectionProductId": "5df20540e2b16e4d09842e33",
+     *              "tradeDate": "2019-01-14",
+     *              "quantity": "2",
+     *              "manufacturingDate": "2019-02-18",
+     *              "expiryDate": "2019-04-28",
+     *              "quarantineDate": "2",
+     *              "distributionAgent": "Cty Thuoc Diet Co",
+     *              "cooperativeId": "HTXNN",
+     *              "created": "2019-12-21T00:28:03.627Z",
+     *              "plantProtectionProductName": "Abasuper 3.6EC"
+     *          }   
+     *          ...
+     *      ]
+     *      
+     *  }
      * 
      * @apiError Page-not-found Trang tìm kiếm không tồn tại
      * 
@@ -1994,7 +2119,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.get('/warehouse/plant-protection-products', (req, res, next) => {
+    app.get('/api/warehouse/plant-protection-products', (req, res, next) => {
         const query = req.query;
 
         app.models.plantProtectionProductWarehouse.find(query, (err, info) => {
@@ -2004,11 +2129,11 @@ exports.routers = app => {
 
 
     /**
-     * @api {get} /warehouse/plant-protection-products/:id Get plant protection product warehourses by id
+     * @api {get} /api/warehouse/plant-protection-products/:id Get plant protection product warehourses by id
      * @apiName GetPlantProtectionProductWarehousesById
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Tìm kiếm thuốc bvtv trong kho theo id:
-     *     curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
+     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
      *
      * @apiHeader {String} authorization Token.
      * 
@@ -2018,15 +2143,15 @@ exports.routers = app => {
      * @apiParam {String} cooperativeId Id của hợp tác xã
      *
      *
-     * @apiSucess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSucess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSucess {Number} quantity Số lượng
-     * @apiSucess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSucess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSucess {String} distributionAgent Đại lý phân phối
-     * @apiSucess {Number} quarantineDate Thời gian cách ly
-     * @apiSucess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSucess {Date} created Thời gian dữ liệu mới được lưu vào db
+     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
+     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
+     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
+     * @apiSuccess {String} distributionAgent Đại lý phân phối
+     * @apiSuccess {Number} quarantineDate Thời gian cách ly
+     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
+     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
      *
      *
      * @apiSuccessExample Success-Response:
@@ -2058,7 +2183,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.get('/warehouse/plant-protection-products/:id', (req, res, next) => {
+    app.get('/api/warehouse/plant-protection-products/:id', (req, res, next) => {
         const id = req.params.id;
 
         app.models.plantProtectionProductWarehouse.findById(id, (err, info) => {
@@ -2068,12 +2193,12 @@ exports.routers = app => {
 
 
     /**
-     * @api {delete} /warehouse/plant-protection-products/:id Delete plant protection product warehouse by id
+     * @api {delete} /api/warehouse/plant-protection-products/:id Delete plant protection product warehouse by id
      * @apiName DeletePlantProtectionProductWarehouseById
      * @apiGroup PlantProtectionProductWarehouses
      *
      * @apiExample {curl} Xóa thuốc bvtv trong kho theo _id:
-     *     curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
+     *     curl -i http://localhost:3001//apiwarehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
      * 
      * 
      * @apiHeader {String} authorization Token.
@@ -2097,7 +2222,7 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
 
-    app.delete('/warehouse/plant-protection-products/:id', (req, res, next) => {
+    app.delete('/api/warehouse/plant-protection-products/:id', (req, res, next) => {
         const id = req.params.id;
 
         app.models.plantProtectionProductWarehouse.deleteById(id, (err, info) => {
@@ -2107,11 +2232,11 @@ exports.routers = app => {
 
 
     /**
-     * @api {patch} /warehouse/plant-protection-products/:id Update plant protection product warehouse by id
+     * @api {patch} /api/warehouse/plant-protection-products/:id Update plant protection product warehouse by id
      * @apiName UpdatePlantProtectionProductWarehouseById
      * @apiGroup PlantProtectionProductWarehouses
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
+     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
      *
      * @apiHeader {String} authorization Token.
      *
@@ -2220,7 +2345,7 @@ exports.routers = app => {
      * @apiPermission none
      */
 
-    app.patch('/warehouse/plant-protection-products/:id', (req, res, next) => {
+    app.patch('/api/warehouse/plant-protection-products/:id', (req, res, next) => {
         const id = req.params.id;
         const update = req.body;
 
@@ -2249,7 +2374,7 @@ exports.routers = app => {
     // *************************************************************************** //
     // ROUTES FOR FERTILIZER
     /**
-     * @api {get} /fertilizers Get all fertilizers with pageNumber and nPerPage
+     * @api {get} /api/fertilizers Get all fertilizers with pageNumber and nPerPage
      * @apiName GetAllFertilizers
      * @apiGroup Fertilizers
      * @apiExample {curl} Tìm kiếm phân bón:
@@ -2262,6 +2387,7 @@ exports.routers = app => {
      * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      *
      *
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
      * @apiSuccess {String} ministry Bộ
      * @apiSuccess {String} province Tỉnh
      * @apiSuccess {String} enterprise Tên doanh nghiệp
@@ -2275,48 +2401,51 @@ exports.routers = app => {
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
-     *  [
-     *      {
-     *          "_id": "5de75a92f4e889141cc24ee8",
-     *          "ministry": "Công thương",
-     *          "province": "Bà Rịa - Vũng Tàu",
-     *          "enterprise": "Công ty TNHH YARA Việt Nam",
-     *          "type": "Phân vô cơ",
-     *          "name": "Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)",
-     *          "ingredient": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
-     *          "lawDocument": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
-     *          "isoCertOrganization": "",
-     *          "manufactureAndImport": "",
-     *          "created": "2019-12-04T07:04:50.952Z"
-     *      },
-     *      {
-     *          "_id": "5de75a92f4e889141cc24efd",
-     *          "ministry": "Công thương",
-     *          "province": "Bà Rịa - Vũng Tàu",
-     *          "enterprise": "Công ty TNHH YARA Việt Nam",
-     *          "type": "Phân vô cơ",
-     *          "name": "Phân bón NPK 15-9-20+TE",
-     *          "ingredient": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
-     *          "lawDocument": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
-     *          "isoCertOrganization": "",
-     *          "manufactureAndImport": "",
-     *          "created": "2019-12-04T07:04:50.956Z"
-     *      },
-     *      {
-     *          "_id": "5de75a92f4e889141cc24f7d",
-     *          "ministry": "Công thương",
-     *          "province": "Bà Rịa - Vũng Tàu",
-     *          "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
-     *          "type": "Phân vô cơ",
-     *          "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
-     *          "ingredient": "",
-     *          "lawDocument": "",
-     *          "isoCertOrganization": "",
-     *          "manufactureAndImport": "",
-     *          "created": "2019-12-04T07:04:50.974Z"
-     *      },
-     *      ...
-     *  ]
+     *  {
+     *      "totalPages": 708,
+     *      "data": [
+     *          {
+     *              "_id": "5de75a92f4e889141cc24ee8",
+     *              "ministry": "Công thương",
+     *              "province": "Bà Rịa - Vũng Tàu",
+     *              "enterprise": "Công ty TNHH YARA Việt Nam",
+     *              "type": "Phân vô cơ",
+     *              "name": "Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)",
+     *              "ingredient": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
+     *              "lawDocument": "Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%",
+     *              "isoCertOrganization": "",
+     *              "manufactureAndImport": "",
+     *              "created": "2019-12-04T07:04:50.952Z"
+     *          },
+     *          {
+     *              "_id": "5de75a92f4e889141cc24efd",
+     *              "ministry": "Công thương",
+     *              "province": "Bà Rịa - Vũng Tàu",
+     *              "enterprise": "Công ty TNHH YARA Việt Nam",
+     *              "type": "Phân vô cơ",
+     *              "name": "Phân bón NPK 15-9-20+TE",
+     *              "ingredient": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
+     *              "lawDocument": "Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%",
+     *              "isoCertOrganization": "",
+     *              "manufactureAndImport": "",
+     *              "created": "2019-12-04T07:04:50.956Z"
+     *          },
+     *          {
+     *              "_id": "5de75a92f4e889141cc24f7d",
+     *              "ministry": "Công thương",
+     *              "province": "Bà Rịa - Vũng Tàu",
+     *              "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *              "type": "Phân vô cơ",
+     *              "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *              "ingredient": "",
+     *              "lawDocument": "",
+     *              "isoCertOrganization": "",
+     *              "manufactureAndImport": "",
+     *              "created": "2019-12-04T07:04:50.974Z"
+     *          },
+     *          ...
+     *      ]
+     *  }
      * 
      * @apiPermission none
      */
@@ -2332,7 +2461,7 @@ exports.routers = app => {
 
 
     /**
-     * @api {get} /fertilizers Get fertilizer by query
+     * @api {get} /api/fertilizers Get fertilizer by query
      * @apiName GetFertilizerByQuery
      * @apiGroup Fertilizers
      * 
@@ -2394,7 +2523,7 @@ exports.routers = app => {
 
 
     /**
-     * @api {post} /fertilizers Create new fertilizer
+     * @api {post} /api/fertilizers Create new fertilizer
      * @apiName CreateFertilizer
      * @apiGroup Fertilizers
      * @apiExample {curl} Example usage:
@@ -2480,7 +2609,7 @@ exports.routers = app => {
 
 
     /**
-     * @api {patch} /fertilizers Update fertilizer
+     * @api {patch} /api/fertilizers Update fertilizer
      * @apiName UpdateFertilizer
      * @apiGroup Fertilizers
      * @apiExample {curl} Update phân bón theo _id:
@@ -2561,7 +2690,7 @@ exports.routers = app => {
     });
 
     /**
-     * @api {delete} /fertilizers Delete fertilizer
+     * @api {delete} /api/fertilizers Delete fertilizer
      * @apiName DeleteFertilizer
      * @apiGroup Fertilizers
      *

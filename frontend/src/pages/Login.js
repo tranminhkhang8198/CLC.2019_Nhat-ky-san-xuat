@@ -1,47 +1,111 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable quotes */
+/* eslint-disable no-console */
+/* eslint-disable arrow-parens */
+/* eslint-disable no-unused-vars */
+/* eslint-disable object-shorthand */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
+import axios from 'axios';
 
 // eslint-disable-next-line react/prefer-stateless-function
+
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      phone: '',
+      password: '',
+      error: '',
+    };
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangePhone = this.onChangePhone.bind(this);
+  }
+
+  onChangePhone(e) {
+    this.setState({
+      phone: e.target.value,
+    });
+  }
+
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value,
+    });
+  }
+
+  async onSubmit(e) {
+    try {
+      e.preventDefault();
+
+      // create isValid to check fields
+      const user = {
+        phone: this.state.phone,
+        password: this.state.password,
+      };
+
+      const res = await axios.post('/api/login', user);
+
+      if (res.status === 200) {
+        const { token } = res.data;
+        // console.log(decode(token).exp);
+        localStorage.setItem('user', token);
+        const resInfor = await axios.get('/api/users/me', {
+          headers: { Authorization: token },
+        });
+        if (resInfor.status === 200) {
+          const { name, avatar } = resInfor.data;
+          localStorage.setItem('name', name);
+          localStorage.setItem('avatar', avatar);
+        }
+        // Redirect here
+        this.props.history.push('/');
+      } else {
+        // eslint-disable-next-line no-alert
+        this.setState({
+          error: "Số điện thoại hoặc mật khẩu không dúng",
+        });
+      }
+
+      this.setState({
+        phone: '',
+        password: '',
+      });
+    } catch (error) {
+      this.setState({
+        error: "Số điện thoại hoặc mật khẩu không dúng",
+      });
+    }
+  }
+
   render() {
+    const { error } = this.state;
     return (
       <div>
-        <nav className="navbar navbar-light navbar-expand-lg  bg-white clean-navbar">
-          <div className="container">
-            <a className="navbar-brand logo" href="/">
-              HTX 4.0
-            </a>
-            <button
-              data-toggle="collapse"
-              className="navbar-toggler"
-              data-target="#navcol-1"
-              type="button"
-            >
-              <span className="sr-only">Toggle navigation</span>
-              <span className="navbar-toggler-icon" />
-            </button>
-            <div className="collapse navbar-collapse" id="navcol-1">
-              <ul className="nav navbar-nav ml-auto" />
-            </div>
-          </div>
-        </nav>
-        <main className="page login-page">
+        <div className="container-fluid" style={{ marginTop: '100px' }} />
+        <main className="page login-page bg-darkv" style={{ width: '35%', margin: 'auto' }}>
           <section className="clean-block clean-form dark">
             <div className="container">
               <div className="block-heading">
-                <h2 className="text-info">Đăng nhập</h2>
-                <p>
+                <h2 className="text-primary" style={{ textAlign: 'center' }}>Đăng nhập</h2>
+                <p style={{ textAlign: 'center' }}>
                   Đăng nhập vào hệ thống bằng tài khoản và mật khẩu được cấp bởi
                   chúng tôi
                 </p>
               </div>
-              <form style={{ paddingBottom: '20px' }}>
+              <div className="text-danger text-center">{error}</div>
+              <form onSubmit={this.onSubmit} style={{ paddingBottom: '20px' }} className="jumbotron border-top border-primary">
                 <div className="form-group">
-                  <label htmlFor="email">Tài khoản</label>
+                  <label htmlFor="phone">Tài khoản</label>
                   <input
                     className="form-control item"
-                    type="email"
-                    id="email"
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    placeholder="Nhập số điện thoại hoặc tài khoản"
+                    value={this.state.phone}
+                    onChange={this.onChangePhone}
                   />
                 </div>
                 <div className="form-group">
@@ -50,6 +114,8 @@ class Login extends Component {
                     className="form-control"
                     type="password"
                     id="password"
+                    value={this.state.password}
+                    onChange={this.onChangePassword}
                   />
                 </div>
                 <button className="btn btn-primary btn-block" type="submit">
@@ -63,19 +129,6 @@ class Login extends Component {
             </div>
           </section>
         </main>
-        <footer className="page-footer dark" style={{ padding: 0 }}>
-          <div
-            className="footer-copyright"
-            style={{
-              border: 0,
-              backgroundColor: '#fff',
-              color: '#858796',
-              margin: 0,
-            }}
-          >
-            <p style={{ color: '#858796' }}>Copyright © HTX 4.0 2019</p>
-          </div>
-        </footer>
       </div>
     );
   }
