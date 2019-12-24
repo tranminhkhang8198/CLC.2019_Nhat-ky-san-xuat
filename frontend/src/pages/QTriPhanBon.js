@@ -16,7 +16,6 @@ class QuanTriPhanBon extends Component {
     this.state = {
       error: null,
       data: [],
-      // eslint-disable-next-line react/no-unused-state
       refresh: false,
       pageNum: 1,
       dataPerpage: 10,
@@ -29,7 +28,6 @@ class QuanTriPhanBon extends Component {
     const fertilizers = await this.getData();
     this.setState({
       data: fertilizers,
-      // eslint-disable-next-line react/no-unused-state
       refresh: false,
     });
   }

@@ -18,6 +18,12 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
       case 'plantProductProtection':
         typeTitle = ' thuốc bảo vệ thực vật ';
         break;
+      case 'seed':
+        typeTitle = ' giống lúa ';
+        break;
+      case 'cooperative':
+        typeTitle = ' hợp tác xã ';
+        break;
       default:
         typeTitle = '';
         break;
@@ -33,6 +39,12 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
         break;
       case 'plantProductProtection':
         apiUrl = 'http://localhost:3001/api/plant-protection-products';
+        break;
+      case 'seed':
+        apiUrl = '';
+        break;
+      case 'cooperative':
+        apiUrl = 'http://localhost:3001/api/cooperatives';
         break;
       default:
         apiUrl = '';
