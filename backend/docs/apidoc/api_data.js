@@ -1257,7 +1257,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/fertilizers",
+    "url": "/api/fertilizers",
     "title": "Create new fertilizer",
     "name": "CreateFertilizer",
     "group": "Fertilizers",
@@ -1474,7 +1474,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/fertilizers",
+    "url": "/api/fertilizers",
     "title": "Delete fertilizer",
     "name": "DeleteFertilizer",
     "group": "Fertilizers",
@@ -1552,7 +1552,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/fertilizers",
+    "url": "/api/fertilizers",
     "title": "Get all fertilizers with pageNumber and nPerPage",
     "name": "GetAllFertilizers",
     "group": "Fertilizers",
@@ -1599,6 +1599,13 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
           {
             "group": "Success 200",
             "type": "String",
@@ -1667,7 +1674,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5de75a92f4e889141cc24ee8\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)\",\n        \"ingredient\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n        \"lawDocument\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.952Z\"\n    },\n    {\n        \"_id\": \"5de75a92f4e889141cc24efd\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân bón NPK 15-9-20+TE\",\n        \"ingredient\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n        \"lawDocument\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.956Z\"\n    },\n    {\n        \"_id\": \"5de75a92f4e889141cc24f7d\",\n        \"ministry\": \"Công thương\",\n        \"province\": \"Bà Rịa - Vũng Tàu\",\n        \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n        \"type\": \"Phân vô cơ\",\n        \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n        \"ingredient\": \"\",\n        \"lawDocument\": \"\",\n        \"isoCertOrganization\": \"\",\n        \"manufactureAndImport\": \"\",\n        \"created\": \"2019-12-04T07:04:50.974Z\"\n    },\n    ...\n]",
+          "content": "HTTP/1.1 200 OK\n{\n    \"totalPages\": 708,\n    \"data\": [\n        {\n            \"_id\": \"5de75a92f4e889141cc24ee8\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)\",\n            \"ingredient\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n            \"lawDocument\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.952Z\"\n        },\n        {\n            \"_id\": \"5de75a92f4e889141cc24efd\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân bón NPK 15-9-20+TE\",\n            \"ingredient\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n            \"lawDocument\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.956Z\"\n        },\n        {\n            \"_id\": \"5de75a92f4e889141cc24f7d\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n            \"ingredient\": \"\",\n            \"lawDocument\": \"\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.974Z\"\n        },\n        ...\n    ]\n}",
           "type": "json"
         }
       ]
@@ -1683,7 +1690,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/fertilizers",
+    "url": "/api/fertilizers",
     "title": "Get fertilizer by query",
     "name": "GetFertilizerByQuery",
     "group": "Fertilizers",
@@ -1828,7 +1835,7 @@ define({ "api": [
   },
   {
     "type": "patch",
-    "url": "/fertilizers",
+    "url": "/api/fertilizers",
     "title": "Update fertilizer",
     "name": "UpdateFertilizer",
     "group": "Fertilizers",
@@ -2029,14 +2036,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/warehouse/plant-protection-products",
+    "url": "/api/warehouse/plant-protection-products",
     "title": "Create new plant protection product warehouse",
     "name": "CreatePlantProtectionProductWarehouse",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products",
+        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products",
         "type": "curl"
       }
     ],
@@ -2329,14 +2336,14 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/warehouse/plant-protection-products/:id",
+    "url": "/api/warehouse/plant-protection-products/:id",
     "title": "Delete plant protection product warehouse by id",
     "name": "DeletePlantProtectionProductWarehouseById",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Xóa thuốc bvtv trong kho theo _id:",
-        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
+        "content": "curl -i http://localhost:3001//apiwarehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
         "type": "curl"
       }
     ],
@@ -2395,19 +2402,19 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/warehouse/plant-protection-products",
+    "url": "/api/warehouse/plant-protection-products",
     "title": "Get all plant protection product warehourses with pageNumber and nPerPage",
     "name": "GetAllPlantProtectionProductWarehouses",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Tìm kiếm tất cả thuốc bvtv và phân trang:",
-        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products?pageNumber=1&nPerPage=20",
+        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products?pageNumber=1&nPerPage=20",
         "type": "curl"
       },
       {
         "title": "Tìm kiếm tất cả thuốc bvtv theo HTX và phân trang:",
-        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20",
+        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20",
         "type": "curl"
       }
     ],
@@ -2455,7 +2462,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5dfd66fc2ea5880f577c38a4\",\n        \"plantProtectionProductId\": \"5df20540e2b16e4d09842e24\",\n        \"tradeDate\": \"2019-01-14\",\n        \"quantity\": \"2\",\n        \"manufacturingDate\": \"2019-02-18\",\n        \"expiryDate\": \"2019-04-28\",\n        \"quarantineDate\": \"2\",\n        \"distributionAgent\": \"Cty Thuoc Diet Co\",\n        \"cooperativeId\": \"HTXUMH3\",\n        \"created\": \"2019-12-21T00:25:12.075Z\",\n        \"plantProtectionProductName\": \"Abagold 55EC\"\n    },\n    {\n        \"_id\": \"5dfd67d3cdb9e2106e3df625\",\n        \"plantProtectionProductId\": \"5df20540e2b16e4d09842e2e\",\n        \"tradeDate\": \"2019-01-14\",\n        \"quantity\": \"2\",\n        \"manufacturingDate\": \"2019-02-18\",\n        \"expiryDate\": \"2019-04-28\",\n        \"quarantineDate\": \"2\",\n        \"distributionAgent\": \"Cty Thuoc Diet Co\",\n        \"cooperativeId\": \"HTXNN\",\n        \"created\": \"2019-12-21T00:31:12.409Z\",\n        \"plantProtectionProductName\": \"Aba-navi 5.5EC\"\n    },\n    {\n        \"_id\": \"5dfd67575953c80fe78f9645\",\n        \"plantProtectionProductId\": \"5df20540e2b16e4d09842e33\",\n        \"tradeDate\": \"2019-01-14\",\n        \"quantity\": \"2\",\n        \"manufacturingDate\": \"2019-02-18\",\n        \"expiryDate\": \"2019-04-28\",\n        \"quarantineDate\": \"2\",\n        \"distributionAgent\": \"Cty Thuoc Diet Co\",\n        \"cooperativeId\": \"HTXNN\",\n        \"created\": \"2019-12-21T00:28:03.627Z\",\n        \"plantProtectionProductName\": \"Abasuper 3.6EC\"\n    }   \n    ...\n]",
+          "content": "HTTP/1.1 200 OK\n{\n    \"totalPages\": 10,\n    \"data\": [\n        {\n            \"_id\": \"5dfd66fc2ea5880f577c38a4\",\n            \"plantProtectionProductId\": \"5df20540e2b16e4d09842e24\",\n            \"tradeDate\": \"2019-01-14\",\n            \"quantity\": \"2\",\n            \"manufacturingDate\": \"2019-02-18\",\n            \"expiryDate\": \"2019-04-28\",\n            \"quarantineDate\": \"2\",\n            \"distributionAgent\": \"Cty Thuoc Diet Co\",\n            \"cooperativeId\": \"HTXUMH3\",\n            \"created\": \"2019-12-21T00:25:12.075Z\",\n            \"plantProtectionProductName\": \"Abagold 55EC\"\n        },\n        {\n            \"_id\": \"5dfd67d3cdb9e2106e3df625\",\n            \"plantProtectionProductId\": \"5df20540e2b16e4d09842e2e\",\n            \"tradeDate\": \"2019-01-14\",\n            \"quantity\": \"2\",\n            \"manufacturingDate\": \"2019-02-18\",\n            \"expiryDate\": \"2019-04-28\",\n            \"quarantineDate\": \"2\",\n            \"distributionAgent\": \"Cty Thuoc Diet Co\",\n            \"cooperativeId\": \"HTXNN\",\n            \"created\": \"2019-12-21T00:31:12.409Z\",\n            \"plantProtectionProductName\": \"Aba-navi 5.5EC\"\n        },\n        {\n            \"_id\": \"5dfd67575953c80fe78f9645\",\n            \"plantProtectionProductId\": \"5df20540e2b16e4d09842e33\",\n            \"tradeDate\": \"2019-01-14\",\n            \"quantity\": \"2\",\n            \"manufacturingDate\": \"2019-02-18\",\n            \"expiryDate\": \"2019-04-28\",\n            \"quarantineDate\": \"2\",\n            \"distributionAgent\": \"Cty Thuoc Diet Co\",\n            \"cooperativeId\": \"HTXNN\",\n            \"created\": \"2019-12-21T00:28:03.627Z\",\n            \"plantProtectionProductName\": \"Abasuper 3.6EC\"\n        }   \n        ...\n    ]\n    \n}",
           "type": "json"
         }
       ]
@@ -2490,14 +2497,14 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/warehouse/plant-protection-products/:id",
+    "url": "/api/warehouse/plant-protection-products/:id",
     "title": "Get plant protection product warehourses by id",
     "name": "GetPlantProtectionProductWarehousesById",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Tìm kiếm thuốc bvtv trong kho theo id:",
-        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
+        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
         "type": "curl"
       }
     ],
@@ -2580,14 +2587,14 @@ define({ "api": [
   },
   {
     "type": "patch",
-    "url": "/warehouse/plant-protection-products/:id",
+    "url": "/api/warehouse/plant-protection-products/:id",
     "title": "Update plant protection product warehouse by id",
     "name": "UpdatePlantProtectionProductWarehouseById",
     "group": "PlantProtectionProductWarehouses",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
+        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
         "type": "curl"
       }
     ],
@@ -2838,7 +2845,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/plant-protection-products",
+    "url": "/api/plant-protection-products",
     "title": "Create new plant protection product",
     "name": "CreatePlantProtectionProduct",
     "group": "PlantProtectionProducts",
@@ -3208,7 +3215,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/plant-protection-products/",
+    "url": "/api/plant-protection-products/",
     "title": "Delete plant protection product",
     "name": "DeletePlantProtectionProduct",
     "group": "PlantProtectionProducts",
@@ -3286,7 +3293,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/plant-protection-products",
+    "url": "/api/plant-protection-products",
     "title": "Get all plant protection products",
     "name": "GetAllPlantProtectionProducts",
     "group": "PlantProtectionProducts",
@@ -3333,6 +3340,13 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
           {
             "group": "Success 200",
             "type": "String",
@@ -3471,7 +3485,16 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5dce66cb5c25ee6da0a29ac8\",\n        \"name\": \" Ababetter  3.6EC\",\n        \"activeIngredient\": \"Abamectin\",\n        \"content\": \"36g/l\",\n        \"plantProtectionProductGroup\": \"\",\n        \"ghs\": \"\",\n        \"who\": \"2\",\n        \"created\": \"2019-11-15T08:50:19.842Z\",\n        \"scopeOfUse\": [\n            {\n                \"_id\": \"5dce66cc5c25ee6da0a29ac9\",\n                \"pppId\": \"5dce66cb5c25ee6da0a29ac8\",\n                \"plant\": \"dưa hấu\",\n                \"pest\": \"bọ trĩ\",\n                \"dosage\": \"0.2 - 0.3 lít/ha\",\n                \"phi\": \"7\",\n                \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n                \"created\": \"2019-11-15T08:50:20.100Z\"\n            }\n        ],\n        \"registrationInfo\": {\n            \"_id\": \"5dce66cc5c25ee6da0a29acd\",\n            \"pppId\": \"5dce66cb5c25ee6da0a29ac8\",\n            \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n            \"registrationUnitAddress\": \"\",\n            \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n            \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n            \"created\": \"2019-11-15T08:50:20.107Z\"\n        }\n    },\n    {\n        \"_id\": \"5dce66e25c25ee6da0a29ace\",\n        \"name\": \" Ababetter  5EC\",\n        \"activeIngredient\": \"Abamectin\",\n        \"content\": \"50g/l\",\n        \"plantProtectionProductGroup\": \"\",\n        \"ghs\": \"\",\n        \"who\": \"2\",\n        \"created\": \"2019-11-15T08:50:42.728Z\",\n        \"scopeOfUse\": [\n            {\n                \"_id\": \"5dce66e25c25ee6da0a29acf\",\n                \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                \"plant\": \"lúa\",\n                \"pest\": \"sâu cuốn lá\",\n                \"dosage\": \"150 - 250 ml/ha\",\n                \"phi\": \"\",\n                \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n                \"created\": \"2019-11-15T08:50:42.728Z\"\n            },\n            {\n                \"_id\": \"5dce66e25c25ee6da0a29ad0\",\n                \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                \"plant\": \"quýt\",\n                \"pest\": \"nhện đỏ\",\n                \"dosage\": \"0.0375 - 0.0625%\",\n                \"phi\": \"\",\n                \"usage\": \"Phun ướt đều plant khi mật độ khoảng \\r\\n5 - 6 con/ lá\",\n                \"created\": \"2019-11-15T08:50:42.728Z\"\n            }\n        ],\n        \"registrationInfo\": {\n            \"_id\": \"5dce66e25c25ee6da0a29ad1\",\n            \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n            \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n            \"registrationUnitAddress\": \"\",\n            \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n            \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n            \"created\": \"2019-11-15T08:50:42.728Z\"\n        }\n    }\n    ...\n]",
+          "content": " HTTP/1.1 200 OK\n{\n     \"totalPages\": 317,\n     \"data\": [\n         {\n             \"_id\": \"5dce66cb5c25ee6da0a29ac8\",\n             \"name\": \" Ababetter  3.6EC\",\n             \"activeIngredient\": \"Abamectin\",\n             \"content\": \"36g/l\",\n             \"plantProtectionProductGroup\": \"\",\n             \"ghs\": \"\",\n             \"who\": \"2\",\n             \"created\": \"2019-11-15T08:50:19.842Z\",\n             \"scopeOfUse\": [\n                 {\n                     \"_id\": \"5dce66cc5c25ee6da0a29ac9\",\n                     \"pppId\": \"5dce66cb5c25ee6da0a29ac8\",\n                     \"plant\": \"dưa hấu\",\n                     \"pest\": \"bọ trĩ\",\n                     \"dosage\": \"0.2 - 0.3 lít/ha\",\n                     \"phi\": \"7\",\n                     \"usage\": \"Lượng nước phun 400 lít/ha. Phun tkhi mật độ \\r\\nbọ trĩ  2-3 con/ ngọn\",\n                     \"created\": \"2019-11-15T08:50:20.100Z\"\n                 }\n             ],\n             \"registrationInfo\": {\n                 \"_id\": \"5dce66cc5c25ee6da0a29acd\",\n                 \"pppId\": \"5dce66cb5c25ee6da0a29ac8\",\n                 \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n                 \"registrationUnitAddress\": \"\",\n                 \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n                 \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n                 \"created\": \"2019-11-15T08:50:20.107Z\"\n             }\n         },\n         {\n             \"_id\": \"5dce66e25c25ee6da0a29ace\",\n             \"name\": \" Ababetter  5EC\",\n             \"activeIngredient\": \"Abamectin\",\n             \"content\": \"50g/l\",\n             \"plantProtectionProductGroup\": \"\",\n             \"ghs\": \"\",\n             \"who\": \"2\",\n             \"created\": \"2019-11-15T08:50:42.728Z\",\n             \"scopeOfUse\": [\n                 {\n                     \"_id\": \"5dce66e25c25ee6da0a29acf\",\n                     \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                     \"plant\": \"lúa\",\n                     \"pest\": \"sâu cuốn lá\",\n                     \"dosage\": \"150 - 250 ml/ha\",\n                     \"phi\": \"\",\n                     \"usage\": \"Lượng nước phun 400 lít/ha. Phun thuốc khi sâu tuổi 1-2\",\n                     \"created\": \"2019-11-15T08:50:42.728Z\"\n                 },\n                 {\n                     \"_id\": \"5dce66e25c25ee6da0a29ad0\",\n                     \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                     \"plant\": \"quýt\",\n                     \"pest\": \"nhện đỏ\",\n                     \"dosage\": \"0.0375 - 0.0625%\",\n                     \"phi\": \"\",\n                     \"usage\": \"Phun ướt đều plant khi mật độ khoảng \\r\\n5 - 6 con/ lá\",\n                     \"created\": \"2019-11-15T08:50:42.728Z\"\n                 }\n             ],\n             \"registrationInfo\": {\n                 \"_id\": \"5dce66e25c25ee6da0a29ad1\",\n                 \"pppId\": \"5dce66e25c25ee6da0a29ace\",\n                 \"registrationUnit\": \"Công ty TNHH MTV Lucky\",\n                 \"registrationUnitAddress\": \"\",\n                 \"manufacturer\": \"Hebei Yetian Agrochemicals Co., Ltd.\",\n                 \"manufacturerAddress\": \"Xiyangling, East Circle Road, 2HD Shi Jia Zhuang City, Hebei, China.\",\n                 \"created\": \"2019-11-15T08:50:42.728Z\"\n             }\n         }\n         ...\n     ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n    }",
           "type": "json"
         }
       ]
@@ -3487,7 +3510,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/plant-protection-products",
+    "url": "/api/plant-protection-products",
     "title": "Get plant protection product by query",
     "name": "GetPlantProtectionProductByQuery",
     "group": "PlantProtectionProducts",
@@ -3702,7 +3725,7 @@ define({ "api": [
   },
   {
     "type": "patch",
-    "url": "/plant-protection-products",
+    "url": "/api/plant-protection-products",
     "title": "Update plant protection product",
     "name": "UpdatePlantProtectionProduct",
     "group": "PlantProtectionProducts",
@@ -4097,7 +4120,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"name\":\"user\",\n    \"role\":{\n        \"user\":\"G\",\n        \"manager\":\"GU\",\n        \"administrator\":\"GUDP\",\n    }\n}",
+          "content": "{\n    \"name\":\"user\",\n    \"role\":{\n        \"user\":\"G\",\n        \"manager\":\"GU\",\n        \"administrator\":\"GUDP\"\n    }\n}",
           "type": "json"
         }
       ]
