@@ -47,7 +47,7 @@ exports.routers = app => {
         if (!token) {
             return cb(
                 {
-                    errorMessage: "Access denied"
+                    errorMessage: "Không tìm thấy token trên request"
                 },
                 null
             );
@@ -57,13 +57,14 @@ exports.routers = app => {
             if (err) {
                 return cb(
                     {
-                        errorMessage: "Loi xac dinh token"
+                        errorMessage: "Token không hợp lệ"
                     },
                     null
                 );
             } else {
+
                 // Check permission
-                app.models.permission.checkPermission(
+                app.models.permission.check(
                     result._id,
                     resource,
                     req.method,
@@ -72,7 +73,8 @@ exports.routers = app => {
                             return cb(
                                 {
                                     errorMessage:
-                                        "Loi trong qua trinh kiem tra quyen truy cap"
+                                        "Lỗi trong quá trình kiểm tra quyền truy cập",
+                                    errorCode: 501
                                 },
                                 null
                             );
@@ -83,7 +85,8 @@ exports.routers = app => {
                                 return cb(
                                     {
                                         errorMessage:
-                                            "Ban khong co quyen truy cap vao tai nguyen nay"
+                                            "Bạn không có quyền truy cập vào tài nguyên này",
+                                        errorCode: 401
                                     },
                                     null
                                 );
@@ -177,9 +180,9 @@ exports.routers = app => {
      * @apiPermission none
      */
     app.post("/api/users/", upload.single('avatar'), (req, res, next) => {
-        let avatar = "http://localhost:3003/default.png"
+        let avatar = "http://localhost:3001/avatar/default.png"
         if (req.file) {
-            avatar = "http://localhost:3003/" + req.file.filename;
+            avatar = "http://localhost:3001/avatar/" + req.file.filename;
         }
         const body = req.body;
         _.set(body, 'avatar', avatar);
@@ -188,14 +191,12 @@ exports.routers = app => {
             if (err) {
                 _.unset(body, "user");
                 app.models.user.create(body, (err, info) => {
-                    console.log(info);
                     return err
                         ? errorHandle(res, err, 503)
                         : responseHandle(res, info);
                 });
             } else {
                 app.models.user.create(body, (err, info) => {
-                    console.log(info);
                     return err
                         ? errorHandle(res, err, 503)
                         : responseHandle(res, info);
@@ -204,17 +205,10 @@ exports.routers = app => {
         });
     });
 
-    app.post('/upload', upload.single('avatar'), (req, res, next) => {
-        console.log(req.file);
-        if (!req.file) {
-            res.status(500);
-            return next(err);
-        }
-        res.json({ fileUrl: 'http://192.168.0.7:3001/images/' + req.file.filename });
-    })
+
 
     /**
-     * @api {post} /login Login user
+     * @api {post} /api/auth/login Login user
      * @apiVersion 0.1.0
      * @apiName LoginUser
      * @apiGroup User
@@ -270,13 +264,98 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-    app.post("/api/login", (req, res, next) => {
+    app.post("/api/auth/login", (req, res, next) => {
         const body = req.body;
 
         app.models.user.login(body, (err, result) => {
             return err
                 ? errorHandle(res, err, 504)
                 : responseHandle(res, result);
+        });
+    });
+
+    /**
+ * @api {post} /api/auth/register User request creating new account
+ * @apiVersion 0.1.0
+ * @apiName authRegister
+ * @apiGroup Auth
+ * @apiExample {curl} Example usage:
+ *     curl -i http://localhost:3001/api/auth/register
+ *
+ *
+ * @apiParam {String} name Ten nguoi su dung
+ * @apiParam {String} personalId So CMND cua nguoi su dung
+ * @apiParam {String} address Địa chỉ cua nguoi su dung
+ * @apiParam {String} phone So dien thoai cua nguoi su dung
+ * @apiParam {String} email Địa chỉ email cua nguoi su dung
+ * @apiParam {String} password Mat khau cua nguoi su dung
+ *
+ * @apiParamExample {json} Request-Example:
+ *     {
+ *       "name": "Nguyen Van Loi",
+ *       "personalId":"384736273",
+ *       "address": "Ninh Kieu, Can Tho",
+ *       "phone": "093827463",
+ *       "email": "admin@gmail.com",
+ *       "password": "123456"
+ *     }
+ *
+ * @apiSuccess {String} name Ten nguoi su dung
+ * @apiSuccess {String} personalId So CMND cua nguoi su dung
+ * @apiSuccess {String} phone So dien thoai cua nguoi su dung
+ * @apiSuccess {String} email Địa chỉ email cua nguoi su dung
+ * @apiSuccess {String} created Thoi gian nguoi dung duoc tao
+ * @apiSuccess {String} _id ID cua nguoi su dung
+ *
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      "name": "Nguyen Quang Khai",
+ *      "avatar": "http://localhost:3003/image-1576222546040.png",
+ *      "personalId": "381823821",
+ *      "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+ *      "email": "vanloi10c@gmail.com",
+ *      "user": "user",
+ *      "HTXId": "115",
+ *      "created": "2019-11-12T12:13:24.216Z",
+ *      "_id": "5dcaa1e4e363dc1df58f0317"
+ *  }
+ *
+ * @apiError Name-is-required Thieu truong ten nguoi dung
+ * @apiError Personal-id-is-invalid So CMND sai
+ * @apiError Phone-number-already-exist Nguoi dung da ton tai trong CSDL
+ * @apiError Phone-number-is-reqired Thieu SDT
+ * @apiError Passsword-is-required-and-more-than-3-characters Khong co ma khau hoac mat khau qua ngan
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Phone number already exist"
+ *     }
+ * @apiPermission none
+ */
+    app.post("/api/auth/register", upload.single('avatar'), (req, res, next) => {
+        let avatar = "http://localhost:3003/default.png"
+        if (req.file) {
+            avatar = "http://localhost:3003/" + req.file.filename;
+        }
+        const body = req.body;
+        _.set(body, 'avatar', avatar);
+        const resource = "user";
+        verifyUser(req, resource, (err, result) => {
+            if (err) {
+                _.unset(body, "user");
+                app.models.user.create(body, (err, info) => {
+                    return err
+                        ? errorHandle(res, err, 503)
+                        : responseHandle(res, info);
+                });
+            } else {
+                app.models.user.create(body, (err, info) => {
+                    return err
+                        ? errorHandle(res, err, 503)
+                        : responseHandle(res, info);
+                });
+            }
         });
     });
 
@@ -422,6 +501,8 @@ exports.routers = app => {
      *
      * @apiExample {curl} Example usage:
      *     curl -i http://localhost:3001/api/users/all
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users/fsdlkfjsdoeijfsdlsdfj
      *
      * @apiHeader {String} authorization Token.
      *
@@ -473,7 +554,7 @@ exports.routers = app => {
         const resource = "user";
         verifyUser(req, resource, (err, permission) => {
             if (err) {
-                errorHandle(res, "Permission denied");
+                errorHandle(res, err.errorMessage);
             } else {
                 app.models.user.get(userId, (err, data) => {
                     return err
@@ -565,7 +646,7 @@ exports.routers = app => {
      * @apiParamExample {json} Request-Example:
      *      {
      *          "_id":"D",
-     *          "permission":"DELETE"
+     *          "method":"DELETE"
      *      }
      *
      * @apiSuccess {String} _id ki hieu cua method
@@ -577,7 +658,7 @@ exports.routers = app => {
      *  [
      *      {
      *          "_id": "D",
-     *          "permission": "DELETE",
+     *          "method": "DELETE",
      *          "created": "2019-11-14T07:10:50.507Z"
      *      }
      *  ]
@@ -600,6 +681,20 @@ exports.routers = app => {
                 : responseHandle(res, role);
         });
     });
+
+    app.get('/api/roles', (req, res, next) => {
+        app.models.role.get((err, roles) => {
+            return err ? errorHandle(res, err.errorMessage, err.errorCode) : responseHandle(res, roles)
+        })
+    })
+
+    app.delete('/api/roles', (req, res, next) => {
+        const query = req.query;
+        app.models.role.delete(query, (err, result) => {
+            return err ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
 
     /**
      * @api {post} /resources Them resource can quan ly quyen
@@ -1149,6 +1244,24 @@ exports.routers = app => {
             else {
                 return responseHandle(res, result);
             }
+        })
+    })
+
+    app.post('/api/goodReceipts', (req, res, next) => {
+        const body = req.body;
+        app.models.goodReceipt.create(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.delete('/api/goodReceipts', (req, res, next) => {
+        const query = req.query;
+        app.models.goodReceipt.delete(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
         })
     })
 

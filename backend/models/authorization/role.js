@@ -7,9 +7,9 @@ const _ = require('lodash');
  * D: DELETE
  * 
  */
-class Role{
+class Role {
 
-    constructor(app){
+    constructor(app) {
         this.app = app;
     }
 
@@ -18,26 +18,26 @@ class Role{
      * @param {string} role 
      * @param {callback fucntion} cb 
      */
-    create(role, cb = () => {}){
-        const collection = this.app.db.collection('role');
-    
+    create(role, cb = () => { }) {
+        const collection = this.app.db.collection('roles');
+
         const obj = {
-            _id: _.get(role,'_id'),
-            permission: _.get(role, 'permission'),
+            _id: _.get(role, '_id'),
+            method: _.get(role, 'method'),
             created: new Date()
         }
 
-        collection.insertOne(obj, (err, result) =>{
+        collection.insertOne(obj, (err, result) => {
 
-            if(err){
-                return cb({error: "error iserting role"}, null);
+            if (err) {
+                return cb({ errorMessage: "Lỗi trong quá trình cập nhật CSDL", errorCode: 501 }, null);
             }
-            else{
+            else {
                 return cb(null, result.ops);
             }
         })
 
-        
+
     }
 
     /**
@@ -46,33 +46,61 @@ class Role{
      * @param {string} allowRole 
      * @param {callback function} cb 
      */
-    compare(method, allowRole, cb = () =>{}){
+    compare(method, allowRole, cb = () => { }) {
 
 
         // Get protocol id
-        const collection = this.app.db.collection('role');
+        const collection = this.app.db.collection('roles');
         const query = {
-            permission: `${method}`
+            method: `${method}`
         }
         const options = {
             _id: 1
         }
         collection.find(query, options).limit(1).toArray((err, result) => {
-            if(err || !_.get(result, '[0]')){
+            if (err || !_.get(result, '[0]')) {
                 return cb(err, null);
             }
-            else{
+            else {
                 const compare = allowRole.indexOf(result[0]._id.toString())
-                if(compare>-1){
+                if (compare > -1) {
                     return cb(null, true);
                 }
-                else{
-                    return cb({err: "Access dinied"});
+                else {
+                    return cb({ err: "Access dinied" });
                 }
             }
         })
 
 
+    }
+    get(cb = () => { }) {
+        const collection = this.app.db.collection('roles');
+        collection.find().toArray((err, result) => {
+            if (err || result.length == 0) {
+                return err
+                    ? cb({ errorMessage: "Lỗi trong quá trình truy vấn CSDL", errorCode: 500 }, null)
+                    : cb({ errorMessage: "Không tìm thấy dữ liệu", errorCode: 400 }, null);
+            }
+            else {
+                return cb(null, result);
+            }
+        })
+    }
+    delete(query, cb = () => { }) {
+        const collection = this.app.db.collection('roles');
+        collection.deleteOne(query, (err, result) => {
+            if (err || result.deletedCount == 0) {
+                return err
+                    ? cb({ errorMessage: "Lỗi trong quá trình cập nhật CSDL", errorCode: 501 }, null)
+                    : cb({ errorMessage: "Không tồn tại dữ liệu cần xóa", errorCode: 401 }, null);
+            }
+            else {
+                return cb(null, {
+                    responseMessage: `Đã xóa ${result.deletedCount} dữ liệu`
+                });
+            }
+        })
     }
 }
 

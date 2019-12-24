@@ -94,7 +94,7 @@ class Resource {
      */
     role(name, cb = () => { }) {
         const collection = this.app.db.collection('resource');
-
+        console.log("name", name);
         const query = {
             name: `${name}`
         }
@@ -107,6 +107,7 @@ class Resource {
                 return cb({ errorMessage: "Role is not found" }, null);
             }
             else {
+                console.log("result", result);
                 const role = _.get(result, '[0]').role;
                 return cb(null, role);
             }
