@@ -215,62 +215,6 @@ class PlantProtectionProductWarehouse {
             }).catch(err => {
                 return cb(err, null);
             });
-
-        //     // Get plant protection product name
-        //     plantProtectionProductWarehouse.forEach(elem => {
-        //         plantProtectionProduct.findOne({ _id: mongoose.Types.ObjectId(elem.plantProtectionProductId) })
-        //             .then((plantProtectionProduct) => {
-        //                 elem['plantProtectionProductName'] = plantProtectionProduct.name;
-
-        //                 responseToClient["data"] = elem;
-
-        //                 count = count + 1;
-
-        //                 if (count == length) {
-        //                     return cb(null, responseToClient);
-        //                 }
-        //             }).catch(err => {
-        //                 return cb(err, null);
-        //             });
-        //     });
-        // }).catch((err) => {
-        //     return cb(err, null);
-        // });
-
-        // plantProtectionProductWarehouse.find(query)
-        //     .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
-        //     .limit(Number(nPerPage))
-        //     .toArray()
-        //     .then((plantProtectionProductWarehouses) => {
-
-        //         // Get plant protection product name
-        //         let count = 0;
-        //         let length = plantProtectionProductWarehouses.length;
-
-        //         if (length == 0) {
-        //             const message = 'Trang tìm kiếm không tồn tại';
-        //             return cb(message, null);
-        //         }
-
-        //         plantProtectionProductWarehouses.forEach((elem) => {
-        //             plantProtectionProduct.findOne({ _id: mongoose.Types.ObjectId(elem.plantProtectionProductId) })
-        //                 .then((plantProtectionProduct) => {
-        //                     elem['plantProtectionProductName'] = plantProtectionProduct.name;
-
-        //                     responseToClient.push(elem);
-
-        //                     count = count + 1;
-
-        //                     if (count == length) {
-        //                         return cb(null, responseToClient);
-        //                     }
-        //                 }).catch(err => {
-        //                     return cb(err, null);
-        //                 });
-        //         });
-        //     }).catch((err) => {
-        //         return cb(err, null);
-        //     });
     }
 
     findById(id, cb = () => { }) {
