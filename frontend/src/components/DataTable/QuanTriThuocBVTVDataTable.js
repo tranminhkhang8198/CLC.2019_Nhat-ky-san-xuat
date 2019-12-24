@@ -56,7 +56,7 @@ export class ListItems extends Component {
     const viewItemModal = <ViewItemModal />;
     const modifyItemModal = <ModifyItemModal />;
     const deleteItemModal = <DeleteItemModal
-      type="plantProductProtection"
+      type="plantProtectionProduct"
       parentComponent={parentComponent}
       selectedItem={selectedItem}
     />;
@@ -66,7 +66,7 @@ export class ListItems extends Component {
         {viewItemModal}
         {modifyItemModal}
         {deleteItemModal}
-        <DataPerPage type="plantProductProtection" parentComponent={parentComponent} />
+        <DataPerPage type="plantProtectionProduct" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">

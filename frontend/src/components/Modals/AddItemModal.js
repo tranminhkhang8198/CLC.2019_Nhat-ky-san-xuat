@@ -1,18 +1,25 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
+/* eslint-disable arrow-body-style */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/jsx-fragments */
+
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
+import axios from 'axios';
 
 class AddItemModal extends Component {
   constructor(props) {
     super(props);
 
+    this.submitData = {};
+
     this.state = {
-      data: '',
+      data: {},
+      serverDomain: 'http://localhost:3001',
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputOnChange = this.handleInputOnChange.bind(this);
     this.handleDataSubmit = this.handleDataSubmit.bind(this);
 
     this.renderAdditionalPPP = this.renderAdditionalPPP.bind(this);
@@ -103,66 +110,6 @@ class AddItemModal extends Component {
           },
         ];
         break;
-      case 'plantProductProtection':
-        labelTitles = [
-          {
-            type: 'text',
-            name: 'name',
-            value: 'Tên thương phẩm',
-            placeholder: 'Nhập vào tên thương phẩm',
-            required: true,
-            notes: [
-              'Tên các thương phẩm phải cách nhau bằng dấu ,',
-              'Ví dụ: Thương phẩm 1, Thương phẩm 2',
-            ],
-          },
-          {
-            type: 'text',
-            name: 'activeIngredient',
-            value: 'Tên hoạt chất',
-            placeholder: 'Nhập vào tên hoạt chất',
-            required: false,
-            notes: [
-              'Tên các thương phẩm phải cách nhau bằng dấu ,',
-              'Ví dụ: Thương phẩm 1, Thương phẩm 2',
-            ],
-          },
-          {
-            type: 'text',
-            name: 'content',
-            value: 'Hàm lượng',
-            placeholder: 'Nhập hàm lượng của thuốc',
-            required: false,
-            notes: [
-              'Ví dụ: 50g/1 liều',
-            ],
-          },
-          {
-            type: 'text',
-            name: 'plantProtectionProductGroup',
-            value: 'Tên nhóm thuốc',
-            placeholder: 'Nhập vào tên nhóm thuốc',
-            required: false,
-            notes: [],
-          },
-          {
-            type: 'number',
-            name: 'ghs',
-            value: 'Nhóm độc ghs',
-            placeholder: 'Nhập vào nhóm độc GHS',
-            required: true,
-            notes: [],
-          },
-          {
-            type: 'number',
-            name: 'who',
-            value: 'Nhóm độc who',
-            placeholder: 'Nhập vào nhóm độc WHO',
-            required: true,
-            notes: [],
-          },
-        ];
-        break;
       default:
         labelTitles = [];
         break;
@@ -170,20 +117,67 @@ class AddItemModal extends Component {
     return labelTitles;
   }
 
-  handleChange(event) {
-    console.log(event.target);
+  handleInputOnChange(event) {
+    const {
+      field,
+    } = event.target.dataset;
 
-    this.setState({
-      data: event.target.value,
-    });
+    const {
+      value,
+    } = event.target;
+
+    /**
+     * Assign inputed values to a containers to prevent re-rendering
+     * that leads to unfocused input elements
+     */
+    this.submitData[field] = value;
   }
 
-  handleDataSubmit() {
+  async handleDataSubmit() {
+    await this.setState({
+      data: {
+        name: this.submitData.name,
+        activeIngredient: this.submitData.activeIngredient,
+        content: this.submitData.content,
+        plantProtectionProductGroup: this.submitData.plantProtectionProductGroup,
+        ghs: parseInt(this.submitData.ghs, 10),
+        who: parseInt(this.submitData.who, 10),
+        scopeOfUse: [
+          {
+            plant: this.submitData['plant-name'],
+            pest: this.submitData.pest,
+            dosage: this.submitData.dosage,
+            usage: this.submitData.usage,
+            phi: parseInt(this.submitData.phi, 10),
+          },
+        ],
+        registrationInfo: {
+          registrationUnit: this.submitData.registrationUnit,
+          registrationUnitAddress: this.submitData.registrationAddress,
+          manufacturer: this.submitData.manufacturer,
+          manufacturerAddress: this.submitData.manufacturerAddress,
+        },
+      },
+    });
     console.log(this.state);
+    console.log(this.submitData);
+    const { data, serverDomain } = this.state;
+
+    try {
+      const newPPPRequest = await axios({
+        url: `${serverDomain}/api/plant-protection-products`,
+        method: 'post',
+        data,
+      });
+
+      console.log(newPPPRequest);
+    } catch (submitError) {
+      console.log(submitError.response);
+    }
   }
 
   renderMainModalPPP() {
-    const { type } = this.props;
+    const { data } = this.state;
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
@@ -198,48 +192,93 @@ class AddItemModal extends Component {
             </div>
             <div className="modal-body modal-add-body">
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-product-name" className="w-100">
+                <label htmlFor="add-ppp-name" className="w-100">
                   Tên thương phẩm
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
                   </span>
                   <input
-                    required
                     type="text"
                     className="form-control item"
                     name="add-ppp-name"
-                    data-type={type}
+                    data-field="name"
+                    value={data.name}
                     placeholder="Nhập vào tên thuốc bảo vệ thực vật"
+                    onChange={(this.handleInputOnChange)}
                   />
-                  <small className="form-text text-muted" key={uuidv4()}>
-                    Tên các thương phẩm phải cách nhau bằng dấu &apos;,&apos;
-                  </small>
-                  <small className="form-text text-muted" key={uuidv4()}>
-                    Ví dụ: Thương phẩm 1, Thương phẩm 2
-                  </small>
                 </label>
               </div>
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-product-name" className="w-100">
+                <label htmlFor="add-ppp-activeIngredient" className="w-100">
                   Tên hoạt chất
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
                   <input
                     type="text"
                     className="form-control item"
                     name="add-ppp-activeIngredient"
-                    data-type={type}
+                    data-field="activeIngredient"
+                    onChange={this.handleInputOnChange}
                     placeholder="Nhập vào tên hoạt chất"
                   />
                 </label>
               </div>
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-product-name" className="w-100">
+                <label htmlFor="add-ppp-content" className="w-100">
                   Hàm lượng sử dụng
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
                   <input
                     type="text"
                     className="form-control item"
                     name="add-ppp-content"
-                    data-type={type}
+                    data-field="content"
                     placeholder="Hàm lượng sử dụng của thuốc"
+                    onChange={this.handleInputOnChange}
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Ví dụ: 50g/1 liều
+                  </small>
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-plantProtectionProductGroup" className="w-100">
+                  Tên nhóm thuốc
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-plantProtectionProductGroup"
+                    placeholder="Nhập vào tên nhóm thuốc"
+                    data-field="plantProtectionProductGroup"
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-ghs" className="w-100">
+                  Nhóm độc GHS
+                  <input
+                    type="number"
+                    className="form-control item"
+                    name="add-ppp-ghs"
+                    placeholder="Nhập vào nhóm độc GHS"
+                    data-field="ghs"
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-who" className="w-100">
+                  Nhóm độc WHO
+                  <input
+                    type="number"
+                    className="form-control item"
+                    name="add-ppp-who"
+                    placeholder="Nhập vào nhóm độc WHO"
+                    data-field="who"
+                    onChange={this.handleInputOnChange}
                   />
                 </label>
               </div>
@@ -264,7 +303,7 @@ class AddItemModal extends Component {
 
   renderAdditionalPPP() {
     return (
-      <React.Fragment key="hey">
+      <React.Fragment>
         <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-addition-1">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -278,38 +317,66 @@ class AddItemModal extends Component {
               </div>
               <div className="modal-body modal-add-body">
                 <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="add-registration-unit" className="w-100">
+                  <label htmlFor="add-ppp-registrationUnit" className="w-100">
                     Nhập vào tên cửa hàng
+                    <span style={{ color: 'rgb(249,15,15)' }}>
+                      &nbsp;*
+                    </span>
                     <input
                       type="text"
-                      name="add-registration-unit"
-                      id="add-registration-unit"
+                      name="add-ppp-registrationUnit"
                       className="form-control item"
                       placeholder="Nhập vào tên cửa hàng"
+                      data-field="registrationUnit"
+                      onChange={this.handleInputOnChange}
                     />
                   </label>
                 </div>
                 <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="add-registration-add" className="w-100">
+                  <label htmlFor="add-ppp-registrationAddress" className="w-100">
                     Địa chỉ cửa hàng
+                    <span style={{ color: 'rgb(249,15,15)' }}>
+                      &nbsp;*
+                    </span>
                     <input
                       type="text"
-                      name="add-registration-add"
-                      id="add-registration-add"
+                      name="add-ppp-registrationAddress"
                       className="form-control item"
                       placeholder="Nhập vào địa chỉ cửa hàng"
+                      data-field="registrationAddress"
+                      onChange={this.handleInputOnChange}
                     />
                   </label>
                 </div>
                 <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="manufacturer" className="w-100">
+                  <label htmlFor="add-ppp-manufacturer" className="w-100">
                     Nhà sản xuất
+                    <span style={{ color: 'rgb(249,15,15)' }}>
+                      &nbsp;*
+                    </span>
                     <input
                       type="text"
-                      name="manufacturer"
-                      id="manufacturer"
+                      name="add-ppp-manufacturer"
                       className="form-control item"
                       placeholder="Nhà sản xuất"
+                      data-field="manufacturer"
+                      onChange={this.handleInputOnChange}
+                    />
+                  </label>
+                </div>
+                <div className="form-group" key={uuidv4()}>
+                  <label htmlFor="add-ppp-manufacturerAddress" className="w-100">
+                    Địa chỉ cửa hàng
+                    <span style={{ color: 'rgb(249,15,15)' }}>
+                      &nbsp;*
+                    </span>
+                    <input
+                      type="text"
+                      name="add-ppp-manufacturerAddress"
+                      className="form-control item"
+                      placeholder="Nhập vào địa chỉ cửa hàng"
+                      data-field="manufacturerAddress"
+                      onChange={this.handleInputOnChange}
                     />
                   </label>
                 </div>
@@ -354,50 +421,67 @@ class AddItemModal extends Component {
                 <fieldset>
                   <legend>Tác dụng 1:</legend>
                   <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="plant-name" className="w-100">
-                      Tên nông phẩm
+                    <label htmlFor="add-ppp-plant-name" className="w-100">
+                      Tên cây tác thuốc tác dụng
                       <input
                         type="text"
-                        name="plant-name"
-                        id="plant-name"
+                        name="add-ppp-plant-name"
                         className="form-control item"
                         placeholder="Nhập vào tên nông phẩm"
+                        data-field="plant-name"
+                        onChange={this.handleInputOnChange}
                       />
                     </label>
                   </div>
                   <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="pest" className="w-100">
+                    <label htmlFor="add-ppp-pest" className="w-100">
                       Sâu bọ diệt trừ
                       <input
                         type="text"
-                        name="pest"
-                        id="pest"
+                        name="add-ppp-pest"
                         className="form-control item"
                         placeholder="Nhập vào tên sâu bọ khắc chế"
+                        data-field="pest"
+                        onChange={this.handleInputOnChange}
                       />
                     </label>
                   </div>
                   <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="dosage" className="w-100">
+                    <label htmlFor="add-ppp-dosage" className="w-100">
                       Liều lượng
                       <input
                         type="text"
-                        name="dosage"
-                        id="dosage"
+                        name="add-ppp-dosage"
                         className="form-control item"
                         placeholder="Liều lượng sử dụng"
+                        data-field="dosage"
+                        onChange={this.handleInputOnChange}
                       />
                     </label>
                   </div>
                   <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="usage" className="w-100">
+                    <label htmlFor="add-ppp-phi" className="w-100">
+                      Phi
+                      <input
+                        type="number"
+                        className="form-control item"
+                        name="add-ppp-phi"
+                        placeholder="Nhập vào độ phi"
+                        data-field="phi"
+                        onChange={this.handleInputOnChange}
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group" key={uuidv4()}>
+                    <label htmlFor="add-ppp-usage" className="w-100">
                       Cách sử dụng
                       <textarea
                         rows="4"
-                        name="usage"
-                        id="usage"
+                        name="add-ppp-usage"
                         className="form-control item"
                         placeholder="Mô tả cách sử dụng chi tiết"
+                        data-field="usage"
+                        onChange={this.handleInputOnChange}
                       />
                     </label>
                   </div>
@@ -426,36 +510,13 @@ class AddItemModal extends Component {
             </div>
           </div>
         </div>
-
       </React.Fragment>
     );
   }
 
-  renderLabels(labelsData) {
-    const { data } = this.state;
-    return labelsData.map((item) => (
-      <div className="form-group" key={uuidv4()}>
-        <label htmlFor={item.name} className="w-100">
-          {item.value}
-          {item.required === true && this.renderRequiredFields()}
-          <input
-            type={item.type}
-            name={`add-${item.name}`}
-            id={item.name}
-            className="form-control item"
-            placeholder={item.placeholder}
-            value={data}
-            onChange={this.handleChange}
-          />
-          {item.notes.length > 0 && this.renderNotesFields(item.notes)}
-        </label>
-      </div>
-    ));
-  }
-
   render() {
     return (
-      <React.Fragment key="hey">
+      <React.Fragment>
         {this.renderMainModalPPP()}
         {this.renderAdditionalPPP()}
       </React.Fragment>
