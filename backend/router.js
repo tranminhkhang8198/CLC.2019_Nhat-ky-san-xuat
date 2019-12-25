@@ -1289,6 +1289,7 @@ exports.routers = app => {
      * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
      * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      *
+     * @apiSuccess {Number} totalProducts Tổng số thuốc bvtv trong danh mục
      * @apiSuccess {Number} totalPages Tổng số lượng trang 
      * @apiSuccess {String} name Tên thuốc bảo vệ thực vật
      * @apiSuccess {String} activeIngredient Hoạt chất
@@ -1314,6 +1315,7 @@ exports.routers = app => {
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      * {
+     *      "totalProducts": 6331,
      *      "totalPages": 317,
      *      "data": [
      *          {
@@ -2387,6 +2389,7 @@ exports.routers = app => {
      * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
      *
      *
+     * @apiSuccess {Number} totalProducts Tổng số phân bón trong danh mục 
      * @apiSuccess {Number} totalPages Tổng số lượng trang
      * @apiSuccess {String} ministry Bộ
      * @apiSuccess {String} province Tỉnh
@@ -2402,6 +2405,7 @@ exports.routers = app => {
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
+     *      "totalProducts": 14152,
      *      "totalPages": 708,
      *      "data": [
      *          {
