@@ -62,6 +62,12 @@ class DeleteItemsModal extends Component {
       case 'plantProductProtection':
         apiUrl = 'http://localhost:3001/api/plant-protection-products';
         break;
+      case 'seed':
+        apiUrl = '';
+        break;
+      case 'cooperative':
+        apiUrl = 'http://localhost:3001/api/cooperatives';
+        break;
       default:
         apiUrl = '';
         break;
@@ -157,6 +163,12 @@ class DeleteItemsModal extends Component {
       case 'plantProductProtection':
         typeTitle = ' thuốc bảo vệ thực vật';
         break;
+      case 'seed':
+        typeTitle = ' giống lúa ';
+        break;
+      case 'cooperative':
+        typeTitle = ' hợp tác xã ';
+        break;
       default:
         typeTitle = '';
         break;
@@ -183,6 +195,10 @@ class DeleteItemsModal extends Component {
 
   render() {
     const { data, type } = this.state;
+
+    if (!data.length) {
+      return '';
+    }
     // console.log(this.state);
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-items">

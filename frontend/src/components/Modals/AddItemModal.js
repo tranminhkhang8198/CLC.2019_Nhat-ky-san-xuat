@@ -6,7 +6,10 @@ import axios from 'axios';
 import * as httpStatus from 'http-status';
 
 function AddItemModal({ type }) {
-  const [input, setInput] = useState({});
+  function getToken() {
+    const token = localStorage.getItem('itemName');
+    return token;
+  }
 
   function renderTypeTitle(typeData) {
     let typeTitle = '';
