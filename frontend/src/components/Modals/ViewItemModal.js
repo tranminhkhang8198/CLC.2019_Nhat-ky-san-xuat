@@ -1,4 +1,3 @@
-
 /* eslint class-methods-use-this: [
   "error",
   { "exceptMethods":

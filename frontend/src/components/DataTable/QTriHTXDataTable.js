@@ -5,12 +5,12 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 
-import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
 import DeleteItemModal from '../Modals/DeleteItemModal';
 
 import DataPerPage from './Pagination/DataPerPage';
 import Pagination from './Pagination/Paginator';
+import ViewItemModal from '../Modals/ViewItemModal';
 
 export class ListItems extends Component {
   constructor(props) {
