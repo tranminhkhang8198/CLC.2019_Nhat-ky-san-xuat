@@ -13,7 +13,7 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid';
 import axios from 'axios';
-import * as httpStatus from 'http-status';
+import httpStatus from 'http-status';
 
 class DeleteItemsModal extends Component {
   constructor(props) {
@@ -30,6 +30,8 @@ class DeleteItemsModal extends Component {
     this.renderItemsToDelete = this.renderItemsToDelete.bind(this);
     this.updateDataWhenRendered = this.updateDataWhenRendered.bind(this);
     this.deleteListOfItemsEventHandler = this.deleteListOfItemsEventHandler.bind(this);
+    this.selectAll = this.selectAll.bind(this);
+    this.deSelectAll = this.deSelectAll.bind(this);
   }
 
 
@@ -71,7 +73,7 @@ class DeleteItemsModal extends Component {
 
   async updateDataWhenRendered(updatedData) {
     // console.log('event 2');
-    await this.setState({
+    this.setState({
       data: updatedData,
     });
     return updatedData;
@@ -148,6 +150,26 @@ class DeleteItemsModal extends Component {
     this.handleDeleteResult(results);
   }
 
+  selectAll() {
+    const { data, checkboxRefs } = this.state;
+    for (let i = 0; i < data.length; i += 1) {
+      const { _id } = data[i];
+      checkboxRefs[_id].checked = true;
+    }
+
+    checkboxRefs['deselect-all'].checked = false;
+  }
+
+  deSelectAll() {
+    const { data, checkboxRefs } = this.state;
+    for (let i = 0; i < data.length; i += 1) {
+      const { _id } = data[i];
+      checkboxRefs[_id].checked = false;
+    }
+
+    checkboxRefs['select-all'].checked = false;
+  }
+
   renderTypeTitle(typeData) {
     let typeTitle = '';
     switch (typeData) {
@@ -166,6 +188,10 @@ class DeleteItemsModal extends Component {
 
   renderItemsToDelete(items) {
     const { checkboxRefs } = this.state;
+    if (!Array.isArray(items)) {
+      return <div />;
+    }
+
     return items.map((item) => (
       <div className="form-check" key={uuidv4()}>
         <label className="form-check-label" htmlFor={`delete-${item._id}`}>
@@ -182,7 +208,7 @@ class DeleteItemsModal extends Component {
   }
 
   render() {
-    const { data, type } = this.state;
+    const { data, type, checkboxRefs } = this.state;
     // console.log(this.state);
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-items">
@@ -200,6 +226,31 @@ class DeleteItemsModal extends Component {
             <div className="modal-body modal-add-body">
               <p>Chọn tên các dữ liệu bạn muốn xóa</p>
               {this.renderItemsToDelete(data)}
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+              <div className="mt-2">
+                <div className="form-check" key={uuidv4()}>
+                  <label className="form-check-label" htmlFor="select-all" onClick={() => this.selectAll()}>
+                    <input
+                      className="form-check-input"
+                      id="select-all"
+                      type="checkbox"
+                      ref={(element) => { checkboxRefs['select-all'] = element; }}
+                    />
+                    Chọn tất cả
+                  </label>
+                </div>
+                <div className="form-check" key={uuidv4()}>
+                  <label className="form-check-label" htmlFor="deselect-all" onClick={() => this.deSelectAll()}>
+                    <input
+                      className="form-check-input"
+                      id="deselect-all"
+                      type="checkbox"
+                      ref={(element) => { checkboxRefs['deselect-all'] = element; }}
+                    />
+                    Bỏ chọn tất cả
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="modal-footer">
               <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>

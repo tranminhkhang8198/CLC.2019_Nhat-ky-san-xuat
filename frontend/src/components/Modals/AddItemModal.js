@@ -3,7 +3,7 @@
 import React from 'react';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
-import * as httpStatus from 'http-status';
+import httpStatus from 'http-status';
 
 function AddItemModal({ type }) {
   function renderTypeTitle(typeData) {

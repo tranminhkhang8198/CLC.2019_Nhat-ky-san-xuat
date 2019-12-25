@@ -4,13 +4,13 @@
 /* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
+import Pagination from 'react-js-pagination';
 
 import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
 import DeleteItemModal from '../Modals/DeleteItemModal';
 
 import DataPerPage from './Pagination/DataPerPage';
-import Pagination from './Pagination/Paginator';
 
 export class ListItems extends Component {
   constructor(props) {
@@ -47,7 +47,9 @@ export class ListItems extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const {
+      data, handlePageChange, activePage, totalProducts, dataPerpage,
+    } = this.props;
     const { selectedItem, parentComponent } = this.state;
     if (!data.length) {
       return <h1>Loading....</h1>;
@@ -136,7 +138,15 @@ export class ListItems extends Component {
           </table>
         </div>
 
-        <Pagination />
+        <Pagination
+          activePage={activePage}
+          itemsCountPerPage={dataPerpage}
+          totalItemsCount={totalProducts}
+          pageRangeDisplayed={5}
+          onChange={handlePageChange}
+          itemClass="page-item"
+          linkClass="page-link"
+        />
       </div>
     );
   }

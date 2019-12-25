@@ -45,7 +45,7 @@ class Login extends Component {
         password: this.state.password,
       };
 
-      const res = await axios.post('/api/login', user);
+      const res = await axios.post('/api/auth/login', user);
 
       if (res.status === 200) {
         const { token } = res.data;

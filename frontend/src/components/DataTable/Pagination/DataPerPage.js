@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useState } from 'react';
 
 function DataPerPage({ type, parentComponent }) {
   function getSearchPlaceholder(dataType) {
@@ -19,6 +21,13 @@ function DataPerPage({ type, parentComponent }) {
     return { placeholderData };
   }
 
+  const [searchValue, setSearchValue] = useState('');
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setSearchValue(value);
+  };
+
+
   let optionRef = null;
   async function changeDataPerPageEventHandler(e, fieldRef) {
     e.preventDefault();
@@ -34,7 +43,7 @@ function DataPerPage({ type, parentComponent }) {
       <div className="col-md-6 text-nowrap">
         <div id="dataTable_length" className="dataTables_length" aria-controls="dataTable">
           <label htmlFor="data-per-page-picker">
-            HIển thị&nbsp;
+            Hiển thị&nbsp;
             <select
               id="data-per-page-picker"
               className="form-control form-control-sm custom-select custom-select-sm"
@@ -59,8 +68,11 @@ function DataPerPage({ type, parentComponent }) {
               className="form-control form-control-sm"
               aria-controls="dataTable"
               placeholder={placeholderData}
+              value={searchValue}
+              onChange={handleInputChange}
             />
           </label>
+          <div className="btn btn-info ml-2" onClick={() => parentComponent.searchDataByName(searchValue)}>Tìm</div>
         </div>
       </div>
     </div>

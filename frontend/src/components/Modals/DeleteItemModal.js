@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import axios from 'axios';
-import * as httpStatus from 'http-status';
+import httpStatus from 'http-status';
 
 function DeleteItemModal({ type, parentComponent, selectedItem }) {
   function getToken() {

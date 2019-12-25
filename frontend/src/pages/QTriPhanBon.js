@@ -14,54 +14,104 @@ class QuanTriPhanBon extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
       data: [],
-      // eslint-disable-next-line react/no-unused-state
+      error: null,
+      searchError: '',
       refresh: false,
       pageNum: 1,
       dataPerpage: 10,
+      activePage: 1,
+      totalProducts: 0,
     };
 
     this.getData = this.getData.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+    this.searchDataByName = this.searchDataByName.bind(this);
   }
 
   async componentDidMount() {
-    const fertilizers = await this.getData();
+    const { data, totalProducts } = await this.getData();
+
     this.setState({
-      data: fertilizers,
-      // eslint-disable-next-line react/no-unused-state
-      refresh: false,
+      data,
+      totalProducts,
     });
   }
 
   async componentDidUpdate(prevProps, prevState) {
     const { refresh } = this.state;
     if (refresh) {
-      const fertilizers = await this.getData();
-      this.updateDataWhenRendered(fertilizers);
+      const { data, totalProducts } = await this.getData();
+      this.updateDataWhenRendered(data, totalProducts);
     }
   }
 
   async getData() {
-    const { pageNum, dataPerpage } = this.state;
-    const { data } = await axios({
-      method: 'GET',
-      url: `http://localhost:3001/api/fertilizers?pageNumber=${pageNum}&nPerPage=${dataPerpage}`,
-    });
-    return data;
+    try {
+      const { pageNum, dataPerpage } = this.state;
+      const response = await axios({
+        method: 'GET',
+        url: `/api/fertilizers?pageNumber=${pageNum}&nPerPage=${dataPerpage}`,
+      });
+
+      if (response.status === 200) {
+        return response.data;
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
   }
 
-  async updateDataWhenRendered(updatedData) {
-    await this.setState({
+  // eslint-disable-next-line class-methods-use-this
+  async searchDataByName(name = '') {
+    try {
+      const token = localStorage.getItem('user');
+      const response = await axios.get(`/api/fertilizers/query?name=${name}`, {
+        headers: { Authorization: token },
+      });
+      if (response.status === 200) {
+        this.setState((state, props) => ({ data: [response.data], searchError: '' }));
+      }
+    } catch (error) {
+      this.setState((state, props) => ({ searchError: 'Không tìm thấy sản phẩm' }));
+    }
+  }
+
+
+  async handlePageChange(pageNumber) {
+    const { dataPerpage } = this.state;
+    const response = await axios.get(`/api/fertilizers?pageNumber=${pageNumber}&nPerPage=${dataPerpage}`);
+    if (response.status === 200) {
+      const { data, totalProducts } = response.data;
+      this.setState(() => ({
+        data,
+        totalProducts,
+        activePage: pageNumber,
+      }));
+    }
+  }
+
+
+  async updateDataWhenRendered(updatedData, totalProducts) {
+    this.setState({
       refresh: false,
       data: updatedData,
+      totalProducts,
     });
     return updatedData;
   }
 
 
   render() {
-    const { error, data } = this.state;
+    const {
+      error,
+      data,
+      activePage,
+      searchError,
+      totalProducts,
+      dataPerpage,
+    } = this.state;
     if (error) {
       const a = (
         <div>
@@ -93,9 +143,17 @@ class QuanTriPhanBon extends Component {
                 </span>
                 <span className="text-white text">Xóa dữ liệu</span>
               </a>
+              <div className="text-center text-danger">{searchError}</div>
             </div>
           </div>
-          <ListItems data={data} parentComponent={this} />
+          <ListItems
+            data={data}
+            activePage={activePage}
+            handlePageChange={this.handlePageChange}
+            parentComponent={this}
+            totalProducts={totalProducts}
+            dataPerpage={dataPerpage}
+          />
         </div>
       </div>
     );
