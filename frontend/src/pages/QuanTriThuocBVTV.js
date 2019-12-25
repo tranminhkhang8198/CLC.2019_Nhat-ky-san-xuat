@@ -1,9 +1,3 @@
-/* eslint-disable react/no-unused-state */
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable-next-line react/prefer-stateless-function */
-/* eslint class-methods-use-this: ["error", { "exceptMethods": ["getData", "render"] }] */
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -20,6 +14,7 @@ class QuanTriThuocBVTV extends Component {
       refresh: false,
       pageNum: 1,
       dataPerpage: 10,
+      totalPages: 1,
     };
 
     this.getData = this.getData.bind(this);
@@ -29,23 +24,31 @@ class QuanTriThuocBVTV extends Component {
     const plantProtectionData = await this.getData();
 
     this.setState({
-      data: plantProtectionData,
+      data: plantProtectionData.data,
+      totalPages: plantProtectionData.totalPages,
     });
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
-      const fertilizers = await this.getData();
-      this.updateDataWhenRendered(fertilizers);
+      const plantProtectionData = await this.getData();
+      this.updateDataWhenRendered(plantProtectionData);
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line class-methods-use-this
+  getToken() {
+    const token = localStorage.getItem('itemName');
+    return token;
   }
 
   async getData() {
     const { pageNum, dataPerpage } = this.state;
     const { data } = await axios({
       method: 'GET',
-      url: `http://localhost:3001/api/plant-protection-products?${pageNum}&nPerPage=${dataPerpage}`,
+      url: `http://localhost:3001/api/plant-protection-products?pageNumber=${pageNum}&nPerPage=${dataPerpage}`,
     });
     return data;
   }
@@ -53,13 +56,23 @@ class QuanTriThuocBVTV extends Component {
   async updateDataWhenRendered(updatedData) {
     await this.setState({
       refresh: false,
-      data: updatedData,
+      data: updatedData.data,
+      totalPages: updatedData.totalPages,
     });
     return updatedData;
   }
 
   render() {
-    const { data } = this.state;
+    const { data, totalPages, error } = this.state;
+    if (error) {
+      const a = (
+        <div>
+          Error:
+          {error.message}
+        </div>
+      );
+      return a;
+    }
     return (
       <div className="container-fluid">
         <DeleteItemsModal type="plantProductProtection" data={data} parentComponent={this} />
@@ -82,7 +95,7 @@ class QuanTriThuocBVTV extends Component {
               </a>
             </div>
           </div>
-          <ListItems data={data} parentComponent={this} />
+          <ListItems data={data} totalPages={totalPages} parentComponent={this} />
         </div>
       </div>
     );

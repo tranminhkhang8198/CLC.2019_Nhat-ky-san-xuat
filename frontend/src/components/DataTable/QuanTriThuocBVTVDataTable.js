@@ -53,11 +53,16 @@ export class ListItems extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, totalPages } = this.props;
     const { selectedItem, parentComponent } = this.state;
+
+    if (!Array.isArray(data)) {
+      return <h1>Loading....</h1>;
+    }
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
+    // console.log(data.length);
 
     const viewItemModal = <ViewItemModal type="plantProductProtection" selectedItem={selectedItem} />;
     const modifyItemModal = <ModifyItemModal />;
@@ -143,7 +148,7 @@ export class ListItems extends Component {
           </table>
         </div>
 
-        <Pagination />
+        <Pagination totalPages={totalPages} />
       </div>
     );
   }

@@ -1,8 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -19,6 +14,7 @@ class QuanTriPhanBon extends Component {
       refresh: false,
       pageNum: 1,
       dataPerpage: 10,
+      totalPages: 1,
     };
 
     this.getData = this.getData.bind(this);
@@ -27,17 +23,24 @@ class QuanTriPhanBon extends Component {
   async componentDidMount() {
     const fertilizers = await this.getData();
     this.setState({
-      data: fertilizers,
-      refresh: false,
+      data: fertilizers.data,
+      totalPages: fertilizers.totalPages,
     });
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
       const fertilizers = await this.getData();
       this.updateDataWhenRendered(fertilizers);
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line class-methods-use-this
+  getToken() {
+    const token = localStorage.getItem('itemName');
+    return token;
   }
 
   async getData() {
@@ -52,14 +55,15 @@ class QuanTriPhanBon extends Component {
   async updateDataWhenRendered(updatedData) {
     await this.setState({
       refresh: false,
-      data: updatedData,
+      data: updatedData.data,
+      totalPages: updatedData.totalPages,
     });
     return updatedData;
   }
 
 
   render() {
-    const { error, data } = this.state;
+    const { error, data, totalPages } = this.state;
     if (error) {
       const a = (
         <div>
@@ -93,7 +97,7 @@ class QuanTriPhanBon extends Component {
               </a>
             </div>
           </div>
-          <ListItems data={data} parentComponent={this} />
+          <ListItems data={data} parentComponent={this} totalPages={totalPages} />
         </div>
       </div>
     );

@@ -54,13 +54,20 @@ export class ListItems extends Component {
     const { data } = this.props;
     const { selectedItem, parentComponent } = this.state;
 
+    if (!Array.isArray(data)) {
+      return <h1>Loading....</h1>;
+    }
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
 
     const viewItemModal = <ViewItemModal type="fertilizer" selectedItem={selectedItem} />;
     const modifyItemModal = <ModifyItemModal />;
-    const deleteItemModal = <DeleteItemModal type="fertilizer" parentComponent={parentComponent} selectedItem={selectedItem} />;
+    const deleteItemModal = <DeleteItemModal
+      type="fertilizer"
+      parentComponent={parentComponent}
+      selectedItem={selectedItem}
+    />;
 
     return (
       <div className="card-body">

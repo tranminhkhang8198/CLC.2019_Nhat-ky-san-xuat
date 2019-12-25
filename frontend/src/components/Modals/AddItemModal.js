@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import React from 'react';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
 import * as httpStatus from 'http-status';
 
 function AddItemModal({ type }) {
+  // eslint-disable-next-line no-unused-vars
   function getToken() {
     const token = localStorage.getItem('itemName');
     return token;
@@ -18,6 +17,9 @@ function AddItemModal({ type }) {
         typeTitle = ' phân bón';
         break;
       case 'plantProductProtection':
+        typeTitle = ' thuốc bảo vệ thực vật';
+        break;
+      case 'cooperative':
         typeTitle = ' thuốc bảo vệ thực vật';
         break;
       default:
@@ -187,6 +189,8 @@ function AddItemModal({ type }) {
           },
         ];
         break;
+      case 'cooperative':
+        break;
       default:
         labelTitles = [];
         break;
@@ -254,7 +258,7 @@ function AddItemModal({ type }) {
           clearAllInputField(titles);
           break;
         case 'plantProductProtection':
-          alert('Thêm thuốc bảo vệ thực vật mới thành công');
+          alert(`Thêm thuốc bảo vệ thực vật ${result.data.name} thành công`);
           break;
         default:
       }
@@ -265,13 +269,11 @@ function AddItemModal({ type }) {
     // eslint-disable-next-line no-useless-escape
     const simpleRegex = /[!@#$%^&*()_+\-=\[\]{}':"\\|,.<>\/?]/;
     if (isRequired && userInputValue.length === 0) {
-      // eslint-disable-next-line prefer-template
-      alert('Trường ' + inputFieldName + ' không được để trống');
+      alert(`Trường ${inputFieldName} không được để trống`);
       return false;
     }
     if (simpleRegex.test(userInputValue)) {
-      // eslint-disable-next-line prefer-template
-      alert('Dữ liệu trường ' + inputFieldName + ' không hợp lệ');
+      alert(`Dữ liệu trường ${inputFieldName} không hợp lệ`);
       return false;
     }
     return true;
@@ -494,6 +496,12 @@ function AddItemModal({ type }) {
   }
 
   function renderLabels(labelsData) {
+    if (!Array.isArray(labelsData)) {
+      return null;
+    }
+    if (labelsData.length === 0) {
+      return null;
+    }
     return labelsData.map((item) => (
       <div className="form-group" key={uuidv4()}>
         <label htmlFor={item.name} className="w-100">

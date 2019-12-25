@@ -39,7 +39,13 @@ export class ListItems extends Component {
   selectTableItemEventHandler(e) {
     e.preventDefault();
     const { data } = this.props;
+    const { selectedItem } = this.state;
     const selectedItemId = e.target.getAttribute('href');
+    if (selectedItem !== null) {
+      if (selectedItem._id === selectedItemId) {
+        return;
+      }
+    }
     const item = this.getItemBaseOnId(data, selectedItemId);
     this.setState({ selectedItem: item });
   }
@@ -48,13 +54,21 @@ export class ListItems extends Component {
     const { data } = this.props;
     const { selectedItem, parentComponent } = this.state;
 
+    if (!Array.isArray(data)) {
+      return <h1>Loading....</h1>;
+    }
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
+    // console.log(data.length);
 
-    const viewItemModal = <ViewItemModal type="fertilizer" selectedItem={selectedItem} />;
+    const viewItemModal = <ViewItemModal type="cooperative" selectedItem={selectedItem} />;
     const modifyItemModal = <ModifyItemModal />;
-    const deleteItemModal = <DeleteItemModal type="cooperative" parentComponent={parentComponent} selectedItem={selectedItem} />;
+    const deleteItemModal = <DeleteItemModal
+      type="cooperative"
+      parentComponent={parentComponent}
+      selectedItem={selectedItem}
+    />;
 
     return (
       <div className="card-body">
@@ -86,11 +100,12 @@ export class ListItems extends Component {
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
                       <a
                         className="dropdown-item text-white bg-info"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
                         data-target="#modal-view-1"
                         style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xem thông tin
                       </a>
