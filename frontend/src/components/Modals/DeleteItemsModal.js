@@ -192,10 +192,6 @@ class DeleteItemsModal extends Component {
 
   render() {
     const { data, type } = this.state;
-
-    if (!data.length) {
-      return '';
-    }
     // console.log(this.state);
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-items">

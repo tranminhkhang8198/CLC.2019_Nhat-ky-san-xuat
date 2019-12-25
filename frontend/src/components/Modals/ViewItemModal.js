@@ -3,7 +3,7 @@
   { "exceptMethods":
     [
       "getLabelTitlesByType", "renderTypeTitle", "renderLabels",
-      "getToken"
+      "getToken", "renderBaseOnDataType"
     ]
   }
 ] */
@@ -52,7 +52,7 @@ class ViewItemModal extends Component {
             ],
           },
           {
-            type: 'img',
+            type: 'image',
             name: 'logo',
             value: 'Logo của HTX',
             placeholder: 'Nhập vào tên Bộ cấp phép sử dụng phân bón',
@@ -126,7 +126,7 @@ class ViewItemModal extends Component {
             notes: [],
           },
           {
-            type: 'text',
+            type: 'link',
             name: 'website',
             value: 'Đia chỉ website của HTX',
             placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
@@ -321,6 +321,25 @@ class ViewItemModal extends Component {
     return typeTitle;
   }
 
+  renderBaseOnDataType(typeData, dataContent) {
+    let result = '';
+    switch (typeData) {
+      case 'link':
+        result = <a href={dataContent}>{dataContent}</a>;
+        break;
+      case 'image':
+        result = <img src={dataContent} alt="sameplePic" />;
+        break;
+      case 'text':
+        result = dataContent;
+        break;
+      default:
+        result = dataContent;
+        break;
+    }
+    return result;
+  }
+
 
   renderLabels(labelsData, itemData) {
     if (!itemData) {
@@ -333,7 +352,7 @@ class ViewItemModal extends Component {
             <p>{item.value}</p>
           </div>
           <div className="col-8">
-            <p>{itemData[item.name]}</p>
+            <p>{this.renderBaseOnDataType(item.type, itemData[item.name])}</p>
           </div>
         </div>
       </div>

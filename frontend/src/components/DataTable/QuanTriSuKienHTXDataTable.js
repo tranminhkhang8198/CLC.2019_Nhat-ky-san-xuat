@@ -60,10 +60,10 @@ export class ListItems extends Component {
     }
     // console.log(data.length);
 
-    const viewItemModal = <ViewItemModal type="cooperative" selectedItem={selectedItem} />;
+    const viewItemModal = <ViewItemModal />;
     const modifyItemModal = <ModifyItemModal />;
     const deleteItemModal = <DeleteItemModal
-      type="cooperative"
+      type="cooperativeEvent"
       parentComponent={parentComponent}
       selectedItem={selectedItem}
     />;
@@ -73,15 +73,15 @@ export class ListItems extends Component {
         {viewItemModal}
         {modifyItemModal}
         {deleteItemModal}
-        <DataPerPage type="cooperative" parentComponent={parentComponent} />
+        <DataPerPage type="cooperativeEvent" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
             <thead>
               <tr>
-                <th>Tên hợp tác xã</th>
-                <th>Địa chỉ</th>
-                <th>Trạng thái hoạt động</th>
+                <th>Tên sự kiện</th>
+                <th>Ngày diễn ra</th>
+                <th>Nơi tổ chức</th>
                 <th>
                   &nbsp;
                 </th>
@@ -135,9 +135,9 @@ export class ListItems extends Component {
             </tbody>
             <tfoot>
               <tr>
-                <td><strong>Tên hợp tác xã</strong></td>
-                <td><strong>Địa chỉ</strong></td>
-                <td><strong>Trạng thái hoạt động</strong></td>
+                <td><strong>Tên sự kiện</strong></td>
+                <td><strong>Ngày diễn ra</strong></td>
+                <td><strong>Nơi tổ chức</strong></td>
                 <td />
               </tr>
             </tfoot>
