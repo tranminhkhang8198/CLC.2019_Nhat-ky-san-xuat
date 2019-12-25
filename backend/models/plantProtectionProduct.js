@@ -179,6 +179,8 @@ class PlantProtectionProduct {
             .then(count => {
                 const totalPages = ((count - (count % nPerPage)) / nPerPage) + 1;
 
+                responseToClient["totalProducts"] = count;
+
                 responseToClient["totalPages"] = totalPages;
 
                 return plantProtectionProduct
