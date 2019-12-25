@@ -2405,6 +2405,7 @@ exports.routers = app => {
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
+     *      "totalProducts": 14152,
      *      "totalPages": 708,
      *      "data": [
      *          {
