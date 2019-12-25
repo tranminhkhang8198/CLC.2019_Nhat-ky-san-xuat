@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+/* eslint-disable react/no-unused-state */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable-next-line react/prefer-stateless-function */
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["getData", "render"] }] */
+>>>>>>> 9750936737130bfce5f54e87e02146d669ecd9a8
 import React, { Component } from 'react';
 import axios from 'axios';
 
