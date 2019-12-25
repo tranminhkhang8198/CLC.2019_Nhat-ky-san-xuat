@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React from 'react';
 import uuidv4 from 'uuid/v4';
-import axios from 'axios';
-import * as httpStatus from 'http-status';
 
 function AddItemModal({ type }) {
+  // eslint-disable-next-line no-unused-vars
   function getToken() {
     const token = localStorage.getItem('itemName');
     return token;
@@ -18,6 +17,9 @@ function AddItemModal({ type }) {
         typeTitle = ' phân bón';
         break;
       case 'plantProductProtection':
+        typeTitle = ' thuốc bảo vệ thực vật';
+        break;
+      case 'cooperative':
         typeTitle = ' thuốc bảo vệ thực vật';
         break;
       default:
@@ -171,6 +173,8 @@ function AddItemModal({ type }) {
           },
         ];
         break;
+      case 'cooperative':
+        break;
       default:
         labelTitles = [];
         break;
@@ -195,11 +199,6 @@ function AddItemModal({ type }) {
   }
 
   const labelTitles = getLabelTitlesByType(type);
-
-  const handleInputChange = (e) => setInput({
-    ...input,
-    [e.currentTarget.name]: e.currentTarget.value,
-  });
 
   function renderAdditionalPlantProtectionProductInput() {
     return (
@@ -249,7 +248,7 @@ function AddItemModal({ type }) {
                       // id="manufacturer"
                       className="form-control item"
                       placeholder="Nhà sản xuất"
-                      onChange={handleInputChange}
+                    // onChange={handleInputChange}
                     />
                   </label>
                 </div>
@@ -379,6 +378,12 @@ function AddItemModal({ type }) {
   }
 
   function renderLabels(labelsData) {
+    if (!Array.isArray(labelsData)) {
+      return null;
+    }
+    if (labelsData.length === 0) {
+      return null;
+    }
     return labelsData.map((item) => (
       <div className="form-group" key={uuidv4()}>
         <label htmlFor={item.name} className="w-100">

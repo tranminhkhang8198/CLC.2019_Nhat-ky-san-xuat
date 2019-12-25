@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -25,11 +21,10 @@ class QuanTriHTX extends Component {
   }
 
   async componentDidMount() {
-    const response = await this.getData();
+    const cooperatives = await this.getData();
     this.setState({
-      data: response.data,
-      error: response.error,
-      refresh: false,
+      data: cooperatives.data.data,
+      error: cooperatives.error,
     });
   }
 
@@ -42,12 +37,19 @@ class QuanTriHTX extends Component {
   // }
 
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
       const cooperatives = await this.getData();
       this.updateDataWhenRendered(cooperatives);
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line class-methods-use-this
+  getToken() {
+    const token = localStorage.getItem('itemName');
+    return token;
   }
 
   // async getData() {
@@ -85,8 +87,9 @@ class QuanTriHTX extends Component {
 
   async updateDataWhenRendered(updatedData) {
     await this.setState({
+      data: updatedData.data.data,
+      error: updatedData.error,
       refresh: false,
-      data: updatedData,
     });
     return updatedData;
   }
@@ -105,7 +108,7 @@ class QuanTriHTX extends Component {
     return (
       <div className="container-fluid">
         <DeleteItemsModal type="cooperative" data={data} parentComponent={this} />
-        {/* <AddItemModal type="cooperative" /> */}
+        <AddItemModal type="cooperative" />
         <div className="card shadow">
           <div className="card-header py-3">
             <p className="text-primary m-0 font-weight-bold">Danh sách hợp tác xã</p>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 /* eslint class-methods-use-this: [
   "error",
   { "exceptMethods":
@@ -17,14 +16,141 @@ class ViewItemModal extends Component {
     super(props);
 
     this.state = {
-      type: props.type,
-      data: props.selectedItem,
     };
   }
 
   getLabelTitlesByType(dataType) {
     let labelTitles = [];
     switch (dataType) {
+      case 'cooperative':
+        labelTitles = [
+          {
+            type: 'text',
+            name: 'name',
+            value: 'Tên hợp tác xã',
+            placeholder: 'Nhập vào tên phân bón',
+            required: true,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'foreignName',
+            value: 'Tên nước ngoài của HTX',
+            placeholder: 'Nhập vào loại phân bón',
+            required: true,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'abbreviationName',
+            value: 'Tên viết tắt',
+            placeholder: 'Nhập vào thành phần của phân bón',
+            required: false,
+            notes: [
+              'Tên các thành phần phải cách nhau bằng dấu ;',
+              'Ví dụ: Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%;...',
+            ],
+          },
+          {
+            type: 'img',
+            name: 'logo',
+            value: 'Logo của HTX',
+            placeholder: 'Nhập vào tên Bộ cấp phép sử dụng phân bón',
+            required: false,
+            notes: [
+              'Ví dụ: Công thương',
+            ],
+          },
+          {
+            type: 'text',
+            name: 'status',
+            value: 'Thông tin trạng thái của HTX',
+            placeholder: 'Nhập vào tên tỉnh, thành nơi sản xuất phân bón',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'cooperativeID',
+            value: 'Mã số HTX',
+            placeholder: 'Nhập vào căn cứ, tiêu chuẩn, quy định',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'tax',
+            value: 'Mã số thuế của HTX',
+            placeholder: 'Nhập vào tên doanh nghiệp sản xuất phân bón',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'surrgate',
+            value: 'Người đại diện',
+            placeholder: 'Nhập vào tên tổ chức chứng nhận hợp quy',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'director',
+            value: 'Giám đốc',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'address',
+            value: 'Địa chỉ của hợp tác xã',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'phone',
+            value: 'Số điện thoại của HTX',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'fax',
+            value: 'Địa chỉ fax của HTX',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'website',
+            value: 'Đia chỉ website của HTX',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'representOffice',
+            value: 'Văn phòng đại diện',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+          {
+            type: 'text',
+            name: 'docs',
+            value: 'Danh sách tài liệu',
+            placeholder: 'Nhập vào thông tin nhập khẩu, xuất khẩu',
+            required: false,
+            notes: [],
+          },
+        ];
+        break;
       case 'fertilizer':
         labelTitles = [
           {
@@ -197,6 +323,9 @@ class ViewItemModal extends Component {
 
 
   renderLabels(labelsData, itemData) {
+    if (!itemData) {
+      return null;
+    }
     return labelsData.map((item) => (
       <div className="container" style={{ padding: 0 }} key={uuidv4()}>
         <div className="row">
@@ -214,11 +343,8 @@ class ViewItemModal extends Component {
   render() {
     const { selectedItem, type } = this.props;
     const labelTitles = this.getLabelTitlesByType(type);
-    let renderLabels = null;
+    const renderLabels = this.renderLabels(labelTitles, selectedItem);
     console.log(selectedItem);
-    if (selectedItem) {
-      renderLabels = this.renderLabels(labelTitles, selectedItem);
-    }
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-view-1">
         <div className="modal-dialog" role="document">

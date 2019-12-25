@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import axios from 'axios';
 import * as httpStatus from 'http-status';
 
 function DeleteItemModal({ type, parentComponent, selectedItem }) {
+  // eslint-disable-next-line no-unused-vars
   function getToken() {
     const token = localStorage.getItem('itemName');
     return token;
@@ -81,7 +81,7 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
     return result;
   }
 
-  async function handleDeleteResult(result) {
+  async function handleDeleteResult(result, parent) {
     if (result == null) {
       return;
     }
@@ -91,7 +91,7 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
       return;
     }
     alert('Xóa thành công');
-    parentComponent.setState(() => ({
+    parent.setState(() => ({
       refresh: true,
     }));
   }
@@ -99,7 +99,7 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
   async function deleteHandler(e, item) {
     e.preventDefault();
     const result = await deleteItemBaseOnId(item);
-    handleDeleteResult(result);
+    handleDeleteResult(result, parentComponent);
   }
 
   return (
