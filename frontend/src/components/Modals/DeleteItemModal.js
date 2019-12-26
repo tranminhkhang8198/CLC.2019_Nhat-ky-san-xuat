@@ -8,12 +8,11 @@ class DeleteItemModal extends Component {
     super(props);
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
-      plantProtectionProductTitle: 'plantProductProtection',
+      plantProtectionProductTitle: 'plantProtectionProduct',
     };
     this.state = {
       type: props.type,
       parentComponent: props.parentComponent,
-      selectedItem: props.selectedItem,
       serverDomain: 'http://localhost:3001',
     };
   }
@@ -30,7 +29,7 @@ class DeleteItemModal extends Component {
       case 'fertilizer':
         apiUrl = 'fertilizers';
         break;
-      case 'plantProductProtection':
+      case 'plantProtectionProduct':
         apiUrl = 'plant-protection-products';
         break;
       case 'seed':
@@ -70,6 +69,8 @@ class DeleteItemModal extends Component {
 
   async deleteItemBaseOnId(itemToDelete) {
     const { serverDomain, type } = this.state;
+    console.log(type);
+    console.log(this.getApiURLByType(type));
     const apiUrl = `${serverDomain}/api/${this.getApiURLByType(type)}?_id=${itemToDelete._id}`;
     const result = await this.callApiToDelete(apiUrl);
     return result;
@@ -122,12 +123,11 @@ class DeleteItemModal extends Component {
     if (!itemData) {
       return null;
     }
-    return itemData.name;
+    return <strong>{itemData.name}</strong>;
   }
 
 
-  renderDeleteModal() {
-    const { selectedItem, type } = this.state;
+  renderDeleteModal(type, item) {
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-item-1">
         <div className="modal-dialog" role="document">
@@ -143,15 +143,13 @@ class DeleteItemModal extends Component {
                 Hành động này không thể hoàn tác,
                 bạn chắc chắn muốn xóa
                 {this.renderTypeTitle(type)}
-                với tên là:
-                <strong>
-                  {` ${this.renderItemContent(selectedItem)}`}
-                </strong>
+                với tên là:&nbsp;
+                {this.renderItemContent(item)}
               </p>
             </div>
             <div className="modal-footer">
               <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-              <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => this.deleteHandler(e, selectedItem)}>Xác nhận xóa</button>
+              <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => this.deleteHandler(e, item)}>Xác nhận xóa</button>
             </div>
           </div>
         </div>
@@ -160,9 +158,11 @@ class DeleteItemModal extends Component {
   }
 
   render() {
+    const { selectedItem } = this.props;
+    const { type } = this.state;
     return (
       <>
-        {this.renderDeleteModal()}
+        {this.renderDeleteModal(type, selectedItem)}
       </>
     );
   }
