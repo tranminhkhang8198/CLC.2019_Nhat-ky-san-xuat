@@ -1247,18 +1247,55 @@ exports.routers = app => {
         })
     })
 
-    app.post('/api/goodReceipts', (req, res, next) => {
+    app.post('/api/goodsReceipts', (req, res, next) => {
         const body = req.body;
-        app.models.goodReceipt.create(body, (err, result) => {
+        app.models.goodsReceipt.create(body, (err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
                 : responseHandle(res, result);
         })
     })
 
-    app.delete('/api/goodReceipts', (req, res, next) => {
+    app.delete('/api/goodsReceipts', (req, res, next) => {
         const query = req.query;
-        app.models.goodReceipt.delete(query, (err, result) => {
+        app.models.goodsReceipt.delete(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.get('/api/goodsReceipts', (req, res, next) => {
+        const query = req.query;
+        app.models.goodsReceipt.get(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.get('/api/goodsReceipts/search', (req, res, next) => {
+        const query = req.query;
+        app.models.goodsReceipt.search(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+
+    app.post('/api/employee', (req, res, next) => {
+        const body = req.body;
+        app.models.employee.create(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.get('/api/employee', (req, res, next) => {
+        const query = req.query;
+        app.models.employee.get(query, (err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
                 : responseHandle(res, result);

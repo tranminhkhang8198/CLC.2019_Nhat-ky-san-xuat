@@ -12,6 +12,8 @@ const Field = require('./field');
 const PlantProtectionProductWarehouse = require('./plantProtectionProductWarehouse');
 const GoodReceipt = require('./goodReceipt');
 const GoodsIssue = require('./goodsIssue');
+const GoodsReceipt = require('./goodsReceipt');
+const Employee = require('./employee');
 
 class Model {
   constructor(app) {
@@ -30,6 +32,8 @@ class Model {
     this.plantProtectionProductWarehouse = new PlantProtectionProductWarehouse(app);
     this.goodReceipt = new GoodReceipt(app);
     this.goodsIssue = new GoodsIssue(app);
+    this.goodsReceipt = new GoodsReceipt(app);
+    this.employee = new Employee(app);
   }
 }
 module.exports = Model;
