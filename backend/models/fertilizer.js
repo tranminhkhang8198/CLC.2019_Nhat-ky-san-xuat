@@ -112,6 +112,8 @@ class Fertilizer {
             .then(count => {
                 const totalPages = ((count - (count % nPerPage)) / nPerPage) + 1;
 
+                responseToClient["totalProducts"] = count;
+
                 responseToClient["totalPages"] = totalPages;
 
                 return fertilizer
@@ -140,7 +142,11 @@ class Fertilizer {
         const fertilizer = this.app.db.collection("fertilizer");
 
         if (query._id) {
-            query._id = mongoose.Types.ObjectId(query._id);
+            try {
+                query._id = mongoose.Types.ObjectId(query._id);
+            } catch (err) {
+                return cb({ errorMessage: 'id không hợp lệ', code: 500 }, null)
+            }
         }
 
         fertilizer.findOne(query, (err, res) => {
@@ -150,7 +156,7 @@ class Fertilizer {
 
             if (!res) {
                 const errorMessage = "Không tìm thấy thuốc bảo vệ thực vật";
-                return cb(errorMessage, null);
+                return cb({ errorMessage, code: 404 }, null);
             }
 
             return cb(null, res);
@@ -184,6 +190,10 @@ class Fertilizer {
 
     update(query, update, cb = () => { }) {
         const fertilizer = this.app.db.collection('fertilizer');
+
+        if (update._id) {
+            delete update._id;
+        }
 
         this.findByQuery(query, (err, res) => {
             if (err) {

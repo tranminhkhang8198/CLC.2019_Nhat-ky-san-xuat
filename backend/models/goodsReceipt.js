@@ -1,5 +1,5 @@
 /**
- * @collectionName goodReceipt Thông tin nhập kho
+ * @collectionName goodsReceipt Thông tin nhập kho
  * @field (String) _id ID của hóa đơn nhập kho
  * @field (String) cooperative_id ID của HTX
  * @field (Date) transDate Ngày nhận
@@ -15,7 +15,7 @@
 
 const _ = require('lodash');
 const { ObjectID } = require('mongodb');
-class GoodReceipt {
+class GoodsReceipt {
 
     constructor(app) {
         this.app = app;
@@ -113,8 +113,43 @@ class GoodReceipt {
         return d instanceof Date && !isNaN(d);
     }
 
+    get(params, cb = () => { }) {
+        const collection = this.app.db.collection('goodsReceipts');
+        const pageNumber = _.get(params, 'pageNumber', 0);
+        const resultNumber = _.get(params, 'resultNumber', 0);
+        collection.find().limit(resultNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
+            if (err || result.length == 0) {
+                return err
+                    ? cb({ errorMessage: "Xãy ra lỗi trong quá trình cập nhật CSDL", errorCode: 500 }, null)
+                    : cb({ errorMessage: "Không tìm thấy dữ liệu", errorCode: 400 }, null);
+
+            }
+            else {
+                return cb(null, result);
+            }
+        })
+    }
+
+    search(params, cb = () => { }) {
+        const pageNumber = _.get(params, 'pageNumber', 0);
+        const resultNumber = _.get(params, 'resultNumber', 0);
+        _.unset(params, 'resultNumber');
+        _.unset(params, 'pageNumber');
+        const collection = this.app.db.collection('goodsReceipts');
+        collection.find(query).limit(pageNumber).skip(pageNumber * resultNumber).toArray((err, result) => {
+            if (err || result.length == 0) {
+                return err
+                    ? cb({ errorMessage: "Lỗi trong quá trình truy vấn dữ liệu", errorCode: 500 }, null)
+                    : cb({ errorMessage: "Không tìm thấy dữ liệu", errorCode: 400 }, null);
+            }
+            else {
+                return console(null, result);
+            }
+        })
+    }
+
     create(body, cb = () => { }) {
-        const collection = this.app.db.collection('goodReceipts');
+        const collection = this.app.db.collection('goodsReceipts');
         const obj = {
             "cooperative_id": _.get(body, 'cooperative_id', ''),
             "transDate": new Date(_.get(body, 'transDate', null)),
@@ -143,7 +178,7 @@ class GoodReceipt {
     }
 
     delete(query, cb = () => { }) {
-        const collection = this.app.db.collection('goodReceipts');
+        const collection = this.app.db.collection('goodsReceipts');
         // Check ID in query if exist
         if (query._id) {
             _.set(query, '_id', new ObjectID(query._id));
@@ -164,4 +199,4 @@ class GoodReceipt {
     }
 
 }
-module.exports = GoodReceipt;
+module.exports = GoodsReceipt;
