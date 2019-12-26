@@ -25,6 +25,7 @@ class DeleteItemsModal extends Component {
       parrent: props.parentComponent,
       checkboxRefs: [],
     };
+    console.log(props);
 
     this.renderTypeTitle = this.renderTypeTitle.bind(this);
     this.renderItemsToDelete = this.renderItemsToDelete.bind(this);
@@ -166,7 +167,7 @@ class DeleteItemsModal extends Component {
 
   renderItemsToDelete(items) {
     const { checkboxRefs } = this.state;
-    return items.map((item) => (
+    return items.data.map((item) => (
       <div className="form-check" key={uuidv4()}>
         <label className="form-check-label" htmlFor={`delete-${item._id}`}>
           <input
