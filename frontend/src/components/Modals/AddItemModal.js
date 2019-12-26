@@ -17,7 +17,7 @@ class AddItemModal extends Component {
     this.submitData = {};
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
-      plantProtectionProductTitle: 'plantProductProtection',
+      plantProtectionProductTitle: 'plantProtectionProduct',
     };
 
     this.state = {
@@ -108,7 +108,7 @@ class AddItemModal extends Component {
             who: parseInt(this.submitData.who, 10),
             scopeOfUse: [
               {
-                plant: this.submitData['plant-name'],
+                plant: this.submitData.plant,
                 pest: this.submitData.pest,
                 dosage: this.submitData.dosage,
                 usage: this.submitData.usage,
@@ -117,7 +117,7 @@ class AddItemModal extends Component {
             ],
             registrationInfo: {
               registrationUnit: this.submitData.registrationUnit,
-              registrationUnitAddress: this.submitData.registrationAddress,
+              registrationUnitAddress: this.submitData.registrationUnitAddress,
               manufacturer: this.submitData.manufacturer,
               manufacturerAddress: this.submitData.manufacturerAddress,
             },
@@ -475,17 +475,17 @@ class AddItemModal extends Component {
                   </label>
                 </div>
                 <div className="form-group" key={uuidv4()}>
-                  <label htmlFor="add-ppp-registrationAddress" className="w-100">
+                  <label htmlFor="add-ppp-registrationUnitAddress" className="w-100">
                     Địa chỉ cửa hàng
                     <span style={{ color: 'rgb(249,15,15)' }}>
                       &nbsp;*
                     </span>
                     <input
                       type="text"
-                      name="add-ppp-registrationAddress"
+                      name="add-ppp-registrationUnitAddress"
                       className="form-control item"
                       placeholder="Nhập vào địa chỉ cửa hàng"
-                      data-field="registrationAddress"
+                      data-field="registrationUnitAddress"
                       onChange={this.handleInputOnChange}
                     />
                   </label>
@@ -573,7 +573,7 @@ class AddItemModal extends Component {
                         name="add-ppp-plant-name"
                         className="form-control item"
                         placeholder="Nhập vào tên cây thuốc tác dụng"
-                        data-field="plant-name"
+                        data-field="plant"
                         onChange={this.handleInputOnChange}
                       />
                     </label>

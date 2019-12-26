@@ -54,11 +54,15 @@ export class ListItems extends Component {
     }
 
     const viewItemModal = <ViewItemModal />;
-    const modifyItemModal = <ModifyItemModal />;
+    const modifyItemModal = <ModifyItemModal
+      type="plantProtectionProduct"
+      data={data}
+    />;
     const deleteItemModal = <DeleteItemModal
       type="plantProtectionProduct"
       parentComponent={parentComponent}
       selectedItem={selectedItem}
+      data={data}
     />;
 
     return (
@@ -81,20 +85,27 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
-              {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
+              {data.length !== 0 && data.map((value, index) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
                 <td>{value.plantProtectionProductGroup}</td>
                 <td>{value.activeIngredient}</td>
                 <td>
                   <div className="dropdown">
-                    <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
+                    <button
+                      className="btn btn-secondary btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                      type="button"
+                    >
+                      Hành động&nbsp;
+                    </button>
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
                       <a
                         className="dropdown-item text-white bg-info"
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-view-1"
+                        data-target={`#modal-view-${index}`}
                         style={{ cursor: 'pointer' }}
                       >
                         Xem thông tin
@@ -104,7 +115,7 @@ export class ListItems extends Component {
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-modify-1"
+                        data-target={`#modal-modify-${index}`}
                         style={{ cursor: 'pointer' }}
                       >
                         Chỉnh sửa
@@ -114,7 +125,7 @@ export class ListItems extends Component {
                         href={value._id}
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-delete-item-1"
+                        data-target={`#modal-delete-${index}`}
                         style={{ cursor: 'pointer' }}
                         onClick={this.selectTableItemEventHandler}
                       >

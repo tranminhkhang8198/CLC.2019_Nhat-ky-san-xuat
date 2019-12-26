@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
-import { ListItems } from '../components/DataTable/DataTable';
+import { ListItems } from '../components/DataTable/QuanTriHTXDataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 

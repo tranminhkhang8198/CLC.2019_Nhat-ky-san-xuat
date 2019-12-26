@@ -53,7 +53,10 @@ export class ListItems extends Component {
     }
 
     const viewItemModal = <ViewItemModal />;
-    const modifyItemModal = <ModifyItemModal />;
+    const modifyItemModal = <ModifyItemModal
+      type="fertilizer"
+      data={data}
+    />;
     const deleteItemModal = <DeleteItemModal type="fertilizer" parentComponent={parentComponent} selectedItem={selectedItem} />;
 
     return (
@@ -76,7 +79,7 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
-              {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
+              {data.length !== 0 && data.map((value, index) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
                 <td>{value.type}</td>
                 <td>{value.enterprise}</td>
@@ -89,7 +92,7 @@ export class ListItems extends Component {
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-view-1"
+                        data-target={`#modal-view-${index}`}
                         style={{ cursor: 'pointer' }}
                       >
                         Xem thông tin
@@ -99,7 +102,7 @@ export class ListItems extends Component {
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-modify-1"
+                        data-target={`#modal-modify-${index}`}
                         style={{ cursor: 'pointer' }}
                       >
                         Chỉnh sửa
