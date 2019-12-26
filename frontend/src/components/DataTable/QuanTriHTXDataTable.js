@@ -26,7 +26,7 @@ export class ListItems extends Component {
     return (
       <div className="card-body">
         <ViewItemModal />
-        <ModifyItemModal type="plantProductProtection" />
+        <ModifyItemModal />
         <DeleteItemModal />
         <DataPerPage />
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -62,7 +62,7 @@ export class ListItems extends Component {
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-view-1"
+                        data-target="#modal-view"
                         style={{ cursor: 'pointer' }}
                       >
                         Xem thông tin

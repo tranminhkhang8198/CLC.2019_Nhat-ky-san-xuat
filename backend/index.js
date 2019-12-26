@@ -2,7 +2,6 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
-
 const { routers } = require('./router')
 const { connect } = require('./db')
 const { dbName } = require('./config')

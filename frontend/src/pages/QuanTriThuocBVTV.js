@@ -1,9 +1,3 @@
-/* eslint-disable react/no-unused-state */
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable-next-line react/prefer-stateless-function */
-/* eslint class-methods-use-this: ["error", { "exceptMethods": ["getData", "render"] }] */
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -22,7 +16,6 @@ class QuanTriThuocBVTV extends Component {
       pageNum: 1,
       dataPerpage: 10,
       activePage: 1,
-      searchValue: '',
       totalProducts: 0,
     };
 
@@ -40,12 +33,19 @@ class QuanTriThuocBVTV extends Component {
     });
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
       const { data, totalProducts } = await this.getData();
       this.updateDataWhenRendered(data, totalProducts);
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line class-methods-use-this
+  getToken() {
+    const token = localStorage.getItem('itemName');
+    return token;
   }
 
   async getData() {
@@ -87,10 +87,10 @@ class QuanTriThuocBVTV extends Component {
         headers: { Authorization: token },
       });
       if (response.status === 200) {
-        this.setState((state, props) => ({ data: [response.data], searchError: '' }));
+        this.setState(() => ({ data: [response.data], searchError: '' }));
       }
     } catch (error) {
-      this.setState((state, props) => ({ searchError: 'Không tìm thấy sản phẩm' }));
+      this.setState(() => ({ searchError: 'Không tìm thấy sản phẩm' }));
     }
   }
 
@@ -105,8 +105,22 @@ class QuanTriThuocBVTV extends Component {
 
   render() {
     const {
-      data, activePage, searchError, totalProducts, dataPerpage,
+      data,
+      activePage,
+      searchError,
+      totalProducts,
+      dataPerpage,
+      error,
     } = this.state;
+    if (error) {
+      const a = (
+        <div>
+          Error:
+          {error.message}
+        </div>
+      );
+      return a;
+    }
     return (
       <div className="container-fluid">
         <DeleteItemsModal type="plantProductProtection" data={data} parentComponent={this} />

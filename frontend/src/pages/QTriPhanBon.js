@@ -1,8 +1,6 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
+
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -38,12 +36,19 @@ class QuanTriPhanBon extends Component {
     });
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
       const { data, totalProducts } = await this.getData();
       this.updateDataWhenRendered(data, totalProducts);
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line class-methods-use-this
+  getToken() {
+    const token = localStorage.getItem('itemName');
+    return token;
   }
 
   async getData() {
@@ -71,10 +76,10 @@ class QuanTriPhanBon extends Component {
         headers: { Authorization: token },
       });
       if (response.status === 200) {
-        this.setState((state, props) => ({ data: [response.data], searchError: '' }));
+        this.setState(() => ({ data: [response.data], searchError: '' }));
       }
     } catch (error) {
-      this.setState((state, props) => ({ searchError: 'Không tìm thấy sản phẩm' }));
+      this.setState(() => ({ searchError: 'Không tìm thấy sản phẩm' }));
     }
   }
 
@@ -101,7 +106,6 @@ class QuanTriPhanBon extends Component {
     });
     return updatedData;
   }
-
 
   render() {
     const {

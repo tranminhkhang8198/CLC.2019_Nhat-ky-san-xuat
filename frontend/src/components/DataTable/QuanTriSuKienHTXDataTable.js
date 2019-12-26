@@ -5,37 +5,83 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 
-import DataPerPage from './Pagination/DataPerPage';
-import Paginator from './Pagination/Paginator';
-
-import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
 import DeleteItemModal from '../Modals/DeleteItemModal';
+
+import DataPerPage from './Pagination/DataPerPage';
+import Pagination from './Pagination/Paginator';
+import ViewItemModal from '../Modals/ViewItemModal';
 
 export class ListItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
-      Items: [],
+      parentComponent: props.parentComponent,
+      selectedItem: null,
     };
+    this.selectTableItemEventHandler = this.selectTableItemEventHandler.bind(this);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getItemBaseOnId(itemList, itemId) {
+    let result = null;
+    for (let i = 0; i < itemList.length; i += 1) {
+      if (itemList[i]._id === itemId) {
+        result = itemList[i];
+        break;
+      }
+    }
+    return result;
+  }
+
+  selectTableItemEventHandler(e) {
+    e.preventDefault();
+    const { data } = this.props;
+    const { selectedItem } = this.state;
+    const selectedItemId = e.target.getAttribute('href');
+    if (selectedItem !== null) {
+      if (selectedItem._id === selectedItemId) {
+        return;
+      }
+    }
+    const item = this.getItemBaseOnId(data, selectedItemId);
+    this.setState({ selectedItem: item });
   }
 
   render() {
     const { data } = this.props;
+    const { selectedItem, parentComponent } = this.state;
+
+    if (!Array.isArray(data)) {
+      return <h1>Loading....</h1>;
+    }
+    if (!data.length) {
+      return <h1>Loading....</h1>;
+    }
+    // console.log(data.length);
+
+    const viewItemModal = <ViewItemModal />;
+    const modifyItemModal = <ModifyItemModal />;
+    const deleteItemModal = <DeleteItemModal
+      type="cooperativeEvent"
+      parentComponent={parentComponent}
+      selectedItem={selectedItem}
+    />;
+
     return (
       <div className="card-body">
-        <ViewItemModal />
-        <ModifyItemModal type="plantProductProtection" />
-        <DeleteItemModal />
-        <DataPerPage />
+        {viewItemModal}
+        {modifyItemModal}
+        {deleteItemModal}
+        <DataPerPage type="cooperativeEvent" parentComponent={parentComponent} />
+
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
             <thead>
               <tr>
-                <th>Tên thương phẩm</th>
-                <th>Tên hoạt chất</th>
-                <th>Loại thuốc</th>
+                <th>Tên sự kiện</th>
+                <th>Ngày diễn ra</th>
+                <th>Nơi tổ chức</th>
                 <th>
                   &nbsp;
                 </th>
@@ -44,26 +90,20 @@ export class ListItems extends Component {
             <tbody>
               {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
-                <td>{value.ingredient}</td>
-                <td>{value.type}</td>
+                <td>{value.address}</td>
+                <td>{value.status}</td>
                 <td>
                   <div className="dropdown">
-                    <button
-                      className="btn btn-secondary btn-sm dropdown-toggle"
-                      data-toggle="dropdown"
-                      aria-expanded="false"
-                      type="button"
-                    >
-                      Hành động&nbsp;
-                    </button>
+                    <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
                       <a
                         className="dropdown-item text-white bg-info"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-view-1"
+                        data-target="#modal-view"
                         style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xem thông tin
                       </a>
@@ -79,11 +119,12 @@ export class ListItems extends Component {
                       </a>
                       <a
                         className="dropdown-item text-white bg-danger"
-                        href="/"
+                        href={value._id}
                         role="presentation"
+                        style={{ cursor: 'pointer' }}
                         data-toggle="modal"
                         data-target="#modal-delete-item-1"
-                        style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xóa hàng này
                       </a>
@@ -94,16 +135,16 @@ export class ListItems extends Component {
             </tbody>
             <tfoot>
               <tr>
-                <td><strong>Tên thương phẩm</strong></td>
-                <td><strong>Tên hoạt chất</strong></td>
-                <td><strong>Loại thuốc</strong></td>
+                <td><strong>Tên sự kiện</strong></td>
+                <td><strong>Ngày diễn ra</strong></td>
+                <td><strong>Nơi tổ chức</strong></td>
                 <td />
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <Paginator />
+        <Pagination />
       </div>
     );
   }
