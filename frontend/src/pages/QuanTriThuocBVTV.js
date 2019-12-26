@@ -5,36 +5,39 @@ import { ListItems } from '../components/DataTable/QuanTriThuocBVTVDataTable';
 import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
-
 class QuanTriThuocBVTV extends Component {
   constructor() {
     super();
     this.state = {
       data: [],
       error: null,
+      searchError: '',
       refresh: false,
       pageNum: 1,
       dataPerpage: 10,
-      totalPages: 1,
+      activePage: 1,
+      totalProducts: 0,
     };
 
     this.getData = this.getData.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+    this.searchDataByName = this.searchDataByName.bind(this);
   }
 
   async componentDidMount() {
-    const plantProtectionData = await this.getData();
+    const { data, totalProducts } = await this.getData();
 
     this.setState({
-      data: plantProtectionData.data,
-      totalPages: plantProtectionData.totalPages,
+      data,
+      totalProducts,
     });
   }
 
   async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
-      const plantProtectionData = await this.getData();
-      this.updateDataWhenRendered(plantProtectionData);
+      const { data, totalProducts } = await this.getData();
+      this.updateDataWhenRendered(data, totalProducts);
     }
   }
 
@@ -46,25 +49,69 @@ class QuanTriThuocBVTV extends Component {
   }
 
   async getData() {
-    const { pageNum, dataPerpage } = this.state;
-    const { data } = await axios({
-      method: 'GET',
-      url: `http://localhost:3001/api/plant-protection-products?pageNumber=${pageNum}&nPerPage=${dataPerpage}`,
-    });
-    return data;
+    try {
+      const { pageNum, dataPerpage } = this.state;
+      const response = await axios({
+        method: 'GET',
+        url: `/api/plant-protection-products?${pageNum}&nPerPage=${dataPerpage}`,
+      });
+
+      if (response.status === 200) {
+        return response.data;
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
   }
 
-  async updateDataWhenRendered(updatedData) {
-    await this.setState({
+  async handlePageChange(pageNumber) {
+    const { dataPerpage } = this.state;
+    const response = await axios.get(`/api/plant-protection-products?${pageNumber}&nPerPage=${dataPerpage}`);
+    if (response.status === 200) {
+      const { data, totalProducts } = response.data;
+      this.setState(() => ({
+        data,
+        totalProducts,
+        activePage: pageNumber,
+      }));
+    }
+  }
+
+
+  // eslint-disable-next-line class-methods-use-this
+  async searchDataByName(name = '') {
+    try {
+      const token = localStorage.getItem('user');
+      const response = await axios.get(`/api/plant-protection-products/query?name=${name}`, {
+        headers: { Authorization: token },
+      });
+      if (response.status === 200) {
+        this.setState(() => ({ data: [response.data], searchError: '' }));
+      }
+    } catch (error) {
+      this.setState(() => ({ searchError: 'Không tìm thấy sản phẩm' }));
+    }
+  }
+
+  async updateDataWhenRendered(updatedData, totalProducts) {
+    this.setState({
       refresh: false,
-      data: updatedData.data,
-      totalPages: updatedData.totalPages,
+      data: updatedData,
+      totalProducts,
     });
     return updatedData;
   }
 
   render() {
-    const { data, totalPages, error } = this.state;
+    const {
+      data,
+      activePage,
+      searchError,
+      totalProducts,
+      dataPerpage,
+      error,
+    } = this.state;
     if (error) {
       const a = (
         <div>
@@ -95,8 +142,16 @@ class QuanTriThuocBVTV extends Component {
                 <span className="text-white text">Xóa dữ liệu</span>
               </a>
             </div>
+            <div className="text-center text-danger">{searchError}</div>
           </div>
-          <ListItems data={data} totalPages={totalPages} parentComponent={this} />
+          <ListItems
+            data={data}
+            activePage={activePage}
+            handlePageChange={this.handlePageChange}
+            parentComponent={this}
+            totalProducts={totalProducts}
+            dataPerpage={dataPerpage}
+          />
         </div>
       </div>
     );

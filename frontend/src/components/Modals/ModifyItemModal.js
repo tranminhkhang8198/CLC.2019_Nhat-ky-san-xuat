@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable arrow-body-style */

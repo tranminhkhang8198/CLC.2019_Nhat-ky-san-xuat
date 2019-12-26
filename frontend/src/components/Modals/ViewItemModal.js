@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';

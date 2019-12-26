@@ -1,7 +1,9 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 import axios from 'axios';
-import * as httpStatus from 'http-status';
+import httpStatus from 'http-status';
 
 class DeleteItemModal extends Component {
   constructor(props) {
