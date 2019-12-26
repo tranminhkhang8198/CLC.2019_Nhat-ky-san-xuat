@@ -34,14 +34,19 @@ class GoodsIssue {
 
         const reg = /^\d+$/;
 
-        const cooperative = this.app.db.collection('cooperatives');
-
         // Validate productType
+        const productTypes = ["Thuốc bvtv", "Phân bón", "Giống"];
+
         if (model.productType == null) {
             errors.push({
                 message: 'Vui lòng nhập loại sản phẩm'
             });
+        } else if (productTypes.indexOf(model.productType) < 0) {
+            errors.push({
+                message: 'Loại sản phẩm không tồn tại'
+            });
         }
+
 
         // Validate receiverID        
         if (model.receiverId == null) {
@@ -54,13 +59,38 @@ class GoodsIssue {
         }
 
         // Validate productId
-        if (model.productType == null) {
+        if (model.productId == null) {
             errors.push({
                 message: 'Vui lòng nhập id sản phẩm'
             });
         } else {
             // Check product exists in db
+            let productCollection = null;
 
+            if (model.productType != null) {
+                if (productTypes.indexOf(model.productType) == 0) {
+                    productCollection = this.app.db.collection('plantProtectionProduct')
+                }
+
+                if (productTypes.indexOf(model.productType) == 1) {
+                    productCollection = this.app.db.collection('fertilizer');
+                }
+
+                // Check db giong lua
+            }
+
+            if (productCollection != null) {
+                productCollection.find({ _id: model.productId })
+                    .then(product => {
+                        if (!product) {
+                            errors.push({
+                                message: 'Sản phẩm không tồn tại trong danh mục'
+                            });
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    });
+            }
         }
 
         // Quantity Validate
@@ -89,6 +119,18 @@ class GoodsIssue {
             });
         } else {
             // Check cooperative exists
+            const cooperative = this.app.db.collection('cooperatives');
+
+            cooperative.find({ _id: model.cooperativeId })
+                .then(cooperative => {
+                    if (!cooperative) {
+                        errors.push({
+                            message: 'Hợp tác xã không tồn tại'
+                        });
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
         }
 
         if (model.goodsReceiptId == null) {
