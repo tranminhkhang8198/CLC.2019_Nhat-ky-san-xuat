@@ -3,7 +3,7 @@
   { "exceptMethods":
     [
       "getLabelTitlesByType", "renderTypeTitle", "renderLabels",
-      "getToken", "renderBaseOnDataType"
+      "getToken", "renderBaseOnDataType", "renderFertilizerModalContent", "renderModal"
     ]
   }
 ] */
@@ -15,7 +15,9 @@ class ViewItemModal extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.typeNames = {
+      fertilizerTitle: 'fertilizer',
+      plantProtectionProductTitle: 'plantProductProtection',
     };
   }
 
@@ -359,31 +361,136 @@ class ViewItemModal extends Component {
     ));
   }
 
-  render() {
-    const { selectedItem, type } = this.props;
-    const labelTitles = this.getLabelTitlesByType(type);
-    const renderLabels = this.renderLabels(labelTitles, selectedItem);
-    console.log(selectedItem);
+  renderFertilizerModalContent(itemData) {
+    if (!itemData) {
+      return null;
+    }
     return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-view-1">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">
-                Thông tin
-                {this.renderTypeTitle(type)}
-              </h4>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
+      <div className="modal-content">
+        <div className="modal-header">
+          <h4 className="modal-title">
+            Thông tin phân bón
+          </h4>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div className="modal-body modal-add-body">
+          <div className="container" style={{ padding: 0 }}>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Tên phân bón</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.name}</p>
+              </div>
             </div>
-            <div className="modal-body modal-add-body">
-              {renderLabels}
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Loại phân bón</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.type}</p>
+              </div>
             </div>
-            <div className="modal-footer"><button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button></div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Thành phần phân bón</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.ingredient}</p>
+              </div>
+            </div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Bộ</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.ministry}</p>
+              </div>
+            </div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Tỉnh</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.ministry}</p>
+              </div>
+            </div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Căn cứ, tiêu chuẩn, quy định</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.lawDocument}</p>
+              </div>
+            </div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Nơi sản xuất</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.enterprise}</p>
+              </div>
+            </div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Tổ chức chứng nhận hợp quy</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.isoCertOrganization}</p>
+              </div>
+            </div>
+            <div className="row" key={uuidv4()}>
+              <div className="col-4">
+                <p>Nhập khẩu, xuất khẩu</p>
+              </div>
+              <div className="col-8">
+                <p>{itemData.manufactureAndImport}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    );
+  }
+
+
+  renderModal(modalContent) {
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-view-1">
+        <div className="modal-dialog" role="document">
+          {modalContent}
+        </div>
+      </div>
+    );
+  }
+
+  renderModals(modalType) {
+    const { fertilizerTitle, plantProtectionProductTitle } = this.typeNames;
+    const { selectedItem } = this.props;
+    console.log(selectedItem);
+    let renderModalContent;
+    switch (modalType) {
+      case fertilizerTitle:
+        renderModalContent = this.renderFertilizerModalContent();
+        break;
+      case plantProtectionProductTitle:
+        renderModalContent = this.renderFertilizerModalContent();
+        break;
+      default:
+        console.log('.');
+        break;
+    }
+    return this.renderModal(renderModalContent);
+  }
+
+  render() {
+    const { type } = this.props;
+    return (
+      <>
+        {this.renderModals(type)}
+      </>
     );
   }
 }

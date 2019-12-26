@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import uuidv4 from 'uuid/v4';
-import axios from 'axios';
-import * as httpStatus from 'http-status';
-
-function AddItemModal({ type }) {
-  // eslint-disable-next-line no-unused-vars
-  function getToken() {
-    const token = localStorage.getItem('itemName');
-    return token;
-  }
-
-  function renderTypeTitle(typeData) {
-    let typeTitle = '';
-    switch (typeData) {
-      case 'fertilizer':
-        typeTitle = ' phân bón';
-        break;
-      case 'plantProductProtection':
-        typeTitle = ' thuốc bảo vệ thực vật';
-        break;
-      case 'cooperative':
-        typeTitle = ' thuốc bảo vệ thực vật';
-        break;
-      default:
-        typeTitle = ' dữ liệu';
-        break;
-    }
-    return typeTitle;
-=======
 /* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable arrow-body-style */
@@ -65,7 +34,6 @@ class AddItemModal extends Component {
     this.renderMainModalFertilizer = this.renderMainModalFertilizer.bind(this);
 
     this.renderModals = this.renderModals.bind(this);
->>>>>>> 9750936737130bfce5f54e87e02146d669ecd9a8
   }
 
   handleInputOnChange(event) {
@@ -170,66 +138,6 @@ class AddItemModal extends Component {
         method: 'post',
         data,
       });
-<<<<<<< HEAD
-      return data;
-    } catch (error) {
-      if (error.response) {
-        // Request made and server responded
-        // console.log(error.response.data.errorMessage);
-        // console.log(error.response.status);
-        // console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
-      }
-      return error.response;
-    }
-  }
-
-  const inputFieldRefs = [];
-  function clearAllInputField(titles) {
-    for (let i = 0; i < titles.length; i += 1) {
-      const { name } = titles[i];
-      inputFieldRefs[name].value = '';
-    }
-  }
-
-  function hanldeResponseFromServer(result, dataType, titles) {
-    if (result.status === httpStatus.NOT_FOUND) {
-      alert(result.data.errorMessage);
-    }
-    if (result.status === httpStatus.OK) {
-      switch (dataType) {
-        case 'fertilizer':
-          alert(`Thêm phân bón ${result.data.name} thành công`);
-          clearAllInputField(titles);
-          break;
-        case 'plantProductProtection':
-          alert(`Thêm thuốc bảo vệ thực vật ${result.data.name} thành công`);
-          break;
-        default:
-      }
-    }
-  }
-
-  function validateUserInput(isRequired, userInputValue, inputFieldName) {
-    // eslint-disable-next-line no-useless-escape
-    const simpleRegex = /[!@#$%^&*()_+\-=\[\]{}':"\\|,.<>\/?]/;
-    if (isRequired && userInputValue.length === 0) {
-      alert(`Trường ${inputFieldName} không được để trống`);
-      return false;
-    }
-    if (simpleRegex.test(userInputValue)) {
-      alert(`Dữ liệu trường ${inputFieldName} không hợp lệ`);
-      return false;
-    }
-    return true;
-  }
-=======
->>>>>>> 9750936737130bfce5f54e87e02146d669ecd9a8
 
       if (createDataRequest.status >= 200 && createDataRequest.status < 300) {
         alert('Tạo mới dữ liệu thành công');
@@ -756,32 +664,6 @@ class AddItemModal extends Component {
     );
   }
 
-<<<<<<< HEAD
-  function renderLabels(labelsData) {
-    if (!Array.isArray(labelsData)) {
-      return null;
-    }
-    if (labelsData.length === 0) {
-      return null;
-    }
-    return labelsData.map((item) => (
-      <div className="form-group" key={uuidv4()}>
-        <label htmlFor={item.name} className="w-100">
-          {item.value}
-          {item.required === true && renderRequiredFields()}
-          <input
-            type={item.type}
-            name={`add-${item.name}`}
-            id={item.value}
-            className="form-control item"
-            placeholder={item.placeholder}
-            ref={(element) => { inputFieldRefs[item.name] = element; }}
-          />
-          {item.notes.length > 0 && renderNotesFields(item.notes)}
-        </label>
-      </div>
-    ));
-=======
   renderModals(modalType) {
     const { fertilizerTitle, plantProtectionProductTitle } = this.typeNames;
     let renderDOM;
@@ -808,7 +690,6 @@ class AddItemModal extends Component {
     }
 
     return renderDOM;
->>>>>>> 9750936737130bfce5f54e87e02146d669ecd9a8
   }
 
   render() {
