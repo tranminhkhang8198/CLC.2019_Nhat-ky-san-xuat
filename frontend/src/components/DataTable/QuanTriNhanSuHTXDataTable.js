@@ -5,19 +5,17 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 
-import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
 import DeleteItemModal from '../Modals/DeleteItemModal';
 
 import DataPerPage from './Pagination/DataPerPage';
 import Pagination from './Pagination/Paginator';
+import ViewItemModal from '../Modals/ViewItemModal';
 
 export class ListItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
-      data: props.data,
       parentComponent: props.parentComponent,
       selectedItem: null,
     };
@@ -60,17 +58,12 @@ export class ListItems extends Component {
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
+    // console.log(data.length);
 
-    const modifyItemModal = <ModifyItemModal
-      type="fertilizer"
-      data={data}
-    />;
-    const viewItemModal = <ViewItemModal
-      type="fertilizer"
-      selectedItem={selectedItem}
-    />;
+    const viewItemModal = <ViewItemModal />;
+    const modifyItemModal = <ModifyItemModal />;
     const deleteItemModal = <DeleteItemModal
-      type="fertilizer"
+      type="cooperativeHRManagement"
       parentComponent={parentComponent}
       selectedItem={selectedItem}
     />;
@@ -80,25 +73,25 @@ export class ListItems extends Component {
         {viewItemModal}
         {modifyItemModal}
         {deleteItemModal}
-        <DataPerPage type="fertilizer" parentComponent={parentComponent} />
+        <DataPerPage type="cooperativeHRManagement" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
             <thead>
               <tr>
-                <th>Tên phân bón</th>
-                <th>Loại phân bón</th>
-                <th>Nơi Sản Xuất</th>
+                <th>Họ và tên</th>
+                <th>Chức vụ</th>
+                <th>Số điện thoại</th>
                 <th>
                   &nbsp;
                 </th>
               </tr>
             </thead>
             <tbody>
-              {data.length !== 0 && data.map((value, index) => <tr key={uuidv4()}>
+              {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
-                <td>{value.type}</td>
-                <td>{value.enterprise}</td>
+                <td>{value.address}</td>
+                <td>{value.status}</td>
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
@@ -108,7 +101,7 @@ export class ListItems extends Component {
                         href={value._id}
                         role="presentation"
                         data-toggle="modal"
-                        data-target={`#modal-view-${index}`}
+                        data-target="#modal-view-1"
                         style={{ cursor: 'pointer' }}
                         onClick={this.selectTableItemEventHandler}
                       >
@@ -119,7 +112,7 @@ export class ListItems extends Component {
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target={`#modal-modify-${index}`}
+                        data-target="#modal-modify-1"
                         style={{ cursor: 'pointer' }}
                       >
                         Chỉnh sửa
@@ -142,9 +135,9 @@ export class ListItems extends Component {
             </tbody>
             <tfoot>
               <tr>
-                <td><strong>Tên phân bón</strong></td>
-                <td><strong>Loại phân bón</strong></td>
-                <td><strong>Nơi Sản Xuất</strong></td>
+                <td><strong>Họ và tên</strong></td>
+                <td><strong>Chức vụ</strong></td>
+                <td><strong>Số điện thoại</strong></td>
                 <td />
               </tr>
             </tfoot>

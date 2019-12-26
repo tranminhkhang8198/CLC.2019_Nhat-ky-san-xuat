@@ -41,22 +41,37 @@ export class ListItems extends Component {
   selectTableItemEventHandler(e) {
     e.preventDefault();
     const { data } = this.props;
+    const { selectedItem } = this.state;
     const selectedItemId = e.target.getAttribute('href');
+    if (selectedItem !== null) {
+      if (selectedItem._id === selectedItemId) {
+        return;
+      }
+    }
     const item = this.getItemBaseOnId(data, selectedItemId);
     this.setState({ selectedItem: item });
   }
 
   render() {
-    const { data } = this.props;
+    const { data, totalPages } = this.props;
     const { selectedItem, parentComponent } = this.state;
+
+    if (!Array.isArray(data)) {
+      return <h1>Loading....</h1>;
+    }
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
+    // console.log(data.length);
 
-    const viewItemModal = <ViewItemModal />;
+
     const modifyItemModal = <ModifyItemModal
       type="plantProtectionProduct"
       data={data}
+    />;
+    const viewItemModal = <ViewItemModal
+      type="plantProductProtection"
+      selectedItem={selectedItem}
     />;
     const deleteItemModal = <DeleteItemModal
       type="plantProtectionProduct"
@@ -102,11 +117,12 @@ export class ListItems extends Component {
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
                       <a
                         className="dropdown-item text-white bg-info"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
                         data-target={`#modal-view-${index}`}
                         style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xem thông tin
                       </a>
@@ -147,7 +163,7 @@ export class ListItems extends Component {
           </table>
         </div>
 
-        <Pagination />
+        <Pagination totalPages={totalPages} />
       </div>
     );
   }
