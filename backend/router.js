@@ -208,7 +208,7 @@ exports.routers = app => {
 
 
     /**
-     * @api {post} /api/auth/login Login user
+     * @api {post} /api/login Login user
      * @apiVersion 0.1.0
      * @apiName LoginUser
      * @apiGroup User
@@ -264,7 +264,7 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-    app.post("/api/auth/login", (req, res, next) => {
+    app.post("/api/login", (req, res, next) => {
         const body = req.body;
 
         app.models.user.login(body, (err, result) => {
