@@ -5,21 +5,17 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 
-import ViewItemModal from '../Modals/ViewItemModal';
 import ModifyItemModal from '../Modals/ModifyItemModal';
 import DeleteItemModal from '../Modals/DeleteItemModal';
 
 import DataPerPage from './Pagination/DataPerPage';
 import Pagination from './Pagination/Paginator';
+import ViewItemModal from '../Modals/ViewItemModal';
 
 export class ListItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
-      Items: [],
-      // eslint-disable-next-line react/no-unused-state
-      data: props.data,
       parentComponent: props.parentComponent,
       selectedItem: null,
     };
@@ -53,7 +49,7 @@ export class ListItems extends Component {
   }
 
   render() {
-    const { data, totalPages } = this.props;
+    const { data } = this.props;
     const { selectedItem, parentComponent } = this.state;
 
     if (!Array.isArray(data)) {
@@ -64,10 +60,10 @@ export class ListItems extends Component {
     }
     // console.log(data.length);
 
-    const viewItemModal = <ViewItemModal type="plantProductProtection" selectedItem={selectedItem} />;
+    const viewItemModal = <ViewItemModal />;
     const modifyItemModal = <ModifyItemModal />;
     const deleteItemModal = <DeleteItemModal
-      type="plantProtectionProduct"
+      type="cooperativeEvent"
       parentComponent={parentComponent}
       selectedItem={selectedItem}
     />;
@@ -77,15 +73,15 @@ export class ListItems extends Component {
         {viewItemModal}
         {modifyItemModal}
         {deleteItemModal}
-        <DataPerPage type="plantProtectionProduct" parentComponent={parentComponent} />
+        <DataPerPage type="cooperativeEvent" parentComponent={parentComponent} />
 
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
           <table className="table dataTable my-0" id="dataTable">
             <thead>
               <tr>
-                <th>Tên thương phẩm</th>
-                <th>Nhóm thuốc</th>
-                <th>Tên hoạt chất</th>
+                <th>Tên sự kiện</th>
+                <th>Ngày diễn ra</th>
+                <th>Nơi tổ chức</th>
                 <th>
                   &nbsp;
                 </th>
@@ -94,8 +90,8 @@ export class ListItems extends Component {
             <tbody>
               {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
-                <td>{value.plantProtectionProductGroup}</td>
-                <td>{value.activeIngredient}</td>
+                <td>{value.address}</td>
+                <td>{value.status}</td>
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Hành động&nbsp;</button>
@@ -125,9 +121,9 @@ export class ListItems extends Component {
                         className="dropdown-item text-white bg-danger"
                         href={value._id}
                         role="presentation"
+                        style={{ cursor: 'pointer' }}
                         data-toggle="modal"
                         data-target="#modal-delete-item-1"
-                        style={{ cursor: 'pointer' }}
                         onClick={this.selectTableItemEventHandler}
                       >
                         Xóa hàng này
@@ -139,16 +135,16 @@ export class ListItems extends Component {
             </tbody>
             <tfoot>
               <tr>
-                <td><strong>Tên thương phẩm</strong></td>
-                <td><strong>Nhóm thuốc</strong></td>
-                <td><strong>Tên hoạt chất</strong></td>
+                <td><strong>Tên sự kiện</strong></td>
+                <td><strong>Ngày diễn ra</strong></td>
+                <td><strong>Nơi tổ chức</strong></td>
                 <td />
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <Pagination totalPages={totalPages} />
+        <Pagination />
       </div>
     );
   }

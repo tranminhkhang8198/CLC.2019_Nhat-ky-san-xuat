@@ -16,8 +16,6 @@ export class ListItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
-      data: props.data,
       parentComponent: props.parentComponent,
       selectedItem: null,
     };

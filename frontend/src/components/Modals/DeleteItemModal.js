@@ -1,50 +1,42 @@
-import React from 'react';
+/* eslint-disable class-methods-use-this */
+import React, { Component } from 'react';
 import axios from 'axios';
 import * as httpStatus from 'http-status';
 
-function DeleteItemModal({ type, parentComponent, selectedItem }) {
+class DeleteItemModal extends Component {
+  constructor(props) {
+    super(props);
+    this.typeNames = {
+      fertilizerTitle: 'fertilizer',
+      plantProtectionProductTitle: 'plantProtectionProduct',
+    };
+    this.state = {
+      type: props.type,
+      parentComponent: props.parentComponent,
+      serverDomain: 'http://localhost:3001',
+    };
+  }
+
   // eslint-disable-next-line no-unused-vars
-  function getToken() {
+  getToken() {
     const token = localStorage.getItem('itemName');
     return token;
   }
 
-  function renderTypeTitle(typeData) {
-    let typeTitle = '';
-    switch (typeData) {
-      case 'fertilizer':
-        typeTitle = ' phân bón ';
-        break;
-      case 'plantProductProtection':
-        typeTitle = ' thuốc bảo vệ thực vật ';
-        break;
-      case 'seed':
-        typeTitle = ' giống lúa ';
-        break;
-      case 'cooperative':
-        typeTitle = ' hợp tác xã ';
-        break;
-      default:
-        typeTitle = '';
-        break;
-    }
-    return typeTitle;
-  }
-
-  function getApiURLByType(typeData) {
+  getApiURLByType(typeData) {
     let apiUrl = '';
     switch (typeData) {
       case 'fertilizer':
-        apiUrl = 'http://localhost:3001/api/fertilizers';
+        apiUrl = 'fertilizers';
         break;
-      case 'plantProductProtection':
-        apiUrl = 'http://localhost:3001/api/plant-protection-products';
+      case 'plantProtectionProduct':
+        apiUrl = 'plant-protection-products';
         break;
       case 'seed':
         apiUrl = '';
         break;
       case 'cooperative':
-        apiUrl = 'http://localhost:3001/api/cooperatives';
+        apiUrl = 'cooperatives';
         break;
       default:
         apiUrl = '';
@@ -53,7 +45,7 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
     return apiUrl;
   }
 
-  async function callApiToDelete(apiUrl) {
+  async callApiToDelete(apiUrl) {
     const data = await axios({
       method: 'delete',
       url: apiUrl,
@@ -75,62 +67,105 @@ function DeleteItemModal({ type, parentComponent, selectedItem }) {
     return data;
   }
 
-  async function deleteItemBaseOnId(itemToDelete) {
-    const apiUrl = `${getApiURLByType(type)}?_id=${itemToDelete._id}`;
-    const result = await callApiToDelete(apiUrl);
+  async deleteItemBaseOnId(itemToDelete) {
+    const { serverDomain, type } = this.state;
+    console.log(type);
+    console.log(this.getApiURLByType(type));
+    const apiUrl = `${serverDomain}/api/${this.getApiURLByType(type)}?_id=${itemToDelete._id}`;
+    const result = await this.callApiToDelete(apiUrl);
     return result;
   }
 
-  async function handleDeleteResult(result, parent) {
+  async handleDeleteResult(result, parent) {
     if (result == null) {
       return;
     }
-    if (result.status === httpStatus.NOT_FOUND) {
-      // alert(results[i].data.errorMessage);
-      alert('Xóa thất bại');
+    if (result.status === httpStatus.OK) {
+      alert('Xóa thành công');
+      parent.setState(() => ({
+        refresh: true,
+      }));
       return;
     }
-    alert('Xóa thành công');
-    parent.setState(() => ({
-      refresh: true,
-    }));
+    alert('Xóa thất bại');
   }
 
-  async function deleteHandler(e, item) {
+  async deleteHandler(e, item) {
     e.preventDefault();
-    const result = await deleteItemBaseOnId(item);
-    handleDeleteResult(result, parentComponent);
+    const { parentComponent } = this.state;
+    const result = await this.deleteItemBaseOnId(item);
+    this.handleDeleteResult(result, parentComponent);
   }
 
-  return (
-    <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-item-1">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h4 className="modal-title">Xóa dữ liệu</h4>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <p>
-              Hành động này không thể hoàn tác,
-              bạn chắc chắn muốn xóa
-              {renderTypeTitle(type)}
-              với tên là:
-              <strong>
-                {` ${selectedItem !== null ? selectedItem.name : ''}`}
-              </strong>
-            </p>
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-            <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => deleteHandler(e, selectedItem)}>Xác nhận xóa</button>
+  renderTypeTitle(typeData) {
+    let typeTitle = '';
+    switch (typeData) {
+      case 'fertilizer':
+        typeTitle = ' phân bón ';
+        break;
+      case 'plantProductProtection':
+        typeTitle = ' thuốc bảo vệ thực vật ';
+        break;
+      case 'seed':
+        typeTitle = ' giống lúa ';
+        break;
+      case 'cooperative':
+        typeTitle = ' hợp tác xã ';
+        break;
+      default:
+        typeTitle = '';
+        break;
+    }
+    return typeTitle;
+  }
+
+  renderItemContent(itemData) {
+    if (!itemData) {
+      return null;
+    }
+    return <strong>{itemData.name}</strong>;
+  }
+
+
+  renderDeleteModal(type, item) {
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-item-1">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Xóa dữ liệu</h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Hành động này không thể hoàn tác,
+                bạn chắc chắn muốn xóa
+                {this.renderTypeTitle(type)}
+                với tên là:&nbsp;
+                {this.renderItemContent(item)}
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+              <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => this.deleteHandler(e, item)}>Xác nhận xóa</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  render() {
+    const { selectedItem } = this.props;
+    const { type } = this.state;
+    return (
+      <>
+        {this.renderDeleteModal(type, selectedItem)}
+      </>
+    );
+  }
 }
 
 export default DeleteItemModal;

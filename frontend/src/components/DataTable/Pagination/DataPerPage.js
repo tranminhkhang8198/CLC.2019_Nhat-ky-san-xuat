@@ -17,6 +17,12 @@ function DataPerPage({ type, parentComponent }) {
       case 'cooperative':
         placeholderData = ' Tìm hợp tác xã theo tên';
         break;
+      case 'cooperativeHRManagement':
+        placeholderData = ' Tìm người quản trị hợp tác xã theo tên';
+        break;
+      case 'cooperativeEvent':
+        placeholderData = ' Tìm sự kiện của hợp tác xã theo tên';
+        break;
       default:
         placeholderData = 'Tìm kiếm dữ liệu theo tên';
         break;
