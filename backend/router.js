@@ -2732,4 +2732,40 @@ exports.routers = app => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR GOODSISSUE
+
+    app.post("/api/goods-issues", (req, res, next) => {
+        const body = req.body;
+
+        app.models.goodsIssue.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
+        });
+    });
+
+    app.get("/api/goods-issues", (req, res, next) => {
+        const query = req.query;
+
+        app.models.goodsIssue.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.get("/api/goods-issues/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.goodsIssue.findById(id, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.delete("/api/goods-issues/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.goodsIssue.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
 };
