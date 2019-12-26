@@ -70,7 +70,7 @@ export class ListItems extends Component {
       data={data}
     />;
     const viewItemModal = <ViewItemModal
-      type="plantProductProtection"
+      type="plantProtectionProduct"
       selectedItem={selectedItem}
     />;
     const deleteItemModal = <DeleteItemModal
@@ -120,7 +120,7 @@ export class ListItems extends Component {
                         href={value._id}
                         role="presentation"
                         data-toggle="modal"
-                        data-target={`#modal-view-${index}`}
+                        data-target="#modal-view"
                         style={{ cursor: 'pointer' }}
                         onClick={this.selectTableItemEventHandler}
                       >

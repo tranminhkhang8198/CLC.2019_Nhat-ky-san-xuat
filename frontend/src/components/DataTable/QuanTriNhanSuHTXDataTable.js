@@ -101,7 +101,7 @@ export class ListItems extends Component {
                         href={value._id}
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-view-1"
+                        data-target="#modal-view"
                         style={{ cursor: 'pointer' }}
                         onClick={this.selectTableItemEventHandler}
                       >

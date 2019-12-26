@@ -8,7 +8,7 @@ class ViewItemModal extends Component {
 
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
-      plantProtectionProductTitle: 'plantProductProtection',
+      plantProtectionProductTitle: 'plantProtectionProduct',
       cooperative: 'cooperative',
     };
   }
@@ -540,7 +540,7 @@ class ViewItemModal extends Component {
 
   renderMainModal(modalContent) {
     return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-view-1">
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-view">
         <div className="modal-dialog" role="document">
           {modalContent}
         </div>
