@@ -12,6 +12,9 @@ class ModifyItemModal extends Component {
   constructor(props) {
     super(props);
 
+    // PPP type only
+    this.scopeOfUse = [];
+
     this.submitData = {};
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
@@ -27,6 +30,7 @@ class ModifyItemModal extends Component {
     this.handleDataSubmit = this.handleDataSubmit.bind(this);
 
     this.renderMainModalPPP = this.renderMainModalPPP.bind(this);
+    this.renderScopeOfUsePPP = this.renderScopeOfUsePPP.bind(this);
     this.renderMainModalFertilizer = this.renderMainModalFertilizer.bind(this);
 
     this.renderModals = this.renderModals.bind(this);
@@ -34,74 +38,69 @@ class ModifyItemModal extends Component {
 
   handleInputOnChange(event) {
     const {
+      target,
+    } = event;
+
+    const {
       field,
-    } = event.target.dataset;
+      type: dataType,
+      index: scopeOfUseIndex,
+    } = target.dataset;
 
     const {
       value,
-    } = event.target;
+    } = target;
 
-    /**
-     * Assign inputed values to a containers to prevent re-rendering
-     * that leads to unfocused input elements
-     */
-    this.submitData[field] = value;
+    // PPP type only
+    if (dataType && dataType === 'scopeOfUse') {
+      if (!this.scopeOfUse[scopeOfUseIndex]) {
+        this.scopeOfUse = [...this.scopeOfUse];
+      }
+      this.scopeOfUse[scopeOfUseIndex][field] = value;
+      console.log(this.scopeOfUse);
+    } else {
+      /**
+       * Assign inputed values to a containers to prevent re-rendering
+       * that leads to unfocused input elements
+       */
+      this.submitData[field] = value;
+    }
   }
 
   async handleDataSubmit(event) {
     const {
       id,
+      index,
     } = event.target.dataset;
-    const { type } = this.props;
+    const { type, data: paginatedData } = this.props;
     const { fertilizerTitle, plantProtectionProductTitle } = this.typeNames;
     const { serverDomain } = this.state;
     let requestUrl = '';
+    const immutableSubmitData = { ...paginatedData[index] };
+
+    Object.keys(this.submitData).forEach((key) => {
+      immutableSubmitData[key] = this.submitData[key];
+    });
+    await this.setState({
+      data: immutableSubmitData,
+    });
 
     switch (type) {
       case fertilizerTitle:
         requestUrl = 'fertilizers';
 
-        await this.setState({
-          data: { ...this.submitData },
-        });
-
         break;
       case plantProtectionProductTitle:
-        // requestUrl = 'plant-protection-products';
+        requestUrl = 'plant-protection-products';
 
-        await this.setState({
-          data: {
-            name: this.submitData.name,
-            activeIngredient: this.submitData.activeIngredient,
-            content: this.submitData.content,
-            plantProtectionProductGroup: this.submitData.plantProtectionProductGroup,
-            ghs: parseInt(this.submitData.ghs, 10),
-            who: parseInt(this.submitData.who, 10),
-            scopeOfUse: [
-              {
-                plant: this.submitData.plant,
-                pest: this.submitData.pest,
-                dosage: this.submitData.dosage,
-                usage: this.submitData.usage,
-                phi: parseInt(this.submitData.phi, 10),
-              },
-            ],
-            registrationInfo: {
-              registrationUnit: this.submitData.registrationUnit,
-              registrationUnitAddress: this.submitData.registrationUnitAddress,
-              manufacturer: this.submitData.manufacturer,
-              manufacturerAddress: this.submitData.manufacturerAddress,
-            },
-          },
-        });
         break;
-
       default:
         console.log('.');
         break;
     }
 
     const { data } = this.state;
+    console.log(data);
     try {
       const updateDataRequest = await axios({
         url: `${serverDomain}/api/${requestUrl}?_id=${id}`,
@@ -119,9 +118,111 @@ class ModifyItemModal extends Component {
     }
   }
 
+  renderScopeOfUsePPP(scopeOfUseData) {
+    return (
+      <React.Fragment>
+        {scopeOfUseData.length && scopeOfUseData.map((item, index) => (
+          <div
+            key={uuidv4()}
+          >
+            <hr />
+            <div className="row">
+              <div className="col-4">
+                <p>Tên cây thuốc tác dụng</p>
+              </div>
+              <div className="col-8">
+                <input
+                  className="form-control-plaintext p-0"
+                  type="text"
+                  data-field="plant"
+                  data-type="scopeOfUse"
+                  data-index={index}
+                  defaultValue={`${item.plant}`}
+                  style={{ padding: 0 }}
+                  onChange={(this.handleInputOnChange)}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-4">
+                <p>Tên sâu bệnh thuốc tác dụng</p>
+              </div>
+              <div className="col-8">
+                <input
+                  className="form-control-plaintext p-0"
+                  type="text"
+                  data-field="pest"
+                  data-type="scopeOfUse"
+                  data-index={index}
+                  defaultValue={`${item.pest}`}
+                  style={{ padding: 0 }}
+                  onChange={(this.handleInputOnChange)}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-4">
+                <p>Liều lượng sử dụng</p>
+              </div>
+              <div className="col-8">
+                <input
+                  className="form-control-plaintext p-0"
+                  type="text"
+                  data-field="dosage"
+                  data-type="scopeOfUse"
+                  data-index={index}
+                  defaultValue={`${item.dosage}`}
+                  style={{ padding: 0 }}
+                  onChange={(this.handleInputOnChange)}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-4">
+                <p>Cách sử dụng</p>
+              </div>
+              <div className="col-8">
+                <textarea
+                  className="form-control item"
+                  rows="4"
+                  value={`${item.usage}`}
+                  data-field="usage"
+                  data-type="scopeOfUse"
+                  data-index={index}
+                  onChange={(this.handleInputOnChange)}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-4">
+                <p>Hàm lượng phi trong thuốc</p>
+              </div>
+              <div className="col-8">
+                <input
+                  className="form-control-plaintext p-0"
+                  type="text"
+                  data-field="phi"
+                  data-type="scopeOfUse"
+                  data-index={index}
+                  defaultValue={`${item.phi}`}
+                  style={{ padding: 0 }}
+                  onChange={(this.handleInputOnChange)}
+                />
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </React.Fragment>
+    );
+  }
+
   renderMainModalPPP() {
     const { data } = this.props;
-    console.log(data);
     return (
       <React.Fragment>
         {data.length && data.map((item, index) => (
@@ -136,6 +237,7 @@ class ModifyItemModal extends Component {
                 </div>
                 <div className="modal-body modal-modify-body">
                   <div className="container" style={{ padding: 0 }}>
+                    <h2>Thông số cơ bản</h2>
                     <div className="row">
                       <div className="col-4">
                         <p>Tên thương phẩm</p>
@@ -232,6 +334,7 @@ class ModifyItemModal extends Component {
                       </div>
                     </div>
 
+                    <h2>Địa chỉ mua hàng</h2>
                     <div className="row">
                       <div className="col-4">
                         <p>Tên cửa hàng mua thuốc</p>
@@ -296,93 +399,24 @@ class ModifyItemModal extends Component {
                       </div>
                     </div>
 
-                    <div className="row">
-                      <div className="col-4">
-                        <p>Tên cây thuốc tác dụng</p>
-                      </div>
-                      <div className="col-8">
-                        <input
-                          className="form-control-plaintext p-0"
-                          type="text"
-                          data-field="plant"
-                          defaultValue={`${item.scopeOfUse[0].plant}`}
-                          style={{ padding: 0 }}
-                          onChange={(this.handleInputOnChange)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-4">
-                        <p>Tên sâu bệnh thuốc tác dụng</p>
-                      </div>
-                      <div className="col-8">
-                        <input
-                          className="form-control-plaintext p-0"
-                          type="text"
-                          data-field="pest"
-                          defaultValue={`${item.scopeOfUse[0].pest}`}
-                          style={{ padding: 0 }}
-                          onChange={(this.handleInputOnChange)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-4">
-                        <p>Liều lượng sử dụng</p>
-                      </div>
-                      <div className="col-8">
-                        <input
-                          className="form-control-plaintext p-0"
-                          type="text"
-                          data-field="dosage"
-                          defaultValue={`${item.scopeOfUse[0].dosage}`}
-                          style={{ padding: 0 }}
-                          onChange={(this.handleInputOnChange)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-4">
-                        <p>Cách sử dụng</p>
-                      </div>
-                      <div className="col-8">
-                        <input
-                          className="form-control-plaintext p-0"
-                          type="text"
-                          data-field="usage"
-                          defaultValue={`${item.scopeOfUse[0].usage}`}
-                          style={{ padding: 0 }}
-                          onChange={(this.handleInputOnChange)}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-4">
-                        <p>Hàm lượng phi trong thuốc</p>
-                      </div>
-                      <div className="col-8">
-                        <input
-                          className="form-control-plaintext p-0"
-                          type="text"
-                          data-field="phi"
-                          defaultValue={`${item.scopeOfUse[0].phi}`}
-                          style={{ padding: 0 }}
-                          onChange={(this.handleInputOnChange)}
-                        />
-                      </div>
-                    </div>
-
+                    <h2>Cách sử dụng</h2>
+                    {this.renderScopeOfUsePPP(item.scopeOfUse)}
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+                  <button
+                    className="btn btn-dark"
+                    type="button"
+                    data-dismiss="modal"
+                  >
+                    Đóng
+                  </button>
                   <button
                     className="btn btn-primary"
                     type="button"
+                    data-dismiss="modal"
+                    data-id={item._id}
+                    data-index={index}
                     onClick={this.handleDataSubmit}
                   >
                     Lưu
@@ -564,6 +598,8 @@ class ModifyItemModal extends Component {
                   <button
                     className="btn btn-primary"
                     type="button"
+                    data-dismiss="modal"
+                    data-index={index}
                     data-id={item._id}
                     onClick={this.handleDataSubmit}
                   >
