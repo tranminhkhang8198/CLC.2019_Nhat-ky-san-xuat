@@ -1,3 +1,6 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
+
 import React, { Component } from 'react';
 import axios from 'axios';
 

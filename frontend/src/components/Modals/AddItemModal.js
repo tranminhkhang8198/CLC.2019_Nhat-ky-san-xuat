@@ -3,6 +3,8 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/jsx-fragments */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
 
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
