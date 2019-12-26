@@ -2557,7 +2557,7 @@ exports.routers = app => {
         const query = req.query;
 
         app.models.fertilizer.findByQuery(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
         });
     });
 
