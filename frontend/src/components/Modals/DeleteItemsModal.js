@@ -8,8 +8,6 @@
     ]
   }
 ] */
-/* eslint-disable no-underscore-dangle */
-
 import React, { Component } from 'react';
 import uuidv4 from 'uuid';
 import axios from 'axios';
@@ -25,6 +23,7 @@ class DeleteItemsModal extends Component {
       parrent: props.parentComponent,
       checkboxRefs: [],
     };
+    console.log(props);
 
     this.renderTypeTitle = this.renderTypeTitle.bind(this);
     this.renderItemsToDelete = this.renderItemsToDelete.bind(this);
@@ -32,9 +31,7 @@ class DeleteItemsModal extends Component {
     this.deleteListOfItemsEventHandler = this.deleteListOfItemsEventHandler.bind(this);
   }
 
-
   componentDidUpdate(prevProps) {
-    // console.log('event');
     const { data } = this.props;
     if (data.length !== prevProps.data.length) {
       this.updateDataWhenRendered(data);
@@ -62,6 +59,12 @@ class DeleteItemsModal extends Component {
       case 'plantProductProtection':
         apiUrl = 'http://localhost:3001/api/plant-protection-products';
         break;
+      case 'seed':
+        apiUrl = '';
+        break;
+      case 'cooperative':
+        apiUrl = 'http://localhost:3001/api/cooperatives';
+        break;
       default:
         apiUrl = '';
         break;
@@ -70,7 +73,6 @@ class DeleteItemsModal extends Component {
   }
 
   async updateDataWhenRendered(updatedData) {
-    // console.log('event 2');
     await this.setState({
       data: updatedData,
     });
@@ -104,9 +106,6 @@ class DeleteItemsModal extends Component {
     const { type } = this.state;
     const apiUrl = `${this.getApiURLByType(type)}?_id=${itemToDelete._id}`;
     const result = await this.callApiToDelete(apiUrl);
-    // console.log(apiUrl);
-    // console.log(result);
-    // console.log(result.status);
     return result;
   }
 
@@ -116,7 +115,7 @@ class DeleteItemsModal extends Component {
     return result;
   }
 
-  handleDeleteResult(results) {
+  handleDeleteResult(results, parrent) {
     if (results.length === 0) {
       return;
     }
@@ -127,6 +126,9 @@ class DeleteItemsModal extends Component {
       }
     }
     alert('Xóa thành công');
+    parrent.setState(() => ({
+      refresh: true,
+    }));
   }
 
   async deleteListOfItemsEventHandler(e) {
@@ -137,15 +139,11 @@ class DeleteItemsModal extends Component {
       const { _id } = data[i];
       const isChecked = checkboxRefs[_id].checked;
       if (isChecked) {
-        // eslint-disable-next-line no-await-in-loop
-        const result = await this.deleteItemBaseOnId(data[i]);
-        results.push(result);
+        results.push(this.deleteItemBaseOnId(data[i]));
       }
     }
-    parrent.setState(() => ({
-      refresh: true,
-    }));
-    this.handleDeleteResult(results);
+    await Promise.all(results);
+    this.handleDeleteResult(results, parrent);
   }
 
   renderTypeTitle(typeData) {
@@ -157,6 +155,12 @@ class DeleteItemsModal extends Component {
       case 'plantProductProtection':
         typeTitle = ' thuốc bảo vệ thực vật';
         break;
+      case 'seed':
+        typeTitle = ' giống lúa ';
+        break;
+      case 'cooperative':
+        typeTitle = ' hợp tác xã ';
+        break;
       default:
         typeTitle = '';
         break;
@@ -166,6 +170,12 @@ class DeleteItemsModal extends Component {
 
   renderItemsToDelete(items) {
     const { checkboxRefs } = this.state;
+    if (!Array.isArray(items)) {
+      return null;
+    }
+    if (!items.length) {
+      return null;
+    }
     return items.map((item) => (
       <div className="form-check" key={uuidv4()}>
         <label className="form-check-label" htmlFor={`delete-${item._id}`}>

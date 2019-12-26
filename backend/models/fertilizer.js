@@ -106,16 +106,31 @@ class Fertilizer {
         const pageNumber = query.pageNumber;
         const nPerPage = query.nPerPage;
 
-        fertilizer.find()
-            .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
-            .limit(Number(nPerPage))
-            .toArray((err, res) => {
-                if (err) {
-                    return cb(err, null)
+        let responseToClient = {};
+
+        fertilizer.find().count()
+            .then(count => {
+                const totalPages = ((count - (count % nPerPage)) / nPerPage) + 1;
+
+                responseToClient["totalPages"] = totalPages;
+
+                return fertilizer
+                    .find()
+                    .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
+                    .limit(Number(nPerPage))
+                    .toArray()
+            }).then(res => {
+                let length = res.length;
+                if (length == 0) {
+                    const message = "Trang tìm kiếm không tồn tại";
+                    return cb(message, null);
                 }
 
-                return cb(null, res);
+                responseToClient["data"] = res;
 
+                return cb(null, responseToClient);
+            }).catch(err => {
+                return cb(err, null);
             });
     }
 

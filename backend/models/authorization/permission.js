@@ -1,9 +1,9 @@
 const _ = require('lodash');
 
 
-class Permission{
+class Permission {
 
-    constructor(app){
+    constructor(app) {
         this.app = app;
     }
 
@@ -14,32 +14,31 @@ class Permission{
      * @param {string} method 
      * @param {callback function} cb 
      */
-    checkPermission(userId, resource, method, cb = () => {}){
+    check(userId, resource, method, cb = () => { }) {
         // Get user workgroup
-        this.app.models.user.workgroup(userId, (err, workgroup) =>{
-            if(err){
-                return cb({err:"Workgroup is not found"}, null);
+        this.app.models.user.workgroup(userId, (err, workgroup) => {
+            if (err) {
+                return cb({ errorMessage: "Workgroup is not found" }, null);
             }
-            else{
+            else {
                 // Check resource role
                 this.app.models.resource.role(resource, (err, role) => {
 
-                    if(err){
+                    if (err) {
                         return cb(err, null)
                     }
-                    else{
+                    else {
                         const allowMethod = _.get(role, workgroup);
-
-                        if(!allowMethod){
-                            return cb({err: "Permission denied"}, null);
+                        if (!allowMethod) {
+                            return cb({ errorMessage: "Permission denied" }, null);
                         }
-                        else{
-                            this.app.models.role.compare(method, allowMethod, (err, result) =>{
-                                if(err){
+                        else {
+                            this.app.models.role.compare(method, allowMethod, (err, result) => {
+                                if (err) {
                                     return cb(err, null);
                                 }
-                                else{
-                                
+                                else {
+
                                     return cb(null, result);
                                 }
                             });

@@ -26,7 +26,7 @@ export class ListItems extends Component {
     return (
       <div className="card-body">
         <ViewItemModal />
-        <ModifyItemModal />
+        <ModifyItemModal type="plantProductProtection" />
         <DeleteItemModal />
         <DataPerPage />
         <div className="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">

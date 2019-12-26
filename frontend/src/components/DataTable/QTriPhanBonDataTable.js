@@ -39,7 +39,13 @@ export class ListItems extends Component {
   selectTableItemEventHandler(e) {
     e.preventDefault();
     const { data } = this.props;
+    const { selectedItem } = this.state;
     const selectedItemId = e.target.getAttribute('href');
+    if (selectedItem !== null) {
+      if (selectedItem._id === selectedItemId) {
+        return;
+      }
+    }
     const item = this.getItemBaseOnId(data, selectedItemId);
     this.setState({ selectedItem: item });
   }
@@ -48,13 +54,26 @@ export class ListItems extends Component {
     const { data } = this.props;
     const { selectedItem, parentComponent } = this.state;
 
+    if (!Array.isArray(data)) {
+      return <h1>Loading....</h1>;
+    }
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
 
-    const viewItemModal = <ViewItemModal />;
-    const modifyItemModal = <ModifyItemModal />;
-    const deleteItemModal = <DeleteItemModal type="fertilizer" parentComponent={parentComponent} selectedItem={selectedItem} />;
+    const modifyItemModal = <ModifyItemModal
+      type="fertilizer"
+      data={data}
+    />;
+    const viewItemModal = <ViewItemModal
+      type="fertilizer"
+      selectedItem={selectedItem}
+    />;
+    const deleteItemModal = <DeleteItemModal
+      type="fertilizer"
+      parentComponent={parentComponent}
+      selectedItem={selectedItem}
+    />;
 
     return (
       <div className="card-body">
@@ -76,7 +95,7 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
-              {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
+              {data.length !== 0 && data.map((value, index) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
                 <td>{value.type}</td>
                 <td>{value.enterprise}</td>
@@ -86,11 +105,12 @@ export class ListItems extends Component {
                     <div className="dropdown-menu" role="menu" style={{ overflow: 'hidden', padding: 0 }}>
                       <a
                         className="dropdown-item text-white bg-info"
-                        href="/"
+                        href={value._id}
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-view-1"
+                        data-target="#modal-view"
                         style={{ cursor: 'pointer' }}
+                        onClick={this.selectTableItemEventHandler}
                       >
                         Xem thông tin
                       </a>
@@ -99,7 +119,7 @@ export class ListItems extends Component {
                         href="/"
                         role="presentation"
                         data-toggle="modal"
-                        data-target="#modal-modify-1"
+                        data-target={`#modal-modify-${index}`}
                         style={{ cursor: 'pointer' }}
                       >
                         Chỉnh sửa
