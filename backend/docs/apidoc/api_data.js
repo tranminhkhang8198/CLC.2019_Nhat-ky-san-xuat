@@ -5308,7 +5308,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/auth/login",
+    "url": "/api/login",
     "title": "Login user",
     "version": "0.1.0",
     "name": "LoginUser",
@@ -5571,8 +5571,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });

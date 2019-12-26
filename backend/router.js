@@ -208,7 +208,7 @@ exports.routers = app => {
 
 
     /**
-     * @api {post} /api/auth/login Login user
+     * @api {post} /api/login Login user
      * @apiVersion 0.1.0
      * @apiName LoginUser
      * @apiGroup User
@@ -264,7 +264,7 @@ exports.routers = app => {
      *     }
      * @apiPermission none
      */
-    app.post("/api/auth/login", (req, res, next) => {
+    app.post("/api/login", (req, res, next) => {
         const body = req.body;
 
         app.models.user.login(body, (err, result) => {
@@ -1247,18 +1247,55 @@ exports.routers = app => {
         })
     })
 
-    app.post('/api/goodReceipts', (req, res, next) => {
+    app.post('/api/goodsReceipts', (req, res, next) => {
         const body = req.body;
-        app.models.goodReceipt.create(body, (err, result) => {
+        app.models.goodsReceipt.create(body, (err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
                 : responseHandle(res, result);
         })
     })
 
-    app.delete('/api/goodReceipts', (req, res, next) => {
+    app.delete('/api/goodsReceipts', (req, res, next) => {
         const query = req.query;
-        app.models.goodReceipt.delete(query, (err, result) => {
+        app.models.goodsReceipt.delete(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.get('/api/goodsReceipts', (req, res, next) => {
+        const query = req.query;
+        app.models.goodsReceipt.get(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.get('/api/goodsReceipts/search', (req, res, next) => {
+        const query = req.query;
+        app.models.goodsReceipt.search(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+
+    app.post('/api/employee', (req, res, next) => {
+        const body = req.body;
+        app.models.employee.create(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    app.get('/api/employee', (req, res, next) => {
+        const query = req.query;
+        app.models.employee.get(query, (err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
                 : responseHandle(res, result);
@@ -2520,7 +2557,7 @@ exports.routers = app => {
         const query = req.query;
 
         app.models.fertilizer.findByQuery(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
         });
     });
 
@@ -2729,6 +2766,42 @@ exports.routers = app => {
         const query = req.query;
 
         app.models.fertilizer.delete(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR GOODSISSUE
+
+    app.post("/api/goods-issues", (req, res, next) => {
+        const body = req.body;
+
+        app.models.goodsIssue.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
+        });
+    });
+
+    app.get("/api/goods-issues", (req, res, next) => {
+        const query = req.query;
+
+        app.models.goodsIssue.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.get("/api/goods-issues/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.goodsIssue.findById(id, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    app.delete("/api/goods-issues/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.goodsIssue.deleteById(id, (err, info) => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
