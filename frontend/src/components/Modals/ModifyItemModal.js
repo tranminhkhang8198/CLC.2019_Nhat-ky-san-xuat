@@ -138,7 +138,7 @@ class ModifyItemModal extends Component {
                   data-field="plant"
                   data-type="scopeOfUse"
                   data-index={index}
-                  defaultValue={`${item.plant}`}
+                  defaultValue={item.plant ? `${item.plant}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
                 />
@@ -156,7 +156,7 @@ class ModifyItemModal extends Component {
                   data-field="pest"
                   data-type="scopeOfUse"
                   data-index={index}
-                  defaultValue={`${item.pest}`}
+                  defaultValue={item.pest ? `${item.pest}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
                 />
@@ -174,7 +174,7 @@ class ModifyItemModal extends Component {
                   data-field="dosage"
                   data-type="scopeOfUse"
                   data-index={index}
-                  defaultValue={`${item.dosage}`}
+                  defaultValue={item.dosage ? `${item.dosage}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
                 />
@@ -189,7 +189,7 @@ class ModifyItemModal extends Component {
                 <textarea
                   className="form-control item"
                   rows="4"
-                  value={`${item.usage}`}
+                  value={item.usage ? `${item.usage}` : 'Rỗng'}
                   data-field="usage"
                   data-type="scopeOfUse"
                   data-index={index}
@@ -209,7 +209,7 @@ class ModifyItemModal extends Component {
                   data-field="phi"
                   data-type="scopeOfUse"
                   data-index={index}
-                  defaultValue={`${item.phi}`}
+                  defaultValue={item.phi ? `${item.phi}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
                 />
@@ -248,7 +248,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="name"
-                          defaultValue={`${item.name}`}
+                          defaultValue={item.name ? `${item.name}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -264,7 +264,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="activeIngredient"
-                          defaultValue={`${item.activeIngredient}`}
+                          defaultValue={item.activeIngredient ? `${item.activeIngredient}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -280,7 +280,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="content"
-                          defaultValue={`${item.content}`}
+                          defaultValue={item.content ? `${item.content}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -296,7 +296,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="plantProtectionProductGroup"
-                          defaultValue={`${item.plantProtectionProductGroup}`}
+                          defaultValue={item.plantProtectionProductGroup ? `${item.plantProtectionProductGroup}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -312,7 +312,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="ghs"
-                          defaultValue={`${item.ghs}`}
+                          defaultValue={item.ghs ? `${item.ghs}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -328,7 +328,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="who"
-                          defaultValue={`${item.who}`}
+                          defaultValue={item.who ? `${item.who}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -345,7 +345,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="registrationUnit"
-                          defaultValue={`${item.registrationInfo.registrationUnit}`}
+                          defaultValue={item.registrationInfo.registrationUnit ? `${item.registrationInfo.registrationUnit}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -361,7 +361,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="registrationUnitAddress"
-                          defaultValue={`${item.registrationInfo.registrationUnitAddress}`}
+                          defaultValue={item.registrationInfo.registrationUnitAddress ? `${item.registrationInfo.registrationUnitAddress}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -377,7 +377,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="manufacturer"
-                          defaultValue={`${item.registrationInfo.manufacturer}`}
+                          defaultValue={item.registrationInfo.manufacturer ? `${item.registrationInfo.manufacturer}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -393,7 +393,7 @@ class ModifyItemModal extends Component {
                           className="form-control-plaintext p-0"
                           type="text"
                           data-field="manufacturerAddress"
-                          defaultValue={`${item.registrationInfo.manufacturerAddress}`}
+                          defaultValue={item.registrationInfo.manufacturerAddress ? `${item.registrationInfo.manufacturerAddress}` : 'Rỗng'}
                           style={{ padding: 0 }}
                           onChange={(this.handleInputOnChange)}
                         />
@@ -433,7 +433,6 @@ class ModifyItemModal extends Component {
 
   renderMainModalFertilizer() {
     const { data } = this.props;
-    console.log(data);
     return (
       <React.Fragment>
         {data.length && data.map((item, index) => (

@@ -562,7 +562,6 @@ class ViewItemModal extends Component {
   renderModals(modalType) {
     const { fertilizerTitle, plantProtectionProductTitle, cooperative } = this.typeNames;
     const { selectedItem } = this.props;
-    console.log(selectedItem);
     let renderDOM;
 
     switch (modalType) {

@@ -175,7 +175,7 @@ class DeleteItemsModal extends Component {
       case 'fertilizer':
         typeTitle = ' phân bón';
         break;
-      case 'plantProductProtection':
+      case 'plantProtectionProduct':
         typeTitle = ' thuốc bảo vệ thực vật';
         break;
       case 'seed':

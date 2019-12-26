@@ -21,6 +21,7 @@ class AddItemModal extends Component {
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
       plantProtectionProductTitle: 'plantProtectionProduct',
+      cooperative: 'cooperative',
     };
 
     this.state = {
