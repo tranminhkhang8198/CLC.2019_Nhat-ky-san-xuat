@@ -1543,7 +1543,7 @@ exports.routers = app => {
         const query = req.query;
 
         app.models.plantProtectionProduct.findByQuery(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
         });
     });
 
@@ -2794,7 +2794,7 @@ exports.routers = app => {
         const id = req.params.id;
 
         app.models.goodsIssue.findById(id, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
         });
     });
 
@@ -2802,7 +2802,16 @@ exports.routers = app => {
         const id = req.params.id;
 
         app.models.goodsIssue.deleteById(id, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+    app.patch("/api/goods-issues/:id", (req, res, next) => {
+        const id = req.params.id;
+        const update = req.body;
+
+        app.models.goodsIssue.updateById(id, update, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
         });
     });
 };
