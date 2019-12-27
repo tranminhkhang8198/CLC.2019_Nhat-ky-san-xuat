@@ -486,17 +486,18 @@ class PlantProtectionProduct {
                         const scopeOfUseId = mongoose.Types.ObjectId(
                             scopeOfUseElem._id
                         );
+
+                        let scopeOfUseUpdate = {
+                            ...scopeOfUseElem
+                        };
+                        delete scopeOfUseUpdate._id;
+                        delete scopeOfUseUpdate.pppId;
+    
+                        this.updateScopeOfUse(scopeOfUseId, scopeOfUseUpdate);
+
                     } catch (err) {
                         return cb(err, null);
                     }
-
-                    let scopeOfUseUpdate = {
-                        ...scopeOfUseElem
-                    };
-                    delete scopeOfUseUpdate._id;
-                    delete scopeOfUseUpdate.pppId;
-
-                    this.updateScopeOfUse(scopeOfUseId, scopeOfUseUpdate);
                 });
             }
 
@@ -507,20 +508,21 @@ class PlantProtectionProduct {
                         const registrationInfoId = mongoose.Types.ObjectId(
                             update.registrationInfo._id
                         );
+
+                        let registrationInfoUpdate = {
+                            ...update.registrationInfo
+                        };
+                        delete registrationInfoUpdate._id;
+                        delete registrationInfoUpdate.pppId;
+    
+                        this.updateRegistrationInfo(
+                            registrationInfoId,
+                            registrationInfoUpdate
+                        );
+                        
                     } catch (err) {
                         return cb(err, null);
                     }
-
-                    let registrationInfoUpdate = {
-                        ...update.registrationInfo
-                    };
-                    delete registrationInfoUpdate._id;
-                    delete registrationInfoUpdate.pppId;
-
-                    this.updateRegistrationInfo(
-                        registrationInfoId,
-                        registrationInfoUpdate
-                    );
                 }
             }
 
