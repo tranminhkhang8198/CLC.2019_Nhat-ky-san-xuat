@@ -14,7 +14,7 @@ class ModifyItemModal extends Component {
     super(props);
 
     // PPP type only
-    this.scopeOfUse = [];
+    this.scopeOfUse = [{}];
 
     this.submitData = {};
     this.typeNames = {
@@ -52,13 +52,16 @@ class ModifyItemModal extends Component {
       value,
     } = target;
 
-    // PPP type only
-    if (dataType && dataType === 'scopeOfUse') {
-      if (!this.scopeOfUse[scopeOfUseIndex]) {
-        this.scopeOfUse = [...this.scopeOfUse];
+    const {
+      type,
+    } = this.props;
+
+    if (type === this.typeNames.plantProtectionProductTitle) {
+      if (dataType && dataType === 'scopeOfUse') {
+        this.scopeOfUse[scopeOfUseIndex] = { ...this.scopeOfUse[scopeOfUseIndex] };
+        this.scopeOfUse[scopeOfUseIndex][field] = value;
       }
-      this.scopeOfUse[scopeOfUseIndex][field] = value;
-      console.log(this.scopeOfUse);
+      this.submitData.scopeOfUse = [...this.scopeOfUse];
     } else {
       /**
        * Assign inputed values to a containers to prevent re-rendering
@@ -66,6 +69,7 @@ class ModifyItemModal extends Component {
        */
       this.submitData[field] = value;
     }
+    console.log(this.submitData, scopeOfUseIndex);
   }
 
   async handleDataSubmit(event) {
@@ -79,36 +83,37 @@ class ModifyItemModal extends Component {
     let requestUrl = '';
     const immutableSubmitData = { ...paginatedData[index] };
 
-    Object.keys(this.submitData).forEach((key) => {
-      immutableSubmitData[key] = this.submitData[key];
-    });
-    await this.setState({
-      data: immutableSubmitData,
-    });
-
     switch (type) {
       case fertilizerTitle:
         requestUrl = 'fertilizers';
-
         break;
       case plantProtectionProductTitle:
         requestUrl = 'plant-protection-products';
 
+        immutableSubmitData.scopeOfUse = paginatedData[index].scopeOfUse;
+        immutableSubmitData.registrationInfo = paginatedData[index].registrationInfo;
         break;
       default:
-        console.log('.');
+        console.log('');
         break;
     }
 
+    Object.keys(this.submitData).forEach((key) => {
+      immutableSubmitData[key] = this.submitData[key];
+    });
+
+    await this.setState({
+      data: immutableSubmitData,
+    });
+
     const { data } = this.state;
-    console.log(data);
     try {
       const updateDataRequest = await axios({
         url: `${serverDomain}/api/${requestUrl}?_id=${id}`,
         method: 'patch',
         data,
       });
-      console.log(data);
+      // console.log(data);
 
       if (updateDataRequest.status >= 200 && updateDataRequest.status < 300) {
         alert('Cập nhật dữ liệu thành công');
@@ -123,9 +128,7 @@ class ModifyItemModal extends Component {
     return (
       <React.Fragment>
         {scopeOfUseData.length && scopeOfUseData.map((item, index) => (
-          <div
-            key={uuidv4()}
-          >
+          <div key={uuidv4()}>
             <hr />
             <div className="row">
               <div className="col-4">
@@ -189,7 +192,8 @@ class ModifyItemModal extends Component {
                 <textarea
                   className="form-control item"
                   rows="4"
-                  value={item.usage ? `${item.usage}` : 'Rỗng'}
+                  // value={item.usage ? `${item.usage}` : 'Rỗng'}
+                  defaultValue={item.usage ? `${item.usage}` : 'Rỗng'}
                   data-field="usage"
                   data-type="scopeOfUse"
                   data-index={index}
