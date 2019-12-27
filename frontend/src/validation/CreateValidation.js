@@ -56,3 +56,41 @@ export function validateFertilizerInput(input) {
 
   return errors;
 }
+
+export function validateCooperativeInput(input) {
+  const errors = [];
+
+  if (!input.name) {
+    errors.push('Không được bỏ trống trường: Tên hợp tác xã');
+  }
+
+  if (!input.foreignName) {
+    errors.push('Không được bỏ trống trường: Tên tiếng Anh');
+  }
+
+  if (!input.abbreviationName) {
+    errors.push('Không được bỏ trống trường: Tên viết tắt');
+  }
+
+  if (!input.cooperativeID) {
+    errors.push('Không được bỏ trống trường: Mã hợp tác xã');
+  }
+
+  if (!input.surrgate) {
+    errors.push('Không được bỏ trống trường: Người đại diện');
+  }
+
+  if (!input.director) {
+    errors.push('Không được bỏ trống trường: Giám đốc hợp tác xã');
+  }
+
+  if (!input.phone) {
+    errors.push('Không được bỏ trống trường: Số điện thoại');
+  }
+
+  if (!input.representOffice) {
+    errors.push('Không được bỏ trống trường: Văn phòng đại diện');
+  }
+
+  return errors;
+}

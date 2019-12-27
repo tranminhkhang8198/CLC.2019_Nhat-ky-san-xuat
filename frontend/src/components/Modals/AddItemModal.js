@@ -11,7 +11,11 @@ import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
 
-import { validatePPPInput, validateFertilizerInput } from '../../validation/CreateValidation';
+import {
+  validatePPPInput,
+  validateFertilizerInput,
+  validateCooperativeInput,
+} from '../../validation/CreateValidation';
 
 class AddItemModal extends Component {
   constructor(props) {
@@ -21,7 +25,7 @@ class AddItemModal extends Component {
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
       plantProtectionProductTitle: 'plantProtectionProduct',
-      cooperativeTitleTitle: 'cooperative',
+      cooperativeTitle: 'cooperative',
     };
 
     this.state = {
@@ -56,12 +60,19 @@ class AddItemModal extends Component {
      * that leads to unfocused input elements
      */
     this.submitData[field] = value;
+    console.log(this.submitData);
   }
 
   async handleDataSubmit() {
     let validationErrors;
-    const { type } = this.props;
-    const { fertilizerTitle, plantProtectionProductTitle, cooperativeTitle } = this.typeNames;
+    const {
+      type,
+    } = this.props;
+    const {
+      fertilizerTitle,
+      plantProtectionProductTitle,
+      cooperativeTitle,
+    } = this.typeNames;
     const { serverDomain } = this.state;
     let requestUrl = '';
 
@@ -131,6 +142,37 @@ class AddItemModal extends Component {
         });
         break;
       case cooperativeTitle:
+        requestUrl = 'cooperatives';
+
+        validationErrors = validateCooperativeInput(this.submitData);
+
+        if (validationErrors.length) {
+          const errors = validationErrors.map((item) => `${item} \n`).toString().replace(/,/g, '');
+          alert(errors);
+
+          return;
+        }
+
+        await this.setState({
+          data: {
+            name: this.submitData.name,
+            foreignName: this.submitData.foreignName,
+            abbreviationName: this.submitData.abbreviationName,
+            cooperativeID: this.submitData.cooperativeID,
+            surrgate: this.submitData.surrgate,
+            director: this.submitData.director,
+            representOffice: this.submitData.representOffice,
+            status: this.submitData.status || 'Đang hoạt động',
+            address: this.submitData.address,
+            phone: this.submitData.phone,
+            tax: this.submitData.tax,
+            email: this.submitData.email,
+            fax: this.submitData.fax,
+            website: this.submitData.website,
+            logo: this.submitData.logo,
+          },
+        });
+
         break;
       default:
         console.log('.');
@@ -138,6 +180,7 @@ class AddItemModal extends Component {
     }
 
     const { data } = this.state;
+    console.log(data);
     try {
       const createDataRequest = await axios({
         url: `${serverDomain}/api/${requestUrl}`,
@@ -178,7 +221,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-name"
+                    id="add-fertilizer-name"
                     data-field="name"
                     placeholder="Tên phân bón"
                     value={data.name}
@@ -195,7 +238,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-type"
+                    id="add-fertilizer-type"
                     data-field="type"
                     placeholder="Loại phân bón"
                     value={data.type}
@@ -209,7 +252,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-ingredient"
+                    id="add-fertilizer-ingredient"
                     data-field="ingredient"
                     placeholder="Thành phần của phân bón"
                     value={data.ingredient}
@@ -223,7 +266,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-ministry"
+                    id="add-fertilizer-ministry"
                     placeholder="Tên Bộ cấp phép sử dụng phân bón"
                     data-field="ministry"
                     value={data.ministry}
@@ -240,7 +283,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-province"
+                    id="add-fertilizer-province"
                     placeholder="Tên tỉnh, thành sản xuất phân bón"
                     data-field="province"
                     value={data.province}
@@ -254,7 +297,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-lawDocument"
+                    id="add-fertilizer-lawDocument"
                     placeholder="Căn cứ, tiêu chuẩn, quy định của phân bón"
                     data-field="lawDocument"
                     value={data.lawDocument}
@@ -268,7 +311,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-enterprise"
+                    id="add-fertilizer-enterprise"
                     placeholder="Tên doanh nghiệp sản xuất phân bón"
                     data-field="enterprise"
                     value={data.enterprise}
@@ -282,7 +325,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-isoCertOrganization"
+                    id="add-fertilizer-isoCertOrganization"
                     placeholder="Tên tổ chức chứng nhận hợp quy"
                     data-field="isoCertOrganization"
                     value={data.isoCertOrganization}
@@ -296,7 +339,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-fertilizer-manufactureAndImport"
+                    id="add-fertilizer-manufactureAndImport"
                     placeholder="Thông tin xuất, nhập khẩu"
                     data-field="manufactureAndImport"
                     value={data.manufactureAndImport}
@@ -345,7 +388,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-name"
+                    id="add-ppp-name"
                     data-field="name"
                     placeholder="Nhập vào tên thuốc bảo vệ thực vật"
                     value={data.name}
@@ -362,7 +405,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-activeIngredient"
+                    id="add-ppp-activeIngredient"
                     data-field="activeIngredient"
                     onChange={this.handleInputOnChange}
                     value={data.activeIngredient}
@@ -379,7 +422,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-content"
+                    id="add-ppp-content"
                     data-field="content"
                     placeholder="Hàm lượng sử dụng của thuốc"
                     value={data.content}
@@ -396,7 +439,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-plantProtectionProductGroup"
+                    id="add-ppp-plantProtectionProductGroup"
                     placeholder="Nhập vào tên nhóm thuốc"
                     data-field="plantProtectionProductGroup"
                     value={data.plantProtectionProductGroup}
@@ -410,7 +453,7 @@ class AddItemModal extends Component {
                   <input
                     type="number"
                     className="form-control item"
-                    name="add-ppp-ghs"
+                    id="add-ppp-ghs"
                     placeholder="Nhập vào nhóm độc GHS"
                     data-field="ghs"
                     value={data.ghs}
@@ -424,7 +467,7 @@ class AddItemModal extends Component {
                   <input
                     type="number"
                     className="form-control item"
-                    name="add-ppp-who"
+                    id="add-ppp-who"
                     placeholder="Nhập vào nhóm độc WHO"
                     data-field="who"
                     value={data.who}
@@ -474,7 +517,7 @@ class AddItemModal extends Component {
                     </span>
                     <input
                       type="text"
-                      name="add-ppp-registrationUnit"
+                      id="add-ppp-registrationUnit"
                       className="form-control item"
                       placeholder="Nhập vào tên cửa hàng"
                       data-field="registrationUnit"
@@ -490,7 +533,7 @@ class AddItemModal extends Component {
                     </span>
                     <input
                       type="text"
-                      name="add-ppp-registrationUnitAddress"
+                      id="add-ppp-registrationUnitAddress"
                       className="form-control item"
                       placeholder="Nhập vào địa chỉ cửa hàng"
                       data-field="registrationUnitAddress"
@@ -506,7 +549,7 @@ class AddItemModal extends Component {
                     </span>
                     <input
                       type="text"
-                      name="add-ppp-manufacturer"
+                      id="add-ppp-manufacturer"
                       className="form-control item"
                       placeholder="Nhà sản xuất"
                       data-field="manufacturer"
@@ -522,7 +565,7 @@ class AddItemModal extends Component {
                     </span>
                     <input
                       type="text"
-                      name="add-ppp-manufacturerAddress"
+                      id="add-ppp-manufacturerAddress"
                       className="form-control item"
                       placeholder="Nhập vào địa chỉ cửa hàng"
                       data-field="manufacturerAddress"
@@ -578,7 +621,7 @@ class AddItemModal extends Component {
                       </span>
                       <input
                         type="text"
-                        name="add-ppp-plant-name"
+                        id="add-ppp-plant-name"
                         className="form-control item"
                         placeholder="Nhập vào tên cây thuốc tác dụng"
                         data-field="plant"
@@ -591,7 +634,7 @@ class AddItemModal extends Component {
                       Sâu bọ diệt trừ
                       <input
                         type="text"
-                        name="add-ppp-pest"
+                        id="add-ppp-pest"
                         className="form-control item"
                         placeholder="Nhập vào tên sâu bọ khắc chế"
                         data-field="pest"
@@ -604,7 +647,7 @@ class AddItemModal extends Component {
                       Liều lượng
                       <input
                         type="text"
-                        name="add-ppp-dosage"
+                        id="add-ppp-dosage"
                         className="form-control item"
                         placeholder="Liều lượng sử dụng"
                         data-field="dosage"
@@ -621,7 +664,7 @@ class AddItemModal extends Component {
                       <input
                         type="number"
                         className="form-control item"
-                        name="add-ppp-phi"
+                        id="add-ppp-phi"
                         placeholder="Nhập vào độ phi"
                         data-field="phi"
                         onChange={this.handleInputOnChange}
@@ -633,7 +676,7 @@ class AddItemModal extends Component {
                       Cách sử dụng
                       <textarea
                         rows="4"
-                        name="add-ppp-usage"
+                        id="add-ppp-usage"
                         className="form-control item"
                         placeholder="Mô tả cách sử dụng chi tiết"
                         data-field="usage"
@@ -686,7 +729,7 @@ class AddItemModal extends Component {
             </div>
             <div className="modal-body modal-add-body">
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-name" className="w-100">
+                <label htmlFor="add-cooperative-name" className="w-100">
                   Tên hợp tác xã
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -694,7 +737,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    id="add-ppp-name"
+                    id="add-cooperative-name"
                     data-field="name"
                     placeholder="Nhập vào tên hợp tác xã"
                     value={data.name}
@@ -707,7 +750,7 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-foreignName" className="w-100">
+                <label htmlFor="add-cooperative-foreignName" className="w-100">
                   Tên tiếng Anh
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -715,7 +758,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-foreignName"
+                    id="add-cooperative-foreignName"
                     data-field="foreignName"
                     onChange={this.handleInputOnChange}
                     value={data.foreignName}
@@ -728,7 +771,7 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-abbreviationName" className="w-100">
+                <label htmlFor="add-cooperative-abbreviationName" className="w-100">
                   Tên viết tắt
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -736,7 +779,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-abbreviationName"
+                    id="add-cooperative-abbreviationName"
                     data-field="abbreviationName"
                     placeholder="Tên viết tắt"
                     value={data.abbreviationName}
@@ -749,7 +792,7 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-cooperativeID" className="w-100">
+                <label htmlFor="add-cooperative-cooperativeID" className="w-100">
                   Mã hợp tác xã
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -757,20 +800,17 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-cooperativeID"
+                    id="add-cooperative-cooperativeID"
                     data-field="cooperativeID"
                     placeholder="Mã hợp tác xã"
                     value={data.cooperativeID}
                     onChange={this.handleInputOnChange}
                   />
-                  <small className="form-text text-muted" key={uuidv4()}>
-                    Mặc định: Đang hoạt động
-                  </small>
                 </label>
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-surrgate" className="w-100">
+                <label htmlFor="add-cooperative-surrgate" className="w-100">
                   Người đại diện
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -778,7 +818,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-surrgate"
+                    id="add-cooperative-surrgate"
                     placeholder="Tên người đại diện cho hợp tác xã"
                     data-field="surrgate"
                     value={data.surrgate}
@@ -788,7 +828,7 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-director" className="w-100">
+                <label htmlFor="add-cooperative-director" className="w-100">
                   Giám đốc hợp tác xã
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -796,7 +836,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-director"
+                    id="add-cooperative-director"
                     placeholder="Tên giám đốc hợp tác xã"
                     data-field="director"
                     value={data.director}
@@ -806,7 +846,7 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-phone" className="w-100">
+                <label htmlFor="add-cooperative-phone" className="w-100">
                   Số điện thoại
                   <span style={{ color: 'rgb(249,15,15)' }}>
                     &nbsp;*
@@ -814,7 +854,7 @@ class AddItemModal extends Component {
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-phone"
+                    id="add-cooperative-phone"
                     placeholder="Số điện thoại của hợp tác xã"
                     data-field="phone"
                     value={data.phone}
@@ -824,16 +864,13 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-representOffice" className="w-100">
+                <label htmlFor="add-cooperative-representOffice" className="w-100">
                   Văn phòng đại diện
-                  <span style={{ color: 'rgb(249,15,15)' }}>
-                    &nbsp;*
-                  </span>
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-representOffice"
-                    placeholder="Địa chỉ văn phòng đại diện của hợp tác xã"
+                    id="add-cooperative-representOffice"
+                    placeholder="Văn phòng đại diện của hợp tác xã"
                     data-field="representOffice"
                     value={data.representOffice}
                     onChange={this.handleInputOnChange}
@@ -842,12 +879,45 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-email" className="w-100">
+                <label htmlFor="add-cooperative-address" className="w-100">
+                  Địa chỉ
+                  <input
+                    type="text"
+                    className="form-control item"
+                    id="add-cooperative-address"
+                    placeholder="Địa chỉ hợp tác xã"
+                    data-field="address"
+                    value={data.address}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-cooperative-status" className="w-100">
+                  Trạng thái hoạt động
+                  <input
+                    type="text"
+                    className="form-control item"
+                    id="add-cooperative-status"
+                    placeholder="Trạng thái hoạt động của hợp tác xã"
+                    data-field="status"
+                    value={data.status}
+                    onChange={this.handleInputOnChange}
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Mặc định: Đang hoạt động
+                  </small>
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-cooperative-email" className="w-100">
                   Thư điện tử
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-email"
+                    id="add-cooperative-email"
                     placeholder="Thư điện tử của hợp tác xã"
                     data-field="email"
                     value={data.email}
@@ -860,12 +930,12 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-website" className="w-100">
+                <label htmlFor="add-cooperative-website" className="w-100">
                   Địa chỉ website
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-website"
+                    id="add-cooperative-website"
                     placeholder="Địa chỉ website của hợp tác xã"
                     data-field="website"
                     value={data.website}
@@ -875,12 +945,12 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-fax" className="w-100">
+                <label htmlFor="add-cooperative-fax" className="w-100">
                   Địa chỉ FAX
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-fax"
+                    id="add-cooperative-fax"
                     placeholder="Địa chỉ FAX của hợp tác xã"
                     data-field="fax"
                     value={data.fax}
@@ -890,12 +960,12 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-tax" className="w-100">
+                <label htmlFor="add-cooperative-tax" className="w-100">
                   Mã số thuế
                   <input
                     type="text"
                     className="form-control item"
-                    name="add-ppp-tax"
+                    id="add-cooperative-tax"
                     placeholder="Mã số thuế"
                     data-field="tax"
                     value={data.tax}
@@ -905,15 +975,13 @@ class AddItemModal extends Component {
               </div>
 
               <div className="form-group" key={uuidv4()}>
-                <label htmlFor="add-ppp-logo" className="w-100">
+                <label htmlFor="add-cooperative-logo" className="w-100">
                   Logo hợp tác xã
                   <input
                     type="file"
                     className="form-control item"
-                    name="add-ppp-logo"
-                    placeholder="Ảnh đại diện của hợp tác xã"
+                    id="add-cooperative-logo"
                     data-field="logo"
-                    value={data.logo}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -923,13 +991,11 @@ class AddItemModal extends Component {
             <div className="modal-footer">
               <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
               <button
-                className="btn btn-info"
+                className="btn btn-primary"
                 type="button"
-                data-dismiss="modal"
-                data-toggle="modal"
-                data-target="#modal-add-addition-1"
+                onClick={this.handleDataSubmit}
               >
-                Tiếp theo
+                Lưu
               </button>
             </div>
           </div>
@@ -942,7 +1008,7 @@ class AddItemModal extends Component {
     const {
       fertilizerTitle,
       plantProtectionProductTitle,
-      cooperativeTitleTitle,
+      cooperativeTitle,
     } = this.typeNames;
     let renderDOM;
 
@@ -954,7 +1020,7 @@ class AddItemModal extends Component {
           </React.Fragment>
         );
         break;
-      case cooperativeTitleTitle:
+      case cooperativeTitle:
         renderDOM = (
           <React.Fragment>
             {this.renderMainModalCooperatives()}
