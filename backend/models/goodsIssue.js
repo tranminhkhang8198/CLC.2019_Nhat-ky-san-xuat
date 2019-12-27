@@ -290,10 +290,22 @@ class GoodsIssue {
         try {
             const goodsIssueCollection = this.app.db.collection('goodsIssues');
 
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                const message = {
+                    errorMessage: 'Id không hợp lệ',
+                    code: 500
+                }
+
+                return cb(message, null);
+            }            
+
             const goodsIssue = await goodsIssueCollection.findOne({ _id: mongoose.Types.ObjectId(id) });
 
             if (!goodsIssue) {
-                const message = "Hóa đơn xuất kho không tồn tại"
+                const message = {
+                    errorMessage: "Hóa đơn xuất kho không tồn tại",
+                    code: 404
+                }
                 return cb(message, null);
             }
 
@@ -304,28 +316,77 @@ class GoodsIssue {
         }
     }
 
-    async deleteById(id, cb = () => { }) {
-        try {
-            const goodsIssueCollection = this.app.db.collection('goodsIssues');
+    deleteById(id, cb = () => { }) {
+        const goodsIssueCollection = this.app.db.collection('goodsIssues');
 
-            const goodsIssue = await goodsIssueCollection.findOne({ _id: mongoose.Types.ObjectId(id) });
+        this.findById(id, async (err, res) => {
+            if (err) {
+                return cb(err, null);
+            }
 
-            if (!goodsIssue) {
-                const message = "Hóa đơn xuất kho không tồn tại"
-                return cb(message, null);
-            } else {
+            try {
                 const goodsIssue = await goodsIssueCollection.deleteOne({ _id: mongoose.Types.ObjectId(id) });
-
                 const message = {
                     successMessage: "Hóa đơn được xóa thành công"
                 }
                 return cb(null, message);
+
+            } catch (err) {
+                return cb({ errorMessage: err, code: 500 }, null);
             }
-        } catch (err) {
-            return cb(err, null);
-        }
+
+        });
     }
 
+
+    async updateById(id, update, cb = () => { }) {
+        this.findById(id, (err, res) => {
+            if (err) {
+                return cb(err, null);
+
+            } else {
+                this.initWithObject(res);
+                let model = this.model;
+
+                // Update model
+                if (update._id) {
+                    delete update._id;
+                }
+                for (let key in update) {
+                    if (model[key]) {
+                        model[key] = update[key];
+                    }
+                }
+
+                // Validate
+                this.validate(model, async (errors) => {
+                    let messages = [];
+
+                    if (errors.length > 0) {
+                        _.each(errors, (err) => {
+                            messages.push(err.message);
+                        });
+
+                        return cb({ errorMessage: _.join(messages, ', '), code: 409 }, null);
+
+                    } else {
+                        // Update to database
+                        try {
+                            const goodsIssueCollection = this.app.db.collection('goodsIssues');
+                            const goodIssue = await goodsIssueCollection.update({ _id: mongoose.Types.ObjectId(id) }, model);
+
+                            this.findById(id, (err, res) => {
+                                return cb(null, res);
+                            });
+
+                        } catch (err) {
+                            return cb({ errorMessage: "Lỗi trong quá trình cập nhật", code: 500 }, null);
+                        }
+                    }
+                });
+            }
+        });
+    }
 }
 
 module.exports = GoodsIssue;

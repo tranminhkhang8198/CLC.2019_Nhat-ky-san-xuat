@@ -246,7 +246,15 @@ class PlantProtectionProduct {
         let responseToClient = {};
 
         if (query._id) {
-            query._id = mongoose.Types.ObjectId(query._id);
+            try {
+                query._id = mongoose.Types.ObjectId(query._id);
+            } catch (err) {
+                const message = {
+                    errorMessage: 'Id không hợp lệ',
+                    code: 500
+                }
+                return cb(message, null);
+            }
         }
 
         plantProtectionProduct.findOne(query, (err, res) => {
@@ -255,8 +263,12 @@ class PlantProtectionProduct {
             }
 
             if (!res) {
-                const errorMessage = "Không tìm thấy thuốc bảo vệ thực vật";
-                return cb(errorMessage, null);
+                const message = {
+                    errorMessage: "Không tìm thấy thuốc bảo vệ thực vật",
+                    code: 404
+                };
+
+                return cb(message, null);
             }
 
             responseToClient = res;
@@ -470,9 +482,13 @@ class PlantProtectionProduct {
             // process for update scopeOfUse if was submitted
             if (update.scopeOfUse) {
                 update.scopeOfUse.forEach(scopeOfUseElem => {
-                    const scopeOfUseId = mongoose.Types.ObjectId(
-                        scopeOfUseElem._id
-                    );
+                    try {
+                        const scopeOfUseId = mongoose.Types.ObjectId(
+                            scopeOfUseElem._id
+                        );
+                    } catch (err) {
+                        return cb(err, null);
+                    }
 
                     let scopeOfUseUpdate = {
                         ...scopeOfUseElem
@@ -487,9 +503,13 @@ class PlantProtectionProduct {
             // process for update scopeOfUse if was submitted
             if (update.registrationInfo) {
                 if (update.registrationInfo._id) {
-                    const registrationInfoId = mongoose.Types.ObjectId(
-                        update.registrationInfo._id
-                    );
+                    try {
+                        const registrationInfoId = mongoose.Types.ObjectId(
+                            update.registrationInfo._id
+                        );
+                    } catch (err) {
+                        return cb(err, null);
+                    }
 
                     let registrationInfoUpdate = {
                         ...update.registrationInfo
