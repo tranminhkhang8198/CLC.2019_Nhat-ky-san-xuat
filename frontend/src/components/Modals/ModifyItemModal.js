@@ -4,6 +4,12 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/jsx-fragments */
+/* eslint no-plusplus: [
+  "warn",
+  {
+      "allowForLoopAfterthoughts": true
+  }
+], */
 
 import React, { Component } from 'react';
 import uuidv4 from 'uuid';
@@ -14,7 +20,9 @@ class ModifyItemModal extends Component {
     super(props);
 
     // PPP type only
-    this.scopeOfUse = [{}];
+    this.scopeOfUse = [];
+    this.isScopeOfUseInitialized = false;
+    this.registrationInfo = {};
 
     this.submitData = {};
     this.typeNames = {
@@ -46,6 +54,8 @@ class ModifyItemModal extends Component {
       field,
       type: dataType,
       index: scopeOfUseIndex,
+      id,
+      totalScopeOfUse,
     } = target.dataset;
 
     const {
@@ -55,21 +65,35 @@ class ModifyItemModal extends Component {
     const {
       type,
     } = this.props;
+    console.log(field, dataType, value);
 
     if (type === this.typeNames.plantProtectionProductTitle) {
       if (dataType && dataType === 'scopeOfUse') {
+        if (this.isScopeOfUseInitialized === false) {
+          for (let object = 0; object < totalScopeOfUse; object++) {
+            this.scopeOfUse[object] = {};
+          }
+          this.isScopeOfUseInitialized = true;
+        }
+
         this.scopeOfUse[scopeOfUseIndex] = { ...this.scopeOfUse[scopeOfUseIndex] };
         this.scopeOfUse[scopeOfUseIndex][field] = value;
+        this.scopeOfUse[scopeOfUseIndex]._id = id;
+        this.submitData.scopeOfUse = [...this.scopeOfUse];
+      } else if (dataType && dataType === 'registrationInfo') {
+        this.registrationInfo[field] = value;
+        this.registrationInfo._id = id;
+        this.submitData.registrationInfo = { ...this.registrationInfo };
+      } else {
+        /**
+         * Assign inputed values to a containers to prevent re-rendering
+         * that leads to unfocused input elements
+         */
+        this.submitData[field] = value;
       }
-      this.submitData.scopeOfUse = [...this.scopeOfUse];
-    } else {
-      /**
-       * Assign inputed values to a containers to prevent re-rendering
-       * that leads to unfocused input elements
-       */
-      this.submitData[field] = value;
     }
-    console.log(this.submitData, scopeOfUseIndex);
+
+    console.log(this.submitData);
   }
 
   async handleDataSubmit(event) {
@@ -107,6 +131,7 @@ class ModifyItemModal extends Component {
     });
 
     const { data } = this.state;
+    console.log(data);
     try {
       const updateDataRequest = await axios({
         url: `${serverDomain}/api/${requestUrl}?_id=${id}`,
@@ -141,6 +166,8 @@ class ModifyItemModal extends Component {
                   data-field="plant"
                   data-type="scopeOfUse"
                   data-index={index}
+                  data-id={item._id}
+                  data-total-scope-of-use={scopeOfUseData.length}
                   defaultValue={item.plant ? `${item.plant}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
@@ -159,6 +186,8 @@ class ModifyItemModal extends Component {
                   data-field="pest"
                   data-type="scopeOfUse"
                   data-index={index}
+                  data-id={item._id}
+                  data-total-scope-of-use={scopeOfUseData.length}
                   defaultValue={item.pest ? `${item.pest}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
@@ -177,6 +206,8 @@ class ModifyItemModal extends Component {
                   data-field="dosage"
                   data-type="scopeOfUse"
                   data-index={index}
+                  data-id={item._id}
+                  data-total-scope-of-use={scopeOfUseData.length}
                   defaultValue={item.dosage ? `${item.dosage}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
@@ -192,11 +223,12 @@ class ModifyItemModal extends Component {
                 <textarea
                   className="form-control item"
                   rows="4"
-                  // value={item.usage ? `${item.usage}` : 'Rỗng'}
                   defaultValue={item.usage ? `${item.usage}` : 'Rỗng'}
                   data-field="usage"
                   data-type="scopeOfUse"
                   data-index={index}
+                  data-id={item._id}
+                  data-total-scope-of-use={scopeOfUseData.length}
                   onChange={(this.handleInputOnChange)}
                 />
               </div>
@@ -213,6 +245,8 @@ class ModifyItemModal extends Component {
                   data-field="phi"
                   data-type="scopeOfUse"
                   data-index={index}
+                  data-id={item._id}
+                  data-total-scope-of-use={scopeOfUseData.length}
                   defaultValue={item.phi ? `${item.phi}` : 'Rỗng'}
                   style={{ padding: 0 }}
                   onChange={(this.handleInputOnChange)}
@@ -348,6 +382,8 @@ class ModifyItemModal extends Component {
                         <input
                           className="form-control-plaintext p-0"
                           type="text"
+                          data-id={item.registrationInfo._id}
+                          data-type="registrationInfo"
                           data-field="registrationUnit"
                           defaultValue={item.registrationInfo.registrationUnit ? `${item.registrationInfo.registrationUnit}` : 'Rỗng'}
                           style={{ padding: 0 }}
@@ -364,6 +400,8 @@ class ModifyItemModal extends Component {
                         <input
                           className="form-control-plaintext p-0"
                           type="text"
+                          data-id={item.registrationInfo._id}
+                          data-type="registrationInfo"
                           data-field="registrationUnitAddress"
                           defaultValue={item.registrationInfo.registrationUnitAddress ? `${item.registrationInfo.registrationUnitAddress}` : 'Rỗng'}
                           style={{ padding: 0 }}
@@ -380,6 +418,8 @@ class ModifyItemModal extends Component {
                         <input
                           className="form-control-plaintext p-0"
                           type="text"
+                          data-id={item.registrationInfo._id}
+                          data-type="registrationInfo"
                           data-field="manufacturer"
                           defaultValue={item.registrationInfo.manufacturer ? `${item.registrationInfo.manufacturer}` : 'Rỗng'}
                           style={{ padding: 0 }}
@@ -396,6 +436,8 @@ class ModifyItemModal extends Component {
                         <input
                           className="form-control-plaintext p-0"
                           type="text"
+                          data-id={item.registrationInfo._id}
+                          data-type="registrationInfo"
                           data-field="manufacturerAddress"
                           defaultValue={item.registrationInfo.manufacturerAddress ? `${item.registrationInfo.manufacturerAddress}` : 'Rỗng'}
                           style={{ padding: 0 }}

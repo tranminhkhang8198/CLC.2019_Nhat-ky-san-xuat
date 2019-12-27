@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-interactive-element-to-noninteractive-role */
+/* eslint-disable import/no-unresolved */
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 import Pagination from 'react-js-pagination';
