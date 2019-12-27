@@ -21,7 +21,7 @@ class AddItemModal extends Component {
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
       plantProtectionProductTitle: 'plantProtectionProduct',
-      cooperativeTitle: 'cooperative',
+      cooperativeTitleTitle: 'cooperative',
     };
 
     this.state = {
@@ -34,6 +34,8 @@ class AddItemModal extends Component {
 
     this.renderAdditionalPPP = this.renderAdditionalPPP.bind(this);
     this.renderMainModalPPP = this.renderMainModalPPP.bind(this);
+
+    this.renderMainModalCooperatives = this.renderMainModalCooperatives.bind(this);
 
     this.renderMainModalFertilizer = this.renderMainModalFertilizer.bind(this);
 
@@ -668,8 +670,280 @@ class AddItemModal extends Component {
     );
   }
 
+  renderMainModalCooperatives() {
+    const { data } = this.state;
+    return (
+      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">
+                Thêm mới hợp tác xã
+              </h4>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body modal-add-body">
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-name" className="w-100">
+                  Tên hợp tác xã
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    id="add-ppp-name"
+                    data-field="name"
+                    placeholder="Nhập vào tên hợp tác xã"
+                    value={data.name}
+                    onChange={(this.handleInputOnChange)}
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Ví dụ: Hợp tác xã U Minh Hạ
+                  </small>
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-foreignName" className="w-100">
+                  Tên tiếng Anh
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-foreignName"
+                    data-field="foreignName"
+                    onChange={this.handleInputOnChange}
+                    value={data.foreignName}
+                    placeholder="Nhập vào tên tiếng Anh của HTX"
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Ví dụ: Hop tac xa U Minh Ha
+                  </small>
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-abbreviationName" className="w-100">
+                  Tên viết tắt
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-abbreviationName"
+                    data-field="abbreviationName"
+                    placeholder="Tên viết tắt"
+                    value={data.abbreviationName}
+                    onChange={this.handleInputOnChange}
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Ví dụ: UMH
+                  </small>
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-cooperativeID" className="w-100">
+                  Mã hợp tác xã
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-cooperativeID"
+                    data-field="cooperativeID"
+                    placeholder="Mã hợp tác xã"
+                    value={data.cooperativeID}
+                    onChange={this.handleInputOnChange}
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Mặc định: Đang hoạt động
+                  </small>
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-surrgate" className="w-100">
+                  Người đại diện
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-surrgate"
+                    placeholder="Tên người đại diện cho hợp tác xã"
+                    data-field="surrgate"
+                    value={data.surrgate}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-director" className="w-100">
+                  Giám đốc hợp tác xã
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-director"
+                    placeholder="Tên giám đốc hợp tác xã"
+                    data-field="director"
+                    value={data.director}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-phone" className="w-100">
+                  Số điện thoại
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-phone"
+                    placeholder="Số điện thoại của hợp tác xã"
+                    data-field="phone"
+                    value={data.phone}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-representOffice" className="w-100">
+                  Văn phòng đại diện
+                  <span style={{ color: 'rgb(249,15,15)' }}>
+                    &nbsp;*
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-representOffice"
+                    placeholder="Địa chỉ văn phòng đại diện của hợp tác xã"
+                    data-field="representOffice"
+                    value={data.representOffice}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-email" className="w-100">
+                  Thư điện tử
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-email"
+                    placeholder="Thư điện tử của hợp tác xã"
+                    data-field="email"
+                    value={data.email}
+                    onChange={this.handleInputOnChange}
+                  />
+                  <small className="form-text text-muted" key={uuidv4()}>
+                    Ví dụ: htxuminh@gmail.com
+                  </small>
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-website" className="w-100">
+                  Địa chỉ website
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-website"
+                    placeholder="Địa chỉ website của hợp tác xã"
+                    data-field="website"
+                    value={data.website}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-fax" className="w-100">
+                  Địa chỉ FAX
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-fax"
+                    placeholder="Địa chỉ FAX của hợp tác xã"
+                    data-field="fax"
+                    value={data.fax}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-tax" className="w-100">
+                  Mã số thuế
+                  <input
+                    type="text"
+                    className="form-control item"
+                    name="add-ppp-tax"
+                    placeholder="Mã số thuế"
+                    data-field="tax"
+                    value={data.tax}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+              <div className="form-group" key={uuidv4()}>
+                <label htmlFor="add-ppp-logo" className="w-100">
+                  Logo hợp tác xã
+                  <input
+                    type="file"
+                    className="form-control item"
+                    name="add-ppp-logo"
+                    placeholder="Ảnh đại diện của hợp tác xã"
+                    data-field="logo"
+                    value={data.logo}
+                    onChange={this.handleInputOnChange}
+                  />
+                </label>
+              </div>
+
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+              <button
+                className="btn btn-info"
+                type="button"
+                data-dismiss="modal"
+                data-toggle="modal"
+                data-target="#modal-add-addition-1"
+              >
+                Tiếp theo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   renderModals(modalType) {
-    const { fertilizerTitle, plantProtectionProductTitle } = this.typeNames;
+    const {
+      fertilizerTitle,
+      plantProtectionProductTitle,
+      cooperativeTitleTitle,
+    } = this.typeNames;
     let renderDOM;
 
     switch (modalType) {
@@ -677,6 +951,13 @@ class AddItemModal extends Component {
         renderDOM = (
           <React.Fragment>
             {this.renderMainModalFertilizer()}
+          </React.Fragment>
+        );
+        break;
+      case cooperativeTitleTitle:
+        renderDOM = (
+          <React.Fragment>
+            {this.renderMainModalCooperatives()}
           </React.Fragment>
         );
         break;
