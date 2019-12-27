@@ -1909,493 +1909,6 @@ exports.routers = app => {
     });
 
 
-
-    // *************************************************************************** //
-    // ROUTES FOR PLANT PROTECTION PRODUCT WAREHOUSE
-
-    /**
-     * @api {post} /api/warehouse/plant-protection-products Create new plant protection product warehouse
-     * @apiName CreatePlantProtectionProductWarehouse
-     * @apiGroup PlantProtectionProductWarehouses
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products
-     *
-     * @apiHeader {String} authorization Token.
-     *
-     * @apiParam {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiParam {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiParam {Number} quantity Số lượng
-     * @apiParam {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiParam {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiParam {String} distributionAgent Đại lý phân phối
-     * @apiParam {Number} quarantineDate Thời gian cách ly
-     *
-     * @apiParamExample {json} Request-Example:
-     * {
-     *     "plantProtectionProductId": "5df20540e2b16e4d09842e26",
-     *     "tradeDate": "2019-01-14",
-     *     "quantity": "2",
-     *     "manufacturingDate": "2019-02-18",
-     *     "expiryDate": "2019-04-28",
-     *     "distributionAgent": "Cty Thuoc Diet Co",
-     *     "quarantineDate": "2",
-     *     "cooperativeId": "HTXUMH3"
-     * }
-     *
-     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSuccess {Number} quantity Số lượng
-     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSuccess {String} distributionAgent Đại lý phân phối
-     * @apiSuccess {Number} quarantineDate Thời gian cách ly
-     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
-     *
-     *
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *     "plantProtectionProductId": "5df20540e2b16e4d09842e26",
-     *     "tradeDate": "2019-01-14",
-     *     "quantity": "2",
-     *     "manufacturingDate": "2019-02-18",
-     *     "expiryDate": "2019-04-28",
-     *     "quarantineDate": "2",
-     *     "distributionAgent": "Cty Thuoc Diet Co",
-     *     "cooperativeId": "HTXUMH3",
-     *     "created": "2019-12-20T15:56:40.048Z",
-     *     "_id": "5dfcef3b83ec1418baf42a34"
-     * }
-     *
-     * @apiError plantProtectionProductId-is-required Trường id thuốc bvtv là bắt buộc
-     * @apiError CooperativeId-is-required Trường id hợp tác xã là bắt buộc
-     * @apiError tradeDate-must-be-a-date Trường tradeDate phải là ngày với định dạng ISO8601
-     * @apiError manufacturingDate-must-be-a-date Trường manufacturingDate phải là ngày với định dạng ISO8601
-     * @apiError expiryDate-must-be-a-date Trường expiryDate phải là ngày với định dạng ISO8601
-     * @apiError quantity-must-be-a-number Trường quantity phải là số nguyên dương
-     * @apiError quarantineDate-must-be-a-number Trường quarantineDate phải là số nguyên dương
-     * @apiError plant-protection-product-not-found Không tìm thấy thuốc bảo vệ thực vật trong danh mục
-     * @apiError cooperative-not-found Không tìm thấy HTX 
-     * 
-     * @apiErrorExample Thuốc bvtv không tồn tại:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Thuốc bảo vệ thực vật không tồn tại trong danh mục"
-     *     }
-     * 
-     * @apiErrorExample Thiếu trường id thuốc bvtv:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Vui lòng nhập id thuốc bảo vệ thực vật"
-     *     }
-     * 
-     * @apiErrorExample HTX không tồn tại:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Hợp tác xã không tồn tại"
-     *     }
-     * 
-     * @apiErrorExample Thiếu trường id HTX:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Vui lòng nhập id họp tác xã"
-     *     }
-     * 
-     * @apiErrorExample Thiếu trường quantity:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Vui lòng nhập số lượng"
-     *     }
-     * 
-     * @apiErrorExample Trường quantity phải là số nguyên dương:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Số lượng phải là số nguyên dương"
-     *     }
-     * 
-     * @apiErrorExample Thiếu trường quarantineDate:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Vui lòng nhập thời gian cách ly"
-     *     }
-     * 
-     * @apiErrorExample Trường quarantineDate phải là số nguyên dương:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Thời gian cách ly phải là số nguyên dương"
-     *     }
-     * 
-     * @apiErrorExample Thiếu trường manufacturingDate:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Vui lòng nhập ngày sản xuất"
-     *     }
-     * 
-     * @apiErrorExample Trường manufacturingDate phải là định dạng ngày:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Ngày sản xuất không hợp lệ"
-     *     }
-     * 
-     * @apiErrorExample Thiếu trường expiryDate:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Vui lòng nhập hạn sử dụng"
-     *     }
-     * 
-     * @apiErrorExample Trường expiryDate phải là định dạng ngày:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Hạn sử dụng không hợp lệ"
-     *     }
-     * 
-     * @apiErrorExample Trường tradeDate phải là định dạng ngày:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Ngày mua không hợp lệ"
-     *     }
-     * 
-     *
-     * @apiPermission none
-     */
-
-    app.post('/api/warehouse/plant-protection-products', (req, res, next) => {
-        const body = req.body;
-
-        app.models.plantProtectionProductWarehouse.create(body, (err, info) => {
-            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
-        });
-    })
-
-
-    /**
-     * @api {get} /api/warehouse/plant-protection-products Get all plant protection product warehourses with pageNumber and nPerPage
-     * @apiName GetAllPlantProtectionProductWarehouses
-     * @apiGroup PlantProtectionProductWarehouses
-     * @apiExample {curl} Tìm kiếm tất cả thuốc bvtv và phân trang:
-     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products?pageNumber=1&nPerPage=20
-     * 
-     * @apiExample {curl} Tìm kiếm tất cả thuốc bvtv theo HTX và phân trang:
-     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20
-     *
-     * @apiHeader {String} authorization Token.
-     * 
-     * 
-     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
-     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
-     * @apiParam {String} cooperativeId Id của hợp tác xã
-     *
-     * @apiSuccess {Number} totalPages Tổng số lượng trang
-     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSuccess {Number} quantity Số lượng
-     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSuccess {String} distributionAgent Đại lý phân phối
-     * @apiSuccess {Number} quarantineDate Thời gian cách ly
-     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
-     *
-     *
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "totalPages": 10,
-     *      "data": [
-     *          {
-     *              "_id": "5dfd66fc2ea5880f577c38a4",
-     *              "plantProtectionProductId": "5df20540e2b16e4d09842e24",
-     *              "tradeDate": "2019-01-14",
-     *              "quantity": "2",
-     *              "manufacturingDate": "2019-02-18",
-     *              "expiryDate": "2019-04-28",
-     *              "quarantineDate": "2",
-     *              "distributionAgent": "Cty Thuoc Diet Co",
-     *              "cooperativeId": "HTXUMH3",
-     *              "created": "2019-12-21T00:25:12.075Z",
-     *              "plantProtectionProductName": "Abagold 55EC"
-     *          },
-     *          {
-     *              "_id": "5dfd67d3cdb9e2106e3df625",
-     *              "plantProtectionProductId": "5df20540e2b16e4d09842e2e",
-     *              "tradeDate": "2019-01-14",
-     *              "quantity": "2",
-     *              "manufacturingDate": "2019-02-18",
-     *              "expiryDate": "2019-04-28",
-     *              "quarantineDate": "2",
-     *              "distributionAgent": "Cty Thuoc Diet Co",
-     *              "cooperativeId": "HTXNN",
-     *              "created": "2019-12-21T00:31:12.409Z",
-     *              "plantProtectionProductName": "Aba-navi 5.5EC"
-     *          },
-     *          {
-     *              "_id": "5dfd67575953c80fe78f9645",
-     *              "plantProtectionProductId": "5df20540e2b16e4d09842e33",
-     *              "tradeDate": "2019-01-14",
-     *              "quantity": "2",
-     *              "manufacturingDate": "2019-02-18",
-     *              "expiryDate": "2019-04-28",
-     *              "quarantineDate": "2",
-     *              "distributionAgent": "Cty Thuoc Diet Co",
-     *              "cooperativeId": "HTXNN",
-     *              "created": "2019-12-21T00:28:03.627Z",
-     *              "plantProtectionProductName": "Abasuper 3.6EC"
-     *          }   
-     *          ...
-     *      ]
-     *      
-     *  }
-     * 
-     * @apiError Page-not-found Trang tìm kiếm không tồn tại
-     * 
-     * @apiErrorExample Page not found:
-     *     HTTP/1.1 404 Not found
-     *     {
-     *       "errorMessage": "Trang tìm kiếm không tồn tại"
-     *     }
-     * 
-     * @apiPermission none
-     */
-
-    app.get('/api/warehouse/plant-protection-products', (req, res, next) => {
-        const query = req.query;
-
-        app.models.plantProtectionProductWarehouse.find(query, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
-
-
-    /**
-     * @api {get} /api/warehouse/plant-protection-products/:id Get plant protection product warehourses by id
-     * @apiName GetPlantProtectionProductWarehousesById
-     * @apiGroup PlantProtectionProductWarehouses
-     * @apiExample {curl} Tìm kiếm thuốc bvtv trong kho theo id:
-     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
-     *
-     * @apiHeader {String} authorization Token.
-     * 
-     * 
-     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
-     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
-     * @apiParam {String} cooperativeId Id của hợp tác xã
-     *
-     *
-     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSuccess {Number} quantity Số lượng
-     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSuccess {String} distributionAgent Đại lý phân phối
-     * @apiSuccess {Number} quarantineDate Thời gian cách ly
-     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
-     *
-     *
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  [
-     *      {
-     *          "_id": "5dfd66fc2ea5880f577c38a4",
-     *          "plantProtectionProductId": "5df20540e2b16e4d09842e24",
-     *          "tradeDate": "2019-01-14",
-     *          "quantity": "2",
-     *          "manufacturingDate": "2019-02-18",
-     *          "expiryDate": "2019-04-28",
-     *          "quarantineDate": "2",
-     *          "distributionAgent": "Cty Thuoc Diet Co",
-     *          "cooperativeId": "HTXUMH3",
-     *          "created": "2019-12-21T00:25:12.075Z",
-     *          "plantProtectionProductName": "Abagold 55EC"
-     *      }
-     *  ]
-     * 
-     * @apiError Plant-protection-product-not-found Thuốc bvtv không tồn tại 
-     * 
-     * @apiErrorExample Plant protection product not found:
-     *     HTTP/1.1 404 Not found
-     *     {
-     *       "errorMessage": "Thuốc bảo vệ thực vật không tồn tại trong kho"
-     *     }
-     * 
-     * @apiPermission none
-     */
-
-    app.get('/api/warehouse/plant-protection-products/:id', (req, res, next) => {
-        const id = req.params.id;
-
-        app.models.plantProtectionProductWarehouse.findById(id, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
-
-
-    /**
-     * @api {delete} /api/warehouse/plant-protection-products/:id Delete plant protection product warehouse by id
-     * @apiName DeletePlantProtectionProductWarehouseById
-     * @apiGroup PlantProtectionProductWarehouses
-     *
-     * @apiExample {curl} Xóa thuốc bvtv trong kho theo _id:
-     *     curl -i http://localhost:3001//apiwarehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
-     * 
-     * 
-     * @apiHeader {String} authorization Token.
-     *
-     * @apiParam {String} _id Id của dữ liệu phân bón được lưu trong kho (NOT plantProtectionProductId)
-     * 
-     *
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *     "successMessage": "Thuốc bảo vệ thực vật được xóa khỏi kho thành công"
-     *  }
-     *
-     *
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     * {
-     *     "errorMessage": "Thuốc bảo vệ thực vật không tồn tại trong kho"
-     * }
-     *
-     * @apiPermission manager-admin
-     */
-
-    app.delete('/api/warehouse/plant-protection-products/:id', (req, res, next) => {
-        const id = req.params.id;
-
-        app.models.plantProtectionProductWarehouse.deleteById(id, (err, info) => {
-            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
-        });
-    });
-
-
-    /**
-     * @api {patch} /api/warehouse/plant-protection-products/:id Update plant protection product warehouse by id
-     * @apiName UpdatePlantProtectionProductWarehouseById
-     * @apiGroup PlantProtectionProductWarehouses
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4
-     *
-     * @apiHeader {String} authorization Token.
-     *
-     * @apiParam {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiParam {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiParam {Number} quantity Số lượng
-     * @apiParam {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiParam {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiParam {String} distributionAgent Đại lý phân phối
-     * @apiParam {Number} quarantineDate Thời gian cách ly
-     *
-     * @apiParamExample {json} Request-Example:
-     * {
-     *     {
-     *          "plantProtectionProductId": "5df20540e2b16e4d09842e2e",
-     *          "tradeDate": "2019-12-12",
-     *          "quantity": "99",
-     *          "manufacturingDate": "2019-12-12",
-     *          "expiryDate": "2020-12-12",
-     *          "distributionAgent": "updated",
-     *          "quarantineDate": "99",
-     *          "cooperativeId": "HTXNN"
-     *      }
-     * }
-     *
-     * @apiSuccess {String} plantProtectionProductId Id thuốc bảo vệ thực vật
-     * @apiSuccess {Date} tradeDate Ngày mua (ISO8601 Format)
-     * @apiSuccess {Number} quantity Số lượng
-     * @apiSuccess {Date} manufacturingDate Ngày sản xuất (ISO8601 Format)
-     * @apiSuccess {Date} expiryDate Hạn sử dụng (ISO8601 Format)
-     * @apiSuccess {String} distributionAgent Đại lý phân phối
-     * @apiSuccess {Number} quarantineDate Thời gian cách ly
-     * @apiSuccess {ObjectId} _id Id của dữ liệu thuốc vừa được thêm vào kho
-     * @apiSuccess {Date} created Thời gian dữ liệu mới được lưu vào db
-     *
-     *
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *     "_id": "5dfd66fc2ea5880f577c38a4",
-     *     "plantProtectionProductId": "5df20540e2b16e4d09842e2e",
-     *     "tradeDate": "2019-12-12",
-     *     "quantity": "99",
-     *     "manufacturingDate": "2019-12-12",
-     *     "expiryDate": "2020-12-12",
-     *     "quarantineDate": "99",
-     *     "distributionAgent": "updated",
-     *     "cooperativeId": "HTXNN",
-     *     "created": "2019-12-21T02:55:59.859Z"
-     * }
-     *
-     * @apiError tradeDate-must-be-a-date Trường tradeDate phải là ngày với định dạng ISO8601
-     * @apiError manufacturingDate-must-be-a-date Trường manufacturingDate phải là ngày với định dạng ISO8601
-     * @apiError expiryDate-must-be-a-date Trường expiryDate phải là ngày với định dạng ISO8601
-     * @apiError quantity-must-be-a-number Trường quantity phải là số nguyên dương
-     * @apiError quarantineDate-must-be-a-number Trường quarantineDate phải là số nguyên dương
-     * @apiError plant-protection-product-not-found Không tìm thấy thuốc bảo vệ thực vật trong danh mục
-     * @apiError cooperative-not-found Không tìm thấy HTX 
-     *  
-     * @apiErrorExample Thuốc bvtv không tồn tại:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Thuốc bảo vệ thực vật không tồn tại trong danh mục"
-     *     }
-     * 
-     * @apiErrorExample HTX không tồn tại:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Hợp tác xã không tồn tại"
-     *     }
-     *
-     * 
-     * @apiErrorExample Trường quantity phải là số nguyên dương:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Số lượng phải là số nguyên dương"
-     *     }
-     *
-     * 
-     * @apiErrorExample Trường quarantineDate phải là số nguyên dương:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Thời gian cách ly phải là số nguyên dương"
-     *     }
-     * 
-     * 
-     * @apiErrorExample Trường manufacturingDate phải là định dạng ngày:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Ngày sản xuất không hợp lệ"
-     *     }
-     * 
-     * @apiErrorExample Trường expiryDate phải là định dạng ngày:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Hạn sử dụng không hợp lệ"
-     *     }
-     * 
-     * @apiErrorExample Trường tradeDate phải là định dạng ngày:
-     *     HTTP/1.1 409 Conflict
-     *     {
-     *       "errorMessage": "Ngày mua không hợp lệ"
-     *     }
-     * 
-     *
-     * @apiPermission none
-     */
-
-    app.patch('/api/warehouse/plant-protection-products/:id', (req, res, next) => {
-        const id = req.params.id;
-        const update = req.body;
-
-        app.models.plantProtectionProductWarehouse.updateById(id, update, (err, info) => {
-            return err ? errorHandle(res, err, 400) : responseHandle(res, info);
-        });
-    });
-
-
-
-
     // *************************************************************************** //
     // ROUTES FOR SCOPE OF USE
     app.get("/api/scope-of-uses/plant-protection-products", (req, res, next) => {
@@ -2405,9 +1918,6 @@ exports.routers = app => {
             return err ? errorHandle(res, err, 404) : responseHandle(res, info);
         });
     });
-
-
-
 
 
     // *************************************************************************** //
@@ -2771,9 +2281,87 @@ exports.routers = app => {
     });
 
 
+
     // *************************************************************************** //
     // ROUTES FOR GOODSISSUE
 
+    /**
+     * @api {post} /api/goods-issues Create new fertilizer
+     * @apiName CreateFertilizer
+     * @apiGroup Fertilizers
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/fertilizers
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} ministry Bộ
+     * @apiParam {String} province Tỉnh
+     * @apiParam {String} enterprise Tên doanh nghiệp
+     * @apiParam {String} type Loại phân bón
+     * @apiParam {String} name Tên phân bón
+     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": ""
+     *  }
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5de75a92f4e889141cc24f7d",
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": "",
+     *      "created": "2019-12-04T07:04:50.974Z"
+     *  }
+     *
+     * @apiError Name-is-required Thiếu trường tên phân bón
+     * @apiError Fertilizer-exists Phân bón đã tồn tại
+     * @apiErrorExample Phân bón tồn tại:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Phân bón với tên '" + name + "' đã tồn tại"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường tên phân bón:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập tên phân bón"
+     *     }
+     * @apiPermission none
+     */
     app.post("/api/goods-issues", (req, res, next) => {
         const body = req.body;
 
