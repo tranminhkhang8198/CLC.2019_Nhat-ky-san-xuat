@@ -91,6 +91,12 @@ class ModifyItemModal extends Component {
          */
         this.submitData[field] = value;
       }
+    } else {
+      /**
+       * Assign inputed values to a containers to prevent re-rendering
+       * that leads to unfocused input elements
+       */
+      this.submitData[field] = value;
     }
 
     console.log(this.submitData);
