@@ -2281,9 +2281,87 @@ exports.routers = app => {
     });
 
 
+
     // *************************************************************************** //
     // ROUTES FOR GOODSISSUE
 
+    /**
+     * @api {post} /api/goods-issues Create new fertilizer
+     * @apiName CreateFertilizer
+     * @apiGroup Fertilizers
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/fertilizers
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} ministry Bộ
+     * @apiParam {String} province Tỉnh
+     * @apiParam {String} enterprise Tên doanh nghiệp
+     * @apiParam {String} type Loại phân bón
+     * @apiParam {String} name Tên phân bón
+     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": ""
+     *  }
+     *
+     * @apiSuccess {String} ministry Bộ
+     * @apiSuccess {String} province Tỉnh
+     * @apiSuccess {String} enterprise Tên doanh nghiệp
+     * @apiSuccess {String} type Loại phân bón
+     * @apiSuccess {String} name Tên phân bón
+     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
+     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5de75a92f4e889141cc24f7d",
+     *      "ministry": "Công thương",
+     *      "province": "Bà Rịa - Vũng Tàu",
+     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
+     *      "type": "Phân vô cơ",
+     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
+     *      "ingredient": "",
+     *      "lawDocument": "",
+     *      "isoCertOrganization": "",
+     *      "manufactureAndImport": "",
+     *      "created": "2019-12-04T07:04:50.974Z"
+     *  }
+     *
+     * @apiError Name-is-required Thiếu trường tên phân bón
+     * @apiError Fertilizer-exists Phân bón đã tồn tại
+     * @apiErrorExample Phân bón tồn tại:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Phân bón với tên '" + name + "' đã tồn tại"
+     *     }
+     * 
+     * @apiErrorExample Thiếu trường tên phân bón:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập tên phân bón"
+     *     }
+     * @apiPermission none
+     */
     app.post("/api/goods-issues", (req, res, next) => {
         const body = req.body;
 
