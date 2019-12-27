@@ -6,6 +6,12 @@
 /* eslint-disable react/jsx-fragments */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
+/* eslint no-plusplus: [
+  "warn",
+  {
+      "allowForLoopAfterthoughts": true
+  }
+], */
 
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
@@ -31,6 +37,9 @@ class AddItemModal extends Component {
     this.state = {
       data: {},
       serverDomain: 'http://localhost:3001',
+      ppp: {
+        currentScopeOfUse: 1,
+      },
     };
 
     this.handleInputOnChange = this.handleInputOnChange.bind(this);
@@ -495,6 +504,115 @@ class AddItemModal extends Component {
   }
 
   renderAdditionalPPP() {
+    const scopeOfUseDOM = [];
+
+    const {
+      ppp,
+    } = this.state;
+
+    const {
+      currentScopeOfUse,
+    } = ppp;
+
+    for (let i = 0; i < currentScopeOfUse; i += 1) {
+      scopeOfUseDOM.push(
+        <React.Fragment key={uuidv4()}>
+          <h3> Tác dụng của thuốc </h3>
+          <div className="form-group" key={uuidv4()}>
+            <label htmlFor="add-ppp-plant-name" className="w-100">
+              Tên cây tác thuốc tác dụng
+              <span style={{ color: 'rgb(249,15,15)' }}>
+                &nbsp;*
+              </span>
+              <input
+                type="text"
+                id="add-ppp-plant-name"
+                className="form-control item"
+                placeholder="Nhập vào tên cây thuốc tác dụng"
+                data-field="plant"
+                onChange={this.handleInputOnChange}
+              />
+            </label>
+          </div>
+
+          <div className="form-group" key={uuidv4()}>
+            <label htmlFor={`add-ppp-pest-${i}`} className="w-100">
+              Sâu bọ diệt trừ
+              <input
+                type="text"
+                className="form-control item"
+                placeholder="Nhập vào tên sâu bọ khắc chế"
+                id={`add-ppp-pest-${i}`}
+                data-field={`pest-${i}`}
+                onChange={this.handleInputOnChange}
+              />
+            </label>
+          </div>
+
+          <div className="form-group" key={uuidv4()}>
+            <label htmlFor={`add-ppp-dosage-${i}`} className="w-100">
+              Liều lượng
+              <input
+                type="text"
+                className="form-control item"
+                placeholder="Liều lượng sử dụng"
+                id={`add-ppp-dosage-${i}`}
+                data-field={`dosage-${i}`}
+                onChange={this.handleInputOnChange}
+              />
+            </label>
+          </div>
+
+          <div className="form-group" key={uuidv4()}>
+            <label htmlFor={`add-ppp-phi-${i}`} className="w-100">
+              Phi
+              <span style={{ color: 'rgb(249,15,15)' }}>
+                &nbsp;*
+              </span>
+              <input
+                type="number"
+                className="form-control item"
+                placeholder="Nhập vào độ phi"
+                id={`add-ppp-phi-${i}`}
+                data-field={`phi-${i}`}
+                onChange={this.handleInputOnChange}
+              />
+            </label>
+          </div>
+
+          <div className="form-group" key={uuidv4()}>
+            <label htmlFor={`add-ppp-usage-${i}`} className="w-100">
+              Cách sử dụng
+              <textarea
+                rows="4"
+                className="form-control item"
+                placeholder="Mô tả cách sử dụng chi tiết"
+                id={`add-ppp-usage-${i}`}
+                data-field={`usage-${i}`}
+                onChange={this.handleInputOnChange}
+              />
+            </label>
+          </div>
+          {i >= 1 ? (
+            <button
+              className="btn btn-danger w-100"
+              type="button"
+              onClick={() => {
+                this.setState({
+                  ppp: {
+                    currentScopeOfUse: currentScopeOfUse - 1,
+                  },
+                });
+              }}
+            >
+              Xóa ô này
+            </button>
+          ) : null}
+          <hr />
+        </React.Fragment>,
+      );
+    }
+
     return (
       <React.Fragment>
         <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add-addition-1">
@@ -611,81 +729,20 @@ class AddItemModal extends Component {
                 </button>
               </div>
               <div className="modal-body modal-add-body">
-                <fieldset>
-                  <legend>Tác dụng:</legend>
-                  <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="add-ppp-plant-name" className="w-100">
-                      Tên cây tác thuốc tác dụng
-                      <span style={{ color: 'rgb(249,15,15)' }}>
-                        &nbsp;*
-                      </span>
-                      <input
-                        type="text"
-                        id="add-ppp-plant-name"
-                        className="form-control item"
-                        placeholder="Nhập vào tên cây thuốc tác dụng"
-                        data-field="plant"
-                        onChange={this.handleInputOnChange}
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="add-ppp-pest" className="w-100">
-                      Sâu bọ diệt trừ
-                      <input
-                        type="text"
-                        id="add-ppp-pest"
-                        className="form-control item"
-                        placeholder="Nhập vào tên sâu bọ khắc chế"
-                        data-field="pest"
-                        onChange={this.handleInputOnChange}
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="add-ppp-dosage" className="w-100">
-                      Liều lượng
-                      <input
-                        type="text"
-                        id="add-ppp-dosage"
-                        className="form-control item"
-                        placeholder="Liều lượng sử dụng"
-                        data-field="dosage"
-                        onChange={this.handleInputOnChange}
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="add-ppp-phi" className="w-100">
-                      Phi
-                      <span style={{ color: 'rgb(249,15,15)' }}>
-                        &nbsp;*
-                      </span>
-                      <input
-                        type="number"
-                        className="form-control item"
-                        id="add-ppp-phi"
-                        placeholder="Nhập vào độ phi"
-                        data-field="phi"
-                        onChange={this.handleInputOnChange}
-                      />
-                    </label>
-                  </div>
-                  <div className="form-group" key={uuidv4()}>
-                    <label htmlFor="add-ppp-usage" className="w-100">
-                      Cách sử dụng
-                      <textarea
-                        rows="4"
-                        id="add-ppp-usage"
-                        className="form-control item"
-                        placeholder="Mô tả cách sử dụng chi tiết"
-                        data-field="usage"
-                        onChange={this.handleInputOnChange}
-                      />
-                    </label>
-                  </div>
-                </fieldset>
-                {/* <button className="btn btn-info w-100" type="button">Thêm mới</button> */}
+                {scopeOfUseDOM}
+                <button
+                  className="btn btn-info w-100"
+                  type="button"
+                  onClick={() => {
+                    this.setState({
+                      ppp: {
+                        currentScopeOfUse: currentScopeOfUse + 1,
+                      },
+                    });
+                  }}
+                >
+                  Thêm tác dụng khác
+                </button>
               </div>
               <div className="modal-footer">
                 <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>

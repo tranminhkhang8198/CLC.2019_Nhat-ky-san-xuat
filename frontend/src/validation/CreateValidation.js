@@ -32,14 +32,6 @@ export function validatePPPInput(input) {
     errors.push('Không được bỏ trống trường: Địa chỉ nhà sản xuất');
   }
 
-  if (!input['plant-name']) {
-    errors.push('Không được bỏ trống trường: Địa chỉ nhà sản xuất');
-  }
-
-  if (!input.phi) {
-    errors.push('Không được bỏ trống trường: Độ phi của thuốc');
-  }
-
   return errors;
 }
 
