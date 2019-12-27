@@ -19,8 +19,10 @@ import axios from 'axios';
 
 import {
   validatePPPInput,
+  // validateScopeOfUsePPPInput,
   validateFertilizerInput,
   validateCooperativeInput,
+  validateScopeOfUsePPPInput,
 } from '../../validation/CreateValidation';
 
 class AddItemModal extends Component {
@@ -42,6 +44,11 @@ class AddItemModal extends Component {
       },
     };
 
+    // PPP only
+    this.registrationInfo = {};
+    this.scopeOfUse = [];
+    this.isPPPInilialized = false;
+
     this.handleInputOnChange = this.handleInputOnChange.bind(this);
     this.handleDataSubmit = this.handleDataSubmit.bind(this);
 
@@ -57,18 +64,45 @@ class AddItemModal extends Component {
 
   handleInputOnChange(event) {
     const {
+      target,
+    } = event;
+
+    const {
       field,
-    } = event.target.dataset;
+      type: dataType,
+      scopeOfUseIndex,
+    } = target.dataset;
 
     const {
       value,
-    } = event.target;
+    } = target;
 
-    /**
-     * Assign inputed values to a containers to prevent re-rendering
-     * that leads to unfocused input elements
-     */
-    this.submitData[field] = value;
+    const {
+      type,
+    } = this.props;
+
+    if (type === this.typeNames.plantProtectionProductTitle) {
+      if (dataType && dataType === 'scopeOfUse') {
+        this.scopeOfUse[scopeOfUseIndex] = { ...this.scopeOfUse[scopeOfUseIndex] };
+        this.scopeOfUse[scopeOfUseIndex][field] = value;
+        this.submitData.scopeOfUse = [...this.scopeOfUse];
+      } else if (dataType && dataType === 'registrationInfo') {
+        this.registrationInfo[field] = value;
+        this.submitData.registrationInfo = { ...this.registrationInfo };
+      } else {
+        /**
+         * Assign inputed values to a containers to prevent re-rendering
+         * that leads to unfocused input elements
+         */
+        this.submitData[field] = value;
+      }
+    } else {
+      /**
+       * Assign inputed values to a containers to prevent re-rendering
+       * that leads to unfocused input elements
+       */
+      this.submitData[field] = value;
+    }
     console.log(this.submitData);
   }
 
@@ -98,20 +132,6 @@ class AddItemModal extends Component {
           return;
         }
 
-        await this.setState({
-          data: {
-            name: this.submitData.name,
-            type: this.submitData.type,
-            ingredient: this.submitData.ingredient,
-            ministry: this.submitData.ministry,
-            province: this.submitData.province,
-            lawDocument: this.submitData.lawDocument,
-            enterprise: this.submitData.enterprise,
-            isoCertOrganization: this.submitData.isoCertOrganization,
-            manufactureAndImport: this.submitData.manufactureAndImport,
-          },
-        });
-
         break;
       case plantProtectionProductTitle:
         requestUrl = 'plant-protection-products';
@@ -124,31 +144,6 @@ class AddItemModal extends Component {
           return;
         }
 
-        await this.setState({
-          data: {
-            name: this.submitData.name,
-            activeIngredient: this.submitData.activeIngredient,
-            content: this.submitData.content,
-            plantProtectionProductGroup: this.submitData.plantProtectionProductGroup,
-            ghs: parseInt(this.submitData.ghs, 10),
-            who: parseInt(this.submitData.who, 10),
-            scopeOfUse: [
-              {
-                plant: this.submitData.plant,
-                pest: this.submitData.pest,
-                dosage: this.submitData.dosage,
-                usage: this.submitData.usage,
-                phi: parseInt(this.submitData.phi, 10),
-              },
-            ],
-            registrationInfo: {
-              registrationUnit: this.submitData.registrationUnit,
-              registrationUnitAddress: this.submitData.registrationUnitAddress,
-              manufacturer: this.submitData.manufacturer,
-              manufacturerAddress: this.submitData.manufacturerAddress,
-            },
-          },
-        });
         break;
       case cooperativeTitle:
         requestUrl = 'cooperatives';
@@ -162,31 +157,17 @@ class AddItemModal extends Component {
           return;
         }
 
-        await this.setState({
-          data: {
-            name: this.submitData.name,
-            foreignName: this.submitData.foreignName,
-            abbreviationName: this.submitData.abbreviationName,
-            cooperativeID: this.submitData.cooperativeID,
-            surrgate: this.submitData.surrgate,
-            director: this.submitData.director,
-            representOffice: this.submitData.representOffice,
-            status: this.submitData.status || 'Đang hoạt động',
-            address: this.submitData.address,
-            phone: this.submitData.phone,
-            tax: this.submitData.tax,
-            email: this.submitData.email,
-            fax: this.submitData.fax,
-            website: this.submitData.website,
-            logo: this.submitData.logo,
-          },
-        });
+        this.submitData.status = this.submitData.status || 'Đang hoạt động';
 
         break;
       default:
         console.log('.');
         break;
     }
+
+    await this.setState({
+      data: this.submitData,
+    });
 
     const { data } = this.state;
     console.log(data);
@@ -374,7 +355,14 @@ class AddItemModal extends Component {
   }
 
   renderMainModalPPP() {
-    const { data } = this.state;
+    const {
+      name,
+      activeIngredient,
+      content,
+      plantProtectionProductGroup,
+      ghs,
+      who,
+    } = this.submitData;
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
@@ -400,7 +388,7 @@ class AddItemModal extends Component {
                     id="add-ppp-name"
                     data-field="name"
                     placeholder="Nhập vào tên thuốc bảo vệ thực vật"
-                    value={data.name}
+                    value={name}
                     onChange={(this.handleInputOnChange)}
                   />
                 </label>
@@ -417,7 +405,7 @@ class AddItemModal extends Component {
                     id="add-ppp-activeIngredient"
                     data-field="activeIngredient"
                     onChange={this.handleInputOnChange}
-                    value={data.activeIngredient}
+                    value={activeIngredient}
                     placeholder="Nhập vào tên hoạt chất"
                   />
                 </label>
@@ -434,7 +422,7 @@ class AddItemModal extends Component {
                     id="add-ppp-content"
                     data-field="content"
                     placeholder="Hàm lượng sử dụng của thuốc"
-                    value={data.content}
+                    value={content}
                     onChange={this.handleInputOnChange}
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -451,7 +439,7 @@ class AddItemModal extends Component {
                     id="add-ppp-plantProtectionProductGroup"
                     placeholder="Nhập vào tên nhóm thuốc"
                     data-field="plantProtectionProductGroup"
-                    value={data.plantProtectionProductGroup}
+                    value={plantProtectionProductGroup}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -465,7 +453,7 @@ class AddItemModal extends Component {
                     id="add-ppp-ghs"
                     placeholder="Nhập vào nhóm độc GHS"
                     data-field="ghs"
-                    value={data.ghs}
+                    value={ghs}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -479,7 +467,7 @@ class AddItemModal extends Component {
                     id="add-ppp-who"
                     placeholder="Nhập vào nhóm độc WHO"
                     data-field="who"
-                    value={data.who}
+                    value={who}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -504,8 +492,6 @@ class AddItemModal extends Component {
   }
 
   renderAdditionalPPP() {
-    const scopeOfUseDOM = [];
-
     const {
       ppp,
     } = this.state;
@@ -513,6 +499,38 @@ class AddItemModal extends Component {
     const {
       currentScopeOfUse,
     } = ppp;
+
+    /**
+     * Initialize necessary properties of PPP type
+     */
+    if (this.isPPPInilialized === false) {
+      this.submitData.registrationInfo = {};
+      this.submitData.scopeOfUse = [];
+      this.isPPPInilialized = true;
+    }
+
+    /**
+     * Initialize object for each element in scopeOfUse array
+     */
+    for (let i = 0; i < currentScopeOfUse; i += 1) {
+      if (typeof this.submitData.scopeOfUse[i] !== 'object') {
+        this.submitData.scopeOfUse[i] = {};
+      }
+    }
+
+    const {
+      registrationInfo,
+      scopeOfUse,
+    } = this.submitData;
+
+    const {
+      registrationUnit,
+      registrationUnitAddress,
+      manufacturer,
+      manufacturerAddress,
+    } = registrationInfo;
+
+    const scopeOfUseDOM = [];
 
     for (let i = 0; i < currentScopeOfUse; i += 1) {
       scopeOfUseDOM.push(
@@ -530,6 +548,10 @@ class AddItemModal extends Component {
                 className="form-control item"
                 placeholder="Nhập vào tên cây thuốc tác dụng"
                 data-field="plant"
+                data-type="scopeOfUse"
+                data-scope-of-use-index={i}
+                value={scopeOfUse[i].plant}
+                disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
             </label>
@@ -543,7 +565,11 @@ class AddItemModal extends Component {
                 className="form-control item"
                 placeholder="Nhập vào tên sâu bọ khắc chế"
                 id={`add-ppp-pest-${i}`}
-                data-field={`pest-${i}`}
+                data-field="pest"
+                data-type="scopeOfUse"
+                data-scope-of-use-index={i}
+                value={scopeOfUse[i].pest}
+                disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
             </label>
@@ -556,8 +582,11 @@ class AddItemModal extends Component {
                 type="text"
                 className="form-control item"
                 placeholder="Liều lượng sử dụng"
-                id={`add-ppp-dosage-${i}`}
-                data-field={`dosage-${i}`}
+                data-field="dosage"
+                data-type="scopeOfUse"
+                data-scope-of-use-index={i}
+                value={scopeOfUse[i].dosage}
+                disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
             </label>
@@ -574,7 +603,11 @@ class AddItemModal extends Component {
                 className="form-control item"
                 placeholder="Nhập vào độ phi"
                 id={`add-ppp-phi-${i}`}
-                data-field={`phi-${i}`}
+                data-field="phi"
+                data-type="scopeOfUse"
+                data-scope-of-use-index={i}
+                value={scopeOfUse[i].phi}
+                disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
             </label>
@@ -588,26 +621,15 @@ class AddItemModal extends Component {
                 className="form-control item"
                 placeholder="Mô tả cách sử dụng chi tiết"
                 id={`add-ppp-usage-${i}`}
-                data-field={`usage-${i}`}
+                data-field="usage"
+                data-type="scopeOfUse"
+                data-scope-of-use-index={i}
+                value={scopeOfUse[i].usage}
+                disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
             </label>
           </div>
-          {i >= 1 ? (
-            <button
-              className="btn btn-danger w-100"
-              type="button"
-              onClick={() => {
-                this.setState({
-                  ppp: {
-                    currentScopeOfUse: currentScopeOfUse - 1,
-                  },
-                });
-              }}
-            >
-              Xóa ô này
-            </button>
-          ) : null}
           <hr />
         </React.Fragment>,
       );
@@ -639,6 +661,8 @@ class AddItemModal extends Component {
                       className="form-control item"
                       placeholder="Nhập vào tên cửa hàng"
                       data-field="registrationUnit"
+                      data-type="registrationInfo"
+                      value={registrationUnit}
                       onChange={this.handleInputOnChange}
                     />
                   </label>
@@ -653,8 +677,10 @@ class AddItemModal extends Component {
                       type="text"
                       id="add-ppp-registrationUnitAddress"
                       className="form-control item"
+                      value={registrationUnitAddress}
                       placeholder="Nhập vào địa chỉ cửa hàng"
                       data-field="registrationUnitAddress"
+                      data-type="registrationInfo"
                       onChange={this.handleInputOnChange}
                     />
                   </label>
@@ -669,15 +695,17 @@ class AddItemModal extends Component {
                       type="text"
                       id="add-ppp-manufacturer"
                       className="form-control item"
+                      value={manufacturer}
                       placeholder="Nhà sản xuất"
                       data-field="manufacturer"
+                      data-type="registrationInfo"
                       onChange={this.handleInputOnChange}
                     />
                   </label>
                 </div>
                 <div className="form-group" key={uuidv4()}>
                   <label htmlFor="add-ppp-manufacturerAddress" className="w-100">
-                    Địa chỉ cửa hàng
+                    Địa chỉ nhà sản xuất
                     <span style={{ color: 'rgb(249,15,15)' }}>
                       &nbsp;*
                     </span>
@@ -685,8 +713,10 @@ class AddItemModal extends Component {
                       type="text"
                       id="add-ppp-manufacturerAddress"
                       className="form-control item"
+                      value={manufacturerAddress}
                       placeholder="Nhập vào địa chỉ cửa hàng"
                       data-field="manufacturerAddress"
+                      data-type="registrationInfo"
                       onChange={this.handleInputOnChange}
                     />
                   </label>
@@ -734,6 +764,14 @@ class AddItemModal extends Component {
                   className="btn btn-info w-100"
                   type="button"
                   onClick={() => {
+                    const validationErrors = validateScopeOfUsePPPInput(this.submitData);
+
+                    if (validationErrors.length) {
+                      const errors = validationErrors.map((item) => `${item} \n`).toString().replace(/,/g, '');
+                      alert(errors);
+
+                      return;
+                    }
                     this.setState({
                       ppp: {
                         currentScopeOfUse: currentScopeOfUse + 1,

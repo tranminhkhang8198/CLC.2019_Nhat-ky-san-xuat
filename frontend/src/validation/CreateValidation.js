@@ -1,5 +1,21 @@
 /* eslint-disable import/prefer-default-export */
 
+export function validateScopeOfUsePPPInput(input) {
+  const errors = [];
+
+  input.scopeOfUse.forEach((item) => {
+    if (!item.phi) {
+      errors.push('Không được bỏ trống trường: Phi');
+    }
+
+    if (!item.plant) {
+      errors.push('Không được bỏ trống trường: Tên cây mà thuốc tác dụng');
+    }
+  });
+
+  return errors;
+}
+
 export function validatePPPInput(input) {
   const errors = [];
 
@@ -16,21 +32,31 @@ export function validatePPPInput(input) {
   }
 
   // REGISTRATION
-  if (!input.registrationUnit) {
+  if (!input.registrationInfo.registrationUnit) {
     errors.push('Không được bỏ trống trường: Tên cửa hàng');
   }
 
-  if (!input.registrationAddress) {
+  if (!input.registrationInfo.registrationUnitAddress) {
     errors.push('Không được bỏ trống trường: Địa chỉ cửa hàng');
   }
 
-  if (!input.manufacturer) {
+  if (!input.registrationInfo.manufacturer) {
     errors.push('Không được bỏ trống trường: Nhà sản xuất');
   }
 
-  if (!input.manufacturerAddress) {
+  if (!input.registrationInfo.manufacturerAddress) {
     errors.push('Không được bỏ trống trường: Địa chỉ nhà sản xuất');
   }
+
+  input.scopeOfUse.forEach((item) => {
+    if (!item.phi) {
+      errors.push('Không được bỏ trống các trường: Phi');
+    }
+
+    if (!item.plant) {
+      errors.push('Không được bỏ trống các trường: Tên cây thuốc tác dụng');
+    }
+  });
 
   return errors;
 }
