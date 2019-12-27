@@ -9,7 +9,6 @@ const Diary = require('./diary');
 const ScopeOfUse = require('./scopeOfUse');
 const Fertilizer = require('./fertilizer');
 const Field = require('./field');
-const PlantProtectionProductWarehouse = require('./plantProtectionProductWarehouse');
 const GoodsIssue = require('./goodsIssue');
 const GoodsReceipt = require('./goodsReceipt');
 const Employee = require('./employee');
@@ -27,8 +26,7 @@ class Model {
     this.scopeOfUse = new ScopeOfUse(app);
     this.fertilizer = new Fertilizer(app);
     this.diary = new Diary(app);
-    this.field = new Field(app)
-    this.plantProtectionProductWarehouse = new PlantProtectionProductWarehouse(app);
+    this.field = new Field(app);
     this.goodsIssue = new GoodsIssue(app);
     this.goodsReceipt = new GoodsReceipt(app);
     this.employee = new Employee(app);
