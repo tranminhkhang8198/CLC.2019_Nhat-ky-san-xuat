@@ -106,16 +106,33 @@ class Fertilizer {
         const pageNumber = query.pageNumber;
         const nPerPage = query.nPerPage;
 
-        fertilizer.find()
-            .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
-            .limit(Number(nPerPage))
-            .toArray((err, res) => {
-                if (err) {
-                    return cb(err, null)
+        let responseToClient = {};
+
+        fertilizer.find().count()
+            .then(count => {
+                const totalPages = ((count - (count % nPerPage)) / nPerPage) + 1;
+
+                responseToClient["totalProducts"] = count;
+
+                responseToClient["totalPages"] = totalPages;
+
+                return fertilizer
+                    .find()
+                    .skip(pageNumber > 0 ? ((pageNumber - 1) * nPerPage) : 0)
+                    .limit(Number(nPerPage))
+                    .toArray()
+            }).then(res => {
+                let length = res.length;
+                if (length == 0) {
+                    const message = "Trang tìm kiếm không tồn tại";
+                    return cb(message, null);
                 }
 
-                return cb(null, res);
+                responseToClient["data"] = res;
 
+                return cb(null, responseToClient);
+            }).catch(err => {
+                return cb(err, null);
             });
     }
 
@@ -125,7 +142,11 @@ class Fertilizer {
         const fertilizer = this.app.db.collection("fertilizer");
 
         if (query._id) {
-            query._id = mongoose.Types.ObjectId(query._id);
+            try {
+                query._id = mongoose.Types.ObjectId(query._id);
+            } catch (err) {
+                return cb({ errorMessage: 'id không hợp lệ', code: 500 }, null)
+            }
         }
 
         fertilizer.findOne(query, (err, res) => {
@@ -135,7 +156,7 @@ class Fertilizer {
 
             if (!res) {
                 const errorMessage = "Không tìm thấy thuốc bảo vệ thực vật";
-                return cb(errorMessage, null);
+                return cb({ errorMessage, code: 404 }, null);
             }
 
             return cb(null, res);
@@ -169,6 +190,10 @@ class Fertilizer {
 
     update(query, update, cb = () => { }) {
         const fertilizer = this.app.db.collection('fertilizer');
+
+        if (update._id) {
+            delete update._id;
+        }
 
         this.findByQuery(query, (err, res) => {
             if (err) {

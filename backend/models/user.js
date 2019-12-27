@@ -201,7 +201,7 @@ class User {
             phone: _.toString(_.get(user, 'phone')),
             email: _.trim(_.toLower(_.get(user, 'email', ''))),
             user: _.get(user, 'user', 'user'),
-            HTXId: _.get(user, 'HTXId'),
+            HTXId: _.get(user, 'HTXId', ''),
             password: _.get(user, 'password'),
             created: new Date(),
         };
