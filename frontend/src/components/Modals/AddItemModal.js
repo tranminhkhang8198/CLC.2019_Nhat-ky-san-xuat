@@ -21,7 +21,7 @@ class AddItemModal extends Component {
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
       plantProtectionProductTitle: 'plantProtectionProduct',
-      cooperative: 'cooperative',
+      cooperativeTitle: 'cooperative',
     };
 
     this.state = {
@@ -59,7 +59,7 @@ class AddItemModal extends Component {
   async handleDataSubmit() {
     let validationErrors;
     const { type } = this.props;
-    const { fertilizerTitle, plantProtectionProductTitle } = this.typeNames;
+    const { fertilizerTitle, plantProtectionProductTitle, cooperativeTitle } = this.typeNames;
     const { serverDomain } = this.state;
     let requestUrl = '';
 
@@ -128,7 +128,7 @@ class AddItemModal extends Component {
           },
         });
         break;
-      case 'cooperative':
+      case cooperativeTitle:
         break;
       default:
         console.log('.');
