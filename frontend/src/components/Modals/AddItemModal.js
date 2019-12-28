@@ -1018,15 +1018,29 @@ class AddItemModal extends Component {
               <div className="form-group" key={uuidv4()}>
                 <label htmlFor="add-cooperative-status" className="w-100">
                   Trạng thái hoạt động
-                  <input
-                    type="text"
+                  <select
                     className="form-control item"
                     id="add-cooperative-status"
-                    placeholder="Trạng thái hoạt động của hợp tác xã"
                     data-field="status"
+                    defaultChecked="Ngừng hoạt động"
                     defaultValue={data.status}
                     onChange={this.handleInputOnChange}
-                  />
+                  >
+                    <option
+                      date-field="status"
+                      key={uuidv4()}
+                      value="Đang hoạt động"
+                    >
+                      Đang hoạt động
+                    </option>
+                    <option
+                      date-field="status"
+                      key={uuidv4()}
+                      value="Ngừng hoạt động"
+                    >
+                      Ngừng hoạt động
+                    </option>
+                  </select>
                   <small className="form-text text-muted" key={uuidv4()}>
                     Mặc định: Đang hoạt động
                   </small>
