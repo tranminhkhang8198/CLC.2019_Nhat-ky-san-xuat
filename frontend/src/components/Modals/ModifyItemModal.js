@@ -28,6 +28,7 @@ class ModifyItemModal extends Component {
     this.typeNames = {
       fertilizerTitle: 'fertilizer',
       plantProtectionProductTitle: 'plantProtectionProduct',
+      cooperativeTitle: 'cooperative',
     };
 
     this.state = {
@@ -653,6 +654,190 @@ class ModifyItemModal extends Component {
                     data-dismiss="modal"
                     data-index={index}
                     data-id={item._id}
+                    onClick={this.handleDataSubmit}
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </React.Fragment>
+    );
+  }
+
+  renderMainModalCooperative() {
+    const { data } = this.props;
+    return (
+      <React.Fragment>
+        {data.length && data.map((item, index) => (
+          <div className="modal fade" role="dialog" key={uuidv4()} tabIndex={-1} id={`modal-modify-${index}`}>
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Chỉnh sửa thông tin hợp tác xã</h4>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body modal-modify-body">
+                  <div className="container" style={{ padding: 0 }}>
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Tên gọi của hợp tác xã</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.name}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Tên nước ngoài của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.foreignName}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Tên viết tắt</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.abbreviationName}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Logo của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <img
+                          src={itemData.logo}
+                          alt="Logo của HTX"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Thông tin trạng thái của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.status}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Mã số HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.cooperativeID}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Mã số thuế của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.tax}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Người đại diện</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.surrgate}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Giám đốc</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.director}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Địa chỉ của hợp tác xã</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.address}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Số điện thoại của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.phone}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Địa chỉ fax của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.fax}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Đia chỉ website của HTX</p>
+                      </div>
+                      <div className="col-8">
+                        <a href={itemData.website}>
+                          {itemData.website}
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Văn phòng đại diện</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.representOffice}</p>
+                      </div>
+                    </div>
+
+                    <div className="row" key={uuidv4()}>
+                      <div className="col-4">
+                        <p>Danh sách tài liệu</p>
+                      </div>
+                      <div className="col-8">
+                        <p>{itemData.docs}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-dark"
+                    type="button"
+                    data-dismiss="modal"
+                  >
+                    Đóng
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    data-dismiss="modal"
+                    data-id={item._id}
+                    data-index={index}
                     onClick={this.handleDataSubmit}
                   >
                     Lưu
