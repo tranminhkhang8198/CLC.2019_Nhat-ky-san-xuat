@@ -837,6 +837,7 @@ class AddItemModal extends Component {
     const {
       data,
     } = this.state;
+
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
@@ -925,7 +926,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-cooperativeID"
                     data-field="cooperativeID"
                     placeholder="Mã hợp tác xã"
-                    defaultValue={data.cooperativeID}
+                    defaultValue={data.cooperativeID || 'HTX'}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -1051,7 +1052,7 @@ class AddItemModal extends Component {
                 <label htmlFor="add-cooperative-email" className="w-100">
                   Thư điện tử
                   <input
-                    type="text"
+                    type="email"
                     className="form-control item"
                     id="add-cooperative-email"
                     placeholder="Thư điện tử của hợp tác xã"
