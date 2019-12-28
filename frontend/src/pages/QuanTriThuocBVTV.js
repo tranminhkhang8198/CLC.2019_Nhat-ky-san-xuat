@@ -124,7 +124,7 @@ class QuanTriThuocBVTV extends Component {
     return (
       <div className="container-fluid">
         <DeleteItemsModal type="plantProtectionProduct" data={data} parentComponent={this} />
-        <AddItemModal type="plantProtectionProduct" />
+        <AddItemModal type="plantProtectionProduct" parentComponent={this} />
         <div className="card shadow">
           <div className="card-header py-3">
             <p className="text-primary m-0 font-weight-bold">Danh sách thuốc bảo vệ thực vật</p>

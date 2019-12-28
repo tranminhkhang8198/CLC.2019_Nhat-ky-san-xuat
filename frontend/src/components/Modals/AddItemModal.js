@@ -42,6 +42,7 @@ class AddItemModal extends Component {
       ppp: {
         currentScopeOfUse: 1,
       },
+      // parent: props.parentComponent,
     };
 
     // PPP only
@@ -116,7 +117,10 @@ class AddItemModal extends Component {
       plantProtectionProductTitle,
       cooperativeTitle,
     } = this.typeNames;
-    const { serverDomain } = this.state;
+    const {
+      serverDomain,
+      // parent,
+    } = this.state;
     let requestUrl = '';
 
     switch (type) {
@@ -180,15 +184,34 @@ class AddItemModal extends Component {
 
       if (createDataRequest.status >= 200 && createDataRequest.status < 300) {
         alert('Tạo mới dữ liệu thành công');
+        // parent.setState(() => ({
+        //   refresh: true,
+        // }));
       }
+
+      return;
     } catch (submitError) {
-      console.log(submitError.response);
-      alert('Có lỗi không mong muốn đã xảy ra, báo cáo với quản trị viên!');
+      console.log(submitError);
+      const {
+        response,
+      } = submitError;
+
+      const {
+        data: errorData,
+      } = response;
+
+      const {
+        errorMessage,
+      } = errorData;
+
+      alert(errorMessage);
     }
   }
 
   renderMainModalFertilizer() {
-    const { data } = this.state;
+    const {
+      data,
+    } = this.state;
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
@@ -214,7 +237,7 @@ class AddItemModal extends Component {
                     id="add-fertilizer-name"
                     data-field="name"
                     placeholder="Tên phân bón"
-                    value={data.name}
+                    defaultValue={data.name}
                     onChange={(this.handleInputOnChange)}
                   />
                 </label>
@@ -245,7 +268,7 @@ class AddItemModal extends Component {
                     id="add-fertilizer-ingredient"
                     data-field="ingredient"
                     placeholder="Thành phần của phân bón"
-                    value={data.ingredient}
+                    defaultValue={data.ingredient}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -259,7 +282,7 @@ class AddItemModal extends Component {
                     id="add-fertilizer-ministry"
                     placeholder="Tên Bộ cấp phép sử dụng phân bón"
                     data-field="ministry"
-                    value={data.ministry}
+                    defaultValue={data.ministry}
                     onChange={this.handleInputOnChange}
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -276,7 +299,7 @@ class AddItemModal extends Component {
                     id="add-fertilizer-province"
                     placeholder="Tên tỉnh, thành sản xuất phân bón"
                     data-field="province"
-                    value={data.province}
+                    defaultValue={data.province}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -343,6 +366,7 @@ class AddItemModal extends Component {
               <button
                 className="btn btn-primary"
                 type="button"
+                data-dismiss="modal"
                 onClick={this.handleDataSubmit}
               >
                 Lưu
@@ -439,7 +463,7 @@ class AddItemModal extends Component {
                     id="add-ppp-plantProtectionProductGroup"
                     placeholder="Nhập vào tên nhóm thuốc"
                     data-field="plantProtectionProductGroup"
-                    value={plantProtectionProductGroup}
+                    defaultValue={plantProtectionProductGroup}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -453,7 +477,7 @@ class AddItemModal extends Component {
                     id="add-ppp-ghs"
                     placeholder="Nhập vào nhóm độc GHS"
                     data-field="ghs"
-                    value={ghs}
+                    defaultValue={ghs}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -467,7 +491,7 @@ class AddItemModal extends Component {
                     id="add-ppp-who"
                     placeholder="Nhập vào nhóm độc WHO"
                     data-field="who"
-                    value={who}
+                    defaultValue={who}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -550,7 +574,7 @@ class AddItemModal extends Component {
                 data-field="plant"
                 data-type="scopeOfUse"
                 data-scope-of-use-index={i}
-                value={scopeOfUse[i].plant}
+                defaultValue={scopeOfUse[i].plant}
                 disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
@@ -568,7 +592,7 @@ class AddItemModal extends Component {
                 data-field="pest"
                 data-type="scopeOfUse"
                 data-scope-of-use-index={i}
-                value={scopeOfUse[i].pest}
+                defaultValue={scopeOfUse[i].pest}
                 disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
@@ -585,7 +609,7 @@ class AddItemModal extends Component {
                 data-field="dosage"
                 data-type="scopeOfUse"
                 data-scope-of-use-index={i}
-                value={scopeOfUse[i].dosage}
+                defaultValue={scopeOfUse[i].dosage}
                 disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
@@ -606,7 +630,7 @@ class AddItemModal extends Component {
                 data-field="phi"
                 data-type="scopeOfUse"
                 data-scope-of-use-index={i}
-                value={scopeOfUse[i].phi}
+                defaultValue={scopeOfUse[i].phi}
                 disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
@@ -624,7 +648,7 @@ class AddItemModal extends Component {
                 data-field="usage"
                 data-type="scopeOfUse"
                 data-scope-of-use-index={i}
-                value={scopeOfUse[i].usage}
+                defaultValue={scopeOfUse[i].usage}
                 disabled={(currentScopeOfUse > 1 && i + 1 < currentScopeOfUse)}
                 onChange={this.handleInputOnChange}
               />
@@ -662,7 +686,7 @@ class AddItemModal extends Component {
                       placeholder="Nhập vào tên cửa hàng"
                       data-field="registrationUnit"
                       data-type="registrationInfo"
-                      value={registrationUnit}
+                      defaultValue={registrationUnit}
                       onChange={this.handleInputOnChange}
                     />
                   </label>
@@ -677,7 +701,7 @@ class AddItemModal extends Component {
                       type="text"
                       id="add-ppp-registrationUnitAddress"
                       className="form-control item"
-                      value={registrationUnitAddress}
+                      defaultValue={registrationUnitAddress}
                       placeholder="Nhập vào địa chỉ cửa hàng"
                       data-field="registrationUnitAddress"
                       data-type="registrationInfo"
@@ -695,7 +719,7 @@ class AddItemModal extends Component {
                       type="text"
                       id="add-ppp-manufacturer"
                       className="form-control item"
-                      value={manufacturer}
+                      defaultValue={manufacturer}
                       placeholder="Nhà sản xuất"
                       data-field="manufacturer"
                       data-type="registrationInfo"
@@ -713,7 +737,7 @@ class AddItemModal extends Component {
                       type="text"
                       id="add-ppp-manufacturerAddress"
                       className="form-control item"
-                      value={manufacturerAddress}
+                      defaultValue={manufacturerAddress}
                       placeholder="Nhập vào địa chỉ cửa hàng"
                       data-field="manufacturerAddress"
                       data-type="registrationInfo"
@@ -796,6 +820,7 @@ class AddItemModal extends Component {
                 <button
                   className="btn btn-primary"
                   type="button"
+                  data-dismiss="modal"
                   onClick={this.handleDataSubmit}
                 >
                   Lưu
@@ -809,7 +834,9 @@ class AddItemModal extends Component {
   }
 
   renderMainModalCooperatives() {
-    const { data } = this.state;
+    const {
+      data,
+    } = this.state;
     return (
       <div className="modal fade" role="dialog" tabIndex={-1} id="modal-add">
         <div className="modal-dialog" role="document">
@@ -835,7 +862,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-name"
                     data-field="name"
                     placeholder="Nhập vào tên hợp tác xã"
-                    value={data.name}
+                    defaultValue={data.name}
                     onChange={(this.handleInputOnChange)}
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -856,7 +883,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-foreignName"
                     data-field="foreignName"
                     onChange={this.handleInputOnChange}
-                    value={data.foreignName}
+                    defaultValue={data.foreignName}
                     placeholder="Nhập vào tên tiếng Anh của HTX"
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -877,7 +904,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-abbreviationName"
                     data-field="abbreviationName"
                     placeholder="Tên viết tắt"
-                    value={data.abbreviationName}
+                    defaultValue={data.abbreviationName}
                     onChange={this.handleInputOnChange}
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -898,7 +925,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-cooperativeID"
                     data-field="cooperativeID"
                     placeholder="Mã hợp tác xã"
-                    value={data.cooperativeID}
+                    defaultValue={data.cooperativeID}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -916,7 +943,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-surrgate"
                     placeholder="Tên người đại diện cho hợp tác xã"
                     data-field="surrgate"
-                    value={data.surrgate}
+                    defaultValue={data.surrgate}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -934,7 +961,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-director"
                     placeholder="Tên giám đốc hợp tác xã"
                     data-field="director"
-                    value={data.director}
+                    defaultValue={data.director}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -952,7 +979,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-phone"
                     placeholder="Số điện thoại của hợp tác xã"
                     data-field="phone"
-                    value={data.phone}
+                    defaultValue={data.phone}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -967,7 +994,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-representOffice"
                     placeholder="Văn phòng đại diện của hợp tác xã"
                     data-field="representOffice"
-                    value={data.representOffice}
+                    defaultValue={data.representOffice}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -982,7 +1009,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-address"
                     placeholder="Địa chỉ hợp tác xã"
                     data-field="address"
-                    value={data.address}
+                    defaultValue={data.address}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -997,7 +1024,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-status"
                     placeholder="Trạng thái hoạt động của hợp tác xã"
                     data-field="status"
-                    value={data.status}
+                    defaultValue={data.status}
                     onChange={this.handleInputOnChange}
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -1015,7 +1042,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-email"
                     placeholder="Thư điện tử của hợp tác xã"
                     data-field="email"
-                    value={data.email}
+                    defaultValue={data.email}
                     onChange={this.handleInputOnChange}
                   />
                   <small className="form-text text-muted" key={uuidv4()}>
@@ -1033,7 +1060,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-website"
                     placeholder="Địa chỉ website của hợp tác xã"
                     data-field="website"
-                    value={data.website}
+                    defaultValue={data.website}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -1048,7 +1075,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-fax"
                     placeholder="Địa chỉ FAX của hợp tác xã"
                     data-field="fax"
-                    value={data.fax}
+                    defaultValue={data.fax}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -1063,7 +1090,7 @@ class AddItemModal extends Component {
                     id="add-cooperative-tax"
                     placeholder="Mã số thuế"
                     data-field="tax"
-                    value={data.tax}
+                    defaultValue={data.tax}
                     onChange={this.handleInputOnChange}
                   />
                 </label>
@@ -1088,6 +1115,7 @@ class AddItemModal extends Component {
               <button
                 className="btn btn-primary"
                 type="button"
+                data-dismiss="modal"
                 onClick={this.handleDataSubmit}
               >
                 Lưu
