@@ -1901,26 +1901,6 @@ define({ "api": [
         ]
       }
     },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "pageNumber",
-            "description": "<p>Số trang cần lấy</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "nPerPage",
-            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2218,14 +2198,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/warehouse/plant-protection-products",
-    "title": "Create new plant protection product warehouse",
-    "name": "CreatePlantProtectionProductWarehouse",
-    "group": "PlantProtectionProductWarehouses",
+    "url": "/goods-issues",
+    "title": "Create new goods issue",
+    "name": "CreateGoodsIssue",
+    "group": "GoodIssues",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products",
+        "content": "curl -i http://localhost:3001/api/goods-issues",
         "type": "curl"
       }
     ],
@@ -2249,15 +2229,22 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "plantProtectionProductId",
-            "description": "<p>Id thuốc bảo vệ thực vật</p>"
+            "field": "receiverId",
+            "description": "<p>Id của người nhận (dựa trên _id lúc tạo user)</p>"
           },
           {
             "group": "Parameter",
-            "type": "Date",
+            "type": "String",
             "optional": false,
-            "field": "tradeDate",
-            "description": "<p>Ngày mua (ISO8601 Format)</p>"
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
           },
           {
             "group": "Parameter",
@@ -2270,36 +2257,50 @@ define({ "api": [
             "group": "Parameter",
             "type": "Date",
             "optional": false,
-            "field": "manufacturingDate",
-            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
+            "field": "issuedDate",
+            "description": "<p>Ngày xuất kho (ISO 8601 format)</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
             "optional": false,
-            "field": "expiryDate",
-            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận sản phẩm (ISO 8601 format)</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "distributionAgent",
-            "description": "<p>Đại lý phân phối</p>"
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
           },
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "quarantineDate",
-            "description": "<p>Thời gian cách ly</p>"
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeId",
+            "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"plantProtectionProductId\": \"5df20540e2b16e4d09842e26\",\n    \"tradeDate\": \"2019-01-14\",\n    \"quantity\": \"2\",\n    \"manufacturingDate\": \"2019-02-18\",\n    \"expiryDate\": \"2019-04-28\",\n    \"distributionAgent\": \"Cty Thuoc Diet Co\",\n    \"quarantineDate\": \"2\",\n    \"cooperativeId\": \"HTXUMH3\"\n}",
+          "content": "\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"quantity\": \"2\",\n    \"issuedDate\": \"2019-12-12\",\n    \"receivedDate\": \"2019-12-12\",\n    \"productType\": \"Thuốc bvtv\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\"\n}",
           "type": "json"
         }
       ]
@@ -2311,15 +2312,22 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "plantProtectionProductId",
-            "description": "<p>Id thuốc bảo vệ thực vật</p>"
+            "field": "receiverId",
+            "description": "<p>Id của người nhận (dựa trên _id lúc tạo user)</p>"
           },
           {
             "group": "Success 200",
-            "type": "Date",
+            "type": "String",
             "optional": false,
-            "field": "tradeDate",
-            "description": "<p>Ngày mua (ISO8601 Format)</p>"
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
           },
           {
             "group": "Success 200",
@@ -2332,50 +2340,57 @@ define({ "api": [
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "manufacturingDate",
-            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
+            "field": "issuedDate",
+            "description": "<p>Ngày xuất kho (ISO 8601 format)</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "expiryDate",
-            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận thuốc (ISO 8601 format)</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "distributionAgent",
-            "description": "<p>Đại lý phân phối</p>"
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "quarantineDate",
-            "description": "<p>Thời gian cách ly</p>"
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
           },
           {
             "group": "Success 200",
-            "type": "ObjectId",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeId",
+            "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
             "field": "_id",
-            "description": "<p>Id của dữ liệu thuốc vừa được thêm vào kho</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "created",
-            "description": "<p>Thời gian dữ liệu mới được lưu vào db</p>"
+            "description": "<p>Id của document vừa tạo thành công</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n    \"plantProtectionProductId\": \"5df20540e2b16e4d09842e26\",\n    \"tradeDate\": \"2019-01-14\",\n    \"quantity\": \"2\",\n    \"manufacturingDate\": \"2019-02-18\",\n    \"expiryDate\": \"2019-04-28\",\n    \"quarantineDate\": \"2\",\n    \"distributionAgent\": \"Cty Thuoc Diet Co\",\n    \"cooperativeId\": \"HTXUMH3\",\n    \"created\": \"2019-12-20T15:56:40.048Z\",\n    \"_id\": \"5dfcef3b83ec1418baf42a34\"\n}",
+          "content": "HTTP/1.1 201 Created\n\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"2\",\n    \"issuedDate\": \"2019-12-12\",\n    \"receivedDate\": \"2019-12-12\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\",\n    \"created_at\": \"2019-12-30T02:35:32.306Z\",\n    \"_id\": \"5e0962f326b7b011c825789c\"\n}",
           "type": "json"
         }
       ]
@@ -2386,123 +2401,97 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "plantProtectionProductId-is-required",
-            "description": "<p>Trường id thuốc bvtv là bắt buộc</p>"
+            "field": "productType-is-required",
+            "description": "<p>Trường loại sản phẩm là bắt buộc</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "CooperativeId-is-required",
+            "field": "productType-does-not-exist",
+            "description": "<p>Trường loại sản phẩm không tồn tại (Loại sp phải là &quot;Thuốc bvtv&quot; || &quot;Phân bón&quot; || &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-is-required",
+            "description": "<p>Trường id người nhận là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productId-is-required",
+            "description": "<p>Trường id sản phẩm là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-required",
+            "description": "<p>Số lượng là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-positive-integer",
+            "description": "<p>Số lượng phải là số nguyên dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "issuedDate-is-ISO8061-format",
+            "description": "<p>Ngày xuất kho phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receivedDate-is-ISO8061-format",
+            "description": "<p>Ngày xuất kho phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "cooperativeId-is-required",
             "description": "<p>Trường id hợp tác xã là bắt buộc</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "tradeDate-must-be-a-date",
-            "description": "<p>Trường tradeDate phải là ngày với định dạng ISO8601</p>"
+            "field": "receiptId-is-required",
+            "description": "<p>Trường id hóa đơn nhập là bắt buộc</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "manufacturingDate-must-be-a-date",
-            "description": "<p>Trường manufacturingDate phải là ngày với định dạng ISO8601</p>"
+            "field": "productId-does-not-exist",
+            "description": "<p>Sản phẩm không tồn tại trong danh mục</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "expiryDate-must-be-a-date",
-            "description": "<p>Trường expiryDate phải là ngày với định dạng ISO8601</p>"
+            "field": "cooperativeId-does-not-exist",
+            "description": "<p>Hợp tác xã không tồn tại</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "quantity-must-be-a-number",
-            "description": "<p>Trường quantity phải là số nguyên dương</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "quarantineDate-must-be-a-number",
-            "description": "<p>Trường quarantineDate phải là số nguyên dương</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "plant-protection-product-not-found",
-            "description": "<p>Không tìm thấy thuốc bảo vệ thực vật trong danh mục</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "cooperative-not-found",
-            "description": "<p>Không tìm thấy HTX</p>"
+            "field": "receiverId-does-not-exist",
+            "description": "<p>Người nhận không tồn tại</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Thuốc bvtv không tồn tại:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Thuốc bảo vệ thực vật không tồn tại trong danh mục\"\n}",
+          "title": "productType is required:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập loại sản phẩm\"\n}",
           "type": "json"
         },
         {
-          "title": "Thiếu trường id thuốc bvtv:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập id thuốc bảo vệ thực vật\"\n}",
+          "title": "productType does not exist:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Loại sản phẩm không tồn tại\"\n}",
           "type": "json"
         },
         {
-          "title": "HTX không tồn tại:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Hợp tác xã không tồn tại\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Thiếu trường id HTX:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập id họp tác xã\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Thiếu trường quantity:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập số lượng\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường quantity phải là số nguyên dương:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Số lượng phải là số nguyên dương\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Thiếu trường quarantineDate:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập thời gian cách ly\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường quarantineDate phải là số nguyên dương:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Thời gian cách ly phải là số nguyên dương\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Thiếu trường manufacturingDate:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập ngày sản xuất\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường manufacturingDate phải là định dạng ngày:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày sản xuất không hợp lệ\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Thiếu trường expiryDate:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập hạn sử dụng\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường expiryDate phải là định dạng ngày:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Hạn sử dụng không hợp lệ\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường tradeDate phải là định dạng ngày:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày mua không hợp lệ\"\n}",
+          "title": "issuedDate is ISO 8601:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày xuất kho không hợp lệ\"\n}",
           "type": "json"
         }
       ]
@@ -2514,18 +2503,18 @@ define({ "api": [
     ],
     "version": "0.0.0",
     "filename": "./router.js",
-    "groupTitle": "PlantProtectionProductWarehouses"
+    "groupTitle": "GoodIssues"
   },
   {
     "type": "delete",
-    "url": "/api/warehouse/plant-protection-products/:id",
-    "title": "Delete plant protection product warehouse by id",
-    "name": "DeletePlantProtectionProductWarehouseById",
-    "group": "PlantProtectionProductWarehouses",
+    "url": "/goods-issues/:id",
+    "title": "Delete goods issue by id",
+    "name": "DeleteGoodsIssueById",
+    "group": "GoodIssues",
     "examples": [
       {
-        "title": "Xóa thuốc bvtv trong kho theo _id:",
-        "content": "curl -i http://localhost:3001//apiwarehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7",
         "type": "curl"
       }
     ],
@@ -2542,61 +2531,64 @@ define({ "api": [
         ]
       }
     },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "_id",
-            "description": "<p>Id của dữ liệu phân bón được lưu trong kho (NOT plantProtectionProductId)</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"successMessage\": \"Thuốc bảo vệ thực vật được xóa khỏi kho thành công\"\n}",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"successMessage\": \"Hóa đơn được xóa thành công\"\n}",
           "type": "json"
         }
       ]
     },
     "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Goods-issue-not-found",
+            "description": "<p>Hóa đơn xuất không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
       "examples": [
         {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"errorMessage\": \"Thuốc bảo vệ thực vật không tồn tại trong kho\"\n}",
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Goods issue not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Id Hóa đơn xuất kho không tồn tại\"\n}",
           "type": "json"
         }
       ]
     },
     "permission": [
       {
-        "name": "manager-admin"
+        "name": "none"
       }
     ],
     "version": "0.0.0",
     "filename": "./router.js",
-    "groupTitle": "PlantProtectionProductWarehouses"
+    "groupTitle": "GoodIssues"
   },
   {
     "type": "get",
-    "url": "/api/warehouse/plant-protection-products",
-    "title": "Get all plant protection product warehourses with pageNumber and nPerPage",
-    "name": "GetAllPlantProtectionProductWarehouses",
-    "group": "PlantProtectionProductWarehouses",
+    "url": "/goods-issues",
+    "title": "Get all goods issue",
+    "name": "GetAllGoodsIssue",
+    "group": "GoodIssues",
     "examples": [
       {
-        "title": "Tìm kiếm tất cả thuốc bvtv và phân trang:",
-        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products?pageNumber=1&nPerPage=20",
-        "type": "curl"
-      },
-      {
-        "title": "Tìm kiếm tất cả thuốc bvtv theo HTX và phân trang:",
-        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products?cooperativeId=HTXNN&pageNumber=1&nPerPage=20",
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/goods-issues",
         "type": "curl"
       }
     ],
@@ -2628,14 +2620,7 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "nPerPage",
-            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "cooperativeId",
-            "description": "<p>Id của hợp tác xã</p>"
+            "description": "<p>Số lượng sản phẩm trên mỗi trang</p>"
           }
         ]
       }
@@ -2643,6 +2628,13 @@ define({ "api": [
     "success": {
       "fields": {
         "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalProducts",
+            "description": "<p>Tổng số phân bón trong danh mục</p>"
+          },
           {
             "group": "Success 200",
             "type": "Number",
@@ -2654,15 +2646,22 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "plantProtectionProductId",
-            "description": "<p>Id thuốc bảo vệ thực vật</p>"
+            "field": "receiverId",
+            "description": "<p>Id của người nhận (dựa trên _id lúc tạo user)</p>"
           },
           {
             "group": "Success 200",
-            "type": "Date",
+            "type": "String",
             "optional": false,
-            "field": "tradeDate",
-            "description": "<p>Ngày mua (ISO8601 Format)</p>"
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
           },
           {
             "group": "Success 200",
@@ -2675,50 +2674,57 @@ define({ "api": [
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "manufacturingDate",
-            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
+            "field": "issuedDate",
+            "description": "<p>Ngày xuất kho (ISO 8601 format)</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "expiryDate",
-            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận thuốc (ISO 8601 format)</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "distributionAgent",
-            "description": "<p>Đại lý phân phối</p>"
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "quarantineDate",
-            "description": "<p>Thời gian cách ly</p>"
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
           },
           {
             "group": "Success 200",
-            "type": "ObjectId",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeId",
+            "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
             "field": "_id",
-            "description": "<p>Id của dữ liệu thuốc vừa được thêm vào kho</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "created",
-            "description": "<p>Thời gian dữ liệu mới được lưu vào db</p>"
+            "description": "<p>Id của document vừa tạo thành công</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"totalPages\": 10,\n    \"data\": [\n        {\n            \"_id\": \"5dfd66fc2ea5880f577c38a4\",\n            \"plantProtectionProductId\": \"5df20540e2b16e4d09842e24\",\n            \"tradeDate\": \"2019-01-14\",\n            \"quantity\": \"2\",\n            \"manufacturingDate\": \"2019-02-18\",\n            \"expiryDate\": \"2019-04-28\",\n            \"quarantineDate\": \"2\",\n            \"distributionAgent\": \"Cty Thuoc Diet Co\",\n            \"cooperativeId\": \"HTXUMH3\",\n            \"created\": \"2019-12-21T00:25:12.075Z\",\n            \"plantProtectionProductName\": \"Abagold 55EC\"\n        },\n        {\n            \"_id\": \"5dfd67d3cdb9e2106e3df625\",\n            \"plantProtectionProductId\": \"5df20540e2b16e4d09842e2e\",\n            \"tradeDate\": \"2019-01-14\",\n            \"quantity\": \"2\",\n            \"manufacturingDate\": \"2019-02-18\",\n            \"expiryDate\": \"2019-04-28\",\n            \"quarantineDate\": \"2\",\n            \"distributionAgent\": \"Cty Thuoc Diet Co\",\n            \"cooperativeId\": \"HTXNN\",\n            \"created\": \"2019-12-21T00:31:12.409Z\",\n            \"plantProtectionProductName\": \"Aba-navi 5.5EC\"\n        },\n        {\n            \"_id\": \"5dfd67575953c80fe78f9645\",\n            \"plantProtectionProductId\": \"5df20540e2b16e4d09842e33\",\n            \"tradeDate\": \"2019-01-14\",\n            \"quantity\": \"2\",\n            \"manufacturingDate\": \"2019-02-18\",\n            \"expiryDate\": \"2019-04-28\",\n            \"quarantineDate\": \"2\",\n            \"distributionAgent\": \"Cty Thuoc Diet Co\",\n            \"cooperativeId\": \"HTXNN\",\n            \"created\": \"2019-12-21T00:28:03.627Z\",\n            \"plantProtectionProductName\": \"Abasuper 3.6EC\"\n        }   \n        ...\n    ]\n    \n}",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"totalGoodsIssues\": 2,\n    \"totalPages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"5e09757502716412c0b026d7\",\n            \"receiverId\": \"5e058f0f089c052958b35c59\",\n            \"productId\": \"5e057818a1c1111795e29b76\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"2\",\n            \"issuedDate\": \"2019-12-30\",\n            \"receivedDate\": \"2019-12-31\",\n            \"goodsReceiptId\": \"21893453567654\",\n            \"cooperativeId\": \"HTXNN\",\n            \"note\": \"Just note something you want\",\n            \"created_at\": \"2019-12-30T03:56:35.656Z\",\n            \"productName\": \"Abatimec 1.8EC\",\n            \"receiverName\": \"khang\"\n        },\n        {\n            \"_id\": \"5e097554b50bae12772bdd09\",\n            \"receiverId\": \"5e058f0f089c052958b35c59\",\n            \"productId\": \"5e057818a1c1111795e29b76\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"2\",\n            \"issuedDate\": \"2019-12-12\",\n            \"receivedDate\": \"2019-12-12\",\n            \"goodsReceiptId\": \"21893453567654\",\n            \"cooperativeId\": \"HTXNN\",\n            \"note\": \"Just note something you want\",\n            \"created_at\": \"2019-12-30T03:55:39.570Z\",\n            \"productName\": \"Abatimec 1.8EC\",\n            \"receiverName\": \"khang\"\n        }\n    ]\n}",
           "type": "json"
         }
       ]
@@ -2730,14 +2736,14 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "Page-not-found",
-            "description": "<p>Trang tìm kiếm không tồn tại</p>"
+            "description": "<p>Trang không tồn tại</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Page not found:",
-          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n}",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Vui lòng nhập loại sản phẩm\"\n}",
           "type": "json"
         }
       ]
@@ -2749,18 +2755,173 @@ define({ "api": [
     ],
     "version": "0.0.0",
     "filename": "./router.js",
-    "groupTitle": "PlantProtectionProductWarehouses"
+    "groupTitle": "GoodIssues"
   },
   {
     "type": "get",
-    "url": "/api/warehouse/plant-protection-products/:id",
-    "title": "Get plant protection product warehourses by id",
-    "name": "GetPlantProtectionProductWarehousesById",
-    "group": "PlantProtectionProductWarehouses",
+    "url": "/goods-issues/:id",
+    "title": "Get goods issue by id",
+    "name": "GetGoodsIssueById",
+    "group": "GoodIssues",
     "examples": [
       {
-        "title": "Tìm kiếm thuốc bvtv trong kho theo id:",
-        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id của người nhận (dựa trên _id lúc tạo user)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "issuedDate",
+            "description": "<p>Ngày xuất kho (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận thuốc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeId",
+            "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5e09757502716412c0b026d7\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"2\",\n    \"issuedDate\": \"2019-12-30\",\n    \"receivedDate\": \"2019-12-31\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\",\n    \"created_at\": \"2019-12-30T03:56:35.656Z\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Goods-issue-not-found",
+            "description": "<p>Hóa đơn xuất không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Goods issue not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Id Hóa đơn xuất kho không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "GoodIssues"
+  },
+  {
+    "type": "patch",
+    "url": "/goods-issues",
+    "title": "Update goods issue by id",
+    "name": "UpdateGoodsIssueById",
+    "group": "GoodIssues",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7",
         "type": "curl"
       }
     ],
@@ -2782,216 +2943,80 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "pageNumber",
-            "description": "<p>Số thứ tự trang cần lấy</p>"
+            "field": "receiverId",
+            "description": "<p>Id của người nhận (dựa trên _id lúc tạo user)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "nPerPage",
-            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "issuedDate",
+            "description": "<p>Ngày xuất kho (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận sản phẩm (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "cooperativeId",
-            "description": "<p>Id của hợp tác xã</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "plantProtectionProductId",
-            "description": "<p>Id thuốc bảo vệ thực vật</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "tradeDate",
-            "description": "<p>Ngày mua (ISO8601 Format)</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "quantity",
-            "description": "<p>Số lượng</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "manufacturingDate",
-            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "expiryDate",
-            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "distributionAgent",
-            "description": "<p>Đại lý phân phối</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "quarantineDate",
-            "description": "<p>Thời gian cách ly</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "ObjectId",
-            "optional": false,
-            "field": "_id",
-            "description": "<p>Id của dữ liệu thuốc vừa được thêm vào kho</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "created",
-            "description": "<p>Thời gian dữ liệu mới được lưu vào db</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5dfd66fc2ea5880f577c38a4\",\n        \"plantProtectionProductId\": \"5df20540e2b16e4d09842e24\",\n        \"tradeDate\": \"2019-01-14\",\n        \"quantity\": \"2\",\n        \"manufacturingDate\": \"2019-02-18\",\n        \"expiryDate\": \"2019-04-28\",\n        \"quarantineDate\": \"2\",\n        \"distributionAgent\": \"Cty Thuoc Diet Co\",\n        \"cooperativeId\": \"HTXUMH3\",\n        \"created\": \"2019-12-21T00:25:12.075Z\",\n        \"plantProtectionProductName\": \"Abagold 55EC\"\n    }\n]",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Plant-protection-product-not-found",
-            "description": "<p>Thuốc bvtv không tồn tại</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Plant protection product not found:",
-          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Thuốc bảo vệ thực vật không tồn tại trong kho\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "none"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "./router.js",
-    "groupTitle": "PlantProtectionProductWarehouses"
-  },
-  {
-    "type": "patch",
-    "url": "/api/warehouse/plant-protection-products/:id",
-    "title": "Update plant protection product warehouse by id",
-    "name": "UpdatePlantProtectionProductWarehouseById",
-    "group": "PlantProtectionProductWarehouses",
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/warehouse/plant-protection-products/5dfd66fc2ea5880f577c38a4",
-        "type": "curl"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization",
-            "description": "<p>Token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "plantProtectionProductId",
-            "description": "<p>Id thuốc bảo vệ thực vật</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": false,
-            "field": "tradeDate",
-            "description": "<p>Ngày mua (ISO8601 Format)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "quantity",
-            "description": "<p>Số lượng</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": false,
-            "field": "manufacturingDate",
-            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Date",
-            "optional": false,
-            "field": "expiryDate",
-            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+            "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "distributionAgent",
-            "description": "<p>Đại lý phân phối</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "quarantineDate",
-            "description": "<p>Thời gian cách ly</p>"
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    {\n         \"plantProtectionProductId\": \"5df20540e2b16e4d09842e2e\",\n         \"tradeDate\": \"2019-12-12\",\n         \"quantity\": \"99\",\n         \"manufacturingDate\": \"2019-12-12\",\n         \"expiryDate\": \"2020-12-12\",\n         \"distributionAgent\": \"updated\",\n         \"quarantineDate\": \"99\",\n         \"cooperativeId\": \"HTXNN\"\n     }\n}",
+          "content": "\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"quantity\": \"900\",\n    \"issuedDate\": \"2019-01-01\",\n    \"receivedDate\": \"2019-01-01\",\n    \"productType\": \"Thuốc bvtv\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"updated\"\n}",
           "type": "json"
         }
       ]
@@ -3003,15 +3028,22 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "plantProtectionProductId",
-            "description": "<p>Id thuốc bảo vệ thực vật</p>"
+            "field": "receiverId",
+            "description": "<p>Id của người nhận (dựa trên _id lúc tạo user)</p>"
           },
           {
             "group": "Success 200",
-            "type": "Date",
+            "type": "String",
             "optional": false,
-            "field": "tradeDate",
-            "description": "<p>Ngày mua (ISO8601 Format)</p>"
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
           },
           {
             "group": "Success 200",
@@ -3024,50 +3056,57 @@ define({ "api": [
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "manufacturingDate",
-            "description": "<p>Ngày sản xuất (ISO8601 Format)</p>"
+            "field": "issuedDate",
+            "description": "<p>Ngày xuất kho (ISO 8601 format)</p>"
           },
           {
             "group": "Success 200",
             "type": "Date",
             "optional": false,
-            "field": "expiryDate",
-            "description": "<p>Hạn sử dụng (ISO8601 Format)</p>"
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận thuốc (ISO 8601 format)</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "distributionAgent",
-            "description": "<p>Đại lý phân phối</p>"
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "quarantineDate",
-            "description": "<p>Thời gian cách ly</p>"
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
           },
           {
             "group": "Success 200",
-            "type": "ObjectId",
+            "type": "String",
+            "optional": false,
+            "field": "cooperativeId",
+            "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
             "field": "_id",
-            "description": "<p>Id của dữ liệu thuốc vừa được thêm vào kho</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Date",
-            "optional": false,
-            "field": "created",
-            "description": "<p>Thời gian dữ liệu mới được lưu vào db</p>"
+            "description": "<p>Id của document vừa tạo thành công</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n    \"_id\": \"5dfd66fc2ea5880f577c38a4\",\n    \"plantProtectionProductId\": \"5df20540e2b16e4d09842e2e\",\n    \"tradeDate\": \"2019-12-12\",\n    \"quantity\": \"99\",\n    \"manufacturingDate\": \"2019-12-12\",\n    \"expiryDate\": \"2020-12-12\",\n    \"quarantineDate\": \"99\",\n    \"distributionAgent\": \"updated\",\n    \"cooperativeId\": \"HTXNN\",\n    \"created\": \"2019-12-21T02:55:59.859Z\"\n}",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5e09757502716412c0b026d7\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"900\",\n    \"issuedDate\": \"2019-01-01\",\n    \"receivedDate\": \"2019-01-01\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"updated\",\n    \"created_at\": \"2019-12-30T03:59:20.896Z\"\n}",
           "type": "json"
         }
       ]
@@ -3078,81 +3117,83 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "tradeDate-must-be-a-date",
-            "description": "<p>Trường tradeDate phải là ngày với định dạng ISO8601</p>"
+            "field": "productType-does-not-exist",
+            "description": "<p>Trường loại sản phẩm không tồn tại (Loại sp phải là &quot;Thuốc bvtv&quot; || &quot;Phân bón&quot; || &quot;Giống&quot;)</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "manufacturingDate-must-be-a-date",
-            "description": "<p>Trường manufacturingDate phải là ngày với định dạng ISO8601</p>"
+            "field": "quantity-is-positive-integer",
+            "description": "<p>Số lượng phải là số nguyên dương</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "expiryDate-must-be-a-date",
-            "description": "<p>Trường expiryDate phải là ngày với định dạng ISO8601</p>"
+            "field": "issuedDate-is-ISO8061-format",
+            "description": "<p>Ngày xuất kho phải là định dạng ISO 8601</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "quantity-must-be-a-number",
-            "description": "<p>Trường quantity phải là số nguyên dương</p>"
+            "field": "receivedDate-is-ISO8061-format",
+            "description": "<p>Ngày xuất kho phải là định dạng ISO 8601</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "quarantineDate-must-be-a-number",
-            "description": "<p>Trường quarantineDate phải là số nguyên dương</p>"
+            "field": "productId-does-not-exist",
+            "description": "<p>Sản phẩm không tồn tại trong danh mục</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "plant-protection-product-not-found",
-            "description": "<p>Không tìm thấy thuốc bảo vệ thực vật trong danh mục</p>"
+            "field": "cooperativeId-does-not-exist",
+            "description": "<p>Hợp tác xã không tồn tại</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "cooperative-not-found",
-            "description": "<p>Không tìm thấy HTX</p>"
+            "field": "receiverId-does-not-exist",
+            "description": "<p>Người nhận không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Goods-issue-not-found",
+            "description": "<p>Hóa đơn xuất không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Thuốc bvtv không tồn tại:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Thuốc bảo vệ thực vật không tồn tại trong danh mục\"\n}",
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
           "type": "json"
         },
         {
-          "title": "HTX không tồn tại:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Hợp tác xã không tồn tại\"\n}",
+          "title": "Goods issue not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Id Hóa đơn xuất kho không tồn tại\"\n}",
           "type": "json"
         },
         {
-          "title": "Trường quantity phải là số nguyên dương:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Số lượng phải là số nguyên dương\"\n}",
+          "title": "productType is required:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập loại sản phẩm\"\n}",
           "type": "json"
         },
         {
-          "title": "Trường quarantineDate phải là số nguyên dương:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Thời gian cách ly phải là số nguyên dương\"\n}",
+          "title": "productType does not exist:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Loại sản phẩm không tồn tại\"\n}",
           "type": "json"
         },
         {
-          "title": "Trường manufacturingDate phải là định dạng ngày:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày sản xuất không hợp lệ\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường expiryDate phải là định dạng ngày:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Hạn sử dụng không hợp lệ\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Trường tradeDate phải là định dạng ngày:",
-          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày mua không hợp lệ\"\n}",
+          "title": "issuedDate is ISO 8601:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày xuất kho không hợp lệ\"\n}",
           "type": "json"
         }
       ]
@@ -3164,7 +3205,7 @@ define({ "api": [
     ],
     "version": "0.0.0",
     "filename": "./router.js",
-    "groupTitle": "PlantProtectionProductWarehouses"
+    "groupTitle": "GoodIssues"
   },
   {
     "type": "post",
@@ -5571,8 +5612,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });

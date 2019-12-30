@@ -2022,11 +2022,6 @@ exports.routers = app => {
      *     curl -i http://localhost:3001/api/fertilizers/query?name=Phân bón Calcium Nitrate( Calcinit)
      *
      * @apiHeader {String} authorization Token.
-     * 
-     * 
-     * @apiParam {Number} pageNumber Số trang cần lấy
-     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
-     *
      *
      * @apiSuccess {String} ministry Bộ
      * @apiSuccess {String} province Tỉnh
@@ -2286,7 +2281,7 @@ exports.routers = app => {
     // ROUTES FOR GOODSISSUE
 
     /**
-     * @api {post} /api/goods-issues Create new goods issue
+     * @api {post} /goods-issues Create new goods issue
      * @apiName CreateGoodsIssue
      * @apiGroup GoodIssues
      * @apiExample {curl} Example usage:
@@ -2334,7 +2329,7 @@ exports.routers = app => {
      *
      *
      * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
+     *  HTTP/1.1 201 Created
      *  
      *  {
      *      "receiverId": "5e058f0f089c052958b35c59",
@@ -2390,6 +2385,83 @@ exports.routers = app => {
         });
     });
 
+
+    /**
+     * @api {get} /goods-issues Get all goods issue
+     * @apiName GetAllGoodsIssue
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
+     *
+     * @apiSuccess {Number} totalProducts Tổng số phân bón trong danh mục 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "totalGoodsIssues": 2,
+     *      "totalPages": 1,
+     *      "data": [
+     *          {
+     *              "_id": "5e09757502716412c0b026d7",
+     *              "receiverId": "5e058f0f089c052958b35c59",
+     *              "productId": "5e057818a1c1111795e29b76",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "2",
+     *              "issuedDate": "2019-12-30",
+     *              "receivedDate": "2019-12-31",
+     *              "goodsReceiptId": "21893453567654",
+     *              "cooperativeId": "HTXNN",
+     *              "note": "Just note something you want",
+     *              "created_at": "2019-12-30T03:56:35.656Z",
+     *              "productName": "Abatimec 1.8EC",
+     *              "receiverName": "khang"
+     *          },
+     *          {
+     *              "_id": "5e097554b50bae12772bdd09",
+     *              "receiverId": "5e058f0f089c052958b35c59",
+     *              "productId": "5e057818a1c1111795e29b76",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "2",
+     *              "issuedDate": "2019-12-12",
+     *              "receivedDate": "2019-12-12",
+     *              "goodsReceiptId": "21893453567654",
+     *              "cooperativeId": "HTXNN",
+     *              "note": "Just note something you want",
+     *              "created_at": "2019-12-30T03:55:39.570Z",
+     *              "productName": "Abatimec 1.8EC",
+     *              "receiverName": "khang"
+     *          }
+     *      ]
+     *  }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.get("/api/goods-issues", (req, res, next) => {
         const query = req.query;
 
@@ -2398,6 +2470,62 @@ exports.routers = app => {
         });
     });
 
+
+    /**
+     * @api {get} /goods-issues/:id Get goods issue by id 
+     * @apiName GetGoodsIssueById
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * 
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e09757502716412c0b026d7",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "2",
+     *      "issuedDate": "2019-12-30",
+     *      "receivedDate": "2019-12-31",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "Just note something you want",
+     *      "created_at": "2019-12-30T03:56:35.656Z"
+     *  }
+     *
+     * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Goods issue not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Id Hóa đơn xuất kho không tồn tại"
+     *     }
+     * @apiPermission none
+     */
     app.get("/api/goods-issues/:id", (req, res, next) => {
         const id = req.params.id;
 
@@ -2406,6 +2534,39 @@ exports.routers = app => {
         });
     });
 
+
+    /**
+     * @api {delete} /goods-issues/:id Delete goods issue by id 
+     * @apiName DeleteGoodsIssueById
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Hóa đơn được xóa thành công"
+     *  }
+     *
+     * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Goods issue not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Id Hóa đơn xuất kho không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.delete("/api/goods-issues/:id", (req, res, next) => {
         const id = req.params.id;
 
@@ -2414,6 +2575,111 @@ exports.routers = app => {
         });
     });
 
+    /**
+     * @api {patch} /goods-issues Update goods issue by id
+     * @apiName UpdateGoodsIssueById
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiParam {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
+     * @apiParam {String} goodsReceiptId Id hóa đơn nhập
+     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "quantity": "900",
+     *      "issuedDate": "2019-01-01",
+     *      "receivedDate": "2019-01-01",
+     *      "productType": "Thuốc bvtv",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "updated"
+     *  }
+     *
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e09757502716412c0b026d7",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "900",
+     *      "issuedDate": "2019-01-01",
+     *      "receivedDate": "2019-01-01",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "updated",
+     *      "created_at": "2019-12-30T03:59:20.896Z"
+     *  }
+     *
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError receivedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Goods issue not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Id Hóa đơn xuất kho không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample productType is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
+     *     }
+     * 
+     * @apiErrorExample productType does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
     app.patch("/api/goods-issues/:id", (req, res, next) => {
         const id = req.params.id;
         const update = req.body;
