@@ -2286,79 +2286,99 @@ exports.routers = app => {
     // ROUTES FOR GOODSISSUE
 
     /**
-     * @api {post} /api/goods-issues Create new fertilizer
-     * @apiName CreateFertilizer
-     * @apiGroup Fertilizers
+     * @api {post} /api/goods-issues Create new goods issue
+     * @apiName CreateGoodsIssue
+     * @apiGroup GoodIssues
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/fertilizers
+     *     curl -i http://localhost:3001/api/goods-issues
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {String} ministry Bộ
-     * @apiParam {String} province Tỉnh
-     * @apiParam {String} enterprise Tên doanh nghiệp
-     * @apiParam {String} type Loại phân bón
-     * @apiParam {String} name Tên phân bón
-     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiParam {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiParam {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
+     * @apiParam {String} goodsReceiptId Id hóa đơn nhập
      * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
-     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
-     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiParam {String} note Ghi chú
      *
      *
      * @apiParamExample {json} Request-Example:
      * 
      *  {
-     *      "ministry": "Công thương",
-     *      "province": "Bà Rịa - Vũng Tàu",
-     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
-     *      "type": "Phân vô cơ",
-     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
-     *      "ingredient": "",
-     *      "lawDocument": "",
-     *      "isoCertOrganization": "",
-     *      "manufactureAndImport": ""
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "quantity": "2",
+     *      "issuedDate": "2019-12-12",
+     *      "receivedDate": "2019-12-12",
+     *      "productType": "Thuốc bvtv",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "Just note something you want"
      *  }
      *
-     * @apiSuccess {String} ministry Bộ
-     * @apiSuccess {String} province Tỉnh
-     * @apiSuccess {String} enterprise Tên doanh nghiệp
-     * @apiSuccess {String} type Loại phân bón
-     * @apiSuccess {String} name Tên phân bón
-     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
      * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
-     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
-     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
      *
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  
      *  {
-     *      "_id": "5de75a92f4e889141cc24f7d",
-     *      "ministry": "Công thương",
-     *      "province": "Bà Rịa - Vũng Tàu",
-     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
-     *      "type": "Phân vô cơ",
-     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
-     *      "ingredient": "",
-     *      "lawDocument": "",
-     *      "isoCertOrganization": "",
-     *      "manufactureAndImport": "",
-     *      "created": "2019-12-04T07:04:50.974Z"
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "2",
+     *      "issuedDate": "2019-12-12",
+     *      "receivedDate": "2019-12-12",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "Just note something you want",
+     *      "created_at": "2019-12-30T02:35:32.306Z",
+     *      "_id": "5e0962f326b7b011c825789c"
      *  }
      *
-     * @apiError Name-is-required Thiếu trường tên phân bón
-     * @apiError Fertilizer-exists Phân bón đã tồn tại
-     * @apiErrorExample Phân bón tồn tại:
+     * @apiError productType-is-required Trường loại sản phẩm là bắt buộc
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError receiverId-is-required Trường id người nhận là bắt buộc
+     * @apiError productId-is-required Trường id sản phẩm là bắt buộc
+     * @apiError quantity-is-required Số lượng là bắt buộc 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError receivedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError cooperativeId-is-required Trường id hợp tác xã là bắt buộc
+     * @apiError receiptId-is-required Trường id hóa đơn nhập là bắt buộc 
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiErrorExample productType is required:
      *     HTTP/1.1 409 Conflict
      *     {
-     *       "errorMessage": "Phân bón với tên '" + name + "' đã tồn tại"
+     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
      *     }
      * 
-     * @apiErrorExample Thiếu trường tên phân bón:
+     * @apiErrorExample productType does not exist:
      *     HTTP/1.1 409 Conflict
      *     {
-     *       "errorMessage": "Vui lòng nhập tên phân bón"
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
      *     }
      * @apiPermission none
      */
