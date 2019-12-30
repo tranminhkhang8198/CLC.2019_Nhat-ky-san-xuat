@@ -453,13 +453,11 @@ class ViewItemModal extends Component {
 
   renderPPPRegistrationInfo(itemData) {
     const { registrationInfo } = itemData;
-    console.log(registrationInfo.length);
     if (!registrationInfo) {
       return null;
     }
     return (
       <div className="container" style={{ padding: 0 }} key={uuidv4()}>
-        <legend>Thông tin đăng ký:</legend>
         <div className="row" key={uuidv4()}>
           <div className="col-4">
             <p>Đơn vị đăng ký</p>
