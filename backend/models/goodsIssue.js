@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const mongoose = require('mongoose');
 const validator = require('validator');
+const mongodb = require('mongodb');
 
 class GoodsIssue {
     constructor(app) {
@@ -11,10 +12,12 @@ class GoodsIssue {
             productId: null,
             productType: null,
             quantity: null,
-            tradeDate: null,
+            issuedDate: null,
+            receivedDate: null,
             goodsReceiptId: null,
             cooperativeId: null,
-            note: null
+            note: null,
+            created_at: new Date()
         }
     }
 
@@ -23,7 +26,8 @@ class GoodsIssue {
         this.model.productId = _.get(obj, 'productId', null);
         this.model.productType = _.get(obj, 'productType', null);
         this.model.quantity = _.get(obj, 'quantity', null);
-        this.model.tradeDate = _.get(obj, 'tradeDate', null);
+        this.model.issuedDate = _.get(obj, 'issuedDate', null);
+        this.model.receivedDate = _.get(obj, 'receivedDate', null);
         this.model.goodsReceiptId = _.get(obj, 'goodsReceiptId', null);
         this.model.cooperativeId = _.get(obj, 'cooperativeId', null);
         this.model.note = _.get(obj, 'note', null);
@@ -34,13 +38,10 @@ class GoodsIssue {
 
         const reg = /^\d+$/;
 
-        let check = 0;
-
         // Validate productType
         const productTypes = ["Thuốc bvtv", "Phân bón", "Giống"];
 
         if (model.productType == null) {
-            console.log("Something here");
             errors.push({
                 message: 'Vui lòng nhập loại sản phẩm'
             });
@@ -77,11 +78,20 @@ class GoodsIssue {
             });
         }
 
-        // Trade date validate
-        if (model.tradeDate != null) {
-            if (!validator.isISO8601(model.tradeDate)) {
+        // Issue date validate
+        if (model.issueDate != null) {
+            if (!validator.isISO8601(model.issueDate)) {
                 errors.push({
                     message: 'Ngày xuất kho không hợp lệ'
+                });
+            }
+        }
+
+        // Receive date validate
+        if (model.receiveDate != null) {
+            if (!validator.isISO8601(model.receiveDate)) {
+                errors.push({
+                    message: 'Ngày nhận không hợp lệ'
                 });
             }
         }
@@ -105,7 +115,11 @@ class GoodsIssue {
         if (model.productId != null) {
             let productCollection = null;
 
-            if (productTypes.indexOf(model.productType) >= 0) {
+            if (!mongodb.ObjectID.isValid(model.productId)) {
+                errors.push({
+                    message: 'Id sản phẩm không hợp lệ'
+                });
+            } else if (productTypes.indexOf(model.productType) >= 0) {
                 if (productTypes.indexOf(model.productType) == 0) {
                     productCollection = this.app.db.collection('plantProtectionProduct')
                 }
@@ -154,17 +168,24 @@ class GoodsIssue {
 
         // --> Check receiver exists in DB
         if (model.receiverId != null) {
-            try {
-                const userCollection = this.app.db.collection('user');
-                const user = await userCollection.findOne({ _id: mongoose.Types.ObjectId(model.receiverId) });
+            if (!mongodb.ObjectID.isValid(model.receiverId)) {
+                errors.push({
+                    message: 'Id người nhận không hợp lệ'
+                });
 
-                if (!user) {
-                    errors.push({
-                        message: 'Người nhận không tồn tại'
-                    });
+            } else {
+                try {
+                    const userCollection = this.app.db.collection('user');
+                    const user = await userCollection.findOne({ _id: mongoose.Types.ObjectId(model.receiverId) });
+
+                    if (!user) {
+                        errors.push({
+                            message: 'Người nhận không tồn tại'
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
                 }
-            } catch (err) {
-                console.log(err);
             }
         }
 
@@ -297,7 +318,7 @@ class GoodsIssue {
                 }
 
                 return cb(message, null);
-            }            
+            }
 
             const goodsIssue = await goodsIssueCollection.findOne({ _id: mongoose.Types.ObjectId(id) });
 
@@ -353,7 +374,7 @@ class GoodsIssue {
                     delete update._id;
                 }
                 for (let key in update) {
-                    if (model[key]) {
+                    if (key in model) {
                         model[key] = update[key];
                     }
                 }

@@ -12,6 +12,8 @@ const Field = require('./field');
 const GoodsIssue = require('./goodsIssue');
 const GoodsReceipt = require('./goodsReceipt');
 const Employee = require('./employee');
+const Tool = require('./tool');
+const Subcontractor = require('./subcontractor');
 
 class Model {
   constructor(app) {
@@ -30,6 +32,8 @@ class Model {
     this.goodsIssue = new GoodsIssue(app);
     this.goodsReceipt = new GoodsReceipt(app);
     this.employee = new Employee(app);
+    this.tool = new Tool(app);
+    this.subcontractor = new Subcontractor(app);
   }
 }
 module.exports = Model;
