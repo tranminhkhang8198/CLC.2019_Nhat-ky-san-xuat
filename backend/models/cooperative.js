@@ -258,7 +258,7 @@ class Cooperative {
 					else {
 						collection.insertOne(obj, (err, result) => {
 							if (err) {
-								return cb({ errorMessage: "Loi trong qua trinh them du lieu vao database" }, null);
+								return cb({ errorMessage: "Lỗi cập nhật cơ sỡ dữ liệu", errorCode: 500 }, null);
 							}
 							else {
 								return cb(null, noneExistCooperative);
@@ -277,7 +277,7 @@ class Cooperative {
 		const resultNumber = _.get(params, 'resultNumber', 0);
 		const pageNumber = _.get(params, 'pageNumber', 0);
 		_.unset(params, 'resultNumber');
-		_.unset(params,'pageNumber');
+		_.unset(params, 'pageNumber');
 		let query = params;
 
 		let _id = _.get(query, "_id", null);
@@ -290,7 +290,7 @@ class Cooperative {
 			}
 
 		}
-		console.log(query, typeof(query._id));
+		console.log(query, typeof (query._id));
 
 		collection.find(query).limit(parseInt(resultNumber)).skip(pageNumber * resultNumber).toArray((err, result) => {
 			if (err) {
@@ -320,10 +320,10 @@ class Cooperative {
 
 		// }
 		collection.find().limit(parseInt(resultNumber)).skip(pageNumber * resultNumber).toArray((err, result) => {
-			if (err || result.length==0) {
+			if (err || result.length == 0) {
 				return err
-				? cb({ errorMessage: "Loi trong qua trinh tim kiem", errorCode:501 }, null)
-				: cb({errorMessage:"Khong tim thay du lieu", errorCode:400}, null);
+					? cb({ errorMessage: "Loi trong qua trinh tim kiem", errorCode: 501 }, null)
+					: cb({ errorMessage: "Khong tim thay du lieu", errorCode: 400 }, null);
 			}
 			else {
 				return cb(null, result);
@@ -335,10 +335,10 @@ class Cooperative {
 		const collection = this.app.db.collection('cooperatives');
 
 		collection.find().toArray((err, result) => {
-			if (err || result.length==0) {
+			if (err || result.length == 0) {
 				return err
-				? cb({ errorMessage: "Loi trong qua trinh tim kiem", errorCode:501 }, null)
-				: cb({errorMessage:"Khong tim thay du lieu", errorCode:400}, null);
+					? cb({ errorMessage: "Loi trong qua trinh tim kiem", errorCode: 501 }, null)
+					: cb({ errorMessage: "Khong tim thay du lieu", errorCode: 400 }, null);
 			}
 			else {
 				return cb(null, result);
@@ -411,6 +411,18 @@ class Cooperative {
 			}
 		});
 
+	}
+
+	count(cb = () => { }) {
+		const collection = this.app.db.collection('cooperatives');
+		collection.find().count((err, result) => {
+			if (err) {
+				return cb({ errorMessage: "Lỗi trong quá trình truy xuất dữ liệu", errorCode: 500 }, null);
+			}
+			else {
+				return cb(null, { total: result });
+			}
+		})
 	}
 }
 module.exports = Cooperative;

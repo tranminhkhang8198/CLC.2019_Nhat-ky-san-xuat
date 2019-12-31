@@ -571,6 +571,80 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/api/cooperatives/count",
+    "title": "Get tổng số HTX đang quản lí",
+    "version": "0.1.0",
+    "name": "GetCooperatives",
+    "group": "Cooperatives",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -X GET http://localhost:3001/api/cooperatives/count",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>Tổng số HTX đang quản lí.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"total\": \"4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Lỗi trong quá trình truy xuất dữ liệu\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Cooperatives"
+  },
+  {
+    "type": "get",
     "url": "/api/cooperatives",
     "title": "Get du lieu HTX theo phan trang.",
     "version": "0.1.0",
@@ -7528,8 +7602,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_student_web_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_student_web_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });
