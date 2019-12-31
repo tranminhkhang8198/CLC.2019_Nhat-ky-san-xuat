@@ -2278,13 +2278,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "cooperativeId",
             "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
           },
@@ -2356,13 +2349,6 @@ define({ "api": [
             "optional": false,
             "field": "goodsReceiptId",
             "description": "<p>Id hóa đơn nhập</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
           },
           {
             "group": "Success 200",
@@ -2444,7 +2430,7 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "receivedDate-is-ISO8061-format",
-            "description": "<p>Ngày xuất kho phải là định dạng ISO 8601</p>"
+            "description": "<p>Ngày nhận phải là định dạng ISO 8601</p>"
           },
           {
             "group": "Error 4xx",
@@ -2707,13 +2693,6 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
             "field": "cooperativeId",
             "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
           },
@@ -2755,7 +2734,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Page not found:",
-          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Vui lòng nhập loại sản phẩm\"\n}",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n}",
           "type": "json"
         }
       ]
@@ -2846,13 +2825,6 @@ define({ "api": [
             "optional": false,
             "field": "goodsReceiptId",
             "description": "<p>Id hóa đơn nhập</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
           },
           {
             "group": "Success 200",
@@ -3006,13 +2978,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "cooperativeId",
             "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
           },
@@ -3089,13 +3054,6 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
             "field": "cooperativeId",
             "description": "<p>Id hợp tác xã (trường cooperativeID trong document chứ kp _id)</p>"
           },
@@ -3148,7 +3106,7 @@ define({ "api": [
             "group": "Error 4xx",
             "optional": false,
             "field": "receivedDate-is-ISO8061-format",
-            "description": "<p>Ngày xuất kho phải là định dạng ISO 8601</p>"
+            "description": "<p>Ngày nhận phải là định dạng ISO 8601</p>"
           },
           {
             "group": "Error 4xx",
@@ -4829,6 +4787,796 @@ define({ "api": [
     ],
     "filename": "./router.js",
     "groupTitle": "Token"
+  },
+  {
+    "type": "post",
+    "url": "/tools",
+    "title": "Create new tool management",
+    "name": "CreateNewTool",
+    "group": "Tools",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/tools",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id người nhận</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "returnedDate",
+            "description": "<p>Ngày trả (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"type\": \"Dụng cụ y tế\",\n    \"quantity\": \"5\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"receivedDate\": \"2019-12-12\",\n    \"returnedDate\": \"2019-12-30\",\n    \"note\": \"Something\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id người nhận</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "returnedDate",
+            "description": "<p>Ngày trả (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n\n{\n    \"type\": \"Dụng cụ y tế\",\n    \"quantity\": \"5\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"receivedDate\": \"2019-12-12\",\n    \"returnedDate\": \"2019-12-30\",\n    \"note\": \"Something\",\n    \"_id\": \"5e0aac96e69e031c5fca8c8b\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-is-required",
+            "description": "<p>Trường id người nhận là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-required",
+            "description": "<p>Số lượng là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-positive-integer",
+            "description": "<p>Số lượng phải là số nguyên dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receivedDate-is-ISO8061-format",
+            "description": "<p>Ngày nhận phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "returnedDate-is-ISO8061-format",
+            "description": "<p>Ngày trả phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-does-not-exist",
+            "description": "<p>Người nhận không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-is-invalid",
+            "description": "<p>Id người nhận không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "type-is-required",
+            "description": "<p>Trường loại dụng cụ là bắt buộc</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "type is required:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập loại công cụ, dụng cụ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "receiverId does not exist:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Người nhận không tồn tại\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "issuedDate is ISO 8601:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày xuất kho không hợp lệ\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Tools"
+  },
+  {
+    "type": "delete",
+    "url": "/tools/:id",
+    "title": "Delete document tool management by id",
+    "name": "DeleteToolById",
+    "group": "Tools",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/tools/5e09757502716412c0b026d7",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"successMessage\": \"Document quản lý công cụ, dụng cụ đã được xóa thành công\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Tool-management-document-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tool management not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Tools"
+  },
+  {
+    "type": "get",
+    "url": "/tools",
+    "title": "Get all tool management",
+    "name": "GetAllTools",
+    "group": "Tools",
+    "examples": [
+      {
+        "title": "Get All Tools Management with paginating:",
+        "content": "curl -i http://localhost:3001/api/tools?pageNumber=1&nPerPage=20",
+        "type": "curl"
+      },
+      {
+        "title": "Get All Tools Management with paginating and specific receiverId:",
+        "content": "curl -i http://localhost:3001/api/tools?pageNumber=1&nPerPage=20&receiverId=5e058f0f089c052958b35c59",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng sản phẩm trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalProducts",
+            "description": "<p>Tổng số document quản lý công cụ, dụng cụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id người nhận (theo _id khi tạo user)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "returnedDate",
+            "description": "<p>Ngày trả (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 Ok\n\n{\n     \"totalGoodsIssues\": 2,\n     \"totalPages\": 1,\n     \"data\": [\n         {\n             \"_id\": \"5e0aac96e69e031c5fca8c8b\",\n             \"type\": \"Dụng cụ y tế\",\n             \"quantity\": \"5\",\n             \"receiverId\": \"5e058f0f089c052958b35c59\",\n             \"receivedDate\": \"2019-12-12\",\n             \"returnedDate\": \"2019-12-30\",\n             \"note\": \"Something\",\n             \"receiverName\": \"khang\"\n         },\n         {\n             \"_id\": \"5e0ab067f1ec331e994c6891\",\n             \"type\": \"Dụng cụ y tế\",\n             \"quantity\": \"5\",\n             \"receiverId\": \"5e0ab05af1ec331e994c6890\",\n             \"receivedDate\": \"2019-12-12\",\n             \"returnedDate\": \"2019-12-30\",\n             \"note\": \"Something\",\n             \"receiverName\": \"khang tran\"\n         }\n     ]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Page-not-found",
+            "description": "<p>Trang không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Page not found:",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Tools"
+  },
+  {
+    "type": "get",
+    "url": "/tools/:id",
+    "title": "Get tool management by id",
+    "name": "GetToolsById",
+    "group": "Tools",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/tools/5e0aac96e69e031c5fca8c8b",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id người nhận</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "returnedDate",
+            "description": "<p>Ngày trả (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 Ok\n\n{\n    \"_id\": \"5e0aac96e69e031c5fca8c8b\",\n    \"type\": \"Dụng cụ y tế\",\n    \"quantity\": \"5\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"receivedDate\": \"2019-12-12\",\n    \"returnedDate\": \"2019-12-30\",\n    \"note\": \"Something\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Tool-management-document-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Tool management not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Tools"
+  },
+  {
+    "type": "patch",
+    "url": "/tools",
+    "title": "Update tool management",
+    "name": "UpdateTool",
+    "group": "Tools",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/tools/5e0ab067f1ec331e994c6891",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id người nhận</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "returnedDate",
+            "description": "<p>Ngày trả (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"type\": \"updated\",\n    \"quantity\": \"900\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"receivedDate\": \"2019-01-01\",\n    \"returnedDate\": \"2019-01-01\",\n    \"note\": \"updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "receiverId",
+            "description": "<p>Id người nhận (theo _id khi tạo user)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "receivedDate",
+            "description": "<p>Ngày nhận (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "returnedDate",
+            "description": "<p>Ngày trả (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5e0ab067f1ec331e994c6891\",\n    \"type\": \"updated\",\n    \"quantity\": \"900\",\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"receivedDate\": \"2019-01-01\",\n    \"returnedDate\": \"2019-01-01\",\n    \"note\": \"updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-positive-integer",
+            "description": "<p>Số lượng phải là số nguyên dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receivedDate-is-ISO8061-format",
+            "description": "<p>Ngày nhận phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "returnedDate-is-ISO8061-format",
+            "description": "<p>Ngày trả phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-does-not-exist",
+            "description": "<p>Người nhận không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-is-invalid",
+            "description": "<p>Id người nhận không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "type-is-required",
+            "description": "<p>Trường loại dụng cụ là bắt buộc</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "type is required:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập loại công cụ, dụng cụ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "receiverId does not exist:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Người nhận không tồn tại\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "issuedDate is ISO 8601:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày xuất kho không hợp lệ\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Tools"
   },
   {
     "type": "get",

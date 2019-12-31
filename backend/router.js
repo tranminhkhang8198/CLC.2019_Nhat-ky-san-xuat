@@ -2296,7 +2296,6 @@ exports.routers = app => {
      * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
      * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
      * @apiParam {String} goodsReceiptId Id hóa đơn nhập
-     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
      * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
      * @apiParam {String} note Ghi chú
      *
@@ -2322,7 +2321,6 @@ exports.routers = app => {
      * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
      * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
      * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
-     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
      * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
      * @apiSuccess {String} note Ghi chú
      * @apiSuccess {String} _id Id của document vừa tạo thành công
@@ -2352,7 +2350,7 @@ exports.routers = app => {
      * @apiError quantity-is-required Số lượng là bắt buộc 
      * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
      * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
-     * @apiError receivedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
      * @apiError cooperativeId-is-required Trường id hợp tác xã là bắt buộc
      * @apiError receiptId-is-required Trường id hóa đơn nhập là bắt buộc 
      * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
@@ -2409,7 +2407,6 @@ exports.routers = app => {
      * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
      * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
      * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
-     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
      * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
      * @apiSuccess {String} note Ghi chú
      * @apiSuccess {String} _id Id của document vừa tạo thành công
@@ -2459,7 +2456,7 @@ exports.routers = app => {
      * @apiErrorExample Page not found:
      *     HTTP/1.1 404 Not found
      *     {
-     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
      *     }
      * 
      * @apiPermission none
@@ -2490,7 +2487,6 @@ exports.routers = app => {
      * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
      * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
      * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
-     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
      * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
      * @apiSuccess {String} note Ghi chú
      * @apiSuccess {String} _id Id của document vừa tạo thành công
@@ -2593,7 +2589,6 @@ exports.routers = app => {
      * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
      * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
      * @apiParam {String} goodsReceiptId Id hóa đơn nhập
-     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
      * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
      * @apiParam {String} note Ghi chú
      *
@@ -2619,7 +2614,6 @@ exports.routers = app => {
      * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
      * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
      * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
-     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
      * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
      * @apiSuccess {String} note Ghi chú
      * @apiSuccess {String} _id Id của document vừa tạo thành công
@@ -2645,7 +2639,7 @@ exports.routers = app => {
      * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
      * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
      * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
-     * @apiError receivedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
      * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
      * @apiError productId-is-invalid Id sản phẩm không hợp lệ 
      * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
@@ -2689,6 +2683,352 @@ exports.routers = app => {
         const update = req.body;
 
         app.models.goodsIssue.updateById(id, update, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR TOOL
+
+    /**
+     * @api {post} /tools Create new tool management
+     * @apiName CreateNewTool
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiParam {Number} quantity Số lượng 
+     * @apiParam {ObjectId} receiverId Id người nhận 
+     * @apiParam {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiParam {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "type": "Dụng cụ y tế",
+	 *      "quantity": "5",
+	 *      "receiverId": "5e058f0f089c052958b35c59",
+	 *      "receivedDate": "2019-12-12",
+	 *      "returnedDate": "2019-12-30",
+	 *      "note": "Something"
+     *  }
+     *
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận 
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 201 Created
+     *  
+     *  {
+     *      "type": "Dụng cụ y tế",
+     *      "quantity": "5",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "receivedDate": "2019-12-12",
+     *      "returnedDate": "2019-12-30",
+     *      "note": "Something",
+     *      "_id": "5e0aac96e69e031c5fca8c8b"
+     *  }
+     *
+     * 
+     * @apiError receiverId-is-required Trường id người nhận là bắt buộc
+     * @apiError quantity-is-required Số lượng là bắt buộc 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
+     * @apiError returnedDate-is-ISO8061-format Ngày trả phải là định dạng ISO 8601
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiError type-is-required Trường loại dụng cụ là bắt buộc
+     * @apiErrorExample type is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại công cụ, dụng cụ"
+     *     }
+     * 
+     * @apiErrorExample receiverId does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Người nhận không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.post("/api/tools", (req, res, next) => {
+        const body = req.body;
+
+        app.models.tool.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
+        });
+    });
+
+    /**
+     * @api {get} /tools Get all tool management
+     * @apiName GetAllTools
+     * @apiGroup Tools
+     * @apiExample {curl} Get All Tools Management with paginating:
+     *     curl -i http://localhost:3001/api/tools?pageNumber=1&nPerPage=20
+     * 
+     * @apiExample {curl} Get All Tools Management with paginating and specific receiverId:
+     *     curl -i http://localhost:3001/api/tools?pageNumber=1&nPerPage=20&receiverId=5e058f0f089c052958b35c59
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
+     *
+     * @apiSuccess {Number} totalProducts Tổng số document quản lý công cụ, dụng cụ 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận (theo _id khi tạo user)
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *       "totalGoodsIssues": 2,
+     *       "totalPages": 1,
+     *       "data": [
+     *           {
+     *               "_id": "5e0aac96e69e031c5fca8c8b",
+     *               "type": "Dụng cụ y tế",
+     *               "quantity": "5",
+     *               "receiverId": "5e058f0f089c052958b35c59",
+     *               "receivedDate": "2019-12-12",
+     *               "returnedDate": "2019-12-30",
+     *               "note": "Something",
+     *               "receiverName": "khang"
+     *           },
+     *           {
+     *               "_id": "5e0ab067f1ec331e994c6891",
+     *               "type": "Dụng cụ y tế",
+     *               "quantity": "5",
+     *               "receiverId": "5e0ab05af1ec331e994c6890",
+     *               "receivedDate": "2019-12-12",
+     *               "returnedDate": "2019-12-30",
+     *               "note": "Something",
+     *               "receiverName": "khang tran"
+     *           }
+     *       ]
+     *   }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/tools", (req, res, next) => {
+        const query = req.query;
+
+        app.models.tool.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {get} /tools/:id Get tool management by id
+     * @apiName GetToolsById
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools/5e0aac96e69e031c5fca8c8b
+     * 
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận 
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *      "_id": "5e0aac96e69e031c5fca8c8b",
+     *      "type": "Dụng cụ y tế",
+     *      "quantity": "5",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "receivedDate": "2019-12-12",
+     *      "returnedDate": "2019-12-30",
+     *      "note": "Something"
+     *  }
+     *
+     * @apiError Tool-management-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Tool management not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/tools/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.tool.findById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {delete} /tools/:id Delete document tool management by id 
+     * @apiName DeleteToolById
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Document quản lý công cụ, dụng cụ đã được xóa thành công"
+     *  }
+     *
+     * @apiError Tool-management-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Tool management not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.delete("/api/tools/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.tool.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {patch} /tools Update tool management
+     * @apiName UpdateTool
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools/5e0ab067f1ec331e994c6891
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiParam {Number} quantity Số lượng 
+     * @apiParam {ObjectId} receiverId Id người nhận 
+     * @apiParam {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiParam {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "type": "updated",
+	 *      "quantity": "900",
+	 *      "receiverId": "5e058f0f089c052958b35c59",
+	 *      "receivedDate": "2019-01-01",
+	 *      "returnedDate": "2019-01-01",
+	 *      "note": "updated"
+     *  }
+     *
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận (theo _id khi tạo user)
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e0ab067f1ec331e994c6891",
+     *      "type": "updated",
+     *      "quantity": "900",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "receivedDate": "2019-01-01",
+     *      "returnedDate": "2019-01-01",
+     *      "note": "updated"
+     *  }
+     *
+     * 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
+     * @apiError returnedDate-is-ISO8061-format Ngày trả phải là định dạng ISO 8601
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiError type-is-required Trường loại dụng cụ là bắt buộc
+     * @apiErrorExample type is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại công cụ, dụng cụ"
+     *     }
+     * 
+     * @apiErrorExample receiverId does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Người nhận không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.patch("/api/tools/:id", (req, res, next) => {
+        const id = req.params.id;
+        const update = req.body;
+
+        app.models.tool.updateById(id, update, (err, info) => {
             return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
         });
     });
