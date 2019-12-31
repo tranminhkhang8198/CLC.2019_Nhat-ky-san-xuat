@@ -2356,8 +2356,10 @@ exports.routers = app => {
      * @apiError cooperativeId-is-required Trường id hợp tác xã là bắt buộc
      * @apiError receiptId-is-required Trường id hóa đơn nhập là bắt buộc 
      * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ
      * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
      * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
      * @apiErrorExample productType is required:
      *     HTTP/1.1 409 Conflict
      *     {
@@ -2645,8 +2647,10 @@ exports.routers = app => {
      * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
      * @apiError receivedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
      * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ 
      * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
      * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
      * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
      * @apiError Invalid-id Id không hợp lệ
      * @apiErrorExample Invalid id:

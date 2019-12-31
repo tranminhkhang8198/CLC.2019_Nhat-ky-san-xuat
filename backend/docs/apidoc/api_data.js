@@ -2467,6 +2467,12 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "productId-is-invalid",
+            "description": "<p>Id sản phẩm không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "cooperativeId-does-not-exist",
             "description": "<p>Hợp tác xã không tồn tại</p>"
           },
@@ -2475,6 +2481,12 @@ define({ "api": [
             "optional": false,
             "field": "receiverId-does-not-exist",
             "description": "<p>Người nhận không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-is-invalid",
+            "description": "<p>Id người nhận không hợp lệ</p>"
           }
         ]
       },
@@ -3147,6 +3159,12 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "productId-is-invalid",
+            "description": "<p>Id sản phẩm không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "cooperativeId-does-not-exist",
             "description": "<p>Hợp tác xã không tồn tại</p>"
           },
@@ -3155,6 +3173,12 @@ define({ "api": [
             "optional": false,
             "field": "receiverId-does-not-exist",
             "description": "<p>Người nhận không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "receiverId-is-invalid",
+            "description": "<p>Id người nhận không hợp lệ</p>"
           },
           {
             "group": "Error 4xx",
