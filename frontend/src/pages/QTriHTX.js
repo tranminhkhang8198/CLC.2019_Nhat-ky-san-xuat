@@ -37,7 +37,9 @@ class QuanTriHTX extends Component {
   async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
-      const { data, totalProducts } = await this.getData();
+      // const { data, totalProducts } = await this.getData();
+      const data = await this.getData();
+      const totalProducts = null;
       this.updateDataWhenRendered(data, totalProducts);
     }
   }
@@ -56,6 +58,7 @@ class QuanTriHTX extends Component {
       }
       return null;
     } catch (error) {
+      console.log('error');
       return null;
     }
   }
