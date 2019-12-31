@@ -35,6 +35,9 @@ class DeleteItemsModal extends Component {
 
   componentDidUpdate(prevProps) {
     const { data } = this.props;
+    if (!Array.isArray(data)) {
+      return;
+    }
     if (data.length !== prevProps.data.length) {
       this.updateDataWhenRendered(data);
       return;

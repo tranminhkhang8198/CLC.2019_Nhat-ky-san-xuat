@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 import React, { Component } from 'react';
@@ -8,7 +9,6 @@ import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
 class QuanTriHTX extends Component {
-  // const navItems = ['Hợp tác xã', 'Quản lý Hợp tác xã', 'Thuốc BVTV', 'Phân bón'];
   constructor(props) {
     super(props);
     this.state = {
@@ -17,81 +17,54 @@ class QuanTriHTX extends Component {
       refresh: false,
       pageNum: 1,
       dataPerpage: 10,
+      totalProducts: 0,
     };
 
     this.getData = this.getData.bind(this);
   }
 
   async componentDidMount() {
-    const cooperatives = await this.getData();
+    // const { data, totalProducts } = await this.getData();
+    const data = await this.getData();
+    const totalProducts = null;
+    console.log(data);
     this.setState({
-      data: cooperatives.data.data,
-      error: cooperatives.error,
+      data,
+      totalProducts,
     });
   }
-
-  // async componentDidMount() {
-  //   const cooperatives = await this.getData();
-  //   this.setState({
-  //     data: cooperatives,
-  //     refresh: false,
-  //   });
-  // }
-
 
   async componentDidUpdate() {
     const { refresh } = this.state;
     if (refresh) {
-      const cooperatives = await this.getData();
-      this.updateDataWhenRendered(cooperatives);
+      const { data, totalProducts } = await this.getData();
+      this.updateDataWhenRendered(data, totalProducts);
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line class-methods-use-this
-  getToken() {
-    const token = localStorage.getItem('itemName');
-    return token;
-  }
-
-  // async getData() {
-  //   const { pageNum, dataPerpage } = this.state;
-  //   const data = await axios({
-  //     method: 'GET',
-  //     url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
-  //   });
-  //   return data;
-  // }
-
   async getData() {
-    const { pageNum, dataPerpage } = this.state;
-    const response = [];
-    response.data = await axios({
-      method: 'GET',
-      url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
-    }).catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        // console.log(error.response.data.errorMessage);
-        // console.log(error.response.status);
-        // console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
+    try {
+      const { pageNum, dataPerpage } = this.state;
+      const token = localStorage.getItem('user');
+      const response = await axios({
+        method: 'GET',
+        url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
+        headers: { Authorization: token },
+      });
+      if (response.status === 200) {
+        return response.data;
       }
-      response.error = error.response;
-    });
-    return response;
+      return null;
+    } catch (error) {
+      return null;
+    }
   }
 
-  async updateDataWhenRendered(updatedData) {
-    await this.setState({
-      data: updatedData.data.data,
-      error: updatedData.error,
+  async updateDataWhenRendered(updatedData, totalProducts) {
+    this.setState({
       refresh: false,
+      data: updatedData,
+      totalProducts,
     });
     return updatedData;
   }
