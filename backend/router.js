@@ -2792,7 +2792,7 @@ exports.routers = app => {
      * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
      * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
      *
-     * @apiSuccess {Number} totalProducts Tổng số document quản lý công cụ, dụng cụ 
+     * @apiSuccess {Number} totalTools Tổng số document quản lý công cụ, dụng cụ 
      * @apiSuccess {Number} totalPages Tổng số lượng trang
      * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
      * @apiSuccess {Number} quantity Số lượng 
@@ -3030,6 +3030,338 @@ exports.routers = app => {
 
         app.models.tool.updateById(id, update, (err, info) => {
             return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR SUBCONTRACTOR
+
+    /**
+     * @api {post} /subcontractors Create new subcontractor
+     * @apiName CreateNewSubcontractor
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} name Tên nhà thầu phụ
+     * @apiParam {String} serviceProvided Dịch vụ cung cấp
+     * @apiParam {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiParam {Number} cost Chi phí thuê
+     * @apiParam {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "name": "tmk",
+	 *      "serviceProvided": "May cat lua",
+	 *      "hiredDate": "2019-12-12",
+	 *      "cost": "9000000",
+	 *      "quantityEmployee": "20",
+     *      "note": "Something for note"
+     *  }
+     *
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 201 Created
+     *  
+     *  {
+     *      "name": "tmk",
+     *      "serviceProvided": "May cat lua",
+     *      "hiredDate": "2019-12-12",
+     *      "cost": "9000000",
+     *      "quantityEmployee": "20",
+     *      "note": "Something for note",
+     *      "_id": "5e0accdaf7cd082ea2431756"
+     *  }
+     *
+     * 
+     * @apiError name-is-required Trường tên nhà thầu phụ là bắt buộc
+     * @apiError serviceProvided-is-required Trường dịch vụ cung cấp là bắt buộc 
+     * @apiError hiredDate-is-ISO8061-format Ngày thuê phải là định dạng ISO 8601
+     * @apiError cost-is-positive-number Tiền thuê phải là số dương
+     * @apiError quantityEmployee-is-positive-integer Số lượng lao động tham gia phải là số nguyên dương
+     * 
+     * @apiErrorExample name is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập tên nhà thầu phụ"
+     *     }
+     * 
+     * @apiErrorExample cost is positive number:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Tiền thuê phải là số dương"
+     *     }
+     * 
+     * @apiErrorExample hiredDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày thuê không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.post("/api/subcontractors", (req, res, next) => {
+        const body = req.body;
+
+        app.models.subcontractor.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
+        });
+    });
+
+
+    /**
+     * @api {get} /subcontractors Get all subcontractors
+     * @apiName GetAllSubcontractors
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Get All Subcontractor with paginating:
+     *     curl -i http://localhost:3001/api/subcontractors?pageNumber=1&nPerPage=20
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
+     *
+     * @apiSuccess {Number} totalSubcontractors Tổng số document quản lý công cụ, dụng cụ 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *      "totalGoodsIssues": 2,
+     *      "totalPages": 1,
+     *      "data": [
+     *          {
+     *              "_id": "5e0acc45b1c82b2dbb7a0fcc",
+     *              "name": "tmk",
+     *              "serviceProvided": "May cat lua",
+     *              "hiredDate": "2019-12-12",
+     *              "cost": "9000000",
+     *              "quantityEmployee": "200",
+     *              "note": null
+     *          },
+     *          {
+     *              "_id": "5e0acc7406c7a42e3a31d3a6",
+     *              "name": "tmk",
+     *              "serviceProvided": "May cat lua",
+     *              "hiredDate": "2019-12-12",
+     *              "cost": "5000.500",
+     *              "quantityEmployee": "200",
+     *              "note": null
+     *          }
+     *  }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/subcontractors", (req, res, next) => {
+        const query = req.query;
+
+        app.models.subcontractor.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {get} /subcontractors/:id Get subcontractor by id
+     * @apiName GetSubcontractorById
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors/5e0aac96e69e031c5fca8c8b
+     * 
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *      "_id": "5e0acc45b1c82b2dbb7a0fcc",
+     *      "name": "tmk",
+     *      "serviceProvided": "May cat lua",
+     *      "hiredDate": "2019-12-12",
+     *      "cost": "9000000",
+     *      "quantityEmployee": "200",
+     *      "note": null
+     *  }
+     *
+     * @apiError Subcontractor-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Subcontractor not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/subcontractors/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.subcontractor.findById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {delete} /subcontractors/:id Update subcontractor by id 
+     * @apiName UpdateSubcontractorById
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Document nhà thầu phụ đã được xóa thành công"
+     *  }
+     *
+     * @apiError Subcontractor-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Subcontractor not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.delete("/api/subcontractors/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.subcontractor.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {patch} /subcontractors Update subcontractor by id
+     * @apiName updateSubcontractorById
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors/5e0accdaf7cd082ea2431756
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} name Tên nhà thầu phụ
+     * @apiParam {String} serviceProvided Dịch vụ cung cấp
+     * @apiParam {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiParam {Number} cost Chi phí thuê
+     * @apiParam {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "name": "updated",
+	 *      "serviceProvided": "updated",
+	 *      "hiredDate": "2019-01-01",
+	 *      "cost": "99999",
+	 *      "quantityEmployee": "999999",
+     *      "note": "updated"
+     *  }
+     *
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e0acc7406c7a42e3a31d3a6",
+     *      "name": "updated",
+     *      "serviceProvided": "updated",
+     *      "hiredDate": "2019-01-01",
+     *      "cost": "99999",
+     *      "quantityEmployee": "999999",
+     *      "note": "updated"
+     *  }
+     *
+     * 
+     * @apiError hiredDate-is-ISO8061-format Ngày thuê phải là định dạng ISO 8601
+     * @apiError cost-is-positive-number Tiền thuê phải là số dương
+     * @apiError quantityEmployee-is-positive-integer Số lượng lao động tham gia phải là số nguyên dương
+     * 
+     * @apiErrorExample cost is positive number:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Tiền thuê phải là số dương"
+     *     }
+     * 
+     * @apiErrorExample hiredDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày thuê không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.patch("/api/subcontractors/:id", (req, res, next) => {
+        const id = req.params.id;
+        const body = req.body;
+
+        app.models.subcontractor.updateById(id, body, (err, info) => {
+            return err ? errorHandle(res, err.errMessage, err.code) : responseHandle(res, info);
         });
     });
 };

@@ -4696,6 +4696,750 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/subcontractors",
+    "title": "Create new subcontractor",
+    "name": "CreateNewSubcontractor",
+    "group": "Subcontractors",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/subcontractors",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên nhà thầu phụ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "serviceProvided",
+            "description": "<p>Dịch vụ cung cấp</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "hireDate",
+            "description": "<p>Ngày thuê (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "cost",
+            "description": "<p>Chi phí thuê</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "quantityEmployee",
+            "description": "<p>Số lượng lao động tham gia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"name\": \"tmk\",\n    \"serviceProvided\": \"May cat lua\",\n    \"hiredDate\": \"2019-12-12\",\n    \"cost\": \"9000000\",\n    \"quantityEmployee\": \"20\",\n    \"note\": \"Something for note\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên nhà thầu phụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serviceProvided",
+            "description": "<p>Dịch vụ cung cấp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "hireDate",
+            "description": "<p>Ngày thuê (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "cost",
+            "description": "<p>Chi phí thuê</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantityEmployee",
+            "description": "<p>Số lượng lao động tham gia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n\n{\n    \"name\": \"tmk\",\n    \"serviceProvided\": \"May cat lua\",\n    \"hiredDate\": \"2019-12-12\",\n    \"cost\": \"9000000\",\n    \"quantityEmployee\": \"20\",\n    \"note\": \"Something for note\",\n    \"_id\": \"5e0accdaf7cd082ea2431756\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "name-is-required",
+            "description": "<p>Trường tên nhà thầu phụ là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "serviceProvided-is-required",
+            "description": "<p>Trường dịch vụ cung cấp là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "hiredDate-is-ISO8061-format",
+            "description": "<p>Ngày thuê phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "cost-is-positive-number",
+            "description": "<p>Tiền thuê phải là số dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantityEmployee-is-positive-integer",
+            "description": "<p>Số lượng lao động tham gia phải là số nguyên dương</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "name is required:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập tên nhà thầu phụ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "cost is positive number:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Tiền thuê phải là số dương\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "hiredDate is ISO 8601:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày thuê không hợp lệ\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Subcontractors"
+  },
+  {
+    "type": "get",
+    "url": "/subcontractors",
+    "title": "Get all subcontractors",
+    "name": "GetAllSubcontractors",
+    "group": "Subcontractors",
+    "examples": [
+      {
+        "title": "Get All Subcontractor with paginating:",
+        "content": "curl -i http://localhost:3001/api/subcontractors?pageNumber=1&nPerPage=20",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng sản phẩm trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalProducts",
+            "description": "<p>Tổng số document quản lý công cụ, dụng cụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên nhà thầu phụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serviceProvided",
+            "description": "<p>Dịch vụ cung cấp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "hireDate",
+            "description": "<p>Ngày thuê (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "cost",
+            "description": "<p>Chi phí thuê</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantityEmployee",
+            "description": "<p>Số lượng lao động tham gia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 Ok\n\n{\n    \"totalGoodsIssues\": 2,\n    \"totalPages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"5e0acc45b1c82b2dbb7a0fcc\",\n            \"name\": \"tmk\",\n            \"serviceProvided\": \"May cat lua\",\n            \"hiredDate\": \"2019-12-12\",\n            \"cost\": \"9000000\",\n            \"quantityEmployee\": \"200\",\n            \"note\": null\n        },\n        {\n            \"_id\": \"5e0acc7406c7a42e3a31d3a6\",\n            \"name\": \"tmk\",\n            \"serviceProvided\": \"May cat lua\",\n            \"hiredDate\": \"2019-12-12\",\n            \"cost\": \"5000.500\",\n            \"quantityEmployee\": \"200\",\n            \"note\": null\n        }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Page-not-found",
+            "description": "<p>Trang không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Page not found:",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Subcontractors"
+  },
+  {
+    "type": "get",
+    "url": "/subcontractors/:id",
+    "title": "Get subcontractor by id",
+    "name": "GetSubcontractorById",
+    "group": "Subcontractors",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/subcontractors/5e0aac96e69e031c5fca8c8b",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên nhà thầu phụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serviceProvided",
+            "description": "<p>Dịch vụ cung cấp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "hireDate",
+            "description": "<p>Ngày thuê (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "cost",
+            "description": "<p>Chi phí thuê</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantityEmployee",
+            "description": "<p>Số lượng lao động tham gia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 Ok\n\n{\n    \"_id\": \"5e0acc45b1c82b2dbb7a0fcc\",\n    \"name\": \"tmk\",\n    \"serviceProvided\": \"May cat lua\",\n    \"hiredDate\": \"2019-12-12\",\n    \"cost\": \"9000000\",\n    \"quantityEmployee\": \"200\",\n    \"note\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Subcontractor-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Subcontractor not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Subcontractors"
+  },
+  {
+    "type": "delete",
+    "url": "/subcontractors/:id",
+    "title": "Update subcontractor by id",
+    "name": "UpdateSubcontractorById",
+    "group": "Subcontractors",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/subcontractors/5e09757502716412c0b026d7",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"successMessage\": \"Document nhà thầu phụ đã được xóa thành công\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Subcontractor-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Subcontractor not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Subcontractors"
+  },
+  {
+    "type": "patch",
+    "url": "/subcontractors",
+    "title": "Update subcontractor by id",
+    "name": "updateSubcontractorById",
+    "group": "Subcontractors",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/subcontractors/5e0accdaf7cd082ea2431756",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên nhà thầu phụ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "serviceProvided",
+            "description": "<p>Dịch vụ cung cấp</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "hireDate",
+            "description": "<p>Ngày thuê (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "cost",
+            "description": "<p>Chi phí thuê</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "quantityEmployee",
+            "description": "<p>Số lượng lao động tham gia</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"name\": \"updated\",\n    \"serviceProvided\": \"updated\",\n    \"hiredDate\": \"2019-01-01\",\n    \"cost\": \"99999\",\n    \"quantityEmployee\": \"999999\",\n    \"note\": \"updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên nhà thầu phụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serviceProvided",
+            "description": "<p>Dịch vụ cung cấp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "hireDate",
+            "description": "<p>Ngày thuê (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "cost",
+            "description": "<p>Chi phí thuê</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantityEmployee",
+            "description": "<p>Số lượng lao động tham gia</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5e0acc7406c7a42e3a31d3a6\",\n    \"name\": \"updated\",\n    \"serviceProvided\": \"updated\",\n    \"hiredDate\": \"2019-01-01\",\n    \"cost\": \"99999\",\n    \"quantityEmployee\": \"999999\",\n    \"note\": \"updated\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "hiredDate-is-ISO8061-format",
+            "description": "<p>Ngày thuê phải là định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "cost-is-positive-number",
+            "description": "<p>Tiền thuê phải là số dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantityEmployee-is-positive-integer",
+            "description": "<p>Số lượng lao động tham gia phải là số nguyên dương</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "cost is positive number:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Tiền thuê phải là số dương\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "hiredDate is ISO 8601:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Ngày thuê không hợp lệ\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Subcontractors"
+  },
+  {
+    "type": "post",
     "url": "/refresh_token",
     "title": "Xac thuc lay access token moi",
     "version": "0.1.0",
