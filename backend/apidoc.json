@@ -3,5 +3,5 @@
   "version": "0.1.0",
   "description": "apiDoc",
   "title": "Custom apiDoc",
-  "url": "http://localhost:3001/api"
+  "url": "http://localhost:3001"
 }

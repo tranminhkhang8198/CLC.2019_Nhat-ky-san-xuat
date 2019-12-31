@@ -938,12 +938,12 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.get('/api/cooperatives',(req, res, next)=>{
+    app.get('/api/cooperatives', (req, res, next) => {
         const body = req.query;
-        app.models.cooperative.get(body, (err, result)=>{
-            return err 
-            ? errorHandle(res, err.errorMessage, err.errorCode)
-            : responseHandle(res, result); 
+        app.models.cooperative.get(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
         })
     })
 
@@ -1013,11 +1013,11 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.get('/api/cooperatives/all',(req, res, next)=>{
-        app.models.cooperative.getAll((err, result)=>{
-            return err 
-            ? errorHandle(res, err.errorMessage, err.errorCode)
-            : responseHandle(res, result); 
+    app.get('/api/cooperatives/all', (req, res, next) => {
+        app.models.cooperative.getAll((err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
         })
     })
 
@@ -1117,8 +1117,13 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.post('/api/cooperatives', (req, res, next) => {
+    app.post('/api/cooperatives', upload.single('logo'), (req, res, next) => {
+        let logo = "http://localhost:3001/logo/default.png"
+        if (req.file) {
+            logo = "http://localhost:3001/logo/" + req.file.filename;
+        }
         const body = req.body;
+        _.set(body, 'logo', logo);
         // verifyUser(req, 'cooperative', (err, accept) => {
         //     if (err) {
         //         errorHandle(res, "Nguoi dung khong duoc phep truy cap", 405);
@@ -1280,6 +1285,43 @@ exports.routers = app => {
     })
 
     /**
+     * @api {get} /api/cooperatives/count Get tổng số HTX đang quản lí
+     * @apiVersion 0.1.0
+     * @apiName GetCooperatives
+     * @apiGroup Cooperatives
+     *
+     *
+     * 
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -X GET http://localhost:3001/api/cooperatives/count
+     * @apiSuccess {Number} total Tổng số HTX đang quản lí.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "total": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Lỗi trong quá trình truy xuất dữ liệu"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.get('/api/cooperatives/count', (req, res, nexr) => {
+        app.models.cooperative.count((err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    /**
      * @api {post} /api/diaries Tạo nhật ký mới.
      * @apiVersion 0.1.0
      * @apiName PostDiaries
@@ -1435,6 +1477,38 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {post} /api/employee Request User information
+     * @apiVersion 0.1.0
+     * @apiName PostEmployee
+     * @apiGroup Employee
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} id Users unique ID.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *       "refresh_token": "fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh"
+     *     }
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
 
     app.post('/api/employee', (req, res, next) => {
         const body = req.body;
