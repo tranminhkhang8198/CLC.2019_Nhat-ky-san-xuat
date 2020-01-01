@@ -184,9 +184,7 @@ class AddItemModal extends Component {
 
       if (createDataRequest.status >= 200 && createDataRequest.status < 300) {
         alert('Tạo mới dữ liệu thành công');
-        // parent.setState(() => ({
-        //   refresh: true,
-        // }));
+        window.location.reload();
       }
 
       return;

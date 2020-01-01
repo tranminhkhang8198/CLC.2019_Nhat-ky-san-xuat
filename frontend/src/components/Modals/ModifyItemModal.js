@@ -149,6 +149,7 @@ class ModifyItemModal extends Component {
 
       if (updateDataRequest.status >= 200 && updateDataRequest.status < 300) {
         alert('Cập nhật dữ liệu thành công');
+        window.location.reload();
       }
     } catch (submitError) {
       console.log(submitError.response);
@@ -671,7 +672,7 @@ class ModifyItemModal extends Component {
     const { data } = this.props;
     return (
       <React.Fragment>
-        {data.length && data.map((item, index) => (
+        {data.length && data.map((itemData, index) => (
           <div className="modal fade" role="dialog" key={uuidv4()} tabIndex={-1} id={`modal-modify-${index}`}>
             <div className="modal-dialog" role="document">
               <div className="modal-content">
@@ -836,7 +837,7 @@ class ModifyItemModal extends Component {
                     className="btn btn-primary"
                     type="button"
                     data-dismiss="modal"
-                    data-id={item._id}
+                    data-id={itemData._id}
                     data-index={index}
                     onClick={this.handleDataSubmit}
                   >

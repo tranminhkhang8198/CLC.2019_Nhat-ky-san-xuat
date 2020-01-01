@@ -16,14 +16,19 @@ class QuanTriHTX extends Component {
       data: [],
       refresh: false,
       pageNum: 1,
+      activePage: 1,
       dataPerpage: 10,
+      searchError: '',
+      totalProducts: 52,
     };
 
     this.getData = this.getData.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
   async componentDidMount() {
     const cooperatives = await this.getData();
+    console.log(cooperatives);
     this.setState({
       data: cooperatives.data.data,
       error: cooperatives.error,
@@ -41,6 +46,7 @@ class QuanTriHTX extends Component {
 
   async componentDidUpdate() {
     const { refresh } = this.state;
+    console.log('updating...');
     if (refresh) {
       const cooperatives = await this.getData();
       this.updateDataWhenRendered(cooperatives);
@@ -65,6 +71,8 @@ class QuanTriHTX extends Component {
 
   async getData() {
     const { pageNum, dataPerpage } = this.state;
+    console.log(pageNum, '-', dataPerpage);
+
     const response = [];
     response.data = await axios({
       method: 'GET',
@@ -87,8 +95,30 @@ class QuanTriHTX extends Component {
     return response;
   }
 
+  async handlePageChange(pageNumber) {
+    const { dataPerpage } = this.state;
+    console.log('call me');
+    const [response, totalCooperativesResponse] = await Promise.all([
+      axios.get(`http://localhost:3001/api/cooperatives?pageNumber=${pageNumber}&resultNumber=${dataPerpage}`),
+      axios.get('http://localhost:3001/api/cooperatives/count'),
+    ]);
+
+    console.log(response.status, '---', totalCooperativesResponse.status);
+
+    if (response.status === 200 && totalCooperativesResponse.status === 200) {
+      const { data } = response.data;
+      console.log(data);
+      const { total: totalProducts } = totalCooperativesResponse.data;
+      this.setState(() => ({
+        // data,
+        totalProducts: totalProducts || 52,
+        activePage: pageNumber,
+      }));
+    }
+  }
+
   async updateDataWhenRendered(updatedData) {
-    await this.setState({
+    this.setState({
       data: updatedData.data.data,
       error: updatedData.error,
       refresh: false,
@@ -97,7 +127,14 @@ class QuanTriHTX extends Component {
   }
 
   render() {
-    const { error, data } = this.state;
+    const {
+      error,
+      data,
+      activePage,
+      searchError,
+      totalProducts,
+      dataPerpage,
+    } = this.state;
     if (error) {
       const a = (
         <div>
@@ -126,10 +163,18 @@ class QuanTriHTX extends Component {
                   <i className="fas fa-trash" />
                 </span>
                 <span className="text-white text">Xóa dữ liệu</span>
+                <div className="text-center text-danger">{searchError}</div>
               </a>
             </div>
           </div>
-          <ListItems data={data} parentComponent={this} />
+          <ListItems
+            data={data}
+            activePage={activePage}
+            handlePageChange={this.handlePageChange}
+            parentComponent={this}
+            totalProducts={totalProducts}
+            dataPerpage={dataPerpage}
+          />
         </div>
       </div>
     );
