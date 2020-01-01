@@ -790,17 +790,18 @@ exports.routers = app => {
     /**
      * @api {get} /api/cooperatives Tìm kiếm thông tin HTX.
      * @apiVersion 0.1.0
-     * @apiName GetCooperatives
+     * @apiName SearchCooperatives
      * @apiGroup Cooperatives
      *
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/cooperatives
+     *     curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&_id=5dd6a2d406e82f6fe5e96f75
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&name=Hop tac xa long thanh
      *
      * @apiHeader {String} authorization Token.
-     * @apiParam {Object} query Dieu kien tim kiem.
-     * @apiParam {Object} options Cau truc ket qua tra ve.
-     * @apiParam {Number} resultNumber so luong ket qua tra ve theo phan trang (tuy chon).
-     * @apiParam {Number} pageNumber trang du lieu can tra ve theo phan trang (tuy chon).
+     * @apiParam {String} query Dieu kien tim kiem.
+     * @apiParam {Number} [resultNumber] so luong ket qua tra ve theo phan trang (tuy chon).
+     * @apiParam {Number} [pageNumber] trang du lieu can tra ve theo phan trang (tuy chon).
      *
      * @apiSuccess (Response Fileds) {Object[]} records Danh sach HTX.
      * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
@@ -822,8 +823,8 @@ exports.routers = app => {
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
-     *  {
-     *      "records": [
+     *  
+     *      [
      *          {
      *              "_id": "5de653f18a92cd1e06fc0b59",
      *              "name": "Hop tac xa nga nam",
@@ -843,7 +844,87 @@ exports.routers = app => {
      *              "docs": ""
      *          }
      *      ]
-     *  }
+     *  
+     * 
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Loi-Trong-qua-trinh-tim-kiem   Lỗi trong quá trình tìm kiếm.
+     * @apiError ID-khong-hop-le ID không hợp lệ
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "ID không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.get('/api/cooperatives/search', (req, res, next) => {
+        const body = req.query;
+        app.models.cooperative.search(body, (err, result) => {
+            if (err) {
+                return errorHandle(res, err.errorMessage, 401);
+            }
+            else {
+                return responseHandle(res, result);
+            }
+        })
+    })
+
+    /**
+     * @api {get} /api/cooperatives Get du lieu HTX theo phan trang.
+     * @apiVersion 0.1.0
+     * @apiName GetCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives?pageNumber=1&resultNumber=1
+     *
+     * @apiHeader {String} authorization Token.
+     * @apiParam {Number} resultNumber so luong ket qua tra ve theo phan trang (tuy chon).
+     * @apiParam {Number} pageNumber trang du lieu can tra ve theo phan trang (tuy chon).
+     * 
+     *
+     * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
+     * @apiSuccess (Response Fileds) {String} records.name Tên gọi của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.foreignName Tên nước ngoài của HTX.
+     * @apiSuccess (Response Fileds) {String} records.abbreviationName Tên viết tắt.
+     * @apiSuccess (Response Fileds) {String} records.logo Logo của HTX.
+     * @apiSuccess (Response Fileds) {String} records.status Thông tin trạng thái của HTX.
+     * @apiSuccess (Response Fileds) {String} records.cooperativeID Mã số HTX.
+     * @apiSuccess (Response Fileds) {String} records.tax Mã số thuế của HTX.
+     * @apiSuccess (Response Fileds) {String} records.surrgate Người đại diện.
+     * @apiSuccess (Response Fileds) {String} records.director Giám đốc.
+     * @apiSuccess (Response Fileds) {String} records.address Địa chỉ của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.phone Số điện thoại của HTX.
+     * @apiSuccess (Response Fileds) {String} records.fax Địa chỉ fax của HTX.
+     * @apiSuccess (Response Fileds) {String} records.website Đia chỉ website của HTX.
+     * @apiSuccess (Response Fileds) {String} records.representOffice Văn phòng đại diện.
+     * @apiSuccess (Response Fileds) {String[]} records.docs Danh sách tài liệu.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *      [
+     *          {
+     *              "_id": "5de653f18a92cd1e06fc0b59",
+     *              "name": "Hop tac xa nga nam",
+     *              "foreignName": "Hop tac xa nga nam",
+     *              "abbreviationName": "NN",
+     *              "logo": "",
+     *              "status": "Dang hoat dong",
+     *              "cooperativeID": "HTXNN",
+     *              "tax": "NN23442",
+     *              "surrgate": "Nguyen Tan Vu",
+     *              "director": "Huynh Van Tan",
+     *              "address": "",
+     *              "phone": "0836738223",
+     *              "fax": "NN341",
+     *              "website": "nn.com",
+     *              "representOffice": "",
+     *              "docs": ""
+     *          }
+     *      ]
+     *  
      * 
      * @apiError Permission-denied Token khong hop le
      * @apiError Loi-Trong-qua-trinh-tim-kiem   Lỗi trong quá trình tìm kiếm.
@@ -858,14 +939,85 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.get('/api/cooperatives', (req, res, next) => {
-        const body = req.body;
-        app.models.cooperative.search(body, (err, result) => {
-            if (err) {
-                return errorHandle(res, err.errorMessage, 401);
-            }
-            else {
-                return responseHandle(res, result);
-            }
+        const body = req.query;
+        app.models.cooperative.get(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    /**
+     * @api {get} /api/cooperatives/all Get thông tin HTX.
+     * @apiVersion 0.1.0
+     * @apiName GetAllCooperatives
+     * @apiGroup Cooperatives
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives/all
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     *
+     * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
+     * @apiSuccess (Response Fileds) {String} records.name Tên gọi của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.foreignName Tên nước ngoài của HTX.
+     * @apiSuccess (Response Fileds) {String} records.abbreviationName Tên viết tắt.
+     * @apiSuccess (Response Fileds) {String} records.logo Logo của HTX.
+     * @apiSuccess (Response Fileds) {String} records.status Thông tin trạng thái của HTX.
+     * @apiSuccess (Response Fileds) {String} records.cooperativeID Mã số HTX.
+     * @apiSuccess (Response Fileds) {String} records.tax Mã số thuế của HTX.
+     * @apiSuccess (Response Fileds) {String} records.surrgate Người đại diện.
+     * @apiSuccess (Response Fileds) {String} records.director Giám đốc.
+     * @apiSuccess (Response Fileds) {String} records.address Địa chỉ của hợp tác xã.
+     * @apiSuccess (Response Fileds) {String} records.phone Số điện thoại của HTX.
+     * @apiSuccess (Response Fileds) {String} records.fax Địa chỉ fax của HTX.
+     * @apiSuccess (Response Fileds) {String} records.website Đia chỉ website của HTX.
+     * @apiSuccess (Response Fileds) {String} records.representOffice Văn phòng đại diện.
+     * @apiSuccess (Response Fileds) {String[]} records.docs Danh sách tài liệu.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *      [
+     *          {
+     *              "_id": "5de653f18a92cd1e06fc0b59",
+     *              "name": "Hop tac xa nga nam",
+     *              "foreignName": "Hop tac xa nga nam",
+     *              "abbreviationName": "NN",
+     *              "logo": "",
+     *              "status": "Dang hoat dong",
+     *              "cooperativeID": "HTXNN",
+     *              "tax": "NN23442",
+     *              "surrgate": "Nguyen Tan Vu",
+     *              "director": "Huynh Van Tan",
+     *              "address": "",
+     *              "phone": "0836738223",
+     *              "fax": "NN341",
+     *              "website": "nn.com",
+     *              "representOffice": "",
+     *              "docs": ""
+     *          }
+     *      ]
+     *  
+     * 
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Loi-Trong-qua-trinh-tim-kiem   Lỗi trong quá trình tìm kiếm.
+     * @apiError ID-khong-hop-le ID không hợp lệ
+     * 
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "ID không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.get('/api/cooperatives/all', (req, res, next) => {
+        app.models.cooperative.getAll((err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
         })
     })
 
@@ -965,8 +1117,13 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.post('/api/cooperatives', (req, res, next) => {
+    app.post('/api/cooperatives', upload.single('logo'), (req, res, next) => {
+        let logo = "http://localhost:3001/logo/default.png"
+        if (req.file) {
+            logo = "http://localhost:3001/logo/" + req.file.filename;
+        }
         const body = req.body;
+        _.set(body, 'logo', logo);
         // verifyUser(req, 'cooperative', (err, accept) => {
         //     if (err) {
         //         errorHandle(res, "Nguoi dung khong duoc phep truy cap", 405);
@@ -1128,6 +1285,43 @@ exports.routers = app => {
     })
 
     /**
+     * @api {get} /api/cooperatives/count Get tổng số HTX đang quản lí
+     * @apiVersion 0.1.0
+     * @apiName GetCooperatives
+     * @apiGroup Cooperatives
+     *
+     *
+     * 
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -X GET http://localhost:3001/api/cooperatives/count
+     * @apiSuccess {Number} total Tổng số HTX đang quản lí.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "total": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Lỗi trong quá trình truy xuất dữ liệu"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.get('/api/cooperatives/count', (req, res, nexr) => {
+        app.models.cooperative.count((err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    /**
      * @api {post} /api/diaries Tạo nhật ký mới.
      * @apiVersion 0.1.0
      * @apiName PostDiaries
@@ -1283,6 +1477,38 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {post} /api/employee Request User information
+     * @apiVersion 0.1.0
+     * @apiName PostEmployee
+     * @apiGroup Employee
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} id Users unique ID.
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *       "refresh_token": "fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh"
+     *     }
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "nModified": "4"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Nothing to update"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
 
     app.post('/api/employee', (req, res, next) => {
         const body = req.body;
@@ -2022,11 +2248,6 @@ exports.routers = app => {
      *     curl -i http://localhost:3001/api/fertilizers/query?name=Phân bón Calcium Nitrate( Calcinit)
      *
      * @apiHeader {String} authorization Token.
-     * 
-     * 
-     * @apiParam {Number} pageNumber Số trang cần lấy
-     * @apiParam {Number} nPerPage Số lượng thuốc bvtv trên mỗi trang
-     *
      *
      * @apiSuccess {String} ministry Bộ
      * @apiSuccess {String} province Tỉnh
@@ -2286,79 +2507,99 @@ exports.routers = app => {
     // ROUTES FOR GOODSISSUE
 
     /**
-     * @api {post} /api/goods-issues Create new fertilizer
-     * @apiName CreateFertilizer
-     * @apiGroup Fertilizers
+     * @api {post} /goods-issues Create new goods issue
+     * @apiName CreateGoodsIssue
+     * @apiGroup GoodIssues
      * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/fertilizers
+     *     curl -i http://localhost:3001/api/goods-issues
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {String} ministry Bộ
-     * @apiParam {String} province Tỉnh
-     * @apiParam {String} enterprise Tên doanh nghiệp
-     * @apiParam {String} type Loại phân bón
-     * @apiParam {String} name Tên phân bón
-     * @apiParam {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
-     * @apiParam {String} lawDocument Căn cứ, tiêu chuẩn, quy định
-     * @apiParam {String} isoCertOrganization Tổ chức chứng nhận hợp quy
-     * @apiParam {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     * @apiParam {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiParam {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
+     * @apiParam {String} goodsReceiptId Id hóa đơn nhập
+     * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiParam {String} note Ghi chú
      *
      *
      * @apiParamExample {json} Request-Example:
      * 
      *  {
-     *      "ministry": "Công thương",
-     *      "province": "Bà Rịa - Vũng Tàu",
-     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
-     *      "type": "Phân vô cơ",
-     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
-     *      "ingredient": "",
-     *      "lawDocument": "",
-     *      "isoCertOrganization": "",
-     *      "manufactureAndImport": ""
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "quantity": "2",
+     *      "issuedDate": "2019-12-12",
+     *      "receivedDate": "2019-12-12",
+     *      "productType": "Thuốc bvtv",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "Just note something you want"
      *  }
      *
-     * @apiSuccess {String} ministry Bộ
-     * @apiSuccess {String} province Tỉnh
-     * @apiSuccess {String} enterprise Tên doanh nghiệp
-     * @apiSuccess {String} type Loại phân bón
-     * @apiSuccess {String} name Tên phân bón
-     * @apiSuccess {String} ingredient Thành phần, hàm lượng chất dinh dưỡng
-     * @apiSuccess {String} lawDocument Căn cứ, tiêu chuẩn, quy định
-     * @apiSuccess {String} isoCertOrganization Tổ chức chứng nhận hợp quy
-     * @apiSuccess {String} manufactureAndImport Nhập khẩu, xuất khẩu
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
      *
      *
      * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
+     *  HTTP/1.1 201 Created
      *  
      *  {
-     *      "_id": "5de75a92f4e889141cc24f7d",
-     *      "ministry": "Công thương",
-     *      "province": "Bà Rịa - Vũng Tàu",
-     *      "enterprise": "Công ty TNHH Sản xuất NGÔI SAO VÀNG",
-     *      "type": "Phân vô cơ",
-     *      "name": "Phân vi lượng TE MAX ( SUPER CHELATE)",
-     *      "ingredient": "",
-     *      "lawDocument": "",
-     *      "isoCertOrganization": "",
-     *      "manufactureAndImport": "",
-     *      "created": "2019-12-04T07:04:50.974Z"
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "2",
+     *      "issuedDate": "2019-12-12",
+     *      "receivedDate": "2019-12-12",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "Just note something you want",
+     *      "created_at": "2019-12-30T02:35:32.306Z",
+     *      "_id": "5e0962f326b7b011c825789c"
      *  }
      *
-     * @apiError Name-is-required Thiếu trường tên phân bón
-     * @apiError Fertilizer-exists Phân bón đã tồn tại
-     * @apiErrorExample Phân bón tồn tại:
+     * @apiError productType-is-required Trường loại sản phẩm là bắt buộc
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError receiverId-is-required Trường id người nhận là bắt buộc
+     * @apiError productId-is-required Trường id sản phẩm là bắt buộc
+     * @apiError quantity-is-required Số lượng là bắt buộc 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
+     * @apiError cooperativeId-is-required Trường id hợp tác xã là bắt buộc
+     * @apiError receiptId-is-required Trường id hóa đơn nhập là bắt buộc 
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ
+     * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiErrorExample productType is required:
      *     HTTP/1.1 409 Conflict
      *     {
-     *       "errorMessage": "Phân bón với tên '" + name + "' đã tồn tại"
+     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
      *     }
      * 
-     * @apiErrorExample Thiếu trường tên phân bón:
+     * @apiErrorExample productType does not exist:
      *     HTTP/1.1 409 Conflict
      *     {
-     *       "errorMessage": "Vui lòng nhập tên phân bón"
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
      *     }
      * @apiPermission none
      */
@@ -2370,6 +2611,82 @@ exports.routers = app => {
         });
     });
 
+
+    /**
+     * @api {get} /goods-issues Get all goods issue
+     * @apiName GetAllGoodsIssue
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
+     *
+     * @apiSuccess {Number} totalProducts Tổng số phân bón trong danh mục 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "totalGoodsIssues": 2,
+     *      "totalPages": 1,
+     *      "data": [
+     *          {
+     *              "_id": "5e09757502716412c0b026d7",
+     *              "receiverId": "5e058f0f089c052958b35c59",
+     *              "productId": "5e057818a1c1111795e29b76",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "2",
+     *              "issuedDate": "2019-12-30",
+     *              "receivedDate": "2019-12-31",
+     *              "goodsReceiptId": "21893453567654",
+     *              "cooperativeId": "HTXNN",
+     *              "note": "Just note something you want",
+     *              "created_at": "2019-12-30T03:56:35.656Z",
+     *              "productName": "Abatimec 1.8EC",
+     *              "receiverName": "khang"
+     *          },
+     *          {
+     *              "_id": "5e097554b50bae12772bdd09",
+     *              "receiverId": "5e058f0f089c052958b35c59",
+     *              "productId": "5e057818a1c1111795e29b76",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "2",
+     *              "issuedDate": "2019-12-12",
+     *              "receivedDate": "2019-12-12",
+     *              "goodsReceiptId": "21893453567654",
+     *              "cooperativeId": "HTXNN",
+     *              "note": "Just note something you want",
+     *              "created_at": "2019-12-30T03:55:39.570Z",
+     *              "productName": "Abatimec 1.8EC",
+     *              "receiverName": "khang"
+     *          }
+     *      ]
+     *  }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.get("/api/goods-issues", (req, res, next) => {
         const query = req.query;
 
@@ -2378,6 +2695,61 @@ exports.routers = app => {
         });
     });
 
+
+    /**
+     * @api {get} /goods-issues/:id Get goods issue by id 
+     * @apiName GetGoodsIssueById
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * 
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e09757502716412c0b026d7",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "2",
+     *      "issuedDate": "2019-12-30",
+     *      "receivedDate": "2019-12-31",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "Just note something you want",
+     *      "created_at": "2019-12-30T03:56:35.656Z"
+     *  }
+     *
+     * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Goods issue not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Id Hóa đơn xuất kho không tồn tại"
+     *     }
+     * @apiPermission none
+     */
     app.get("/api/goods-issues/:id", (req, res, next) => {
         const id = req.params.id;
 
@@ -2386,6 +2758,39 @@ exports.routers = app => {
         });
     });
 
+
+    /**
+     * @api {delete} /goods-issues/:id Delete goods issue by id 
+     * @apiName DeleteGoodsIssueById
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Hóa đơn được xóa thành công"
+     *  }
+     *
+     * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Goods issue not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Id Hóa đơn xuất kho không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.delete("/api/goods-issues/:id", (req, res, next) => {
         const id = req.params.id;
 
@@ -2394,12 +2799,795 @@ exports.routers = app => {
         });
     });
 
+    /**
+     * @api {patch} /goods-issues Update goods issue by id
+     * @apiName UpdateGoodsIssueById
+     * @apiGroup GoodIssues
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiParam {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
+     * @apiParam {String} goodsReceiptId Id hóa đơn nhập
+     * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "quantity": "900",
+     *      "issuedDate": "2019-01-01",
+     *      "receivedDate": "2019-01-01",
+     *      "productType": "Thuốc bvtv",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "updated"
+     *  }
+     *
+     * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
+     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
+     * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
+     * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e09757502716412c0b026d7",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "productId": "5e057818a1c1111795e29b76",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "900",
+     *      "issuedDate": "2019-01-01",
+     *      "receivedDate": "2019-01-01",
+     *      "goodsReceiptId": "21893453567654",
+     *      "cooperativeId": "HTXNN",
+     *      "note": "updated",
+     *      "created_at": "2019-12-30T03:59:20.896Z"
+     *  }
+     *
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError issuedDate-is-ISO8061-format Ngày xuất kho phải là định dạng ISO 8601
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ 
+     * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Goods issue not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Id Hóa đơn xuất kho không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample productType is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
+     *     }
+     * 
+     * @apiErrorExample productType does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
     app.patch("/api/goods-issues/:id", (req, res, next) => {
         const id = req.params.id;
         const update = req.body;
 
         app.models.goodsIssue.updateById(id, update, (err, info) => {
             return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR TOOL
+
+    /**
+     * @api {post} /tools Create new tool management
+     * @apiName CreateNewTool
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiParam {Number} quantity Số lượng 
+     * @apiParam {ObjectId} receiverId Id người nhận 
+     * @apiParam {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiParam {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "type": "Dụng cụ y tế",
+	 *      "quantity": "5",
+	 *      "receiverId": "5e058f0f089c052958b35c59",
+	 *      "receivedDate": "2019-12-12",
+	 *      "returnedDate": "2019-12-30",
+	 *      "note": "Something"
+     *  }
+     *
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận 
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 201 Created
+     *  
+     *  {
+     *      "type": "Dụng cụ y tế",
+     *      "quantity": "5",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "receivedDate": "2019-12-12",
+     *      "returnedDate": "2019-12-30",
+     *      "note": "Something",
+     *      "_id": "5e0aac96e69e031c5fca8c8b"
+     *  }
+     *
+     * 
+     * @apiError receiverId-is-required Trường id người nhận là bắt buộc
+     * @apiError quantity-is-required Số lượng là bắt buộc 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
+     * @apiError returnedDate-is-ISO8061-format Ngày trả phải là định dạng ISO 8601
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiError type-is-required Trường loại dụng cụ là bắt buộc
+     * @apiErrorExample type is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại công cụ, dụng cụ"
+     *     }
+     * 
+     * @apiErrorExample receiverId does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Người nhận không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.post("/api/tools", (req, res, next) => {
+        const body = req.body;
+
+        app.models.tool.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
+        });
+    });
+
+    /**
+     * @api {get} /tools Get all tool management
+     * @apiName GetAllTools
+     * @apiGroup Tools
+     * @apiExample {curl} Get All Tools Management with paginating:
+     *     curl -i http://localhost:3001/api/tools?pageNumber=1&nPerPage=20
+     * 
+     * @apiExample {curl} Get All Tools Management with paginating and specific receiverId:
+     *     curl -i http://localhost:3001/api/tools?pageNumber=1&nPerPage=20&receiverId=5e058f0f089c052958b35c59
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
+     *
+     * @apiSuccess {Number} totalTools Tổng số document quản lý công cụ, dụng cụ 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận (theo _id khi tạo user)
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *       "totalGoodsIssues": 2,
+     *       "totalPages": 1,
+     *       "data": [
+     *           {
+     *               "_id": "5e0aac96e69e031c5fca8c8b",
+     *               "type": "Dụng cụ y tế",
+     *               "quantity": "5",
+     *               "receiverId": "5e058f0f089c052958b35c59",
+     *               "receivedDate": "2019-12-12",
+     *               "returnedDate": "2019-12-30",
+     *               "note": "Something",
+     *               "receiverName": "khang"
+     *           },
+     *           {
+     *               "_id": "5e0ab067f1ec331e994c6891",
+     *               "type": "Dụng cụ y tế",
+     *               "quantity": "5",
+     *               "receiverId": "5e0ab05af1ec331e994c6890",
+     *               "receivedDate": "2019-12-12",
+     *               "returnedDate": "2019-12-30",
+     *               "note": "Something",
+     *               "receiverName": "khang tran"
+     *           }
+     *       ]
+     *   }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/tools", (req, res, next) => {
+        const query = req.query;
+
+        app.models.tool.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {get} /tools/:id Get tool management by id
+     * @apiName GetToolsById
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools/5e0aac96e69e031c5fca8c8b
+     * 
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận 
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *      "_id": "5e0aac96e69e031c5fca8c8b",
+     *      "type": "Dụng cụ y tế",
+     *      "quantity": "5",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "receivedDate": "2019-12-12",
+     *      "returnedDate": "2019-12-30",
+     *      "note": "Something"
+     *  }
+     *
+     * @apiError Tool-management-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Tool management not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/tools/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.tool.findById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {delete} /tools/:id Delete document tool management by id 
+     * @apiName DeleteToolById
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Document quản lý công cụ, dụng cụ đã được xóa thành công"
+     *  }
+     *
+     * @apiError Tool-management-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Tool management not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.delete("/api/tools/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.tool.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {patch} /tools Update tool management
+     * @apiName UpdateTool
+     * @apiGroup Tools
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/tools/5e0ab067f1ec331e994c6891
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiParam {Number} quantity Số lượng 
+     * @apiParam {ObjectId} receiverId Id người nhận 
+     * @apiParam {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiParam {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "type": "updated",
+	 *      "quantity": "900",
+	 *      "receiverId": "5e058f0f089c052958b35c59",
+	 *      "receivedDate": "2019-01-01",
+	 *      "returnedDate": "2019-01-01",
+	 *      "note": "updated"
+     *  }
+     *
+     * @apiSuccess {String} type Loại công cụ, dụng cụ (vật liệu y tế, bao, đồ bảo hộ lao động,... )
+     * @apiSuccess {Number} quantity Số lượng 
+     * @apiSuccess {ObjectId} receiverId Id người nhận (theo _id khi tạo user)
+     * @apiSuccess {Date} receivedDate Ngày nhận (ISO 8601 format)
+     * @apiSuccess {Date} returnedDate Ngày trả (ISO 8601 format)
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e0ab067f1ec331e994c6891",
+     *      "type": "updated",
+     *      "quantity": "900",
+     *      "receiverId": "5e058f0f089c052958b35c59",
+     *      "receivedDate": "2019-01-01",
+     *      "returnedDate": "2019-01-01",
+     *      "note": "updated"
+     *  }
+     *
+     * 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+     * @apiError receivedDate-is-ISO8061-format Ngày nhận phải là định dạng ISO 8601
+     * @apiError returnedDate-is-ISO8061-format Ngày trả phải là định dạng ISO 8601
+     * @apiError receiverId-does-not-exist Người nhận không tồn tại 
+     * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiError type-is-required Trường loại dụng cụ là bắt buộc
+     * @apiErrorExample type is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại công cụ, dụng cụ"
+     *     }
+     * 
+     * @apiErrorExample receiverId does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Người nhận không tồn tại"
+     *     }
+     * 
+     * @apiErrorExample issuedDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày xuất kho không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.patch("/api/tools/:id", (req, res, next) => {
+        const id = req.params.id;
+        const update = req.body;
+
+        app.models.tool.updateById(id, update, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR SUBCONTRACTOR
+
+    /**
+     * @api {post} /subcontractors Create new subcontractor
+     * @apiName CreateNewSubcontractor
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} name Tên nhà thầu phụ
+     * @apiParam {String} serviceProvided Dịch vụ cung cấp
+     * @apiParam {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiParam {Number} cost Chi phí thuê
+     * @apiParam {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "name": "tmk",
+	 *      "serviceProvided": "May cat lua",
+	 *      "hiredDate": "2019-12-12",
+	 *      "cost": "9000000",
+	 *      "quantityEmployee": "20",
+     *      "note": "Something for note"
+     *  }
+     *
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 201 Created
+     *  
+     *  {
+     *      "name": "tmk",
+     *      "serviceProvided": "May cat lua",
+     *      "hiredDate": "2019-12-12",
+     *      "cost": "9000000",
+     *      "quantityEmployee": "20",
+     *      "note": "Something for note",
+     *      "_id": "5e0accdaf7cd082ea2431756"
+     *  }
+     *
+     * 
+     * @apiError name-is-required Trường tên nhà thầu phụ là bắt buộc
+     * @apiError serviceProvided-is-required Trường dịch vụ cung cấp là bắt buộc 
+     * @apiError hiredDate-is-ISO8061-format Ngày thuê phải là định dạng ISO 8601
+     * @apiError cost-is-positive-number Tiền thuê phải là số dương
+     * @apiError quantityEmployee-is-positive-integer Số lượng lao động tham gia phải là số nguyên dương
+     * 
+     * @apiErrorExample name is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập tên nhà thầu phụ"
+     *     }
+     * 
+     * @apiErrorExample cost is positive number:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Tiền thuê phải là số dương"
+     *     }
+     * 
+     * @apiErrorExample hiredDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày thuê không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.post("/api/subcontractors", (req, res, next) => {
+        const body = req.body;
+
+        app.models.subcontractor.create(body, (err, info) => {
+            return err ? errorHandle(res, err, 409) : responseHandle(res, info, 201);
+        });
+    });
+
+
+    /**
+     * @api {get} /subcontractors Get all subcontractors
+     * @apiName GetAllSubcontractors
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Get All Subcontractor with paginating:
+     *     curl -i http://localhost:3001/api/subcontractors?pageNumber=1&nPerPage=20
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng sản phẩm trên mỗi trang
+     *
+     * @apiSuccess {Number} totalSubcontractors Tổng số document quản lý công cụ, dụng cụ 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *      "totalGoodsIssues": 2,
+     *      "totalPages": 1,
+     *      "data": [
+     *          {
+     *              "_id": "5e0acc45b1c82b2dbb7a0fcc",
+     *              "name": "tmk",
+     *              "serviceProvided": "May cat lua",
+     *              "hiredDate": "2019-12-12",
+     *              "cost": "9000000",
+     *              "quantityEmployee": "200",
+     *              "note": null
+     *          },
+     *          {
+     *              "_id": "5e0acc7406c7a42e3a31d3a6",
+     *              "name": "tmk",
+     *              "serviceProvided": "May cat lua",
+     *              "hiredDate": "2019-12-12",
+     *              "cost": "5000.500",
+     *              "quantityEmployee": "200",
+     *              "note": null
+     *          }
+     *  }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/subcontractors", (req, res, next) => {
+        const query = req.query;
+
+        app.models.subcontractor.find(query, (err, info) => {
+            return err ? errorHandle(res, err, 404) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {get} /subcontractors/:id Get subcontractor by id
+     * @apiName GetSubcontractorById
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors/5e0aac96e69e031c5fca8c8b
+     * 
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * 
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công 
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 Ok
+     *  
+     *  {
+     *      "_id": "5e0acc45b1c82b2dbb7a0fcc",
+     *      "name": "tmk",
+     *      "serviceProvided": "May cat lua",
+     *      "hiredDate": "2019-12-12",
+     *      "cost": "9000000",
+     *      "quantityEmployee": "200",
+     *      "note": null
+     *  }
+     *
+     * @apiError Subcontractor-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Subcontractor not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get("/api/subcontractors/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.subcontractor.findById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+
+    /**
+     * @api {delete} /subcontractors/:id Update subcontractor by id 
+     * @apiName UpdateSubcontractorById
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors/5e09757502716412c0b026d7
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Document nhà thầu phụ đã được xóa thành công"
+     *  }
+     *
+     * @apiError Subcontractor-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Subcontractor not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.delete("/api/subcontractors/:id", (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.subcontractor.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        });
+    });
+
+    /**
+     * @api {patch} /subcontractors Update subcontractor by id
+     * @apiName updateSubcontractorById
+     * @apiGroup Subcontractors
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/subcontractors/5e0accdaf7cd082ea2431756
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} name Tên nhà thầu phụ
+     * @apiParam {String} serviceProvided Dịch vụ cung cấp
+     * @apiParam {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiParam {Number} cost Chi phí thuê
+     * @apiParam {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiParam {String} note Ghi chú
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "name": "updated",
+	 *      "serviceProvided": "updated",
+	 *      "hiredDate": "2019-01-01",
+	 *      "cost": "99999",
+	 *      "quantityEmployee": "999999",
+     *      "note": "updated"
+     *  }
+     *
+     * @apiSuccess {String} name Tên nhà thầu phụ
+     * @apiSuccess {String} serviceProvided Dịch vụ cung cấp
+     * @apiSuccess {Date} hireDate Ngày thuê (ISO 8601 format)
+     * @apiSuccess {Number} cost Chi phí thuê
+     * @apiSuccess {Number} quantityEmployee Số lượng lao động tham gia 
+     * @apiSuccess {String} note Ghi chú
+     * @apiSuccess {String} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e0acc7406c7a42e3a31d3a6",
+     *      "name": "updated",
+     *      "serviceProvided": "updated",
+     *      "hiredDate": "2019-01-01",
+     *      "cost": "99999",
+     *      "quantityEmployee": "999999",
+     *      "note": "updated"
+     *  }
+     *
+     * 
+     * @apiError hiredDate-is-ISO8061-format Ngày thuê phải là định dạng ISO 8601
+     * @apiError cost-is-positive-number Tiền thuê phải là số dương
+     * @apiError quantityEmployee-is-positive-integer Số lượng lao động tham gia phải là số nguyên dương
+     * 
+     * @apiErrorExample cost is positive number:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Tiền thuê phải là số dương"
+     *     }
+     * 
+     * @apiErrorExample hiredDate is ISO 8601:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Ngày thuê không hợp lệ"
+     *     }
+     * @apiPermission none
+     */
+    app.patch("/api/subcontractors/:id", (req, res, next) => {
+        const id = req.params.id;
+        const body = req.body;
+
+        app.models.subcontractor.updateById(id, body, (err, info) => {
+            return err ? errorHandle(res, err.errMessage, err.code) : responseHandle(res, info);
         });
     });
 };
