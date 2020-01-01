@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -61,14 +62,12 @@ export class ListItems extends Component {
     if (!data.length) {
       return <h1>Loading....</h1>;
     }
-    // console.log(data.length);
-
     const viewItemModal = <ViewItemModal type="cooperative" selectedItem={selectedItem} />;
     const modifyItemModal = <ModifyItemModal data={data} />;
     const deleteItemModal = <DeleteItemModal
       type="cooperative"
       parentComponent={parentComponent}
-      selectedItem={selectedItem}
+      data={data}
     />;
 
     return (
@@ -91,7 +90,7 @@ export class ListItems extends Component {
               </tr>
             </thead>
             <tbody>
-              {data.length !== 0 && data.map((value) => <tr key={uuidv4()}>
+              {data.length !== 0 && data.map((value, index) => <tr key={uuidv4()}>
                 <td>{value.name}</td>
                 <td>{value.address}</td>
                 <td>{value.status}</td>
@@ -126,8 +125,7 @@ export class ListItems extends Component {
                         role="presentation"
                         style={{ cursor: 'pointer' }}
                         data-toggle="modal"
-                        data-target="#modal-delete-item-1"
-                        onClick={this.selectTableItemEventHandler}
+                        data-target={`#modal-delete-${index}`}
                       >
                         Xóa hàng này
                       </a>

@@ -147,8 +147,8 @@ class QuanTriPhanBon extends Component {
                 </span>
                 <span className="text-white text">Xóa dữ liệu</span>
               </a>
-              <div className="text-center text-danger">{searchError}</div>
             </div>
+            <div className="text-center text-danger">{searchError}</div>
           </div>
           <ListItems
             data={data}

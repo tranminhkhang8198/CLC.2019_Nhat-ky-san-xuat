@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable react/no-unused-state */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 import React, { Component } from 'react';
@@ -8,7 +10,6 @@ import DeleteItemsModal from '../components/Modals/DeleteItemsModal';
 import AddItemModal from '../components/Modals/AddItemModal';
 
 class QuanTriHTX extends Component {
-  // const navItems = ['Hợp tác xã', 'Quản lý Hợp tác xã', 'Thuốc BVTV', 'Phân bón'];
   constructor(props) {
     super(props);
     this.state = {
@@ -24,75 +25,78 @@ class QuanTriHTX extends Component {
 
     this.getData = this.getData.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.searchDataByName = this.searchDataByName.bind(this);
   }
 
   async componentDidMount() {
-    const cooperatives = await this.getData();
-    console.log(cooperatives);
+    // const { data, totalProducts } = await this.getData();
+    const { data, totalProducts } = await this.getData();
+    console.log(data);
     this.setState({
-      data: cooperatives.data.data,
-      error: cooperatives.error,
+      data,
+      totalProducts,
     });
   }
-
-  // async componentDidMount() {
-  //   const cooperatives = await this.getData();
-  //   this.setState({
-  //     data: cooperatives,
-  //     refresh: false,
-  //   });
-  // }
-
 
   async componentDidUpdate() {
     const { refresh } = this.state;
     console.log('updating...');
     if (refresh) {
-      const cooperatives = await this.getData();
-      this.updateDataWhenRendered(cooperatives);
+      const { data, totalProducts } = await this.getData();
+      // const data = await this.getData();
+      // const totalProducts = null;
+      this.updateDataWhenRendered(data, totalProducts);
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line class-methods-use-this
-  getToken() {
-    const token = localStorage.getItem('itemName');
-    return token;
+  async getData() {
+    try {
+      const { pageNum, dataPerpage } = this.state;
+      const token = localStorage.getItem('user');
+      const [response, totalCooperativesResponse] = await Promise.all([
+        axios({
+          method: 'GET',
+          url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
+          headers: { Authorization: token },
+        }),
+        axios({
+          method: 'GET',
+          url: 'http://localhost:3001/api/cooperatives/count',
+          headers: { Authorization: token },
+        }),
+      ]);
+      if (response.status === 200 && totalCooperativesResponse.status === 200) {
+        const { data } = response;
+        const { total: totalProducts } = totalCooperativesResponse.data;
+        return {
+          data,
+          totalProducts,
+        };
+      }
+      return null;
+    } catch (error) {
+      console.log('error');
+      return null;
+    }
   }
 
-  // async getData() {
-  //   const { pageNum, dataPerpage } = this.state;
-  //   const data = await axios({
-  //     method: 'GET',
-  //     url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
-  //   });
-  //   return data;
-  // }
-
-  async getData() {
-    const { pageNum, dataPerpage } = this.state;
-    console.log(pageNum, '-', dataPerpage);
-
-    const response = [];
-    response.data = await axios({
-      method: 'GET',
-      url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
-    }).catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        // console.log(error.response.data.errorMessage);
-        // console.log(error.response.status);
-        // console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
+  async searchDataByName(name = '') {
+    try {
+      const token = localStorage.getItem('user');
+      const response = await axios.get(`http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&name=${name}`, {
+        headers: { Authorization: token },
+      });
+      if (response.status === 200) {
+        const { data } = response;
+        if (data.length !== 0) {
+          this.setState(() => ({ data, searchError: '' }));
+        } else {
+          this.setState(() => ({ searchError: 'Không tìm thấy sản phẩm' }));
+        }
       }
-      response.error = error.response;
-    });
-    return response;
+    } catch (error) {
+      this.setState(() => ({ searchError: 'Không tìm thấy sản phẩm' }));
+    }
   }
 
   async handlePageChange(pageNumber) {
@@ -103,25 +107,23 @@ class QuanTriHTX extends Component {
       axios.get('http://localhost:3001/api/cooperatives/count'),
     ]);
 
-    console.log(response.status, '---', totalCooperativesResponse.status);
-
     if (response.status === 200 && totalCooperativesResponse.status === 200) {
-      const { data } = response.data;
+      const { data } = response;
       console.log(data);
       const { total: totalProducts } = totalCooperativesResponse.data;
       this.setState(() => ({
-        // data,
+        data,
         totalProducts: totalProducts || 52,
         activePage: pageNumber,
       }));
     }
   }
 
-  async updateDataWhenRendered(updatedData) {
+  async updateDataWhenRendered(updatedData, totalProducts) {
     this.setState({
-      data: updatedData.data.data,
-      error: updatedData.error,
       refresh: false,
+      data: updatedData,
+      totalProducts,
     });
     return updatedData;
   }
@@ -163,9 +165,9 @@ class QuanTriHTX extends Component {
                   <i className="fas fa-trash" />
                 </span>
                 <span className="text-white text">Xóa dữ liệu</span>
-                <div className="text-center text-danger">{searchError}</div>
               </a>
             </div>
+            <div className="text-center text-danger">{searchError}</div>
           </div>
           <ListItems
             data={data}

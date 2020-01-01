@@ -146,7 +146,6 @@ export class ListItems extends Component {
                         data-toggle="modal"
                         data-target={`#modal-delete-${index}`}
                         style={{ cursor: 'pointer' }}
-                        onClick={this.selectTableItemEventHandler}
                       >
                         Xóa hàng này
                       </a>

@@ -14,7 +14,53 @@ class ViewItemModal extends Component {
     };
   }
 
-  renderFertilizerModalContent(itemData) {
+  renderItemContent(itemData) {
+    return itemData || 'Rỗng';
+  }
+
+  renderModalFooterContent(itemData, previousModalId, nextModalId) {
+    let nextModalButton = null;
+    let previousModalButton = null;
+    const closeCurrModalButton = (
+      <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+    );
+    if (nextModalId) {
+      nextModalButton = (
+        <button
+          className="btn btn-info"
+          type="button"
+          data-dismiss="modal"
+          data-toggle="modal"
+          data-target={`#${nextModalId}`}
+        >
+          Tiếp theo
+        </button>
+      );
+    }
+    if (previousModalId) {
+      previousModalButton = (
+        <button
+          className="btn btn-light"
+          type="button"
+          data-dismiss="modal"
+          data-toggle="modal"
+          data-target={`#${previousModalId}`}
+        >
+          Trở lại
+        </button>
+      );
+    }
+
+    return (
+      <>
+        {closeCurrModalButton}
+        {previousModalButton}
+        {nextModalButton}
+      </>
+    );
+  }
+
+  renderFertilizerModalContent(itemData, previousModalId, nextModalId) {
     if (!itemData) {
       return null;
     }
@@ -35,7 +81,7 @@ class ViewItemModal extends Component {
                 <p>Tên phân bón</p>
               </div>
               <div className="col-8">
-                <p>{itemData.name}</p>
+                <p>{this.renderItemContent(itemData.name)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -43,7 +89,7 @@ class ViewItemModal extends Component {
                 <p>Loại phân bón</p>
               </div>
               <div className="col-8">
-                <p>{itemData.type}</p>
+                <p>{this.renderItemContent(itemData.type)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -51,7 +97,7 @@ class ViewItemModal extends Component {
                 <p>Thành phần phân bón</p>
               </div>
               <div className="col-8">
-                <p>{itemData.ingredient}</p>
+                <p>{this.renderItemContent(itemData.ingredient)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -59,7 +105,7 @@ class ViewItemModal extends Component {
                 <p>Bộ</p>
               </div>
               <div className="col-8">
-                <p>{itemData.ministry}</p>
+                <p>{this.renderItemContent(itemData.ministry)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -67,7 +113,7 @@ class ViewItemModal extends Component {
                 <p>Tỉnh</p>
               </div>
               <div className="col-8">
-                <p>{itemData.ministry}</p>
+                <p>{this.renderItemContent(itemData.ministry)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -75,7 +121,7 @@ class ViewItemModal extends Component {
                 <p>Căn cứ, tiêu chuẩn, quy định</p>
               </div>
               <div className="col-8">
-                <p>{itemData.lawDocument}</p>
+                <p>{this.renderItemContent(itemData.lawDocument)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -83,7 +129,7 @@ class ViewItemModal extends Component {
                 <p>Nơi sản xuất</p>
               </div>
               <div className="col-8">
-                <p>{itemData.enterprise}</p>
+                <p>{this.renderItemContent(itemData.enterprise)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -91,7 +137,7 @@ class ViewItemModal extends Component {
                 <p>Tổ chức chứng nhận hợp quy</p>
               </div>
               <div className="col-8">
-                <p>{itemData.isoCertOrganization}</p>
+                <p>{this.renderItemContent(itemData.isoCertOrganization)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -99,19 +145,23 @@ class ViewItemModal extends Component {
                 <p>Nhập khẩu, xuất khẩu</p>
               </div>
               <div className="col-8">
-                <p>{itemData.manufactureAndImport}</p>
+                <p>{this.renderItemContent(itemData.manufactureAndImport)}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+          {this.renderModalFooterContent(
+            null,
+            previousModalId,
+            nextModalId,
+          )}
         </div>
       </div>
     );
   }
 
-  renderCooperativeModalContent(itemData) {
+  renderCooperativeModalContent(itemData, previousModalId, nextModalId) {
     if (!itemData) {
       return null;
     }
@@ -132,7 +182,7 @@ class ViewItemModal extends Component {
                 <p>Tên gọi của hợp tác xã</p>
               </div>
               <div className="col-8">
-                <p>{itemData.name}</p>
+                <p>{this.renderItemContent(itemData.name)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -140,7 +190,7 @@ class ViewItemModal extends Component {
                 <p>Tên nước ngoài của HTX</p>
               </div>
               <div className="col-8">
-                <p>{itemData.foreignName}</p>
+                <p>{this.renderItemContent(itemData.foreignName)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -148,7 +198,7 @@ class ViewItemModal extends Component {
                 <p>Tên viết tắt</p>
               </div>
               <div className="col-8">
-                <p>{itemData.abbreviationName}</p>
+                <p>{this.renderItemContent(itemData.abbreviationName)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -167,7 +217,7 @@ class ViewItemModal extends Component {
                 <p>Thông tin trạng thái của HTX</p>
               </div>
               <div className="col-8">
-                <p>{itemData.status}</p>
+                <p>{this.renderItemContent(itemData.status)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -175,7 +225,7 @@ class ViewItemModal extends Component {
                 <p>Mã số HTX</p>
               </div>
               <div className="col-8">
-                <p>{itemData.cooperativeID}</p>
+                <p>{this.renderItemContent(itemData.cooperativeID)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -183,7 +233,7 @@ class ViewItemModal extends Component {
                 <p>Mã số thuế của HTX</p>
               </div>
               <div className="col-8">
-                <p>{itemData.tax}</p>
+                <p>{this.renderItemContent(itemData.tax)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -191,7 +241,7 @@ class ViewItemModal extends Component {
                 <p>Người đại diện</p>
               </div>
               <div className="col-8">
-                <p>{itemData.surrgate}</p>
+                <p>{this.renderItemContent(itemData.surrgate)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -199,7 +249,7 @@ class ViewItemModal extends Component {
                 <p>Giám đốc</p>
               </div>
               <div className="col-8">
-                <p>{itemData.director}</p>
+                <p>{this.renderItemContent(itemData.director)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -207,7 +257,7 @@ class ViewItemModal extends Component {
                 <p>Địa chỉ của hợp tác xã</p>
               </div>
               <div className="col-8">
-                <p>{itemData.address}</p>
+                <p>{this.renderItemContent(itemData.address)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -215,7 +265,7 @@ class ViewItemModal extends Component {
                 <p>Số điện thoại của HTX</p>
               </div>
               <div className="col-8">
-                <p>{itemData.phone}</p>
+                <p>{this.renderItemContent(itemData.phone)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -223,7 +273,7 @@ class ViewItemModal extends Component {
                 <p>Địa chỉ fax của HTX</p>
               </div>
               <div className="col-8">
-                <p>{itemData.fax}</p>
+                <p>{this.renderItemContent(itemData.fax)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -232,7 +282,7 @@ class ViewItemModal extends Component {
               </div>
               <div className="col-8">
                 <a href={itemData.website}>
-                  {itemData.website}
+                  {this.renderItemContent(itemData.website)}
                 </a>
               </div>
             </div>
@@ -241,7 +291,7 @@ class ViewItemModal extends Component {
                 <p>Văn phòng đại diện</p>
               </div>
               <div className="col-8">
-                <p>{itemData.representOffice}</p>
+                <p>{this.renderItemContent(itemData.representOffice)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -249,20 +299,24 @@ class ViewItemModal extends Component {
                 <p>Danh sách tài liệu</p>
               </div>
               <div className="col-8">
-                <p>{itemData.docs}</p>
+                <p>{this.renderItemContent(itemData.docs)}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
+          {this.renderModalFooterContent(
+            null,
+            previousModalId,
+            nextModalId,
+          )}
         </div>
       </div>
     );
   }
 
 
-  renderPPPModalContent(itemData) {
+  renderPPPModalContent(itemData, previousModalId, nextModalId) {
     if (!itemData) {
       return null;
     }
@@ -283,7 +337,7 @@ class ViewItemModal extends Component {
                 <p>Tên thương phẩm</p>
               </div>
               <div className="col-8">
-                <p>{itemData.name}</p>
+                <p>{this.renderItemContent(itemData.name)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -291,7 +345,7 @@ class ViewItemModal extends Component {
                 <p>Tên hoạt chất</p>
               </div>
               <div className="col-8">
-                <p>{itemData.activeIngredient}</p>
+                <p>{this.renderItemContent(itemData.activeIngredient)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -299,7 +353,7 @@ class ViewItemModal extends Component {
                 <p>Hàm lượng sử dụng</p>
               </div>
               <div className="col-8">
-                <p>{itemData.content}</p>
+                <p>{this.renderItemContent(itemData.content)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -307,7 +361,7 @@ class ViewItemModal extends Component {
                 <p>Tên nhóm thuốc</p>
               </div>
               <div className="col-8">
-                <p>{itemData.plantProtectionProductGroup}</p>
+                <p>{this.renderItemContent(itemData.plantProtectionProductGroup)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -315,7 +369,7 @@ class ViewItemModal extends Component {
                 <p>Nhóm độc GHS</p>
               </div>
               <div className="col-8">
-                <p>{itemData.ghs}</p>
+                <p>{this.renderItemContent(itemData.ghs)}</p>
               </div>
             </div>
             <div className="row" key={uuidv4()}>
@@ -323,22 +377,17 @@ class ViewItemModal extends Component {
                 <p>Nhóm độc WHO</p>
               </div>
               <div className="col-8">
-                <p>{itemData.who}</p>
+                <p>{this.renderItemContent(itemData.who)}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
-          <button
-            className="btn btn-info"
-            type="button"
-            data-dismiss="modal"
-            data-toggle="modal"
-            data-target="#modal-view-addition-1"
-          >
-            Tiếp theo
-          </button>
+          {this.renderModalFooterContent(
+            null,
+            previousModalId,
+            nextModalId,
+          )}
         </div>
       </div>
     );
@@ -357,7 +406,7 @@ class ViewItemModal extends Component {
             <p>Tên cây tác thuốc tác dụng</p>
           </div>
           <div className="col-8">
-            <p>{item.plant}</p>
+            <p>{this.renderItemContent(item.plant)}</p>
           </div>
         </div>
         <div className="row" key={uuidv4()}>
@@ -365,7 +414,7 @@ class ViewItemModal extends Component {
             <p>Sâu bọ diệt trừ</p>
           </div>
           <div className="col-8">
-            <p>{item.pest}</p>
+            <p>{this.renderItemContent(item.pest)}</p>
           </div>
         </div>
         <div className="row" key={uuidv4()}>
@@ -373,7 +422,7 @@ class ViewItemModal extends Component {
             <p>Liều lượng</p>
           </div>
           <div className="col-8">
-            <p>{item.dosage}</p>
+            <p>{this.renderItemContent(item.dosage)}</p>
           </div>
         </div>
         <div className="row" key={uuidv4()}>
@@ -381,7 +430,7 @@ class ViewItemModal extends Component {
             <p>Phi</p>
           </div>
           <div className="col-8">
-            <p>{item.phi}</p>
+            <p>{this.renderItemContent(item.phi)}</p>
           </div>
         </div>
         <div className="row" key={uuidv4()}>
@@ -392,7 +441,7 @@ class ViewItemModal extends Component {
             <textarea
               className="form-control item"
               rows="4"
-              value={item.usage}
+              value={this.renderItemContent(item.usage)}
               readOnly
             />
           </div>
@@ -402,7 +451,51 @@ class ViewItemModal extends Component {
     ));
   }
 
-  renderAdditionalModalPPPContent(itemData) {
+  renderPPPRegistrationInfo(itemData) {
+    const { registrationInfo } = itemData;
+    if (!registrationInfo) {
+      return null;
+    }
+    return (
+      <div className="container" style={{ padding: 0 }} key={uuidv4()}>
+        <div className="row" key={uuidv4()}>
+          <div className="col-4">
+            <p>Đơn vị đăng ký</p>
+          </div>
+          <div className="col-8">
+            <p>{this.renderItemContent(registrationInfo.registrationUnit)}</p>
+          </div>
+        </div>
+        <div className="row" key={uuidv4()}>
+          <div className="col-4">
+            <p>Địa chỉ</p>
+          </div>
+          <div className="col-8">
+            <p>{this.renderItemContent(registrationInfo.registrationUnitAddress)}</p>
+          </div>
+        </div>
+        <div className="row" key={uuidv4()}>
+          <div className="col-4">
+            <p>Nhà sản xuất</p>
+          </div>
+          <div className="col-8">
+            <p>{this.renderItemContent(registrationInfo.manufacturer)}</p>
+          </div>
+        </div>
+        <div className="row" key={uuidv4()}>
+          <div className="col-4">
+            <p>Địa chỉ sản xuất</p>
+          </div>
+          <div className="col-8">
+            <p>{this.renderItemContent(registrationInfo.manufacturerAddress)}</p>
+          </div>
+        </div>
+        <hr />
+      </div>
+    );
+  }
+
+  renderAdditionalModalPPPScopeOfUseContent(itemData, previousModalId, nextModalId) {
     if (!itemData) {
       return null;
     }
@@ -522,22 +615,46 @@ class ViewItemModal extends Component {
             {this.renderPPPScopeOfUse(itemData)}
           </div>
           <div className="modal-footer">
-            <button className="btn btn-dark" type="button" data-dismiss="modal">Đóng</button>
-            <button
-              className="btn btn-light"
-              type="button"
-              data-dismiss="modal"
-              data-toggle="modal"
-              data-target="#modal-view-1"
-            >
-              Trở lại
-            </button>
+            {this.renderModalFooterContent(
+              null,
+              previousModalId,
+              nextModalId,
+            )}
           </div>
         </div>
       </>
     );
   }
 
+  renderAdditionalModalPPPRegistrationInfoContent(itemData, previousModalId, nextModalId) {
+    if (!itemData) {
+      return null;
+    }
+    return (
+      <>
+        <div className="modal-content">
+          <div className="modal-header">
+            <h4 className="modal-title">
+              Thông tin đăng ký
+            </h4>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div className="modal-body modal-add-body">
+            {this.renderPPPRegistrationInfo(itemData)}
+          </div>
+          <div className="modal-footer">
+            {this.renderModalFooterContent(
+              null,
+              previousModalId,
+              nextModalId,
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
 
   renderMainModal(modalContent) {
     return (
@@ -549,9 +666,9 @@ class ViewItemModal extends Component {
     );
   }
 
-  renderAdditionalModal(modalContent) {
+  renderAdditionalModal(modalContent, modalId) {
     return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-view-addition-1">
+      <div className="modal fade" role="dialog" tabIndex={-1} id={modalId}>
         <div className="modal-dialog" role="document">
           {modalContent}
         </div>
@@ -562,6 +679,7 @@ class ViewItemModal extends Component {
   renderModals(modalType) {
     const { fertilizerTitle, plantProtectionProductTitle, cooperative } = this.typeNames;
     const { selectedItem } = this.props;
+    console.log(selectedItem);
     let renderDOM;
 
     switch (modalType) {
@@ -575,8 +693,29 @@ class ViewItemModal extends Component {
       case plantProtectionProductTitle:
         renderDOM = (
           <>
-            {this.renderMainModal(this.renderPPPModalContent(selectedItem))}
-            {this.renderAdditionalModal(this.renderAdditionalModalPPPContent(selectedItem))}
+            {this.renderMainModal(
+              this.renderPPPModalContent(
+                selectedItem,
+                null,
+                'modal-view-addition-1',
+              ),
+            )}
+            {this.renderAdditionalModal(
+              this.renderAdditionalModalPPPScopeOfUseContent(
+                selectedItem,
+                'modal-view',
+                'modal-view-addition-2',
+              ),
+              'modal-view-addition-1',
+            )}
+            {this.renderAdditionalModal(
+              this.renderAdditionalModalPPPRegistrationInfoContent(
+                selectedItem,
+                'modal-view-addition-1',
+                null,
+              ),
+              'modal-view-addition-2',
+            )}
           </>
         );
         break;

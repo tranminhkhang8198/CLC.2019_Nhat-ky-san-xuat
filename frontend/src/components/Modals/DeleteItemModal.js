@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import httpStatus from 'http-status';
+import uuidv4 from 'uuid/v4';
 
 class DeleteItemModal extends Component {
   constructor(props) {
@@ -79,6 +80,7 @@ class DeleteItemModal extends Component {
   }
 
   async handleDeleteResult(result, parent) {
+    console.log(result);
     if (result == null) {
       return;
     }
@@ -105,7 +107,7 @@ class DeleteItemModal extends Component {
       case 'fertilizer':
         typeTitle = ' phân bón ';
         break;
-      case 'plantProductProtection':
+      case 'plantProtectionProduct':
         typeTitle = ' thuốc bảo vệ thực vật ';
         break;
       case 'seed':
@@ -129,42 +131,49 @@ class DeleteItemModal extends Component {
   }
 
 
-  renderDeleteModal(type, item) {
+  renderDeleteModal(type) {
+    const { data } = this.props;
+    if (!Array.isArray(data)) {
+      return null;
+    }
     return (
-      <div className="modal fade" role="dialog" tabIndex={-1} id="modal-delete-item-1">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Xóa dữ liệu</h4>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>
-                Hành động này không thể hoàn tác,
-                bạn chắc chắn muốn xóa
-                {this.renderTypeTitle(type)}
-                với tên là:&nbsp;
-                {this.renderItemContent(item)}
-              </p>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
-              <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => this.deleteHandler(e, item)}>Xác nhận xóa</button>
+      <>
+        {data.length && data.map((item, index) => (
+          <div className="modal fade" role="dialog" tabIndex={-1} id={`modal-delete-${index}`} key={uuidv4()}>
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Xóa dữ liệu</h4>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <p>
+                    Hành động này không thể hoàn tác,
+                    bạn chắc chắn muốn xóa
+                    {this.renderTypeTitle(type)}
+                    với tên là:&nbsp;
+                    {this.renderItemContent(item)}
+                  </p>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-light" type="button" data-dismiss="modal">Đóng</button>
+                  <button className="btn btn-primary" type="button" data-dismiss="modal" onClick={(e) => this.deleteHandler(e, item)}>Xác nhận xóa</button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        ))}
+      </>
     );
   }
 
   render() {
-    const { selectedItem } = this.props;
     const { type } = this.state;
     return (
       <>
-        {this.renderDeleteModal(type, selectedItem)}
+        {this.renderDeleteModal(type)}
       </>
     );
   }

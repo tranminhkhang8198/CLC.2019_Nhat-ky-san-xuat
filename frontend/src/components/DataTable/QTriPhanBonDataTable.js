@@ -76,7 +76,7 @@ export class ListItems extends Component {
     const deleteItemModal = <DeleteItemModal
       type="fertilizer"
       parentComponent={parentComponent}
-      selectedItem={selectedItem}
+      data={data}
     />;
 
     return (
@@ -134,8 +134,7 @@ export class ListItems extends Component {
                         role="presentation"
                         style={{ cursor: 'pointer' }}
                         data-toggle="modal"
-                        data-target="#modal-delete-item-1"
-                        onClick={this.selectTableItemEventHandler}
+                        data-target={`#modal-delete-${index}`}
                       >
                         Xóa hàng này
                       </a>
