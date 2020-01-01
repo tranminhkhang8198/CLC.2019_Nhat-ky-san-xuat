@@ -16,7 +16,7 @@ class QuanTriHTX extends Component {
       error: null,
       data: [],
       refresh: false,
-      pageNum: 1,
+      pageNum: 0,
       activePage: 1,
       dataPerpage: 10,
       searchError: '',
@@ -56,7 +56,7 @@ class QuanTriHTX extends Component {
       const [response, totalCooperativesResponse] = await Promise.all([
         axios({
           method: 'GET',
-          url: `http://localhost:3001/api/cooperatives?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
+          url: `http://localhost:3001/api/cooperatives/search?pageNumber=${pageNum}&resultNumber=${dataPerpage}`,
           headers: { Authorization: token },
         }),
         axios({
@@ -73,11 +73,13 @@ class QuanTriHTX extends Component {
           totalProducts,
         };
       }
-      return null;
     } catch (error) {
-      console.log('error');
-      return null;
+      console.log(error);
     }
+    return {
+      data: [],
+      totalProducts: 0,
+    };
   }
 
   async searchDataByName(name = '') {

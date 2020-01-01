@@ -59,10 +59,13 @@ class QuanTriThuocBVTV extends Component {
       if (response.status === 200) {
         return response.data;
       }
-      return null;
     } catch (error) {
-      return null;
+      console.log(error);
     }
+    return {
+      data: [],
+      totalProducts: 0,
+    };
   }
 
   async handlePageChange(pageNumber) {
