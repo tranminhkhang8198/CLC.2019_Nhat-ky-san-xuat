@@ -17,7 +17,7 @@ class Employee {
         this.app = app;
     }
 
-    validate(obj) {
+    validate(obj, cb = () => { }) {
         const validations = {
             name: {
                 errorMessage: "Tên nhân sự không hợp lệ",
@@ -30,6 +30,7 @@ class Employee {
                 errorMessage: "Số điện thoại không phù hợp",
                 diValidate: () => {
                     const phone = obj.phone;
+                    console.log(phone);
                     return true;
                 }
             },
@@ -70,7 +71,7 @@ class Employee {
             }
         })
         if (errors.length == 0) {
-            return cb(null, true);
+            return cb(null, obj);
         }
         const err = _.join(errors, ',');
         return cb({ errorMessage: err, errorCode: 400 }, null);
@@ -83,7 +84,7 @@ class Employee {
             avatar: _.toString(_.get(params, 'avatar', '')),
             personalId: _.toString(_.get(params, 'personalId', '')),
             address: _.toString(_.get(params, 'address', '')),
-            phone: _.toString(_.get(params, 'phone', '')),
+            phone: _.get(params, 'phone', ''),
             email: _.trim(_.toLower(_.get(params, 'email', ''))),
             user: _.get(params, 'jobTitle', ''),
             HTXId: _.get(params, 'HTXId', ''),

@@ -1,35 +1,14 @@
 const _ = require("lodash");
 const upload = require("./models/multer");
-
+const { verifyUserV2 } = require("./middleware/verifyUser");
+const { errorHandle, responseHandle } = require("./middleware/lastHandler");
 
 exports.routers = app => {
     /**
      * @apiDefine set $set
      */
 
-    /**
-     * Error Handle In Response
-     * @param {request object} res
-     * @param {string} errorMessage
-     * @param {int} code
-     * @returns {*|JSON|Promise<any>}
-     */
-    const errorHandle = (res, errorMessage, code = 500) => {
-        return res.status(code).json({
-            errorMessage: errorMessage
-        });
-    };
 
-    /**
-     * Response Handle In Response
-     * @param {*} res
-     * @param {*} data
-     * @param {*} code
-     * @returns {*|JSON|Promise<any>}
-     */
-    const responseHandle = (res, data, code = 200) => {
-        return res.status(code).json(data);
-    };
 
     /**
      *
@@ -97,6 +76,9 @@ exports.routers = app => {
             }
         });
     };
+
+
+
 
     /**
      * @method GET
@@ -1313,7 +1295,7 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.get('/api/cooperatives/count', (req, res, nexr) => {
+    app.get('/api/cooperatives/count', verifyUserV2, (req, res, next) => {
         app.models.cooperative.count((err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
@@ -1441,6 +1423,108 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {post} /api/goodsReceipts Thêm đơn nhập hàng mới.
+     * @apiVersion 0.1.0
+     * @apiName PostGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} cooperative_id ID của hợp tác xã
+     * @apiParam {String} product_id ID của sản phẩm
+     * @apiParam {String} product_type Loại sản phẩm được nhập
+     * @apiParam {Date} transDate Ngày mua
+     * @apiParam {Object[]} Detail Danh sách các lô đã mua
+     * @apiParam {String} Detail.patchCode Max số lô
+     * @apiParam {String} Detail.quantity Số lượng
+     * @apiParam {String} Detail.price Đơn giá
+     * @apiParam {String} Detail.expireDate Ngày hết hạn
+     * @apiParam {Date} inDate Ngày nhập kho
+     * @apiParam {String} notes Ghi chú
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *      "cooperative_id": "sdfsdfsdf",
+     *      "transDate": "2019-10-12T07:40:00.000Z",
+     *      "product_id": "sdfsd",
+     *      "product_type": "plant",
+     *      "detail": [
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          },
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          }
+     *      ],
+     *      "inDate": "1970-01-01T00:00:00.000Z",
+     *      "notes": "dsfdfsd sfdf"
+     *  }
+     *
+     * @apiSuccess {String} cooperative_id ID của hợp tác xã
+     * @apiSuccess {String} product_id ID của sản phẩm
+     * @apiSuccess {String} product_type Loại sản phẩm được nhập
+     * @apiSuccess {Date} transDate Ngày mua
+     * @apiSuccess {Object[]} Detail Danh sách các lô đã mua
+     * @apiSuccess {String} Detail.patchCode Max số lô
+     * @apiSuccess {String} Detail.quantity Số lượng
+     * @apiSuccess {String} Detail.price Đơn giá
+     * @apiSuccess {String} Detail.expireDate Ngày hết hạn
+     * @apiSuccess {Date} inDate Ngày nhập kho
+     * @apiSuccess {String} notes Ghi chú
+     * @apiSuccess {String} _id ID của hóa đơn nhập hàng
+     * @apiSuccess {Date} createdDate Ngày khởi tạo
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "cooperative_id": "sdfsdfsdf",
+     *      "transDate": "2019-10-12T07:40:00.000Z",
+     *      "product_id": "sdfsd",
+     *      "product_type": "plant",
+     *      "detail": [
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          },
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          }
+     *      ],
+     *      "inDate": "1970-01-01T00:00:00.000Z",
+     *      "notes": "dsfdfsd sfdf",
+     *      "createdDate": "2020-01-03T10:17:17.697Z",
+     *      "_id": "5e0f14ad3d3b5928ff43fdff"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Ngay-giao-dich-khong-hop-le Ngày giao dịch không hợp lệ
+     * @apiError Product-ID-khong-hop-le Product ID không hợp lệ
+     * @apiError Product-type-khong-hop-le Product Type không hợp lệ
+     * @apiError Ma-so-lo-khong-hop-le Mã số lô không hợp lệ
+     * @apiError So-luong-khong-hop-le SỐ lượng không hợp lệ
+     * @apiError Don-gia-khong-hop-le Đơn giá không hợp lệ
+     * @apiError Ngay-het-han-khong-hop-le Ngày hết hạn không hợp lệ
+     * @apiError Ngay-nhap-kho-khong-hop-le Ngày nhập kho không hợp lệ
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Token không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.post('/api/goodsReceipts', (req, res, next) => {
         const body = req.body;
         app.models.goodsReceipt.create(body, (err, result) => {
@@ -1450,6 +1534,37 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {delete} /aip/goodsReceipts?queryParam Xóa thông tin của HTX
+     * @apiVersion 0.1.0
+     * @apiName DeleteGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} [_id] ID của hóa đơn
+     * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+     *     curl -i Delete http://localhost:3001/api/goodsReceipts?_id=sdfklsdjfsdfje23kj
+     *
+     * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *   "responseMessage": "Đã xóa dữ 1 liệu"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Khong-tim-thay-du-lieu-can-xoa Không tìm thấy dữ liệu cần xóa
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *  "errorMessage": "Không tìm thấy dữ liệu cần xóa "
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.delete('/api/goodsReceipts', (req, res, next) => {
         const query = req.query;
         app.models.goodsReceipt.delete(query, (err, result) => {
@@ -1459,6 +1574,61 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {get} /aip/goodsReceipts?queryParam Xóa thông tin của HTX
+     * @apiVersion 0.1.0
+     * @apiName GetGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} [pageNumber] Số thứ tự trang cần tìm lấy bắt đầu từ 0
+     * @apiParam {Number} [resulNumber] Số lượng dữ liệu mỗi trang
+     * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+     *     curl -i http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1
+     *
+     * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5e0f14ad3d3b5928ff43fdff",
+     *          "cooperative_id": "sdfsdfsdf",
+     *          "transDate": "2019-10-12T07:40:00.000Z",
+     *          "product_id": "sdfsd",
+     *          "product_type": "plant",
+     *          "detail": [
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              },
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              }
+     *          ],
+     *          "inDate": "1970-01-01T00:00:00.000Z",
+     *          "notes": "dsfdfsd sfdf",
+     *          "createdDate": "2020-01-03T10:17:17.697Z"
+     *      }
+     *  ]
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Khong-tim-thay-du-lieu-can-xoa Không tìm thấy dữ liệu
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *  "errorMessage": "Không tìm thấy dữ liệu "
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.get('/api/goodsReceipts', (req, res, next) => {
         const query = req.query;
         app.models.goodsReceipt.get(query, (err, result) => {
@@ -1468,6 +1638,62 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {get} /aip/goodsReceipts/search?queryParam Xóa thông tin của HTX
+     * @apiVersion 0.1.0
+     * @apiName GetGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} [pageNumber] Số thứ tự trang cần tìm lấy bắt đầu từ 0
+     * @apiParam {Number} [resulNumber] Số lượng dữ liệu mỗi trang
+     * @apiParam {String} _id Mã số hóa đơn nhập kho
+     * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+     *     curl -i http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf
+     *
+     * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5e0f14ad3d3b5928ff43fdff",
+     *          "cooperative_id": "sdfsdfsdf",
+     *          "transDate": "2019-10-12T07:40:00.000Z",
+     *          "product_id": "sdfsd",
+     *          "product_type": "plant",
+     *          "detail": [
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              },
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              }
+     *          ],
+     *          "inDate": "1970-01-01T00:00:00.000Z",
+     *          "notes": "dsfdfsd sfdf",
+     *          "createdDate": "2020-01-03T10:17:17.697Z"
+     *      }
+     *  ]
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Khong-tim-thay-du-lieu-can-xoa Không tìm thấy dữ liệu
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *  "errorMessage": "Không tìm thấy dữ liệu "
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.get('/api/goodsReceipts/search', (req, res, next) => {
         const query = req.query;
         app.models.goodsReceipt.search(query, (err, result) => {
@@ -1510,7 +1736,7 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
 
-    app.post('/api/employee', (req, res, next) => {
+    app.post('/api/employee', upload.single("avatar"), (req, res, next) => {
         const body = req.body;
         app.models.employee.create(body, (err, result) => {
             return err
@@ -1520,6 +1746,12 @@ exports.routers = app => {
     })
 
     app.get('/api/employee', (req, res, next) => {
+        let avatar = "http://localhost:3001/avatar/default.png"
+        if (req.file) {
+            avatar = "http://localhost:3001/avatar/" + req.file.filename;
+        }
+        const body = req.body;
+        _.set(body, 'avatar', avatar);
         const query = req.query;
         app.models.employee.get(query, (err, result) => {
             return err
