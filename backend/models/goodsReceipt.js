@@ -38,16 +38,28 @@ class GoodsReceipt {
             quantity: {
                 errorMessage: "Số lượng không hợp lệ",
                 doValidate: () => {
-                    const quantity = obj.quantity;
+
+                    const quantities = _.map(obj.detail, 'quantity');
+                    quantities.forEach(quantity => {
+                        if (quantity = null) {
+                            return false;
+                        }
+                    })
                     return true
                 }
             },
             price: {
                 errorMessage: "Đơn giá không hợp lệ ",
                 doValidate: () => {
-                    const price = obj.price;
+                    const prices = _.map(obj.detail, 'price');
+                    prices.forEach(price => {
+                        if (price == null) {
+                            return false;
+                        }
+                    })
                     return true;
                 }
+
             },
             product_id: {
                 errorMessage: "Product ID không hợp lệ",
@@ -66,15 +78,23 @@ class GoodsReceipt {
             batchCode: {
                 errorMessage: " Mã lô không hợp lệ",
                 doValidate: () => {
-                    const batchCode = obj.batchCode;
+                    obj.detail.forEach(detail => {
+                        if (detail.batchCode == null) {
+                            return false;
+                        }
+                    })
                     return true;
                 }
             },
             expireDate: {
                 errorMessage: "Ngày hết hạng không hợp lệ",
                 doValidate: () => {
-                    const expireDate = obj.expireDate;
-                    return this.isValidDate(expireDate);
+                    obj.detail.forEach(detail => {
+                        if (this.isValidDate(detail.expireDate) == false) {
+                            return false;
+                        }
+                    })
+                    return true;
                 }
             },
             inDate: {
@@ -150,15 +170,27 @@ class GoodsReceipt {
 
     create(body, cb = () => { }) {
         const collection = this.app.db.collection('goodsReceipts');
+        let detail = [];
+        body.detail.forEach(rawDetail => {
+            const quantity = _.get(rawDetail, 'quantity', null);
+            const price = _.get(rawDetail, 'price', null);
+            const patchCode = _.get(rawDetail, 'patchCode', null);
+            const expireDate = _.get(rawDetail, 'expireDate', null);
+            detail.push({
+                quantity: quantity,
+                price: price,
+                patchCode: patchCode,
+                expireDate: expireDate
+            })
+        })
+
+
         const obj = {
             "cooperative_id": _.get(body, 'cooperative_id', ''),
             "transDate": new Date(_.get(body, 'transDate', null)),
-            "quantity": _.get(body, 'quantity', null),
-            "price": _.get(body, 'price', null),
             "product_id": _.get(body, 'product_id', ''),
             "product_type": _.get(body, 'product_type', ''),
-            "batchCode": _.get(body, "batchCode", ''),
-            "expireDate": new Date(_.get(body, "expireDate", null)),
+            "detail": detail,
             "inDate": new Date(_.get(body, 'indate', null)),
             "notes": _.get(body, 'notes', ''),
             "createdDate": new Date()

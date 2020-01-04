@@ -18,7 +18,7 @@ class Permission {
         // Get user workgroup
         this.app.models.user.workgroup(userId, (err, workgroup) => {
             if (err) {
-                return cb({ errorMessage: "Workgroup is not found" }, null);
+                return cb({ errorMessage: "Loại người dùng không hợp lệ", errorCode: 404 }, null);
             }
             else {
                 // Check resource role
@@ -30,7 +30,7 @@ class Permission {
                     else {
                         const allowMethod = _.get(role, workgroup);
                         if (!allowMethod) {
-                            return cb({ errorMessage: "Permission denied" }, null);
+                            return cb({ errorMessage: "Bạn không có quyền try cập vào tài nguyên này", errorCode: 400 }, null);
                         }
                         else {
                             this.app.models.role.compare(method, allowMethod, (err, result) => {

@@ -380,15 +380,15 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/cooperatives",
-    "title": "Tìm kiếm thông tin HTX.",
+    "url": "/api/cooperatives/all",
+    "title": "Get thông tin HTX.",
     "version": "0.1.0",
-    "name": "GetCooperatives",
+    "name": "GetAllCooperatives",
     "group": "Cooperatives",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/cooperatives",
+        "content": "curl -i http://localhost:3001/api/cooperatives/all",
         "type": "curl"
       }
     ],
@@ -405,50 +405,9 @@ define({ "api": [
         ]
       }
     },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "query",
-            "description": "<p>Dieu kien tim kiem.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "options",
-            "description": "<p>Cau truc ket qua tra ve.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "resultNumber",
-            "description": "<p>so luong ket qua tra ve theo phan trang (tuy chon).</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "pageNumber",
-            "description": "<p>trang du lieu can tra ve theo phan trang (tuy chon).</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Response Fileds": [
-          {
-            "group": "Response Fileds",
-            "type": "Object[]",
-            "optional": false,
-            "field": "records",
-            "description": "<p>Danh sach HTX.</p>"
-          },
           {
             "group": "Response Fileds",
             "type": "String",
@@ -566,7 +525,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"records\": [\n        {\n            \"_id\": \"5de653f18a92cd1e06fc0b59\",\n            \"name\": \"Hop tac xa nga nam\",\n            \"foreignName\": \"Hop tac xa nga nam\",\n            \"abbreviationName\": \"NN\",\n            \"logo\": \"\",\n            \"status\": \"Dang hoat dong\",\n            \"cooperativeID\": \"HTXNN\",\n            \"tax\": \"NN23442\",\n            \"surrgate\": \"Nguyen Tan Vu\",\n            \"director\": \"Huynh Van Tan\",\n            \"address\": \"\",\n            \"phone\": \"0836738223\",\n            \"fax\": \"NN341\",\n            \"website\": \"nn.com\",\n            \"representOffice\": \"\",\n            \"docs\": \"\"\n        }\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n\n    [\n        {\n            \"_id\": \"5de653f18a92cd1e06fc0b59\",\n            \"name\": \"Hop tac xa nga nam\",\n            \"foreignName\": \"Hop tac xa nga nam\",\n            \"abbreviationName\": \"NN\",\n            \"logo\": \"\",\n            \"status\": \"Dang hoat dong\",\n            \"cooperativeID\": \"HTXNN\",\n            \"tax\": \"NN23442\",\n            \"surrgate\": \"Nguyen Tan Vu\",\n            \"director\": \"Huynh Van Tan\",\n            \"address\": \"\",\n            \"phone\": \"0836738223\",\n            \"fax\": \"NN341\",\n            \"website\": \"nn.com\",\n            \"representOffice\": \"\",\n            \"docs\": \"\"\n        }\n    ]",
           "type": "json"
         }
       ]
@@ -598,6 +557,291 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"ID không hợp lệ\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Cooperatives"
+  },
+  {
+    "type": "get",
+    "url": "/api/cooperatives",
+    "title": "Get du lieu HTX theo phan trang.",
+    "version": "0.1.0",
+    "name": "GetCooperatives",
+    "group": "Cooperatives",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/cooperatives?pageNumber=1&resultNumber=1",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "resultNumber",
+            "description": "<p>so luong ket qua tra ve theo phan trang (tuy chon).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>trang du lieu can tra ve theo phan trang (tuy chon).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Response Fileds": [
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records._id",
+            "description": "<p>ID cua Hop tac xa.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.name",
+            "description": "<p>Tên gọi của hợp tác xã.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.foreignName",
+            "description": "<p>Tên nước ngoài của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.abbreviationName",
+            "description": "<p>Tên viết tắt.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.logo",
+            "description": "<p>Logo của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.status",
+            "description": "<p>Thông tin trạng thái của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.cooperativeID",
+            "description": "<p>Mã số HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.tax",
+            "description": "<p>Mã số thuế của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.surrgate",
+            "description": "<p>Người đại diện.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.director",
+            "description": "<p>Giám đốc.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.address",
+            "description": "<p>Địa chỉ của hợp tác xã.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.phone",
+            "description": "<p>Số điện thoại của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.fax",
+            "description": "<p>Địa chỉ fax của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.website",
+            "description": "<p>Đia chỉ website của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.representOffice",
+            "description": "<p>Văn phòng đại diện.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String[]",
+            "optional": false,
+            "field": "records.docs",
+            "description": "<p>Danh sách tài liệu.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n    [\n        {\n            \"_id\": \"5de653f18a92cd1e06fc0b59\",\n            \"name\": \"Hop tac xa nga nam\",\n            \"foreignName\": \"Hop tac xa nga nam\",\n            \"abbreviationName\": \"NN\",\n            \"logo\": \"\",\n            \"status\": \"Dang hoat dong\",\n            \"cooperativeID\": \"HTXNN\",\n            \"tax\": \"NN23442\",\n            \"surrgate\": \"Nguyen Tan Vu\",\n            \"director\": \"Huynh Van Tan\",\n            \"address\": \"\",\n            \"phone\": \"0836738223\",\n            \"fax\": \"NN341\",\n            \"website\": \"nn.com\",\n            \"representOffice\": \"\",\n            \"docs\": \"\"\n        }\n    ]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Loi-Trong-qua-trinh-tim-kiem",
+            "description": "<p>Lỗi trong quá trình tìm kiếm.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ID-khong-hop-le",
+            "description": "<p>ID không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"ID không hợp lệ\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Cooperatives"
+  },
+  {
+    "type": "get",
+    "url": "/api/cooperatives/count",
+    "title": "Get tổng số HTX đang quản lí",
+    "version": "0.1.0",
+    "name": "GetCooperatives",
+    "group": "Cooperatives",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -X GET http://localhost:3001/api/cooperatives/count",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>Tổng số HTX đang quản lí.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"total\": \"4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Lỗi trong quá trình truy xuất dữ liệu\"\n    }",
           "type": "json"
         }
       ]
@@ -1239,6 +1483,236 @@ define({ "api": [
     "groupTitle": "Cooperatives"
   },
   {
+    "type": "get",
+    "url": "/api/cooperatives",
+    "title": "Tìm kiếm thông tin HTX.",
+    "version": "0.1.0",
+    "name": "SearchCooperatives",
+    "group": "Cooperatives",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&_id=5dd6a2d406e82f6fe5e96f75",
+        "type": "curl"
+      },
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&name=Hop tac xa long thanh",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "query",
+            "description": "<p>Dieu kien tim kiem.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "resultNumber",
+            "description": "<p>so luong ket qua tra ve theo phan trang (tuy chon).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageNumber",
+            "description": "<p>trang du lieu can tra ve theo phan trang (tuy chon).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Response Fileds": [
+          {
+            "group": "Response Fileds",
+            "type": "Object[]",
+            "optional": false,
+            "field": "records",
+            "description": "<p>Danh sach HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records._id",
+            "description": "<p>ID cua Hop tac xa.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.name",
+            "description": "<p>Tên gọi của hợp tác xã.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.foreignName",
+            "description": "<p>Tên nước ngoài của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.abbreviationName",
+            "description": "<p>Tên viết tắt.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.logo",
+            "description": "<p>Logo của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.status",
+            "description": "<p>Thông tin trạng thái của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.cooperativeID",
+            "description": "<p>Mã số HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.tax",
+            "description": "<p>Mã số thuế của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.surrgate",
+            "description": "<p>Người đại diện.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.director",
+            "description": "<p>Giám đốc.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.address",
+            "description": "<p>Địa chỉ của hợp tác xã.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.phone",
+            "description": "<p>Số điện thoại của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.fax",
+            "description": "<p>Địa chỉ fax của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.website",
+            "description": "<p>Đia chỉ website của HTX.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String",
+            "optional": false,
+            "field": "records.representOffice",
+            "description": "<p>Văn phòng đại diện.</p>"
+          },
+          {
+            "group": "Response Fileds",
+            "type": "String[]",
+            "optional": false,
+            "field": "records.docs",
+            "description": "<p>Danh sách tài liệu.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n    [\n        {\n            \"_id\": \"5de653f18a92cd1e06fc0b59\",\n            \"name\": \"Hop tac xa nga nam\",\n            \"foreignName\": \"Hop tac xa nga nam\",\n            \"abbreviationName\": \"NN\",\n            \"logo\": \"\",\n            \"status\": \"Dang hoat dong\",\n            \"cooperativeID\": \"HTXNN\",\n            \"tax\": \"NN23442\",\n            \"surrgate\": \"Nguyen Tan Vu\",\n            \"director\": \"Huynh Van Tan\",\n            \"address\": \"\",\n            \"phone\": \"0836738223\",\n            \"fax\": \"NN341\",\n            \"website\": \"nn.com\",\n            \"representOffice\": \"\",\n            \"docs\": \"\"\n        }\n    ]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Loi-Trong-qua-trinh-tim-kiem",
+            "description": "<p>Lỗi trong quá trình tìm kiếm.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ID-khong-hop-le",
+            "description": "<p>ID không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"ID không hợp lệ\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Cooperatives"
+  },
+  {
     "type": "post",
     "url": "/api/diaries",
     "title": "Tạo nhật ký mới.",
@@ -1429,6 +1903,93 @@ define({ "api": [
     ],
     "filename": "./router.js",
     "groupTitle": "Diaries"
+  },
+  {
+    "type": "post",
+    "url": "/api/employee",
+    "title": "Request User information",
+    "version": "0.1.0",
+    "name": "PostEmployee",
+    "group": "Employee",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Users unique ID.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"refresh_token\": \"fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "firstname",
+            "description": "<p>Firstname of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Nothing to update\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Employee"
   },
   {
     "type": "post",
@@ -3188,6 +3749,595 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./router.js",
     "groupTitle": "GoodIssues"
+  },
+  {
+    "type": "delete",
+    "url": "/aip/goodsReceipts?queryParam",
+    "title": "Xóa thông tin của HTX",
+    "version": "0.1.0",
+    "name": "DeleteGoodsReceipts",
+    "group": "GoodsReceipts",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "_id",
+            "description": "<p>ID của hóa đơn</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Xóa hóa đơn nhập kho theo id:",
+        "content": "curl -i Delete http://localhost:3001/api/goodsReceipts?_id=sdfklsdjfsdfje23kj",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "responseMessage",
+            "description": "<p>Thông báo số lượng thông tin đã xóa</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n \"responseMessage\": \"Đã xóa dữ 1 liệu\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Khong-tim-thay-du-lieu-can-xoa",
+            "description": "<p>Không tìm thấy dữ liệu cần xóa</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n \"errorMessage\": \"Không tìm thấy dữ liệu cần xóa \"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "GoodsReceipts"
+  },
+  {
+    "type": "get",
+    "url": "/aip/goodsReceipts?queryParam",
+    "title": "Xóa thông tin của HTX",
+    "version": "0.1.0",
+    "name": "GetGoodsReceipts",
+    "group": "GoodsReceipts",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần tìm lấy bắt đầu từ 0</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "resulNumber",
+            "description": "<p>Số lượng dữ liệu mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Xóa hóa đơn nhập kho theo id:",
+        "content": "curl -i http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "responseMessage",
+            "description": "<p>Thông báo số lượng thông tin đã xóa</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5e0f14ad3d3b5928ff43fdff\",\n        \"cooperative_id\": \"sdfsdfsdf\",\n        \"transDate\": \"2019-10-12T07:40:00.000Z\",\n        \"product_id\": \"sdfsd\",\n        \"product_type\": \"plant\",\n        \"detail\": [\n            {\n                \"quantity\": \"200\",\n                \"price\": 260000,\n                \"patchCode\": null,\n                \"expireDate\": \"2019-12-30 15:30\"\n            },\n            {\n                \"quantity\": \"200\",\n                \"price\": 260000,\n                \"patchCode\": null,\n                \"expireDate\": \"2019-12-30 15:30\"\n            }\n        ],\n        \"inDate\": \"1970-01-01T00:00:00.000Z\",\n        \"notes\": \"dsfdfsd sfdf\",\n        \"createdDate\": \"2020-01-03T10:17:17.697Z\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Khong-tim-thay-du-lieu-can-xoa",
+            "description": "<p>Không tìm thấy dữ liệu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n \"errorMessage\": \"Không tìm thấy dữ liệu \"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "GoodsReceipts"
+  },
+  {
+    "type": "get",
+    "url": "/aip/goodsReceipts/search?queryParam",
+    "title": "Xóa thông tin của HTX",
+    "version": "0.1.0",
+    "name": "GetGoodsReceipts",
+    "group": "GoodsReceipts",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần tìm lấy bắt đầu từ 0</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "resulNumber",
+            "description": "<p>Số lượng dữ liệu mỗi trang</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Mã số hóa đơn nhập kho</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Xóa hóa đơn nhập kho theo id:",
+        "content": "curl -i http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "responseMessage",
+            "description": "<p>Thông báo số lượng thông tin đã xóa</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"5e0f14ad3d3b5928ff43fdff\",\n        \"cooperative_id\": \"sdfsdfsdf\",\n        \"transDate\": \"2019-10-12T07:40:00.000Z\",\n        \"product_id\": \"sdfsd\",\n        \"product_type\": \"plant\",\n        \"detail\": [\n            {\n                \"quantity\": \"200\",\n                \"price\": 260000,\n                \"patchCode\": null,\n                \"expireDate\": \"2019-12-30 15:30\"\n            },\n            {\n                \"quantity\": \"200\",\n                \"price\": 260000,\n                \"patchCode\": null,\n                \"expireDate\": \"2019-12-30 15:30\"\n            }\n        ],\n        \"inDate\": \"1970-01-01T00:00:00.000Z\",\n        \"notes\": \"dsfdfsd sfdf\",\n        \"createdDate\": \"2020-01-03T10:17:17.697Z\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Khong-tim-thay-du-lieu-can-xoa",
+            "description": "<p>Không tìm thấy dữ liệu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n \"errorMessage\": \"Không tìm thấy dữ liệu \"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "GoodsReceipts"
+  },
+  {
+    "type": "post",
+    "url": "/api/goodsReceipts",
+    "title": "Thêm đơn nhập hàng mới.",
+    "version": "0.1.0",
+    "name": "PostGoodsReceipts",
+    "group": "GoodsReceipts",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "cooperative_id",
+            "description": "<p>ID của hợp tác xã</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>ID của sản phẩm</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "product_type",
+            "description": "<p>Loại sản phẩm được nhập</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "transDate",
+            "description": "<p>Ngày mua</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Detail",
+            "description": "<p>Danh sách các lô đã mua</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.patchCode",
+            "description": "<p>Max số lô</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.price",
+            "description": "<p>Đơn giá</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.expireDate",
+            "description": "<p>Ngày hết hạn</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "inDate",
+            "description": "<p>Ngày nhập kho</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "notes",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"cooperative_id\": \"sdfsdfsdf\",\n    \"transDate\": \"2019-10-12T07:40:00.000Z\",\n    \"product_id\": \"sdfsd\",\n    \"product_type\": \"plant\",\n    \"detail\": [\n        {\n            \"quantity\": \"200\",\n            \"price\": 260000,\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        },\n        {\n            \"quantity\": \"200\",\n            \"price\": 260000,\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        }\n    ],\n    \"inDate\": \"1970-01-01T00:00:00.000Z\",\n    \"notes\": \"dsfdfsd sfdf\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "cooperative_id",
+            "description": "<p>ID của hợp tác xã</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>ID của sản phẩm</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "product_type",
+            "description": "<p>Loại sản phẩm được nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "transDate",
+            "description": "<p>Ngày mua</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "Detail",
+            "description": "<p>Danh sách các lô đã mua</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.patchCode",
+            "description": "<p>Max số lô</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.price",
+            "description": "<p>Đơn giá</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Detail.expireDate",
+            "description": "<p>Ngày hết hạn</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "inDate",
+            "description": "<p>Ngày nhập kho</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "notes",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của hóa đơn nhập hàng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "createdDate",
+            "description": "<p>Ngày khởi tạo</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"cooperative_id\": \"sdfsdfsdf\",\n    \"transDate\": \"2019-10-12T07:40:00.000Z\",\n    \"product_id\": \"sdfsd\",\n    \"product_type\": \"plant\",\n    \"detail\": [\n        {\n            \"quantity\": \"200\",\n            \"price\": 260000,\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        },\n        {\n            \"quantity\": \"200\",\n            \"price\": 260000,\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        }\n    ],\n    \"inDate\": \"1970-01-01T00:00:00.000Z\",\n    \"notes\": \"dsfdfsd sfdf\",\n    \"createdDate\": \"2020-01-03T10:17:17.697Z\",\n    \"_id\": \"5e0f14ad3d3b5928ff43fdff\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ngay-giao-dich-khong-hop-le",
+            "description": "<p>Ngày giao dịch không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Product-ID-khong-hop-le",
+            "description": "<p>Product ID không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Product-type-khong-hop-le",
+            "description": "<p>Product Type không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ma-so-lo-khong-hop-le",
+            "description": "<p>Mã số lô không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "So-luong-khong-hop-le",
+            "description": "<p>SỐ lượng không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Don-gia-khong-hop-le",
+            "description": "<p>Đơn giá không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ngay-het-han-khong-hop-le",
+            "description": "<p>Ngày hết hạn không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ngay-nhap-kho-khong-hop-le",
+            "description": "<p>Ngày nhập kho không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Token không hợp lệ\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "GoodsReceipts"
   },
   {
     "type": "post",
@@ -4952,7 +6102,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "totalProducts",
+            "field": "totalSubcontractors",
             "description": "<p>Tổng số document quản lý công cụ, dụng cụ</p>"
           },
           {
@@ -5887,7 +7037,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "totalProducts",
+            "field": "totalTools",
             "description": "<p>Tổng số document quản lý công cụ, dụng cụ</p>"
           },
           {
@@ -7128,8 +8278,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_loi_webWorkspace_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });
