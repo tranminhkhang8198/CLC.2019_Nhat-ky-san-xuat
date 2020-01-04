@@ -1929,9 +1929,65 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "id",
+            "field": "Name",
+            "description": "<p>Tên nhân sự</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ảnh đại diện</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>Số CMND của nhân sự</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "jobTitle",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "HTXId",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
             "description": "<p>Users unique ID.</p>"
           }
         ]
@@ -1939,7 +1995,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"refresh_token\": \"fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh\"\n}",
+          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n    \"password\": \"123456\",\n}",
           "type": "json"
         }
       ]
@@ -1951,15 +2007,85 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
+            "field": "Name",
+            "description": "<p>Tên nhân sự</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ảnh đại diện</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>Số CMND của nhân sự</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "jobTitle",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "HTXId",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "created",
+            "description": "<p>Ngày tạo.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của nhân sự.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "content": "HTTP/1.1 200 OK\n    [\n        {\n            \"name\": \"Nguyễn Văn Lợi\",\n            \"avatar\": \"http://localhost:3001/avatar/image-1578136142752.png\",\n            \"personalId\": \"8182213312\",\n            \"address\": \"Cần Thơ\",\n            \"phone\": \"0836810267\",\n            \"email\": \"vanloi@gmail.com\",\n            \"jobTitle\": \"Manager\",\n            \"salary\":\"600\",\n            \"jobDesc\":\"\",\n            \"HTXId\": \"dfsdf\",\n            \"password\": \"123456\",\n            \"created\": \"2020-01-04T11:09:02.758Z\",\n            \"_id\": \"5e10724efde38921cd444999\"\n        }\n    ]",
           "type": "json"
         }
       ]
@@ -3846,7 +3972,7 @@
   {
     "type": "get",
     "url": "/aip/goodsReceipts?queryParam",
-    "title": "Xóa thông tin của HTX",
+    "title": "Tìm kiếm thông tin HTX",
     "version": "0.1.0",
     "name": "GetGoodsReceipts",
     "group": "GoodsReceipts",
