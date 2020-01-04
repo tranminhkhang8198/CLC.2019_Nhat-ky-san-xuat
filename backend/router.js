@@ -3364,4 +3364,23 @@ exports.routers = app => {
             return err ? errorHandle(res, err.errMessage, err.code) : responseHandle(res, info);
         });
     });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR SUBCONTRACTOR
+    app.post('/api/warehouses', (req, res, next) => {
+        const body = req.body;
+
+        app.models.warehouse.create(body, (err, info) => {
+            return err ? errorHandle(res, err) : responseHandle(res, info, 201);
+        });
+    });
+
+    app.get('/api/warehouses', (req, res, next) => {
+        const query = req.query;
+
+        app.models.warehouse.find(query, (err, info) => {
+            return err ? errorHandle(res, err) : responseHandle(res, info);
+        })
+    });
 };
