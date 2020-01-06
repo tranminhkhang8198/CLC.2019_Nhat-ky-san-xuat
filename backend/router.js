@@ -1715,12 +1715,98 @@ exports.routers = app => {
      * @apiParam {String} Name Tên nhân sự
      * @apiParam {File} avatar Ảnh đại diện
      * @apiParam {String} personalId Số CMND của nhân sự
-     * @apiParam {String} address Users unique ID.
-     * @apiParam {String} phone Users unique ID.
-     * @apiParam {String} email Users unique ID.
-     * @apiParam {String} jobTitle Users unique ID.
-     * @apiParam {String} HTXId Users unique ID.
-     * @apiParam {String} password Users unique ID.
+     * @apiParam {String} address Địa chỉ.
+     * @apiParam {String} phone Số điện thoại.
+     * @apiParam {String} email Địa chỉ email.
+     * @apiParam {String} jobTitle chức vụ.
+     * @apiParam {String} HTXId ID của HTX.
+     * @apiParam {String} password Mật khẩu account của nhân sự.
+     * 
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "name": "Nguyễn Văn Lợi",
+     *         "avatar": "C:/avatar/image-1578136142752.png",
+     *         "personalId": "8182213312",
+     *         "address": "Cần Thơ",
+     *         "phone": "0836810267",
+     *         "email": "vanloi@gmail.com",
+     *         "jobTitle": "Manager",
+     *         "HTXId": "dfsdf",
+     *         "password": "123456",
+     *     }
+     *
+     * @apiSuccess {String} Name Tên nhân sự
+     * @apiSuccess {File} avatar Ảnh đại diện
+     * @apiSuccess {String} personalId Số CMND của nhân sự
+     * @apiSuccess {String} address Địa chỉ.
+     * @apiSuccess {String} phone Số điện thoại.
+     * @apiSuccess {String} email Địa chỉ email.
+     * @apiSuccess {String} jobTitle chức vụ.
+     * @apiSuccess {String} HTXId ID của HTX.
+     * @apiSuccess {String} password Mật khẩu account của nhân sự.
+     * @apiSuccess {Date} created Ngày tạo.
+     * @apiSuccess {String} _id ID của nhân sự. 
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *      
+     *          {
+     *              "name": "Nguyễn Văn Lợi",
+     *              "avatar": "http://localhost:3001/avatar/image-1578136142752.png",
+     *              "personalId": "8182213312",
+     *              "address": "Cần Thơ",
+     *              "phone": "0836810267",
+     *              "email": "vanloi@gmail.com",
+     *              "jobTitle": "Manager",
+     *              "salary":"600",
+     *              "jobDesc":"",
+     *              "HTXId": "dfsdf",
+     *              "password": "123456",
+     *              "created": "2020-01-04T11:09:02.758Z",
+     *              "_id": "5e10724efde38921cd444999"
+     *          }
+     *      
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Ten-nhan-su-khong-hop-le Tên nhân sự không hợp lệ
+     * @apiError So-dien-thoai-khong-hop-le Số điện thoaij không hợp lệ
+     * @apiError Dia-chi-khong-hop-le Địa chỉ không hợp lệ
+     * @apiError Ten-chuc-vu-khong-hop-le Tên chức vụ không hợp lệ
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Số điện thoại không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+
+    app.post('/api/employee', upload.single("avatar"), (req, res, next) => {
+        let avatar = "http://localhost:3001/avatar/default.png"
+        if (req.file) {
+            avatar = "http://localhost:3001/avatar/" + req.file.filename;
+        }
+        const body = req.body;
+        _.set(body, 'avatar', avatar);
+        app.models.employee.create(body, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    /**
+     * @api {post} /api/employee Request User information
+     * @apiVersion 0.1.0
+     * @apiName PostEmployee
+     * @apiGroup Employee
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} HTXId HTX ID
+     * @apiParam {Number} [pageNumber] Số trang
+     * @apiParam {Number} [resultNumber] Số lượng dữ liệu mỗi trang
+     * @apiParam {String} personalId Số CMND của nhân sự
      * 
      * @apiParamExample {json} Request-Example:
      *     {
@@ -1748,7 +1834,7 @@ exports.routers = app => {
      * @apiSuccess {String} _id ID của nhân sự. 
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
-     *      [
+     *     [ 
      *          {
      *              "name": "Nguyễn Văn Lợi",
      *              "avatar": "http://localhost:3001/avatar/image-1578136142752.png",
@@ -1765,31 +1851,17 @@ exports.routers = app => {
      *              "_id": "5e10724efde38921cd444999"
      *          }
      *      ]
+     *      
      * @apiError Permission-denied Token khong hop le
      *
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *     {
-     *       "error": "Nothing to update"
+     *       "error": "Số điện thoại không hợp lệ"
      *     }
      * 
      * @apiPermission manager-admin
      */
-
-    app.post('/api/employee', upload.single("avatar"), (req, res, next) => {
-        let avatar = "http://localhost:3001/avatar/default.png"
-        if (req.file) {
-            avatar = "http://localhost:3001/avatar/" + req.file.filename;
-        }
-        const body = req.body;
-        _.set(body, 'avatar', avatar);
-        app.models.employee.create(body, (err, result) => {
-            return err
-                ? errorHandle(res, err.errorMessage, err.errorCode)
-                : responseHandle(res, result);
-        })
-    })
-
     app.get('/api/employee', (req, res, next) => {
 
         const query = req.query;
