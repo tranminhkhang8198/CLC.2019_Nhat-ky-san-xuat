@@ -1818,7 +1818,7 @@ exports.routers = app => {
      *         "email": "vanloi@gmail.com",
      *         "jobTitle": "Manager",
      *         "HTXId": "dfsdf",
-     *         "password": "123456",
+     *         "password": "123456"
      *     }
      *
      * @apiSuccess {String} Name Tên nhân sự
@@ -1872,6 +1872,16 @@ exports.routers = app => {
         })
     })
 
+    app.patch('/api/employee/:id', (req,res,next)=>{
+        const _id = req.params.id;
+        const updateData = req.body;
+        _.unset(updateData, 'tokenPayload');
+        app.models.employee.update(_id, updateData, (err, result)=>{
+            err 
+            ? errorHandle(res, err.errorMessage, err.errorCode)
+            : responseHandle(res, result);
+        })
+    })
 
 
 

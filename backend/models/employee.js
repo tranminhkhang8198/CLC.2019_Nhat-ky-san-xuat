@@ -10,7 +10,7 @@
  */
 
 const _ = require('lodash')
-
+const {ObjectID} = require('mongodb')
 class Employee {
 
     constructor(app) {
@@ -176,7 +176,7 @@ class Employee {
             }
 
         }
-        collection.find(query, option).limit(resultNumber).skip(pageNumber * resultNumber)
+        collection.find(query, option).limit(parseInt(resultNumber)).skip(pageNumber * resultNumber)
             .map(doc => {
                 doc.jobTitle = doc.user;
                 delete doc['user'];
@@ -191,6 +191,36 @@ class Employee {
                     return cb(null, result);
                 }
             })
+    }
+    update(target, rawData, cb=()=>{}){
+        const collection = this.app.db.collection('employee')
+        rawData.user = rawData.jobTitle;
+        delete rawData['jobTitle']
+        try {
+            target = new ObjectID(target);
+        } catch (error) {
+            return cb({errorMessage:"Mã số nhân sự không hợp lệ", errorCode:404}, null);
+        }
+        this.validate(rawData,(err, validObj)=>{
+            if(err){
+                return cb(err, null);
+            }
+            else{
+                const updateData = {
+                    $set:validObj
+                }
+                collection.updateOne({"_id":`${target}`},updateData,(err, result)=>{
+                    if(err || result.result.nModified ==0){
+                        return err 
+                        ? cb({errorMessage:"Lỗi trong quá trình cập nhật dữ liệu", errorCode:500},null)
+                        : cb({errorMessage:"Không tìm thấy dữ liệu cần cập nhật",errorCode:400},null);
+
+                    }else{
+                        return cb(null, {responseMessage: `Đã cập nhật ${result.result.nModified} dữ liệu`});
+                    }
+                })
+            }
+        })
     }
 
 
