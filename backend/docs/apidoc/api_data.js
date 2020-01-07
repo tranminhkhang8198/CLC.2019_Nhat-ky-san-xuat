@@ -1929,17 +1929,73 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "id",
-            "description": "<p>Users unique ID.</p>"
+            "field": "Name",
+            "description": "<p>Tên nhân sự</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ảnh đại diện</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>Số CMND của nhân sự</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Địa chỉ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Số điện thoại.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Địa chỉ email.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "jobTitle",
+            "description": "<p>chức vụ.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "HTXId",
+            "description": "<p>ID của HTX.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mật khẩu account của nhân sự.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"refresh_token\": \"fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh\"\n}",
+          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n    \"password\": \"123456\",\n}",
           "type": "json"
         }
       ]
@@ -1951,15 +2007,287 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
+            "field": "Name",
+            "description": "<p>Tên nhân sự</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ảnh đại diện</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>Số CMND của nhân sự</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Địa chỉ.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Số điện thoại.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Địa chỉ email.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "jobTitle",
+            "description": "<p>chức vụ.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "HTXId",
+            "description": "<p>ID của HTX.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Mật khẩu account của nhân sự.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "created",
+            "description": "<p>Ngày tạo.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của nhân sự.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"nModified\": \"4\"\n}",
+          "content": "HTTP/1.1 200 OK\n    \n        {\n            \"name\": \"Nguyễn Văn Lợi\",\n            \"avatar\": \"http://localhost:3001/avatar/image-1578136142752.png\",\n            \"personalId\": \"8182213312\",\n            \"address\": \"Cần Thơ\",\n            \"phone\": \"0836810267\",\n            \"email\": \"vanloi@gmail.com\",\n            \"jobTitle\": \"Manager\",\n            \"salary\":\"600\",\n            \"jobDesc\":\"\",\n            \"HTXId\": \"dfsdf\",\n            \"password\": \"123456\",\n            \"created\": \"2020-01-04T11:09:02.758Z\",\n            \"_id\": \"5e10724efde38921cd444999\"\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ten-nhan-su-khong-hop-le",
+            "description": "<p>Tên nhân sự không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "So-dien-thoai-khong-hop-le",
+            "description": "<p>Số điện thoaij không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Dia-chi-khong-hop-le",
+            "description": "<p>Địa chỉ không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Ten-chuc-vu-khong-hop-le",
+            "description": "<p>Tên chức vụ không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Số điện thoại không hợp lệ\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Employee"
+  },
+  {
+    "type": "post",
+    "url": "/api/employee",
+    "title": "Request User information",
+    "version": "0.1.0",
+    "name": "PostEmployee",
+    "group": "Employee",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "HTXId",
+            "description": "<p>HTX ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageNumber",
+            "description": "<p>Số trang</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "resultNumber",
+            "description": "<p>Số lượng dữ liệu mỗi trang</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>Số CMND của nhân sự</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n    \"password\": \"123456\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "Name",
+            "description": "<p>Tên nhân sự</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>Ảnh đại diện</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "personalId",
+            "description": "<p>Số CMND của nhân sự</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "jobTitle",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "HTXId",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Users unique ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "created",
+            "description": "<p>Ngày tạo.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID của nhân sự.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n   [ \n        {\n            \"name\": \"Nguyễn Văn Lợi\",\n            \"avatar\": \"http://localhost:3001/avatar/image-1578136142752.png\",\n            \"personalId\": \"8182213312\",\n            \"address\": \"Cần Thơ\",\n            \"phone\": \"0836810267\",\n            \"email\": \"vanloi@gmail.com\",\n            \"jobTitle\": \"Manager\",\n            \"salary\":\"600\",\n            \"jobDesc\":\"\",\n            \"HTXId\": \"dfsdf\",\n            \"password\": \"123456\",\n            \"created\": \"2020-01-04T11:09:02.758Z\",\n            \"_id\": \"5e10724efde38921cd444999\"\n        }\n    ]",
           "type": "json"
         }
       ]
@@ -1978,7 +2306,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Nothing to update\"\n    }",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Số điện thoại không hợp lệ\"\n    }",
           "type": "json"
         }
       ]
@@ -3034,6 +3362,18 @@ define({ "api": [
             "optional": false,
             "field": "receiverId-is-invalid",
             "description": "<p>Id người nhận không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-does-not-exist",
+            "description": "<p>Hóa đơn nhập không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-is-invalid",
+            "description": "<p>Id hóa đơn nhập không tồn tại</p>"
           }
         ]
       },
@@ -3708,6 +4048,18 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
+            "field": "goodsReceiptId-does-not-exist",
+            "description": "<p>Hóa đơn nhập không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-is-invalid",
+            "description": "<p>Id hóa đơn nhập không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
             "field": "Invalid-id",
             "description": "<p>Id không hợp lệ</p>"
           }
@@ -3846,7 +4198,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/aip/goodsReceipts?queryParam",
-    "title": "Xóa thông tin của HTX",
+    "title": "Tìm kiếm thông tin HTX",
     "version": "0.1.0",
     "name": "GetGoodsReceipts",
     "group": "GoodsReceipts",
@@ -8253,6 +8605,216 @@ define({ "api": [
     ],
     "filename": "./router.js",
     "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/warehouses",
+    "title": "Create new warehouse",
+    "name": "CreateNewWarehouses",
+    "group": "Warehouses",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/warehouses",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9\",\n    \"goodsReceiptId\": \"1234567890\",\n    \"patchCode\": \"1234567890\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9\",\n    \"goodsReceiptId\": \"1234567890\",\n    \"patchCode\": \"1234567890\",\n    \"_id\": \"5e106cf39a2d430f0fda2557\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productType-is-required",
+            "description": "<p>Trường loại sản phẩm là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productType-does-not-exist",
+            "description": "<p>Trường loại sản phẩm không tồn tại (Loại sp phải là &quot;Thuốc bvtv&quot; || &quot;Phân bón&quot; || &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productId-is-required",
+            "description": "<p>Trường id sản phẩm là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-required",
+            "description": "<p>Số lượng là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-positive-integer",
+            "description": "<p>Số lượng phải là số nguyên dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productId-does-not-exist",
+            "description": "<p>Sản phẩm không tồn tại trong danh mục</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productId-is-invalid",
+            "description": "<p>Id sản phẩm không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-does-not-exist",
+            "description": "<p>Hóa đơn nhập không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-is-invalid",
+            "description": "<p>Id hóa đơn nhập không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "productType is required:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập loại sản phẩm\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "productType does not exist:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Loại sản phẩm không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Warehouses"
   },
   {
     "success": {

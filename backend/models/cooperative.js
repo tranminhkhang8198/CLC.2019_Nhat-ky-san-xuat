@@ -308,7 +308,8 @@ class Cooperative {
 		// const query = _.get(params, 'query', {});
 		// const options = _.get(params, 'options', {});
 		const resultNumber = _.get(params, 'resultNumber', 0);
-		const pageNumber = _.get(params, 'pageNumber', 0);
+		let pageNumber = _.get(params, 'pageNumber', 0);
+		pageNumber > 0 ? pageNumber = pageNumber - 1 : pageNumber = 0;
 		// var _id = _.get(query, "_id", null);
 		// if (_id != null) {
 		// 	try {
