@@ -1872,14 +1872,14 @@ exports.routers = app => {
         })
     })
 
-    app.patch('/api/employee/:id', (req,res,next)=>{
+    app.patch('/api/employee/:id', (req, res, next) => {
         const _id = req.params.id;
         const updateData = req.body;
         _.unset(updateData, 'tokenPayload');
-        app.models.employee.update(_id, updateData, (err, result)=>{
-            err 
-            ? errorHandle(res, err.errorMessage, err.errorCode)
-            : responseHandle(res, result);
+        app.models.employee.update(_id, updateData, (err, result) => {
+            err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
         })
     })
 
@@ -3962,7 +3962,7 @@ exports.routers = app => {
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
      * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
      * @apiParam {Number} quantity Số lượng
      * @apiParam {ObjectId} goodsReceiptId Id hóa đơn nhập
@@ -3975,11 +3975,11 @@ exports.routers = app => {
      *      "productId": "5e057818a1c1111795e29b75",
 	 *      "productType": "Thuốc bvtv",
 	 *      "quantity": "9",
-	 *      "goodsReceiptId": "1234567890",
+	 *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
 	 *      "patchCode": "1234567890"
      *  }
      *
-     * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
      * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
      * @apiSuccess {Number} quantity Số lượng
      * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
@@ -3995,7 +3995,7 @@ exports.routers = app => {
      *      "productType": "Thuốc bvtv",
      *      "quantity": "9",
      *      "goodsReceiptId": "1234567890",
-     *      "patchCode": "1234567890",
+     *      "patchCode": "5e16a02767944a0c086f82a2",
      *      "_id": "5e106cf39a2d430f0fda2557"
      *  }
      *
@@ -4031,6 +4031,62 @@ exports.routers = app => {
     });
 
 
+    /**
+     * @api {get} /warehouses Get All Warehouses
+     * @apiName GetAllWarehouses
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng document kho thuốc trên mỗi trang
+     *
+     * @apiSuccess {Number} totalSubcontractors Tổng số document kho thuốc trong kho 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "totalWarehouses": 2,
+     *      "totalPages": 1,
+     *      "data": [
+     *          {
+     *              "_id": "5e106cf39a2d430f0fda2557",
+     *              "productId": "5e057818a1c1111795e29b75",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "100",
+     *              "goodsReceiptId": "1234567890",
+     *              "patchCode": "1234567890"
+     *          },
+     *          {
+     *              "_id": "5e1075d453adfe17f413a130",
+     *              "productId": "5e057818a1c1111795e29b75",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "9",
+     *              "goodsReceiptId": "5e10733dca9ed4129c70715c",
+     *              "patchCode": "1234567890"
+     *          }
+     *      ]
+     *  }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.get('/api/warehouses', (req, res, next) => {
         const query = req.query;
 
@@ -4039,7 +4095,52 @@ exports.routers = app => {
         })
     });
 
-
+    /**
+     * @api {get} /warehouses Get Warehouse by Id
+     * @apiName GetWarehouseById
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      
+     *      "_id": "5e106cf39a2d430f0fda2557",
+     *      "productId": "5e057818a1c1111795e29b75",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "100",
+     *      "goodsReceiptId": "1234567890",
+     *      "patchCode": "1234567890"
+     *
+     *  }
+     *
+     * @apiError Warehouse-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Warehouse document not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.get('/api/warehouses/:id', (req, res, next) => {
         const id = req.params.id;
 
@@ -4048,6 +4149,36 @@ exports.routers = app => {
         })
     });
 
+    /**
+     * @api {delete} /warehouses Delete Warehouse by Id
+     * @apiName DeleteWarehouseById
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Document kho thuốc đã được xóa thành công"
+     *  }
+     *
+     * @apiError Warehouse-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Warehouse not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.delete('/api/warehouses/:id', (req, res, next) => {
         const id = req.params.id;
 
@@ -4056,6 +4187,67 @@ exports.routers = app => {
         })
     });
 
+    /**
+     * @api {patch} /warehouses Update warehouse by Id
+     * @apiName UpdateWarehouseById
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiParam {String} patchCode Số lô
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "productId": "5e057818a1c1111795e29b75",
+	 *      "productType": "Thuốc bvtv",
+	 *      "quantity": "9999",
+	 *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+	 *      "patchCode": "999999999"
+     *  }
+     *
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e106cf39a2d430f0fda2557",
+     *      "productId": "5e057818a1c1111795e29b75",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "9999",
+     *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+     *      "patchCode": "999999999"
+     *  }
+     *
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương 
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ
+     * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+     * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
+     * 
+     * @apiErrorExample productType does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
     app.patch('/api/warehouses/:id', (req, res, next) => {
         const id = req.params.id;
         const update = req.body;

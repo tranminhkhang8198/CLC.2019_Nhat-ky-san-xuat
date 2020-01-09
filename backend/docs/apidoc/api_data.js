@@ -2197,7 +2197,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n    \"password\": \"123456\",\n}",
+          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n    \"password\": \"123456\"\n}",
           "type": "json"
         }
       ]
@@ -8637,7 +8637,7 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "ObjectId",
             "optional": false,
             "field": "productId",
             "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
@@ -8675,7 +8675,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9\",\n    \"goodsReceiptId\": \"1234567890\",\n    \"patchCode\": \"1234567890\"\n}",
+          "content": "\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9\",\n    \"goodsReceiptId\": \"5e16a02767944a0c086f82a2\",\n    \"patchCode\": \"1234567890\"\n}",
           "type": "json"
         }
       ]
@@ -8685,7 +8685,7 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "ObjectId",
             "optional": false,
             "field": "productId",
             "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
@@ -8730,7 +8730,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9\",\n    \"goodsReceiptId\": \"1234567890\",\n    \"patchCode\": \"1234567890\",\n    \"_id\": \"5e106cf39a2d430f0fda2557\"\n}",
+          "content": "HTTP/1.1 201 Created\n\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9\",\n    \"goodsReceiptId\": \"1234567890\",\n    \"patchCode\": \"5e16a02767944a0c086f82a2\",\n    \"_id\": \"5e106cf39a2d430f0fda2557\"\n}",
           "type": "json"
         }
       ]
@@ -8800,6 +8800,517 @@ define({ "api": [
           "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Vui lòng nhập loại sản phẩm\"\n}",
           "type": "json"
         },
+        {
+          "title": "productType does not exist:",
+          "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Loại sản phẩm không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Warehouses"
+  },
+  {
+    "type": "delete",
+    "url": "/warehouses",
+    "title": "Delete Warehouse by Id",
+    "name": "DeleteWarehouseById",
+    "group": "Warehouses",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/warehouses",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"successMessage\": \"Document kho thuốc đã được xóa thành công\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Warehouse-document-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Warehouse not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Warehouses"
+  },
+  {
+    "type": "get",
+    "url": "/warehouses",
+    "title": "Get All Warehouses",
+    "name": "GetAllWarehouses",
+    "group": "Warehouses",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/warehouses",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng document kho thuốc trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalSubcontractors",
+            "description": "<p>Tổng số document kho thuốc trong kho</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"totalWarehouses\": 2,\n    \"totalPages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"5e106cf39a2d430f0fda2557\",\n            \"productId\": \"5e057818a1c1111795e29b75\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"100\",\n            \"goodsReceiptId\": \"1234567890\",\n            \"patchCode\": \"1234567890\"\n        },\n        {\n            \"_id\": \"5e1075d453adfe17f413a130\",\n            \"productId\": \"5e057818a1c1111795e29b75\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"9\",\n            \"goodsReceiptId\": \"5e10733dca9ed4129c70715c\",\n            \"patchCode\": \"1234567890\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Page-not-found",
+            "description": "<p>Trang không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Page not found:",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Warehouses"
+  },
+  {
+    "type": "get",
+    "url": "/warehouses",
+    "title": "Get Warehouse by Id",
+    "name": "GetWarehouseById",
+    "group": "Warehouses",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/warehouses",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \n    \"_id\": \"5e106cf39a2d430f0fda2557\",\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"100\",\n    \"goodsReceiptId\": \"1234567890\",\n    \"patchCode\": \"1234567890\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Warehouse-document-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Warehouse document not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Warehouses"
+  },
+  {
+    "type": "patch",
+    "url": "/warehouses",
+    "title": "Update warehouse by Id",
+    "name": "UpdateWarehouseById",
+    "group": "Warehouses",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/warehouses",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9999\",\n    \"goodsReceiptId\": \"5e16a02767944a0c086f82a2\",\n    \"patchCode\": \"999999999\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"_id\": \"5e106cf39a2d430f0fda2557\",\n    \"productId\": \"5e057818a1c1111795e29b75\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"9999\",\n    \"goodsReceiptId\": \"5e16a02767944a0c086f82a2\",\n    \"patchCode\": \"999999999\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productType-does-not-exist",
+            "description": "<p>Trường loại sản phẩm không tồn tại (Loại sp phải là &quot;Thuốc bvtv&quot; || &quot;Phân bón&quot; || &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "quantity-is-positive-integer",
+            "description": "<p>Số lượng phải là số nguyên dương</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productId-does-not-exist",
+            "description": "<p>Sản phẩm không tồn tại trong danh mục</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "productId-is-invalid",
+            "description": "<p>Id sản phẩm không hợp lệ</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-does-not-exist",
+            "description": "<p>Hóa đơn nhập không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "goodsReceiptId-is-invalid",
+            "description": "<p>Id hóa đơn nhập không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
         {
           "title": "productType does not exist:",
           "content": "HTTP/1.1 409 Conflict\n{\n  \"errorMessage\": \"Loại sản phẩm không tồn tại\"\n}",
