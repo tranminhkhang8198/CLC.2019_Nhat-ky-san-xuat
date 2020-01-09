@@ -1704,7 +1704,7 @@ exports.routers = app => {
     })
 
     /**
-     * @api {post} /api/employee Request User information
+     * @api {post} /api/employee Thêm nhân sự mới
      * @apiVersion 0.1.0
      * @apiName PostEmployee
      * @apiGroup Employee
@@ -1795,9 +1795,9 @@ exports.routers = app => {
     })
 
     /**
-     * @api {post} /api/employee Tạo nhân sự mới
+     * @api {get} /api/employee Get danh sách nhân sự
      * @apiVersion 0.1.0
-     * @apiName PostEmployee
+     * @apiName GetEmployee
      * @apiGroup Employee
      *
      *

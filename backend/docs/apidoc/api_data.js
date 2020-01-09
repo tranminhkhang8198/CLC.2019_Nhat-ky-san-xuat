@@ -571,80 +571,6 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/cooperatives/count",
-    "title": "Get tổng số HTX đang quản lí",
-    "version": "0.1.0",
-    "name": "GetCooperatives",
-    "group": "Cooperatives",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization",
-            "description": "<p>Token.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -X GET http://localhost:3001/api/cooperatives/count",
-        "type": "curl"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "total",
-            "description": "<p>Tổng số HTX đang quản lí.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"total\": \"4\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Permission-denied",
-            "description": "<p>Token khong hop le</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Lỗi trong quá trình truy xuất dữ liệu\"\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "manager-admin"
-      }
-    ],
-    "filename": "./router.js",
-    "groupTitle": "Cooperatives"
-  },
-  {
-    "type": "get",
     "url": "/api/cooperatives",
     "title": "Get du lieu HTX theo phan trang.",
     "version": "0.1.0",
@@ -842,6 +768,80 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"ID không hợp lệ\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Cooperatives"
+  },
+  {
+    "type": "get",
+    "url": "/api/cooperatives/count",
+    "title": "Get tổng số HTX đang quản lí",
+    "version": "0.1.0",
+    "name": "GetCooperatives",
+    "group": "Cooperatives",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -X GET http://localhost:3001/api/cooperatives/count",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>Tổng số HTX đang quản lí.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"total\": \"4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Lỗi trong quá trình truy xuất dữ liệu\"\n    }",
           "type": "json"
         }
       ]
@@ -1905,123 +1905,11 @@ define({ "api": [
     "groupTitle": "Diaries"
   },
   {
-    "type": "patch",
-    "url": "/api/employee/:id",
-    "title": "Cập nhật thông tin nhân sự",
-    "version": "0.1.0",
-    "name": "PatchEmployee",
-    "group": "Employee",
-    "examples": [
-      {
-        "title": "Cập nhật thông tin nhân sự:",
-        "content": "- curl -i http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef",
-        "type": "curl"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization",
-            "description": "<p>Token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "updateData",
-            "description": "<p>Dữ liệu cần update</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "responseMessage",
-            "description": "<p>thông báo cập nhật thành công</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n   {\n        responseMessage:\"Đã cập nhật 3 dữ liệu\" \n   }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Permission-denied",
-            "description": "<p>Token khong hop le</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "ServerError",
-            "description": "<p>Lỗi trong quá trình cập nhật dữ liệu</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "NotFound",
-            "description": "<p>Không tìm thấy dữ liệu cần cập nhật</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BadRequest",
-            "description": "<p>Mã nhân sự không hợp lệ</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Lỗi trong quá trình cập nhật dữ liệu\"\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "manager-admin"
-      }
-    ],
-    "filename": "./router.js",
-    "groupTitle": "Employee"
-  },
-  {
-    "type": "post",
+    "type": "get",
     "url": "/api/employee",
-    "title": "Tạo nhân sự mới",
+    "title": "Get danh sách nhân sự",
     "version": "0.1.0",
-    "name": "PostEmployee",
+    "name": "GetEmployee",
     "group": "Employee",
     "header": {
       "fields": {
@@ -2195,9 +2083,121 @@ define({ "api": [
     "groupTitle": "Employee"
   },
   {
+    "type": "patch",
+    "url": "/api/employee/:id",
+    "title": "Cập nhật thông tin nhân sự",
+    "version": "0.1.0",
+    "name": "PatchEmployee",
+    "group": "Employee",
+    "examples": [
+      {
+        "title": "Cập nhật thông tin nhân sự:",
+        "content": "- curl -i http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "updateData",
+            "description": "<p>Dữ liệu cần update</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"name\": \"Nguyễn Văn Lợi\",\n    \"avatar\": \"C:/avatar/image-1578136142752.png\",\n    \"personalId\": \"8182213312\",\n    \"address\": \"Cần Thơ\",\n    \"phone\": \"0836810267\",\n    \"email\": \"vanloi@gmail.com\",\n    \"jobTitle\": \"Manager\",\n    \"HTXId\": \"dfsdf\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "responseMessage",
+            "description": "<p>thông báo cập nhật thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n   {\n        responseMessage:\"Đã cập nhật 3 dữ liệu\" \n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>Lỗi trong quá trình cập nhật dữ liệu</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "NotFound",
+            "description": "<p>Không tìm thấy dữ liệu cần cập nhật</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Mã nhân sự không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Lỗi trong quá trình cập nhật dữ liệu\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./router.js",
+    "groupTitle": "Employee"
+  },
+  {
     "type": "post",
     "url": "/api/employee",
-    "title": "Request User information",
+    "title": "Thêm nhân sự mới",
     "version": "0.1.0",
     "name": "PostEmployee",
     "group": "Employee",
@@ -9463,8 +9463,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "_home_student_web_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
-    "groupTitle": "_home_student_web_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "group": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
+    "groupTitle": "_home_khangtmk_CLC_2019_Nhat_ky_san_xuat_backend_docs_apidoc_main_js",
     "name": ""
   }
 ] });
