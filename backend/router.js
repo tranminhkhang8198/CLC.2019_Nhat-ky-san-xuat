@@ -1795,7 +1795,7 @@ exports.routers = app => {
     })
 
     /**
-     * @api {post} /api/employee Request User information
+     * @api {post} /api/employee Tạo nhân sự mới
      * @apiVersion 0.1.0
      * @apiName PostEmployee
      * @apiGroup Employee
@@ -1872,6 +1872,50 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {patch} /api/employee/:id Cập nhật thông tin nhân sự
+     * @apiVersion 0.1.0
+     * @apiName PatchEmployee
+     * @apiGroup Employee
+     *
+     * @apiExample {curl} Cập nhật thông tin nhân sự:
+     *  - curl -i http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Object} updateData Dữ liệu cần update
+     * 
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "name": "Nguyễn Văn Lợi",
+     *         "avatar": "C:/avatar/image-1578136142752.png",
+     *         "personalId": "8182213312",
+     *         "address": "Cần Thơ",
+     *         "phone": "0836810267",
+     *         "email": "vanloi@gmail.com",
+     *         "jobTitle": "Manager",
+     *         "HTXId": "dfsdf",
+     *     }
+     *
+     * @apiSuccess {String} responseMessage thông báo cập nhật thành công
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *     {
+     *          responseMessage:"Đã cập nhật 3 dữ liệu" 
+     *     }
+     *      
+     * @apiError Permission-denied Token khong hop le
+     * @apiError ServerError Lỗi trong quá trình cập nhật dữ liệu
+     * @apiError NotFound Không tìm thấy dữ liệu cần cập nhật
+     * @apiError BadRequest Mã nhân sự không hợp lệ 
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Lỗi trong quá trình cập nhật dữ liệu"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.patch('/api/employee/:id', (req, res, next) => {
         const _id = req.params.id;
         const updateData = req.body;
