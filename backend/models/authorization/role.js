@@ -59,7 +59,7 @@ class Role {
         }
         collection.find(query, options).limit(1).toArray((err, result) => {
             if (err || !_.get(result, '[0]')) {
-                return cb(err, null);
+                return cb({ errorMessage: "Lỗi trong quá trình truy xuất dữ liệu", errorCode: 400 }, null);
             }
             else {
                 const compare = allowRole.indexOf(result[0]._id.toString())
@@ -67,7 +67,7 @@ class Role {
                     return cb(null, true);
                 }
                 else {
-                    return cb({ err: "Access dinied" });
+                    return cb({ err: "Bạn không có quyền truy cập vào tài nguyên này", errorCode: 400 }, null);
                 }
             }
         })

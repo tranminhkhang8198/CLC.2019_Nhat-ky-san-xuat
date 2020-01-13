@@ -411,5 +411,12 @@ class User {
         })
 
     }
+    search(query, cb = () => { }) {
+
+        this.collection = this.app.db.collection('user');
+        const pageNumber = _.get(query, 'pageNumber', 0);
+        const resultnumber = _.get(query, 'resultNumber', 0);
+
+    }
 }
 module.exports = User;

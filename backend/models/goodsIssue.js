@@ -164,6 +164,27 @@ class GoodsIssue {
         }
 
         // --> Check goods receipt exists in DB
+        if (model.goodsReceiptId != null) {
+            if (!mongodb.ObjectID.isValid(model.goodsReceiptId)) {
+                errors.push({
+                    message: 'Id hóa đơn nhập không hợp lệ'
+                });
+            } else {
+                try {
+                    const GoodsReceipt = this.app.db.collection('goodsReceipts');
+
+                    const goodsReceipt = await GoodsReceipt.findOne({ _id: mongodb.ObjectID(model.goodsReceiptId) });
+
+                    if (!goodsReceipt) {
+                        errors.push({
+                            message: 'Hóa đơn nhập không tồn tại'
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        }
 
 
         // --> Check receiver exists in DB

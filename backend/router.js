@@ -1,35 +1,14 @@
 const _ = require("lodash");
 const upload = require("./models/multer");
-
+const { verifyUserV2 } = require("./middleware/verifyUser");
+const { errorHandle, responseHandle } = require("./middleware/lastHandler");
 
 exports.routers = app => {
     /**
      * @apiDefine set $set
      */
 
-    /**
-     * Error Handle In Response
-     * @param {request object} res
-     * @param {string} errorMessage
-     * @param {int} code
-     * @returns {*|JSON|Promise<any>}
-     */
-    const errorHandle = (res, errorMessage, code = 500) => {
-        return res.status(code).json({
-            errorMessage: errorMessage
-        });
-    };
 
-    /**
-     * Response Handle In Response
-     * @param {*} res
-     * @param {*} data
-     * @param {*} code
-     * @returns {*|JSON|Promise<any>}
-     */
-    const responseHandle = (res, data, code = 200) => {
-        return res.status(code).json(data);
-    };
 
     /**
      *
@@ -97,6 +76,9 @@ exports.routers = app => {
             }
         });
     };
+
+
+
 
     /**
      * @method GET
@@ -629,6 +611,17 @@ exports.routers = app => {
         });
     });
 
+    app.get("/api/users/search", (req, res, next) => {
+        const query = req.body.query;
+        app.db.models.user.search(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+
+
+        })
+    })
+
     /**
      * @api {post} /roles Them phuong thuc moi
      * @apiVersion 0.1.0
@@ -793,15 +786,13 @@ exports.routers = app => {
      * @apiName SearchCooperatives
      * @apiGroup Cooperatives
      *
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&_id=5dd6a2d406e82f6fe5e96f75
-     * @apiExample {curl} Example usage:
-     *     curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&name=Hop tac xa long thanh
      *
      * @apiHeader {String} authorization Token.
-     * @apiParam {String} query Dieu kien tim kiem.
+     * @apiParam {String} keyworks Dieu kien tim kiem.
      * @apiParam {Number} [resultNumber] so luong ket qua tra ve theo phan trang (tuy chon).
      * @apiParam {Number} [pageNumber] trang du lieu can tra ve theo phan trang (tuy chon).
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&keyworks=Hop tac xa long thanh
      *
      * @apiSuccess (Response Fileds) {Object[]} records Danh sach HTX.
      * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
@@ -862,7 +853,7 @@ exports.routers = app => {
         const body = req.query;
         app.models.cooperative.search(body, (err, result) => {
             if (err) {
-                return errorHandle(res, err.errorMessage, 401);
+                return errorHandle(res, err.errorMessage, err.errorCode);
             }
             else {
                 return responseHandle(res, result);
@@ -939,8 +930,8 @@ exports.routers = app => {
      * @apiPermission manager-admin
      */
     app.get('/api/cooperatives', (req, res, next) => {
-        const body = req.query;
-        app.models.cooperative.get(body, (err, result) => {
+        const query = req.query;
+        app.models.cooperative.get(query, (err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
                 : responseHandle(res, result);
@@ -1124,10 +1115,6 @@ exports.routers = app => {
         }
         const body = req.body;
         _.set(body, 'logo', logo);
-        // verifyUser(req, 'cooperative', (err, accept) => {
-        //     if (err) {
-        //         errorHandle(res, "Nguoi dung khong duoc phep truy cap", 405);
-        //     } else {
         app.models.cooperative.create(body, (err, result) => {
             if (err) {
                 return errorHandle(res, err.errorMessage, 404);
@@ -1135,8 +1122,6 @@ exports.routers = app => {
             else {
                 return responseHandle(res, result)
             }
-            //         })
-            //     }
         })
     })
 
@@ -1313,7 +1298,7 @@ exports.routers = app => {
      * 
      * @apiPermission manager-admin
      */
-    app.get('/api/cooperatives/count', (req, res, nexr) => {
+    app.get('/api/cooperatives/count', verifyUserV2, (req, res, next) => {
         app.models.cooperative.count((err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
@@ -1441,6 +1426,108 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {post} /api/goodsReceipts Thêm đơn nhập hàng mới.
+     * @apiVersion 0.1.0
+     * @apiName PostGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} cooperative_id ID của hợp tác xã
+     * @apiParam {String} product_id ID của sản phẩm
+     * @apiParam {String} product_type Loại sản phẩm được nhập
+     * @apiParam {Date} transDate Ngày mua
+     * @apiParam {Object[]} Detail Danh sách các lô đã mua
+     * @apiParam {String} Detail.patchCode Max số lô
+     * @apiParam {String} Detail.quantity Số lượng
+     * @apiParam {String} Detail.price Đơn giá
+     * @apiParam {String} Detail.expireDate Ngày hết hạn
+     * @apiParam {Date} inDate Ngày nhập kho
+     * @apiParam {String} notes Ghi chú
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *      "cooperative_id": "sdfsdfsdf",
+     *      "transDate": "2019-10-12T07:40:00.000Z",
+     *      "product_id": "sdfsd",
+     *      "product_type": "plant",
+     *      "detail": [
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          },
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          }
+     *      ],
+     *      "inDate": "1970-01-01T00:00:00.000Z",
+     *      "notes": "dsfdfsd sfdf"
+     *  }
+     *
+     * @apiSuccess {String} cooperative_id ID của hợp tác xã
+     * @apiSuccess {String} product_id ID của sản phẩm
+     * @apiSuccess {String} product_type Loại sản phẩm được nhập
+     * @apiSuccess {Date} transDate Ngày mua
+     * @apiSuccess {Object[]} Detail Danh sách các lô đã mua
+     * @apiSuccess {String} Detail.patchCode Max số lô
+     * @apiSuccess {String} Detail.quantity Số lượng
+     * @apiSuccess {String} Detail.price Đơn giá
+     * @apiSuccess {String} Detail.expireDate Ngày hết hạn
+     * @apiSuccess {Date} inDate Ngày nhập kho
+     * @apiSuccess {String} notes Ghi chú
+     * @apiSuccess {String} _id ID của hóa đơn nhập hàng
+     * @apiSuccess {Date} createdDate Ngày khởi tạo
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "cooperative_id": "sdfsdfsdf",
+     *      "transDate": "2019-10-12T07:40:00.000Z",
+     *      "product_id": "sdfsd",
+     *      "product_type": "plant",
+     *      "detail": [
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          },
+     *          {
+     *              "quantity": "200",
+     *              "price": 260000,
+     *              "patchCode": null,
+     *              "expireDate": "2019-12-30 15:30"
+     *          }
+     *      ],
+     *      "inDate": "1970-01-01T00:00:00.000Z",
+     *      "notes": "dsfdfsd sfdf",
+     *      "createdDate": "2020-01-03T10:17:17.697Z",
+     *      "_id": "5e0f14ad3d3b5928ff43fdff"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Ngay-giao-dich-khong-hop-le Ngày giao dịch không hợp lệ
+     * @apiError Product-ID-khong-hop-le Product ID không hợp lệ
+     * @apiError Product-type-khong-hop-le Product Type không hợp lệ
+     * @apiError Ma-so-lo-khong-hop-le Mã số lô không hợp lệ
+     * @apiError So-luong-khong-hop-le SỐ lượng không hợp lệ
+     * @apiError Don-gia-khong-hop-le Đơn giá không hợp lệ
+     * @apiError Ngay-het-han-khong-hop-le Ngày hết hạn không hợp lệ
+     * @apiError Ngay-nhap-kho-khong-hop-le Ngày nhập kho không hợp lệ
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Token không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.post('/api/goodsReceipts', (req, res, next) => {
         const body = req.body;
         app.models.goodsReceipt.create(body, (err, result) => {
@@ -1450,6 +1537,37 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {delete} /aip/goodsReceipts?queryParam Xóa thông tin của HTX
+     * @apiVersion 0.1.0
+     * @apiName DeleteGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} [_id] ID của hóa đơn
+     * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+     *     curl -i Delete http://localhost:3001/api/goodsReceipts?_id=sdfklsdjfsdfje23kj
+     *
+     * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *   "responseMessage": "Đã xóa dữ 1 liệu"
+     *  }
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Khong-tim-thay-du-lieu-can-xoa Không tìm thấy dữ liệu cần xóa
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *  "errorMessage": "Không tìm thấy dữ liệu cần xóa "
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.delete('/api/goodsReceipts', (req, res, next) => {
         const query = req.query;
         app.models.goodsReceipt.delete(query, (err, result) => {
@@ -1459,6 +1577,61 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {get} /aip/goodsReceipts?queryParam Tìm kiếm thông tin HTX
+     * @apiVersion 0.1.0
+     * @apiName GetGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} [pageNumber] Số thứ tự trang cần tìm lấy bắt đầu từ 0
+     * @apiParam {Number} [resulNumber] Số lượng dữ liệu mỗi trang
+     * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+     *     curl -i http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1
+     *
+     * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5e0f14ad3d3b5928ff43fdff",
+     *          "cooperative_id": "sdfsdfsdf",
+     *          "transDate": "2019-10-12T07:40:00.000Z",
+     *          "product_id": "sdfsd",
+     *          "product_type": "plant",
+     *          "detail": [
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              },
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              }
+     *          ],
+     *          "inDate": "1970-01-01T00:00:00.000Z",
+     *          "notes": "dsfdfsd sfdf",
+     *          "createdDate": "2020-01-03T10:17:17.697Z"
+     *      }
+     *  ]
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Khong-tim-thay-du-lieu-can-xoa Không tìm thấy dữ liệu
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *  "errorMessage": "Không tìm thấy dữ liệu "
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.get('/api/goodsReceipts', (req, res, next) => {
         const query = req.query;
         app.models.goodsReceipt.get(query, (err, result) => {
@@ -1468,6 +1641,62 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {get} /aip/goodsReceipts/search?queryParam Xóa thông tin của HTX
+     * @apiVersion 0.1.0
+     * @apiName GetGoodsReceipts
+     * @apiGroup GoodsReceipts
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Number} [pageNumber] Số thứ tự trang cần tìm lấy bắt đầu từ 0
+     * @apiParam {Number} [resulNumber] Số lượng dữ liệu mỗi trang
+     * @apiParam {String} _id Mã số hóa đơn nhập kho
+     * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+     *     curl -i http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf
+     *
+     * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  [
+     *      {
+     *          "_id": "5e0f14ad3d3b5928ff43fdff",
+     *          "cooperative_id": "sdfsdfsdf",
+     *          "transDate": "2019-10-12T07:40:00.000Z",
+     *          "product_id": "sdfsd",
+     *          "product_type": "plant",
+     *          "detail": [
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              },
+     *              {
+     *                  "quantity": "200",
+     *                  "price": 260000,
+     *                  "patchCode": null,
+     *                  "expireDate": "2019-12-30 15:30"
+     *              }
+     *          ],
+     *          "inDate": "1970-01-01T00:00:00.000Z",
+     *          "notes": "dsfdfsd sfdf",
+     *          "createdDate": "2020-01-03T10:17:17.697Z"
+     *      }
+     *  ]
+     * @apiError Permission-denied Token khong hop le
+     * @apiError Khong-tim-thay-du-lieu-can-xoa Không tìm thấy dữ liệu
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *  "errorMessage": "Không tìm thấy dữ liệu "
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.get('/api/goodsReceipts/search', (req, res, next) => {
         const query = req.query;
         app.models.goodsReceipt.search(query, (err, result) => {
@@ -1478,7 +1707,7 @@ exports.routers = app => {
     })
 
     /**
-     * @api {post} /api/employee Request User information
+     * @api {post} /api/employee Thêm nhân sự mới
      * @apiVersion 0.1.0
      * @apiName PostEmployee
      * @apiGroup Employee
@@ -1486,32 +1715,81 @@ exports.routers = app => {
      *
      * @apiHeader {String} authorization Token.
      *
-     * @apiParam {Number} id Users unique ID.
+     * @apiParam {String} Name Tên nhân sự
+     * @apiParam {File} avatar Ảnh đại diện
+     * @apiParam {String} personalId Số CMND của nhân sự
+     * @apiParam {String} address Địa chỉ.
+     * @apiParam {String} phone Số điện thoại.
+     * @apiParam {String} email Địa chỉ email.
+     * @apiParam {String} jobTitle chức vụ.
+     * @apiParam {String} HTXId ID của HTX.
+     * @apiParam {String} password Mật khẩu account của nhân sự.
+     * 
      * @apiParamExample {json} Request-Example:
      *     {
-     *       "refresh_token": "fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh"
+     *         "name": "Nguyễn Văn Lợi",
+     *         "avatar": "C:/avatar/image-1578136142752.png",
+     *         "personalId": "8182213312",
+     *         "address": "Cần Thơ",
+     *         "phone": "0836810267",
+     *         "email": "vanloi@gmail.com",
+     *         "jobTitle": "Manager",
+     *         "HTXId": "dfsdf",
+     *         "password": "123456",
      *     }
      *
-     * @apiSuccess {String} firstname Firstname of the User.
-     *
+     * @apiSuccess {String} Name Tên nhân sự
+     * @apiSuccess {File} avatar Ảnh đại diện
+     * @apiSuccess {String} personalId Số CMND của nhân sự
+     * @apiSuccess {String} address Địa chỉ.
+     * @apiSuccess {String} phone Số điện thoại.
+     * @apiSuccess {String} email Địa chỉ email.
+     * @apiSuccess {String} jobTitle chức vụ.
+     * @apiSuccess {String} HTXId ID của HTX.
+     * @apiSuccess {String} password Mật khẩu account của nhân sự.
+     * @apiSuccess {Date} created Ngày tạo.
+     * @apiSuccess {String} _id ID của nhân sự. 
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
-     *  {
-     *      "nModified": "4"
-     *  }
+     *      
+     *          {
+     *              "name": "Nguyễn Văn Lợi",
+     *              "avatar": "http://localhost:3001/avatar/image-1578136142752.png",
+     *              "personalId": "8182213312",
+     *              "address": "Cần Thơ",
+     *              "phone": "0836810267",
+     *              "email": "vanloi@gmail.com",
+     *              "jobTitle": "Manager",
+     *              "salary":"600",
+     *              "jobDesc":"",
+     *              "HTXId": "dfsdf",
+     *              "password": "123456",
+     *              "created": "2020-01-04T11:09:02.758Z",
+     *              "_id": "5e10724efde38921cd444999"
+     *          }
+     *      
      * @apiError Permission-denied Token khong hop le
+     * @apiError Ten-nhan-su-khong-hop-le Tên nhân sự không hợp lệ
+     * @apiError So-dien-thoai-khong-hop-le Số điện thoaij không hợp lệ
+     * @apiError Dia-chi-khong-hop-le Địa chỉ không hợp lệ
+     * @apiError Ten-chuc-vu-khong-hop-le Tên chức vụ không hợp lệ
      *
      * @apiErrorExample Error-Response:
      * HTTP/1.1 404 Not Found
      *     {
-     *       "error": "Nothing to update"
+     *       "error": "Số điện thoại không hợp lệ"
      *     }
      * 
      * @apiPermission manager-admin
      */
 
-    app.post('/api/employee', (req, res, next) => {
+    app.post('/api/employee', upload.single("avatar"), (req, res, next) => {
+        let avatar = "http://localhost:3001/avatar/default.png"
+        if (req.file) {
+            avatar = "http://localhost:3001/avatar/" + req.file.filename;
+        }
         const body = req.body;
+        _.set(body, 'avatar', avatar);
         app.models.employee.create(body, (err, result) => {
             return err
                 ? errorHandle(res, err.errorMessage, err.errorCode)
@@ -1519,7 +1797,76 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {get} /api/employee Get danh sách nhân sự
+     * @apiVersion 0.1.0
+     * @apiName GetEmployee
+     * @apiGroup Employee
+     *
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} HTXId HTX ID
+     * @apiParam {Number} [pageNumber] Số trang
+     * @apiParam {Number} [resultNumber] Số lượng dữ liệu mỗi trang
+     * @apiParam {String} personalId Số CMND của nhân sự
+     * 
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "name": "Nguyễn Văn Lợi",
+     *         "avatar": "C:/avatar/image-1578136142752.png",
+     *         "personalId": "8182213312",
+     *         "address": "Cần Thơ",
+     *         "phone": "0836810267",
+     *         "email": "vanloi@gmail.com",
+     *         "jobTitle": "Manager",
+     *         "HTXId": "dfsdf",
+     *         "password": "123456"
+     *     }
+     *
+     * @apiSuccess {String} Name Tên nhân sự
+     * @apiSuccess {File} avatar Ảnh đại diện
+     * @apiSuccess {String} personalId Số CMND của nhân sự
+     * @apiSuccess {String} address Users unique ID.
+     * @apiSuccess {String} phone Users unique ID.
+     * @apiSuccess {String} email Users unique ID.
+     * @apiSuccess {String} jobTitle Users unique ID.
+     * @apiSuccess {String} HTXId Users unique ID.
+     * @apiSuccess {String} password Users unique ID. 
+     * @apiSuccess {Date} created Ngày tạo.
+     * @apiSuccess {String} _id ID của nhân sự. 
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *     [ 
+     *          {
+     *              "name": "Nguyễn Văn Lợi",
+     *              "avatar": "http://localhost:3001/avatar/image-1578136142752.png",
+     *              "personalId": "8182213312",
+     *              "address": "Cần Thơ",
+     *              "phone": "0836810267",
+     *              "email": "vanloi@gmail.com",
+     *              "jobTitle": "Manager",
+     *              "salary":"600",
+     *              "jobDesc":"",
+     *              "HTXId": "dfsdf",
+     *              "password": "123456",
+     *              "created": "2020-01-04T11:09:02.758Z",
+     *              "_id": "5e10724efde38921cd444999"
+     *          }
+     *      ]
+     *      
+     * @apiError Permission-denied Token khong hop le
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Số điện thoại không hợp lệ"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
     app.get('/api/employee', (req, res, next) => {
+
         const query = req.query;
         app.models.employee.get(query, (err, result) => {
             return err
@@ -1528,6 +1875,60 @@ exports.routers = app => {
         })
     })
 
+    /**
+     * @api {patch} /api/employee/:id Cập nhật thông tin nhân sự
+     * @apiVersion 0.1.0
+     * @apiName PatchEmployee
+     * @apiGroup Employee
+     *
+     * @apiExample {curl} Cập nhật thông tin nhân sự:
+     *  - curl -i http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {Object} updateData Dữ liệu cần update
+     * 
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *         "name": "Nguyễn Văn Lợi",
+     *         "avatar": "C:/avatar/image-1578136142752.png",
+     *         "personalId": "8182213312",
+     *         "address": "Cần Thơ",
+     *         "phone": "0836810267",
+     *         "email": "vanloi@gmail.com",
+     *         "jobTitle": "Manager",
+     *         "HTXId": "dfsdf",
+     *     }
+     *
+     * @apiSuccess {String} responseMessage thông báo cập nhật thành công
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *     {
+     *          responseMessage:"Đã cập nhật 3 dữ liệu" 
+     *     }
+     *      
+     * @apiError Permission-denied Token khong hop le
+     * @apiError ServerError Lỗi trong quá trình cập nhật dữ liệu
+     * @apiError NotFound Không tìm thấy dữ liệu cần cập nhật
+     * @apiError BadRequest Mã nhân sự không hợp lệ 
+     *
+     * @apiErrorExample Error-Response:
+     * HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Lỗi trong quá trình cập nhật dữ liệu"
+     *     }
+     * 
+     * @apiPermission manager-admin
+     */
+    app.patch('/api/employee/:id', (req, res, next) => {
+        const _id = req.params.id;
+        const updateData = req.body;
+        _.unset(updateData, 'tokenPayload');
+        app.models.employee.update(_id, updateData, (err, result) => {
+            err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
 
 
 
@@ -2584,6 +2985,8 @@ exports.routers = app => {
      * @apiError cooperativeId-does-not-exist Hợp tác xã không tồn tại
      * @apiError receiverId-does-not-exist Người nhận không tồn tại 
      * @apiError receiverId-is-invalid Id người nhận không hợp lệ
+     * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+     * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
      * @apiErrorExample productType is required:
      *     HTTP/1.1 409 Conflict
      *     {
@@ -2872,6 +3275,8 @@ exports.routers = app => {
      * @apiError receiverId-does-not-exist Người nhận không tồn tại 
      * @apiError receiverId-is-invalid Id người nhận không hợp lệ
      * @apiError Goods-issue-not-found Hóa đơn xuất không tồn tại
+     * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+     * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
      * @apiError Invalid-id Id không hợp lệ
      * @apiErrorExample Invalid id:
      *     HTTP/1.1 500 Internal Server Error
@@ -3589,5 +3994,313 @@ exports.routers = app => {
         app.models.subcontractor.updateById(id, body, (err, info) => {
             return err ? errorHandle(res, err.errMessage, err.code) : responseHandle(res, info);
         });
+    });
+
+
+    // *************************************************************************** //
+    // ROUTES FOR WAREHOUSE
+
+    /**
+     * @api {post} /warehouses Create new warehouse
+     * @apiName CreateNewWarehouses
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiParam {String} patchCode Số lô
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "productId": "5e057818a1c1111795e29b75",
+	 *      "productType": "Thuốc bvtv",
+	 *      "quantity": "9",
+	 *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+	 *      "patchCode": "1234567890"
+     *  }
+     *
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 201 Created
+     *  
+     *  {
+     *      "productId": "5e057818a1c1111795e29b75",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "9",
+     *      "goodsReceiptId": "1234567890",
+     *      "patchCode": "5e16a02767944a0c086f82a2",
+     *      "_id": "5e106cf39a2d430f0fda2557"
+     *  }
+     *
+     * @apiError productType-is-required Trường loại sản phẩm là bắt buộc
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError productId-is-required Trường id sản phẩm là bắt buộc
+     * @apiError quantity-is-required Số lượng là bắt buộc 
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương 
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ
+     * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+     * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
+     * @apiErrorExample productType is required:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Vui lòng nhập loại sản phẩm"
+     *     }
+     * 
+     * @apiErrorExample productType does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.post('/api/warehouses', (req, res, next) => {
+        const body = req.body;
+
+        app.models.warehouse.create(body, (err, info) => {
+            return err ? errorHandle(res, err) : responseHandle(res, info, 201);
+        });
+    });
+
+
+    /**
+     * @api {get} /warehouses Get All Warehouses
+     * @apiName GetAllWarehouses
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+     * @apiParam {Number} nPerPage Số lượng document kho thuốc trên mỗi trang
+     *
+     * @apiSuccess {Number} totalSubcontractors Tổng số document kho thuốc trong kho 
+     * @apiSuccess {Number} totalPages Tổng số lượng trang
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "totalWarehouses": 2,
+     *      "totalPages": 1,
+     *      "data": [
+     *          {
+     *              "_id": "5e106cf39a2d430f0fda2557",
+     *              "productId": "5e057818a1c1111795e29b75",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "100",
+     *              "goodsReceiptId": "1234567890",
+     *              "patchCode": "1234567890"
+     *          },
+     *          {
+     *              "_id": "5e1075d453adfe17f413a130",
+     *              "productId": "5e057818a1c1111795e29b75",
+     *              "productType": "Thuốc bvtv",
+     *              "quantity": "9",
+     *              "goodsReceiptId": "5e10733dca9ed4129c70715c",
+     *              "patchCode": "1234567890"
+     *          }
+     *      ]
+     *  }
+     *
+     * @apiError Page-not-found Trang không tồn tại 
+     * @apiErrorExample Page not found:
+     *     HTTP/1.1 404 Not found
+     *     {
+     *       "errorMessage": "Trang tìm kiếm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get('/api/warehouses', (req, res, next) => {
+        const query = req.query;
+
+        app.models.warehouse.find(query, (err, info) => {
+            return err ? errorHandle(res, err) : responseHandle(res, info);
+        })
+    });
+
+    /**
+     * @api {get} /warehouses Get Warehouse by Id
+     * @apiName GetWarehouseById
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     * 
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      
+     *      "_id": "5e106cf39a2d430f0fda2557",
+     *      "productId": "5e057818a1c1111795e29b75",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "100",
+     *      "goodsReceiptId": "1234567890",
+     *      "patchCode": "1234567890"
+     *
+     *  }
+     *
+     * @apiError Warehouse-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Warehouse document not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.get('/api/warehouses/:id', (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.warehouse.findById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        })
+    });
+
+    /**
+     * @api {delete} /warehouses Delete Warehouse by Id
+     * @apiName DeleteWarehouseById
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "successMessage": "Document kho thuốc đã được xóa thành công"
+     *  }
+     *
+     * @apiError Warehouse-document-not-found Document không tồn tại
+     * @apiError Invalid-id Id không hợp lệ
+     * @apiErrorExample Invalid id:
+     *     HTTP/1.1 500 Internal Server Error
+     *     {
+     *       "errorMessage": "Id không hợp lệ"
+     *     }
+     * 
+     * @apiErrorExample Warehouse not found
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "errorMessage": "Document không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.delete('/api/warehouses/:id', (req, res, next) => {
+        const id = req.params.id;
+
+        app.models.warehouse.deleteById(id, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        })
+    });
+
+    /**
+     * @api {patch} /warehouses Update warehouse by Id
+     * @apiName UpdateWarehouseById
+     * @apiGroup Warehouses
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/warehouses
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiParam {Number} quantity Số lượng
+     * @apiParam {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiParam {String} patchCode Số lô
+     *
+     *
+     * @apiParamExample {json} Request-Example:
+     * 
+     *  {
+     *      "productId": "5e057818a1c1111795e29b75",
+	 *      "productType": "Thuốc bvtv",
+	 *      "quantity": "9999",
+	 *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+	 *      "patchCode": "999999999"
+     *  }
+     *
+     * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+     * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+     * @apiSuccess {Number} quantity Số lượng
+     * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+     * @apiSuccess {String} patchCode Số lô
+     * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  
+     *  {
+     *      "_id": "5e106cf39a2d430f0fda2557",
+     *      "productId": "5e057818a1c1111795e29b75",
+     *      "productType": "Thuốc bvtv",
+     *      "quantity": "9999",
+     *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+     *      "patchCode": "999999999"
+     *  }
+     *
+     * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+     * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương 
+     * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+     * @apiError productId-is-invalid Id sản phẩm không hợp lệ
+     * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+     * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
+     * 
+     * @apiErrorExample productType does not exist:
+     *     HTTP/1.1 409 Conflict
+     *     {
+     *       "errorMessage": "Loại sản phẩm không tồn tại"
+     *     }
+     * 
+     * @apiPermission none
+     */
+    app.patch('/api/warehouses/:id', (req, res, next) => {
+        const id = req.params.id;
+        const update = req.body;
+
+        app.models.warehouse.updateById(id, update, (err, info) => {
+            return err ? errorHandle(res, err.errorMessage, err.code) : responseHandle(res, info);
+        })
     });
 };

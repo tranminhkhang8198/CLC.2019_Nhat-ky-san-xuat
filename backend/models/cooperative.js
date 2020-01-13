@@ -19,7 +19,7 @@
  */
 const _ = require("lodash");
 const { ObjectID } = require("mongodb");
-
+const httpStatus = require('http-status');
 class Cooperative {
 	constructor(app) {
 		this.app = app;
@@ -275,26 +275,26 @@ class Cooperative {
 
 		const collection = this.app.db.collection('cooperatives');
 		const resultNumber = _.get(params, 'resultNumber', 0);
-		const pageNumber = _.get(params, 'pageNumber', 0);
+		let pageNumber = _.get(params, 'pageNumber', 0);
+		pageNumber > 0 ? pageNumber = pageNumber - 1 : pageNumber = 0;
 		_.unset(params, 'resultNumber');
 		_.unset(params, 'pageNumber');
-		let query = params;
-
-		let _id = _.get(query, "_id", null);
-		if (_id != null) {
-			try {
-				_id = new ObjectID(_id);
-				_.set(query, '_id', _id);
-			} catch (error) {
-				return cb({ errorMessage: "ID không hợp lệ" });
+		// TODO: validate input query
+		let keywords = _.get(params, 'keywords', '');
+		let names = keywords.replace(' ', '|');
+		const query = {
+			name: {
+				$regex: names,
+				$options: "si"
 			}
-
 		}
-		console.log(query, typeof (query._id));
+
 
 		collection.find(query).limit(parseInt(resultNumber)).skip(pageNumber * resultNumber).toArray((err, result) => {
-			if (err) {
-				return cb({ errorMessage: "Loi trong qua trinh tim kiem" }, null);
+			if (err || result.length === 0) {
+				return err
+					? cb({ errorMessage: "Lỗi trong quá trình truy xuất dữ liệu", errorCode: httpStatus.INTERNAL_SERVER_ERROR }, null)
+					: cb({ errorMessage: "Không tìm thấy dữ liệu", errorCode: httpStatus.NOT_FOUND }, null);
 			}
 			else {
 				return cb(null, result);
@@ -308,7 +308,8 @@ class Cooperative {
 		// const query = _.get(params, 'query', {});
 		// const options = _.get(params, 'options', {});
 		const resultNumber = _.get(params, 'resultNumber', 0);
-		const pageNumber = _.get(params, 'pageNumber', 0);
+		let pageNumber = _.get(params, 'pageNumber', 0);
+		pageNumber > 0 ? pageNumber = pageNumber - 1 : pageNumber = 0;
 		// var _id = _.get(query, "_id", null);
 		// if (_id != null) {
 		// 	try {
@@ -322,8 +323,8 @@ class Cooperative {
 		collection.find().limit(parseInt(resultNumber)).skip(pageNumber * resultNumber).toArray((err, result) => {
 			if (err || result.length == 0) {
 				return err
-					? cb({ errorMessage: "Loi trong qua trinh tim kiem", errorCode: 501 }, null)
-					: cb({ errorMessage: "Khong tim thay du lieu", errorCode: 400 }, null);
+					? cb({ errorMessage: "Lỗi trong quá trình truy xuất dữ liệu", errorCode: httpStatus.INTERNAL_SERVER_ERROR }, null)
+					: cb({ errorMessage: "Không tìm thấy dữ liệu", errorCode: httpStatus.NO_CONTENT }, null);
 			}
 			else {
 				return cb(null, result);
