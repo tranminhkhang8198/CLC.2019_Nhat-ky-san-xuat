@@ -476,6 +476,68 @@ exports.routers = app => {
     });
 
     /**
+     * @api {get} /api/users/search Search user by name
+     * @apiVersion 0.1.0
+     * @apiName SearchUser
+     * @apiGroup User
+     *
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:3001/api/users/search?keywords=nguyen van loi&pageNumber=1&resultNumber=1
+     *
+     * @apiHeader {String} authorization Token.
+     *
+     * @apiParam {String} keywords Searching keywords
+     * @apiParam {Number} pageNumber Page Number
+     * @apiParam {Number} resultNumber Result Number
+     * 
+     * @apiSuccess {String} _id ID token
+     * @apiSuccess {String} created Ngay tao token
+     * @apiSuccess {String} _id ID cua user
+     * @apiSuccess {String} name Ten cua user
+     * @apiSuccess {String} avatar User avatar
+     * @apiSuccess {String} personalId So CMND cua user
+     * @apiSuccess {String} address Địa chỉ cua user
+     * @apiSuccess {String} phone So dien thoai cua user
+     * @apiSuccess {String} email Địa chỉ email cua user
+     * @apiSuccess {String} user Loai nguoi dung
+     * @apiSuccess {String} HTXId ID cua hop tac xa
+     * @apiSuccess {String} created ngay tao account cua user
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *      [
+     *          {
+     *              "_id": "5e1c79058413720653b09112",
+     *              "name": "Nguyen Van Loi",
+     *              "avatar": "http://localhost:3001/avatar/default.png",
+     *              "personalId": "381823993",
+     *              "address": "Can Tho",
+     *              "phone": "0836810994",
+     *              "email": "vanloi1010@gmail.com",
+     *              "user": "user",
+     *              "HTXId": "UM1",
+     *              "created": "2020-01-13T14:04:53.771Z"
+     *          }
+     *      ]
+     *
+     * @apiError Access-dinied Token khong hop le
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "Access dinied"
+     *     }
+     * @apiPermission none
+     */
+    app.get("/api/users/search", (req, res, next) => {
+        const query = req.query;
+        app.models.user.search(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        })
+    })
+
+    /**
      * @api {get} /users/:userId Get user info from id
      * @apiVersion 0.1.0
      * @apiName GetUser
@@ -611,16 +673,7 @@ exports.routers = app => {
         });
     });
 
-    app.get("/api/users/search", (req, res, next) => {
-        const query = req.body.query;
-        app.db.models.user.search(query, (err, result) => {
-            return err
-                ? errorHandle(res, err.errorMessage, err.errorCode)
-                : responseHandle(res, result);
 
-
-        })
-    })
 
     /**
      * @api {post} /roles Them phuong thuc moi
