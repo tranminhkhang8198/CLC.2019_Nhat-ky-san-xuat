@@ -32,7 +32,6 @@ app.server = http.createServer(app);
 
 
 
-
 // App routers
 app.routers = routers(app)
 
@@ -48,6 +47,7 @@ connect((err, client) => {
 
 // Set up models
 app.models = new Model(app);
+
 
 // Start server
 app.server.listen(PORT, () => {

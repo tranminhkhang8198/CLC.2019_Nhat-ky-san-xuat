@@ -14,6 +14,7 @@ const GoodsReceipt = require('./goodsReceipt');
 const Employee = require('./employee');
 const Tool = require('./tool');
 const Subcontractor = require('./subcontractor');
+const Warehouse = require('./warehouse');
 
 class Model {
   constructor(app) {
@@ -34,6 +35,7 @@ class Model {
     this.employee = new Employee(app);
     this.tool = new Tool(app);
     this.subcontractor = new Subcontractor(app);
+    this.warehouse = new Warehouse(app);
   }
 }
 module.exports = Model;
