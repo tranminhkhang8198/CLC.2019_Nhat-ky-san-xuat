@@ -1862,20 +1862,9 @@ exports.routers = app => {
      * @apiParam {String} HTXId HTX ID
      * @apiParam {Number} [pageNumber] Số trang
      * @apiParam {Number} [resultNumber] Số lượng dữ liệu mỗi trang
-     * @apiParam {String} personalId Số CMND của nhân sự
      * 
-     * @apiParamExample {json} Request-Example:
-     *     {
-     *         "name": "Nguyễn Văn Lợi",
-     *         "avatar": "C:/avatar/image-1578136142752.png",
-     *         "personalId": "8182213312",
-     *         "address": "Cần Thơ",
-     *         "phone": "0836810267",
-     *         "email": "vanloi@gmail.com",
-     *         "jobTitle": "Manager",
-     *         "HTXId": "dfsdf",
-     *         "password": "123456"
-     *     }
+     * @apiExample {curl} Example request
+     *  - curl -DELETE http://localhost:3001/api/employee?HTXId=fjdiejdnfjdjfjdiendjfkdmei&pageNumber=1&resultNumber=1
      *
      * @apiSuccess {String} Name Tên nhân sự
      * @apiSuccess {File} avatar Ảnh đại diện
