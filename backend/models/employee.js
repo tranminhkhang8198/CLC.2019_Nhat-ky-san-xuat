@@ -157,13 +157,14 @@ class Employee {
     }
 
     get(params, cb = () => { }) {
-        const pageNumber = _.get(params, 'pageNumber', 0);
+        let pageNumber = _.get(params, 'pageNumber', 0);
         const resultNumber = _.get(params, 'resultNumber', 0);
         const HTXId = _.get(params, 'HTXId', null);
 
         if (HTXId == null) {
             return cb({ errorMessage: "Yêu cầu không được chấp nhận: Thiếu thông tin HTX", errorCode: 400 }, null);
         }
+        pageNumber > 0 ? pageNumber = pageNumber - 1 : pageNumber = 0
         const collection = this.app.db.collection('user');
         const query = {
             HTXId: HTXId
