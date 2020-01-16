@@ -3,7 +3,8 @@
 const _ = require('lodash');
 const { OrderedMap } = require('immutable');
 const bcrypt = require('bcrypt');
-const { ObjectID } = require('mongodb')
+const { ObjectID } = require('mongodb');
+const httpStatus = require('http-status');
 
 const salt = 10;
 
@@ -411,12 +412,35 @@ class User {
         })
 
     }
-    search(query, cb = () => { }) {
+    search(params, cb = () => { }) {
 
-        this.collection = this.app.db.collection('user');
-        const pageNumber = _.get(query, 'pageNumber', 0);
-        const resultnumber = _.get(query, 'resultNumber', 0);
+        const collection = this.app.db.collection('user');
+        let pageNumber = parseInt(_.get(params, 'pageNumber', 0));
+        let resultnumber = parseInt(_.get(params, 'resultNumber', 0));
+        pageNumber > 0 ? pageNumber = pageNumber - 1 : pageNumber = 0;
+        const keywords = _.get(params, 'keywords', '');
+        const names = keywords.replace(' ', '|');
+        const query = {
 
+            name: {
+                $regex: names,
+                $options: 'si'
+            }
+        }
+        collection.find(query).limit(resultnumber).skip(resultnumber * pageNumber).map(doc => {
+            delete doc['password']
+            return doc;
+        }).toArray((err, result) => {
+            if (err || result.length == 0) {
+                console.log(result);
+                return err
+                    ? cb({ errorMessage: "Lỗi trong quá trình truy xuất dữ liệu", errorCode: httpStatus.INTERNAL_SERVER_ERROR }, null)
+                    : cb({ errorMessage: "Không tìm thấy dữ liệu", ErrorCode: httpStatus.NOT_FOUND }, null);
+            }
+            else {
+                return cb(null, result);
+            }
+        })
     }
 }
 module.exports = User;
