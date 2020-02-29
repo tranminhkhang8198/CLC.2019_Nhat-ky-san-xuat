@@ -35,6 +35,7 @@ function App() {
     { pageName: 'Quản trị HTX', route: '/quantrihtx' },
     { pageName: 'Quản trị nhân sự HTX', route: '/quantriquanlyhtx' },
     { pageName: 'Quản trị sự kiện HTX', route: '/quantrisukienhtx' },
+    { pageName: 'Quản trị công cụ HTX', route: '/quantricongcuhtx' },
     { pageName: 'Profile', route: '/profile' },
   ];
 
@@ -78,6 +79,9 @@ function App() {
           </NavItem>
           <NavItem>
             <NavLink to="/quantrisukienhtx" tag={RRNavLink}>Quản trị sự kiện HTX</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/quantricongcuhtx" tag={RRNavLink}>Quản trị công cụ HTX</NavLink>
           </NavItem>
           <NavItem>
             <NavLink to="/profile" tag={RRNavLink}>Profile</NavLink>
