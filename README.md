@@ -29,8 +29,8 @@
 
 ## Project teams
 ### APIs:
-1. ...: responsibilities
-2. ...: responsibilities
+1. Tran Minh Khang
+2. Nguyen Van Loi
 
 ### Mobile app:
 1. ...: responsibilities
@@ -47,10 +47,22 @@
 ### APIs
 | # 	|                    Task                   	| Start | Deadline 	| Progress 	| Report 	| UC     |
 |:----:	|:-----------------------------------------	|:----:	|:---------:|:--------:	|:------:	|:------:|
-|  1 	|                              |      	|          	|           |        	|        |
-|  2 	|                              |      	|          	|           |        	|        |
-|  3 	|                              |      	|          	|          	|        	|        |
-|  4 	|                              |      	|          	|          	|        	|        |
+|  1 	| Fertilizer management API                          |      	|          	|           |        	|        |
+|  2 	| Plant protection product management API            |      	|          	|           |        	|        |
+|  3 	| Good receipt API (for import product to warehouse) |      	|          	|          	|        	|        |
+|  4 	| Good issue API (for export product from warehouse  |      	|          	|          	|        	|        |
+|  5 	| Warehouse API                                      |      	|          	|          	|        	|        |
+|  6 	| Cooperative management API                         |      	|          	|          	|        	|        |
+|  7 	| Employee management API                            |      	|          	|          	|        	|        |
+|  8 	| User management API                                |      	|          	|          	|        	|        |
+|  9 	| Tool management API                                |      	|          	|          	|        	|        |
+|  10	| Subcontractor management API                       |      	|          	|          	|        	|        |
+|  11	| Diary management API                               |      	|          	|          	|        	|        |
+|  12	| Field management API                               |      	|          	|          	|        	|        |
+|  13	| Subcontractor management API                       |      	|          	|          	|        	|        |
+
+
+
 
 
 ### Web app
