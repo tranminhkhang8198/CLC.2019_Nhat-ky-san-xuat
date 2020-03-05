@@ -31,6 +31,7 @@
 ### APIs:
 1. Tran Minh Khang
 2. Nguyen Van Loi
+3. Nguyen Nhat Quang
 
 ### Mobile app:
 1. ...: responsibilities
@@ -59,8 +60,6 @@
 |  10	| Subcontractor management API                       |      	|          	|          	|        	|        |
 |  11	| Diary management API                               |      	|          	|          	|        	|        |
 |  12	| Field management API                               |      	|          	|          	|        	|        |
-|  13	| Subcontractor management API                       |      	|          	|          	|        	|        |
-
 
 
 
