@@ -38,8 +38,10 @@
 2. ...: responsibilities
 
 ### Web app:
-1. ...: responsibilities
-2. ...: responsibilities
+1. Nguyen Minh Toan
+2. Nguyen Thai Ngoc
+3. Nguyen Quang Khai
+4. Nguyen Hoang Huynh
 
 
 
@@ -67,10 +69,18 @@
 ### Web app
 | # 	|                    Task                   	| Start | Deadline 	| Progress 	| Report 	| UC     |
 |:----:	|:-----------------------------------------	|:----:	|:---------:|:--------:	|:------:	|:------:|
-|  1 	|                              |      	|          	|           |        	|        |
-|  2 	|                              |      	|          	|           |        	|        |
-|  3 	|                              |      	|          	|          	|        	|        |
-|  4 	|                              |      	|          	|          	|        	|        |
+|  1 	| Phan quyen Admin - Manager                             |      	|          	|           |        	|        |
+|  2 	| Quan tri nhan su HTX (Admin)                             |      	|          	|           |        	|        |
+|  3 	| Quan li kho phan bon (Manager)                             |      	|          	|          	|        	|        |
+|  4 	| Quan li su kien HTX (Manager)                             |      	|          	|          	|        	|        |
+|  5 	| Quan li kho thuoc BVTV (Manager)                             |      	|          	|          	|        	|        |
+|  6 	| Quan li kho cong cu, dung cu (Manager)                             |      	|          	|          	|        	|        |
+|  7 	| Quan li co so vat chat (Manager)                             |      	|          	|          	|        	|        |
+|  8 	| Quan li nhan su HTX (Manager)                             |      	|          	|          	|        	|        |
+|  9 	| Quan li giong lua (Manager)                             |      	|          	|          	|        	|        |
+
+
+
 
 
 ### Mobile app
