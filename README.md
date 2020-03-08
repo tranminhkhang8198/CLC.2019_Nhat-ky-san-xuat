@@ -34,8 +34,8 @@
 3. Nguyen Nhat Quang
 
 ### Mobile app:
-1. ...: responsibilities
-2. ...: responsibilities
+1. Huynh Minh Nhat
+2. Dang Huynh Phuc Hau
 
 ### Web app:
 1. Nguyen Minh Toan
@@ -86,8 +86,10 @@
 ### Mobile app
 | # 	|                    Task                   	| Start | Deadline 	| Progress 	| Report 	| UC     |
 |:----:	|:-----------------------------------------	|:----:	|:---------:|:--------:	|:------:	|:------:|
-|  1 	|                              |      	|          	|           |        	|        |
-|  2 	|                              |      	|          	|           |        	|        |
-|  3 	|                              |      	|          	|          	|        	|        |
-|  4 	|                              |      	|          	|          	|        	|        |
+|  1 	| Giao dien ghi nhat ky                             |      	| Done         	|           |        	|        |
+|  2 	| Giao dien kho                             |      	|          	|           |        	|        |
+|  3 	| Giao dien thu hoach                             |      	|          	|          	|        	|        |
+|  4 	| Giao dien cac mua vu truoc                             |      	|          	|          	|        	|        |
+|  5 	| Giao dien thong tin ca nhan,dang nhap,thong bao,...                             |      	| Done         	|          	|        	|        |
+|  6 	| Goi API                             |      	|          	|          	|        	| On pending       |
 
