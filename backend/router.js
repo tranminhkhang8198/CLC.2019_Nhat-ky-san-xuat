@@ -1917,6 +1917,16 @@ exports.routers = app => {
         })
     })
 
+    app.get('/api/employee/total', (req, res, next) => {
+        const query = req.query;
+        app.models.employee.getTotal(query, (err, result) => {
+            return err
+                ? errorHandle(res, err.errorMessage, err.errorCode)
+                : responseHandle(res, result);
+        });
+
+    })
+
     /**
      * @api {patch} /api/employee/:id Cập nhật thông tin nhân sự
      * @apiVersion 0.1.0
@@ -1971,6 +1981,8 @@ exports.routers = app => {
                 : responseHandle(res, result);
         })
     })
+
+
 
 
 
