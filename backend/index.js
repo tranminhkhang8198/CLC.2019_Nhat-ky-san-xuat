@@ -7,7 +7,7 @@ const { connect } = require('./db')
 const { dbName } = require('./config')
 const Model = require('./models')
 const morgan = require('morgan')
-
+const Router = require('./routes/v1');
 const PORT = 3001;
 
 
@@ -48,6 +48,7 @@ connect((err, client) => {
 // Set up models
 app.models = new Model(app);
 
+app.use(Router);
 
 // Start server
 app.server.listen(PORT, () => {

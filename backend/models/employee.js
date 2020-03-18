@@ -8,7 +8,7 @@
  * @field (String) jobDesc Mô tả
  * @field (String) note ghi chú
  */
-
+const httpStatus = require('http-status');
 const _ = require('lodash')
 const { ObjectID } = require('mongodb')
 class Employee {
@@ -194,7 +194,7 @@ class Employee {
             })
     }
     update(target, rawData, cb = () => { }) {
-        const collection = this.app.db.collection('employee')
+        const collection = this.app.db.collection('user')
         rawData.user = rawData.jobTitle;
         delete rawData['jobTitle']
         try {
@@ -220,6 +220,26 @@ class Employee {
                         return cb(null, { responseMessage: `Đã cập nhật ${result.result.nModified} dữ liệu` });
                     }
                 })
+            }
+        })
+    }
+    getTotal(params, cb = () => { }) {
+        const collection = this.app.db.collection('user');
+        const HTXId = _.get(params, 'HTXId', '');
+        if (!HTXId || HTXId.length <= 0) {
+            return cb({ errorMessage: "HTX ID không hợp lệ" }, null);
+        }
+        const query = {
+            'HTXId': HTXId
+        }
+        collection.find(query).count((err, result) => {
+            if (err || result === 0) {
+                return err
+                    ? cb({ errorMessage: "Lỗi trong quá trình truy xuất dữ liệu", errorCode: httpStatus.INTERNAL_SERVER_ERROR }, null)
+                    : cb({ errorMessage: "Không tìm thấy dữ liệu", errorCode: httpStatus.NOT_FOUND }, null);
+            }
+            else {
+                return cb(null, { total: result });
             }
         })
     }
