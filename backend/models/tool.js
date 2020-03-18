@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const mongodb = require('mongodb');
+const validator = require('validator');
 
 class Tool {
     constructor(app) {
@@ -24,7 +25,7 @@ class Tool {
         this.model.note = _.get(obj, 'note', null);
     }
 
-    async validate(model, cb = () => { }) {
+    async validate(model, cb = () => {}) {
         let errors = [];
 
         const reg = /^\d+$/;
@@ -81,7 +82,9 @@ class Tool {
             } else {
                 try {
                     const User = this.app.db.collection('user');
-                    const user = await User.findOne({ _id: mongodb.ObjectID(model.receiverId) });
+                    const user = await User.findOne({
+                        _id: mongodb.ObjectID(model.receiverId)
+                    });
 
                     if (!user) {
                         errors.push({
@@ -97,7 +100,7 @@ class Tool {
         return cb(errors);
     }
 
-    create(body, cb = () => { }) {
+    create(body, cb = () => {}) {
         const Tool = this.app.db.collection('tools');
 
         // Create new goods issue with req body
@@ -129,7 +132,7 @@ class Tool {
         });
     }
 
-    async find(query, cb = () => { }) {
+    async find(query, cb = () => {}) {
         const Tool = this.app.db.collection('tools');
 
         const pageNumber = query.pageNumber;
@@ -169,7 +172,9 @@ class Tool {
                         // Get Receiver Name
                         const User = this.app.db.collection('user');
 
-                        const user = await User.findOne({ _id: mongodb.ObjectID(elem.receiverId) });
+                        const user = await User.findOne({
+                            _id: mongodb.ObjectID(elem.receiverId)
+                        });
                         elem["receiverName"] = user.name;
 
                         if (!responseToClient['data']) {
@@ -191,7 +196,7 @@ class Tool {
             });
     }
 
-    async findById(id, cb = () => { }) {
+    async findById(id, cb = () => {}) {
         try {
             const Tool = this.app.db.collection('tools');
 
@@ -204,7 +209,9 @@ class Tool {
                 return cb(message, null);
             }
 
-            const tool = await Tool.findOne({ _id: mongodb.ObjectID(id) });
+            const tool = await Tool.findOne({
+                _id: mongodb.ObjectID(id)
+            });
 
             if (!tool) {
                 const message = {
@@ -221,7 +228,7 @@ class Tool {
         }
     }
 
-    deleteById(id, cb = () => { }) {
+    deleteById(id, cb = () => {}) {
         const Tool = this.app.db.collection('tools');
 
         this.findById(id, async (err, res) => {
@@ -230,20 +237,25 @@ class Tool {
             }
 
             try {
-                const tool = await Tool.deleteOne({ _id: mongodb.ObjectID(id) });
+                const tool = await Tool.deleteOne({
+                    _id: mongodb.ObjectID(id)
+                });
                 const message = {
                     successMessage: "Document quản lý công cụ, dụng cụ được xóa thành công"
                 }
                 return cb(null, message);
 
             } catch (err) {
-                return cb({ errorMessage: err, code: 500 }, null);
+                return cb({
+                    errorMessage: err,
+                    code: 500
+                }, null);
             }
 
         });
     }
 
-    async updateById(id, update, cb = () => { }) {
+    async updateById(id, update, cb = () => {}) {
         this.findById(id, (err, res) => {
             if (err) {
                 return cb(err, null);
@@ -271,20 +283,28 @@ class Tool {
                             messages.push(err.message);
                         });
 
-                        return cb({ errorMessage: _.join(messages, ', '), code: 409 }, null);
+                        return cb({
+                            errorMessage: _.join(messages, ', '),
+                            code: 409
+                        }, null);
 
                     } else {
                         // Update to database
                         try {
                             const Tool = this.app.db.collection('tools');
-                            const tool = await Tool.update({ _id: mongodb.ObjectID(id) }, model);
+                            const tool = await Tool.update({
+                                _id: mongodb.ObjectID(id)
+                            }, model);
 
                             this.findById(id, (err, res) => {
                                 return cb(null, res);
                             });
 
                         } catch (err) {
-                            return cb({ errorMessage: "Lỗi trong quá trình cập nhật", code: 500 }, null);
+                            return cb({
+                                errorMessage: "Lỗi trong quá trình cập nhật",
+                                code: 500
+                            }, null);
                         }
                     }
                 });
