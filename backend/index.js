@@ -1,5 +1,6 @@
 const http = require('http');
 const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 const express = require('express');
 const cors = require('cors');
 const { routers } = require('./router')
@@ -19,6 +20,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
 app.use(bodyParser.json());
 
+// enable files upload
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 app.use(morgan('dev'));
 
