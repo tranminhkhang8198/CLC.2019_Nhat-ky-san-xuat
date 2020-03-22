@@ -4,7 +4,8 @@ const {
   validateBeforeCreate,
   validateBeforeUpdate,
   validateParamId,
-  validateExist
+  validateExist,
+  validateBeforeReturn
 } = require("../../validations/borrowedTool.validation");
 
 const {
@@ -12,7 +13,8 @@ const {
   getAll,
   getOne,
   update,
-  deleteOne
+  deleteOne,
+  returnTool
 } = require("../../controllers/borrowedTool.controller");
 
 /**
@@ -174,7 +176,7 @@ Router.route("/").post(validateBeforeCreate, create);
 Router.route("/").get(getAll);
 
 /**
- * @api {get} /api/borrowedTools Get borrowed tool document
+ * @api {get} /api/borrowedTools/:id Get borrowed tool document
  * @apiName GetBorrowedTool
  * @apiGroup BorrowedTools
  * @apiExample {curl} Get borrowed tool:
@@ -228,7 +230,7 @@ Router.route("/").get(getAll);
 Router.route("/:id").get(validateParamId, getOne);
 
 /**
- * @api {patch} /api/borrowedTools Update borrowed tool document
+ * @api {patch} /api/borrowedTools/:id Update borrowed tool document
  * @apiName UpdateBorrowedTool
  * @apiGroup BorrowedTools
  * @apiExample {curl} Example usage:
@@ -266,11 +268,10 @@ Router.route("/:id").get(validateParamId, getOne);
  * @apiSuccess {String} cooperativeId cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
  * @apiSuccess {String} image Image file
  * @apiSuccess {String} note Ghi chú
- * @apiSuccess {String} _id Id của document vừa tạo thành công
- *
+ * @apiSuccess {String} _id Id của document
  *
  * @apiSuccessExample Success-Response:
- *  HTTP/1.1 201 Created
+ *  HTTP/1.1 200 OK
  *
  *  {
  *      "toolId": "5e76f16b1dcd9d3dcb2dca0a",
@@ -357,5 +358,74 @@ Router.route("/:id").patch(
  * @apiPermission none
  */
 Router.route("/:id").delete(validateParamId, validateExist, deleteOne);
+
+/**
+ * @api {post} /api/borrowedTools/:id/return Return borrowed tool
+ * @apiName ReturnBorrowedTool
+ * @apiGroup BorrowedTools
+ * @apiExample {curl} Example usage:
+ *     curl -i http://localhost:3001/api/borrowedTools/5e7713bc31d4d0077efd283d/return
+ *
+ * @apiHeader {String} authorization Token.
+ *
+ * @apiParam {Date} returnedDate Ngày trả (chuẩn ISO 8601)
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+ *  {
+ *      "returnedDate": "2022-01-01"
+ *  }
+ *
+ * @apiSuccess {ObjectId} toolId Id công cụ, dụng cụ cần mượn
+ * @apiSuccess {Number} borrowedQuantity Số lượng mượn
+ * @apiSuccess {Date} borrowedDate Ngày mượn (chuẩn ISO 8601)
+ * @apiSuccess {Date} returnedDate Ngày trả (chuẩn ISO 8601)
+ * @apiSuccess {ObjectId} userBorrowedId Id người mượn
+ * @apiSuccess {String} cooperativeId cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
+ * @apiSuccess {String} image Image file
+ * @apiSuccess {String} note Ghi chú
+ * @apiSuccess {String} _id Id của document
+ *
+ *
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *
+ *  {
+ *      "toolId": "5e76f16b1dcd9d3dcb2dca0a",
+ *      "borrowedQuantity": "99",
+ *      "borrowedDate": "2020-09-09",
+ *      "returnedDate": "2022-01-01",
+ *      "userBorrowedId": "5dc7da01b47cf4369b24d8f6",
+ *      "note": "something"
+ *      "image": "http://localhost:3001/tool/image-1584776076120.jpeg",
+ *      "cooperativeId": "HTXNN",
+ *      "_id": "5e75c38c40019a40362038ff"
+ *  }
+ *
+ * @apiError returnedDate-is-invalid Định dạng ngày trả không hợp lệ
+ * @apiError returnedDate-is-less-than-borrowedDate Ngày trả không thể nhỏ hơn ngày đã mượn
+ * @apiError tool-already-return Dụng cụ đã được trả
+ *
+ * @apiErrorExample returnedDate less than borrowedDate:
+ *     HTTP/1.1 400 Bad request
+ *     {
+ *       "errorMessage": "Ngày trả không thể nhỏ hơn ngày mượn."
+ *     }
+ *
+ * @apiErrorExample tool already return:
+ *     HTTP/1.1 400 Bad request
+ *     {
+ *       "errorMessage": "Dụng cụ đã được trả. Sử dụng update nếu muốn cập nhật ngày trả"
+ *     }
+ *
+ *
+ * @apiPermission none
+ */
+Router.route("/:id/return").post(
+  validateParamId,
+  validateExist,
+  validateBeforeReturn,
+  returnTool
+);
 
 module.exports = Router;

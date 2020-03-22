@@ -204,7 +204,7 @@ Router.route("/").get(getAll);
 Router.route("/:id").get(getOne);
 
 /**
- * @api {patch} /api/tools Update tool
+ * @api {patch} /api/tools/:id Update tool
  * @apiName UpdateTool
  * @apiGroup Tools
  * @apiExample {curl} Example usage:

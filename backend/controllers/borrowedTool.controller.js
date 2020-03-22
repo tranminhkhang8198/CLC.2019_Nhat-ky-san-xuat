@@ -193,3 +193,19 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
     successMessage: "Document được xoá thành công."
   });
 });
+
+exports.returnTool = catchAsync(async (req, res, next) => {
+  const { models } = req.app;
+  const id = req.params.id;
+
+  const filterBody = filterObj(req.body, "returnedDate");
+
+  const borrowedTool = await models.borrowedTool.update(id, filterBody);
+
+  await models.tool.increaseAvailable(
+    borrowedTool.value.toolId,
+    borrowedTool.value.borrowedQuantity
+  );
+
+  return res.status(200).json(borrowedTool.value);
+});

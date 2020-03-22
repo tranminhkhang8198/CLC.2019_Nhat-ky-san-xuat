@@ -125,7 +125,7 @@ exports.validateExist = async (req, res, next) => {
 
   if (!isExist) {
     return res.status(404).json({
-      errorMessage: `Document cần cập nhật không tồn tại`
+      errorMessage: `Document không tồn tại`
     });
   }
 
@@ -246,6 +246,45 @@ exports.validateBeforeUpdate = catchAsync(async (req, res, next) => {
   // Validate image
   if (req.files) {
     validateImg(req.files, errors);
+  }
+
+  if (errors.length > 0) {
+    _.each(errors, err => {
+      messages.push(err.message);
+    });
+
+    const errorMessage = _.join(messages, "; ");
+
+    return res.status(400).json({
+      errorMessage
+    });
+  }
+
+  next();
+});
+
+exports.validateBeforeReturn = catchAsync(async (req, res, next) => {
+  const { db, models } = req.app;
+  const { returnedDate } = req.body;
+
+  let errors = [];
+  let messages = [];
+
+  // Check if returnedDate already exist
+  const borrowedTool = await models.borrowedTool.findOne(req.params.id);
+  if (borrowedTool.returnedDate) {
+    return res.status(400).json({
+      errorMessage:
+        "Dụng cụ đã được trả. Sử dụng update nếu muốn cập nhật ngày trả"
+    });
+  }
+
+  if (returnedDate == null) {
+    errors.push({
+      message: "Vui lòng nhập ngày trả"
+    });
+  } else {
+    await validateReturnedDate(errors, returnedDate, models, req.params.id);
   }
 
   if (errors.length > 0) {

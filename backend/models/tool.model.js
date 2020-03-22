@@ -109,7 +109,22 @@ class Tool {
 
       const tool = await Tool.findOneAndUpdate(
         { _id: mongodb.ObjectID(id) },
-        { $inc: { available: -borrowedQuantity } }
+        { $inc: { available: -parseInt(borrowedQuantity) } }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async increaseAvailable(id, borrowedQuantity) {
+    try {
+      const Tool = this.app.db.collection("tools");
+
+      console.log(borrowedQuantity);
+
+      const tool = await Tool.findOneAndUpdate(
+        { _id: mongodb.ObjectID(id) },
+        { $inc: { available: parseInt(borrowedQuantity) } }
       );
     } catch (err) {
       console.log(err);
