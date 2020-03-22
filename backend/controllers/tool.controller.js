@@ -19,12 +19,16 @@ const uploadImage = file => {
 };
 
 const removeImage = imgUrl => {
-  const filename = imgUrl.split("/").slice(-1)[0];
+  try {
+    const filename = imgUrl.split("/").slice(-1)[0];
 
-  const imgPath = path.join(__dirname, "../images/tool/" + filename);
+    const imgPath = path.join(__dirname, "../images/tool/" + filename);
 
-  if (fs.existsSync(imgPath)) {
-    fs.unlinkSync(imgPath);
+    if (fs.existsSync(imgPath)) {
+      fs.unlinkSync(imgPath);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -132,6 +136,14 @@ exports.update = catchAsync(async (req, res, next) => {
     });
   }
 
+  const isExist = await models.tool.isExist({ _id: mongodb.ObjectID(id) });
+
+  if (!isExist) {
+    return res.status(404).json({
+      errorMessage: `Dụng cụ với id = ${id} không tồn tại`
+    });
+  }
+
   if (Object.keys(filterBody).length == 0) {
     return res.status(400).json({
       errorMessage: "Vui lòng nhập thông tin cần cập nhật"
@@ -142,6 +154,8 @@ exports.update = catchAsync(async (req, res, next) => {
   if (filterBody.name) {
     filterBody.name = filterBody.name.trim().replace(/\s\s+/g, " ");
   }
+
+  filterBody.available = parseInt(filterBody.available);
 
   // check if image was posted
   if (req.files) {
@@ -155,7 +169,9 @@ exports.update = catchAsync(async (req, res, next) => {
     // Remove old image
     const tool = await models.tool.findOne(id);
 
-    removeImage(tool.image);
+    if (tool.image != null) {
+      removeImage(tool.image);
+    }
   }
 
   const tool = await models.tool.update(id, filterBody);

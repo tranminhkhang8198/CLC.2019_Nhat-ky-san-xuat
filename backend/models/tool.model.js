@@ -20,7 +20,7 @@ class Tool {
   initWithObject(obj) {
     this.model.name = _.get(obj, "name", null);
     this.model.total = _.get(obj, "total", null);
-    this.model.available = _.get(obj, "available", null);
+    this.model.available = parseInt(_.get(obj, "available", null));
     this.model.image = _.get(obj, "image", null);
     this.model.note = _.get(obj, "note", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
@@ -98,6 +98,19 @@ class Tool {
       const tool = await Tool.findOne(field);
 
       return tool;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async decreaseAvailable(id, borrowedQuantity) {
+    try {
+      const Tool = this.app.db.collection("tools");
+
+      const tool = await Tool.findOneAndUpdate(
+        { _id: mongodb.ObjectID(id) },
+        { $inc: { available: -borrowedQuantity } }
+      );
     } catch (err) {
       console.log(err);
     }

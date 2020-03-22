@@ -26,7 +26,7 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
   let errors = [];
   let messages = [];
 
-  const reg = /^\d+$/;
+  const reg = /^[1-9]\d*$/;
 
   // Name validate
   if (name == null) {
@@ -105,7 +105,7 @@ exports.validateBeforeUpdate = catchAsync(async (req, res, next) => {
   let errors = [];
   let messages = [];
 
-  const reg = /^\d+$/;
+  const reg = /^[1-9]\d*$/;
 
   // Validate name
   if (name != null) {

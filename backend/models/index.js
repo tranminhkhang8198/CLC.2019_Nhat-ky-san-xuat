@@ -4,18 +4,19 @@ const Role = require("./authorization/role");
 const Resource = require("./authorization/resource");
 const Permission = require("./authorization/permission");
 const PlantProtectionProduct = require("./plantProtectionProduct");
-const Cooperative = require('./cooperative');
-const Diary = require('./diary');
-const ScopeOfUse = require('./scopeOfUse');
-const Fertilizer = require('./fertilizer');
-const Field = require('./field');
-const GoodsIssue = require('./goodsIssue');
-const GoodsReceipt = require('./goodsReceipt');
-const Employee = require('./employee');
-const Tool = require('./tool.model');
-const Subcontractor = require('./subcontractor');
-const Warehouse = require('./warehouse');
-const Test = require('./test.model');
+const Cooperative = require("./cooperative");
+const Diary = require("./diary");
+const ScopeOfUse = require("./scopeOfUse");
+const Fertilizer = require("./fertilizer");
+const Field = require("./field");
+const GoodsIssue = require("./goodsIssue");
+const GoodsReceipt = require("./goodsReceipt");
+const Employee = require("./employee");
+const Tool = require("./tool.model");
+const Subcontractor = require("./subcontractor");
+const Warehouse = require("./warehouse");
+const Test = require("./test.model");
+const BorrowedTool = require("./borrowedTool.model");
 
 class Model {
   constructor(app) {
@@ -38,6 +39,7 @@ class Model {
     this.subcontractor = new Subcontractor(app);
     this.warehouse = new Warehouse(app);
     this.test = new Test(app);
+    this.borrowedTool = new BorrowedTool(app);
   }
 }
 module.exports = Model;
