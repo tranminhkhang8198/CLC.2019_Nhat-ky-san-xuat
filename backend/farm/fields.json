@@ -1,0 +1,6 @@
+{"_id":{"$oid":"5dedc51f8bad46247b9f4d32"},"name":"F0001","area_id":"A0001"}
+{"_id":{"$oid":"5dedc52f8bad46247b9f4d33"},"name":"F0002","area_id":"A0001"}
+{"_id":{"$oid":"5dedc5451f26d124a4bcf0b2"},"name":"F0003","area_id":"A0001"}
+{"_id":{"$oid":"5dedc55698051924bc83044c"},"name":"F0004","area_id":"A0001"}
+{"_id":{"$oid":"5dedc932bad8e32650d38788"},"name":"F0005","area_id":"A0001","square":{"$numberInt":"50"},"unit":"m2","status":{"$numberInt":"0"}}
+{"_id":{"$oid":"5dedc93ebad8e32650d38789"},"name":"F0006","area_id":"A0001","square":{"$numberInt":"50"},"unit":"m2","status":{"$numberInt":"0"}}
