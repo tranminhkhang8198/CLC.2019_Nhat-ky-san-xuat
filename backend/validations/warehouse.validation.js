@@ -43,14 +43,18 @@ const validateProductId = async (errors, db, id, type) => {
       Giống: "cultivars"
     };
 
-    const Collection = db.collection(collections[type]);
+    try {
+      const Collection = db.collection(collections[type]);
 
-    const isExist = await isExistProduct(Collection, id);
+      const isExist = await isExistProduct(Collection, id);
 
-    if (!isExist) {
-      return errors.push({
-        message: "Sản phẩm không tồn tại trong danh mục."
-      });
+      if (!isExist) {
+        return errors.push({
+          message: "Sản phẩm không tồn tại trong danh mục."
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 };
@@ -75,6 +79,48 @@ const validateQuantity = async (errors, quantity) => {
   }
 };
 
+const validateGoodsReceiptId = async (errors, db, id) => {
+  if (!mongodb.ObjectID.isValid(id)) {
+    return errors.push({
+      message: "Id hoá đơn nhập không hợp lệ."
+    });
+  }
+
+  try {
+    const GoodsReceiptId = db.collection("goodsReceipts");
+
+    const goodsReceiptId = await GoodsReceiptId.findOne({
+      _id: mongodb.ObjectID(id)
+    });
+
+    if (!goodsReceiptId) {
+      return errors.push({
+        message: "Hoá đơn nhập không tồn tại."
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const validateCooperativeId = async (errors, db, id) => {
+  try {
+    const Cooperative = db.collection("cooperatives");
+
+    const cooperative = await Cooperative.findOne({
+      cooperativeID: id
+    });
+
+    if (!cooperative) {
+      return errors.push({
+        message: "Hợp tác xã không tồn tại."
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
   const { models, db } = req.app;
 
@@ -83,7 +129,8 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
     productType,
     price,
     quantity,
-    goodReceiptId,
+    patchCode,
+    goodsReceiptId,
     cooperativeId
   } = req.body;
 
@@ -122,7 +169,30 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
     validateQuantity(errors, quantity);
   }
 
-  // Validate goodsReceipt
+  // Validate goodsReceiptId
+  if (goodsReceiptId == null) {
+    errors.push({
+      message: "Vui lòng nhập id hoá đơn nhập."
+    });
+  } else {
+    await validateGoodsReceiptId(errors, db, goodsReceiptId);
+  }
+
+  // Validate cooperativeId
+  if (cooperativeId == null) {
+    errors.push({
+      message: "Vui lòng nhập id hợp tác xã."
+    });
+  } else {
+    await validateCooperativeId(errors, db, cooperativeId);
+  }
+
+  // Validate patchCode
+  if (patchCode == null) {
+    errors.push({
+      message: "Vui lòng nhập mã số lô."
+    });
+  }
 
   if (errors.length > 0) {
     _.each(errors, err => {

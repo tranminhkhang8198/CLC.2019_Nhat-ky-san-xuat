@@ -10,6 +10,7 @@ class Warehouse {
       productType: null,
       price: null,
       quantity: null,
+      patchCode: null,
       goodReceiptId: null,
       cooperativeId: null
     };
