@@ -42,11 +42,11 @@ class Warehouse {
 
   async find(query) {
     try {
-      const BorrowedTool = this.app.db.collection("borrowedTools");
+      const Warehouse = this.app.db.collection("warehouses");
 
-      const borrowedTools = await BorrowedTool.find(query).toArray();
+      const warehouses = await Warehouse.find(query).toArray();
 
-      return borrowedTools;
+      return warehouses;
     } catch (err) {
       console.log(err);
     }
@@ -92,13 +92,29 @@ class Warehouse {
     }
   }
 
-  async isExist(field) {
+  async isExist(productId, cooperativeId) {
     try {
-      const BorrowedTool = this.app.db.collection("borrowedTools");
+      const Warehouse = this.app.db.collection("warehouses");
 
-      const borrowedTool = await BorrowedTool.findOne(field);
+      const warehouse = await Warehouse.findOne({
+        productId,
+        cooperativeId
+      });
 
-      return borrowedTool;
+      return warehouse;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async updateQuantity(productId, cooperativeId, quantity) {
+    try {
+      const Warehouse = this.app.db.collection("warehouses");
+
+      const warehouse = await Warehouse.findOneAndUpdate(
+        { productId, cooperativeId },
+        { $inc: { quantity: parseInt(quantity) } }
+      );
     } catch (err) {
       console.log(err);
     }

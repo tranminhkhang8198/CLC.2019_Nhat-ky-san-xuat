@@ -5,6 +5,18 @@ const fs = require("fs");
 const filterObj = require("../utils/filterObj");
 const catchAsync = require("../utils/catchAsync");
 
+const getProductCollection = (db, type) => {
+  const collections = {
+    "Thuốc bvtv": "plantProtectionProduct",
+    "Phân bón": "fertilizer",
+    Giống: "cultivars"
+  };
+
+  const Collection = db.collection(collections[type]);
+
+  return Collection;
+};
+
 exports.create = catchAsync(async (req, res, next) => {
   const { models } = req.app;
 
@@ -36,22 +48,19 @@ exports.getAll = catchAsync(async (req, res, next) => {
   delete query.nPerPage;
   delete query.pageNumber;
 
-  const borrowedTools = await models.borrowedTool.find(query);
-  const paginatedBorrowedTools = borrowedTools.slice(start, end);
+  const warehouses = await models.warehouses.find(query);
+  const paginatedWarehouses = warehouses.slice(start, end);
 
   const totalPages =
-    (borrowedTools.length - (borrowedTools.length % nPerPage)) / nPerPage + 1;
+    (warehouses.length - (warehouses.length % nPerPage)) / nPerPage + 1;
 
-  if (paginatedBorrowedTools.length == 0) {
+  if (paginatedWarehouses.length == 0) {
     return res.status(404).json({
       errorMessage: "Trang tìm kiếm không tồn tại"
     });
   }
 
-  for (borrowedTool of paginatedBorrowedTools) {
-    const user = await getUserInfo(db, borrowedTool.userBorrowedId);
-    const tool = await models.tool.findOne(borrowedTool.toolId);
-
+  for (warehouse of paginatedWarehouses) {
     borrowedTool.toolName = tool.name;
     borrowedTool.userBorrowedName = user.name;
 
