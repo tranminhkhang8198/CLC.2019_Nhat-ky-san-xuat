@@ -1,8 +1,6 @@
 const _ = require("lodash");
 const mongodb = require("mongodb");
 
-const catchAsync = require("../utils/catchAsync");
-
 class Tool {
   constructor(app) {
     this.app = app;

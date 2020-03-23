@@ -1,43 +1,39 @@
 const _ = require("lodash");
 const mongodb = require("mongodb");
 
-class BorrowedTool {
+class Warehouse {
   constructor(app) {
     this.app = app;
 
     this.model = {
-      toolId: null,
-      borrowedQuantity: null,
-      borrowedDate: null,
-      returnedDate: null,
-      image: null,
-      note: null,
-      userBorrowedId: null,
+      productId: null,
+      productType: null,
+      price: null,
+      quantity: null,
+      goodReceiptId: null,
       cooperativeId: null
     };
   }
 
   initWithObject(obj) {
-    this.model.toolId = _.get(obj, "toolId", null);
-    this.model.borrowedQuantity = _.get(obj, "borrowedQuantity", null);
-    this.model.borrowedDate = _.get(obj, "borrowedDate", null);
-    this.model.returnedDate = _.get(obj, "returnedDate", null);
-    this.model.image = _.get(obj, "image", null);
-    this.model.note = _.get(obj, "note", null);
-    this.model.userBorrowedId = _.get(obj, "userBorrowedId", null);
+    this.model.productId = _.get(obj, "productId", null);
+    this.model.productType = _.get(obj, "productType", null);
+    this.model.price = _.get(obj, "price", null);
+    this.model.quantity = _.get(obj, "quantity", null);
+    this.model.goodReceiptId = _.get(obj, "goodReceiptId", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
   }
 
   async create(obj) {
     try {
-      const BorrowedTool = this.app.db.collection("borrowedTools");
+      const Warehouse = this.app.db.collection("warehouses");
 
       // init model
       this.initWithObject(obj);
 
-      const borrowedTool = await BorrowedTool.insertOne(this.model);
+      const warehouse = await Warehouse.insertOne(this.model);
 
-      return borrowedTool.ops[0];
+      return warehouse.ops[0];
     } catch (err) {
       console.log(err);
     }
@@ -108,4 +104,4 @@ class BorrowedTool {
   }
 }
 
-module.exports = BorrowedTool;
+module.exports = Warehouse;

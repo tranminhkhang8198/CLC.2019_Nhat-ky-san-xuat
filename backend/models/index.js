@@ -14,7 +14,7 @@ const GoodsReceipt = require("./goodsReceipt");
 const Employee = require("./employee");
 const Tool = require("./tool.model");
 const Subcontractor = require("./subcontractor");
-const Warehouse = require("./warehouse");
+const Warehouse = require("./warehouse.model");
 const Test = require("./test.model");
 const BorrowedTool = require("./borrowedTool.model");
 
