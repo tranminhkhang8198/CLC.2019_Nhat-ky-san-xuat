@@ -115,6 +115,7 @@ class Warehouse {
         { productId, cooperativeId },
         { $inc: { quantity: parseInt(quantity) } }
       );
+      return warehouse;
     } catch (err) {
       console.log(err);
     }

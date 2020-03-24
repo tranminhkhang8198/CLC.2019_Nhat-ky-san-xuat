@@ -1,7 +1,9 @@
 {
-  "name": "Cooperatives Management system",
-  "version": "0.1.0",
-  "description": "apiDoc",
-  "title": "Custom apiDoc",
-  "url": "http://localhost:3001"
+  "name": "Cooperative management platform",
+  "version": "1.0.0",
+  "description": "CMP APIs documentation",
+  "title": "Cooperative management platform | APIs documentation",
+  "template": {
+    "forceLanguage": "en"
+  }
 }
