@@ -22,9 +22,9 @@ define({ "api": [
     "type": "",
     "url": "",
     "version": "0.0.0",
-    "filename": "./docs/apidoc_clone/main.js",
-    "group": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc_clone/main.js",
-    "groupTitle": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc_clone/main.js",
+    "filename": "./docs/apidoc/main.js",
+    "group": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "groupTitle": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
     "name": ""
   },
   {
