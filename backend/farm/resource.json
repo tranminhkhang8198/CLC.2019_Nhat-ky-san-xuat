@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5e0195bafea6c01a7f61a5d8"},"name":"user","role":{"user":"GUDP","manager":"GUDP","administrator":"GUDP"},"created":{"$date":{"$numberLong":"1577162170261"}}}
+{"_id":{"$oid":"5e0195c7fea6c01a7f61a5d9"},"name":"cooperatives","role":{"user":"GUDP","manager":"GUDP","administrator":"GUDP"},"created":{"$date":{"$numberLong":"1577162183129"}}}

@@ -15,6 +15,7 @@
 
 const _ = require('lodash');
 const { ObjectID } = require('mongodb');
+const httpStatus = require('http-status');
 class GoodsReceipt {
 
     constructor(app) {
@@ -133,6 +134,35 @@ class GoodsReceipt {
         return d instanceof Date && !isNaN(d);
     }
 
+    /**
+    *==========================================================
+    *=                Creation functions                      =
+    *=        Put all the creation functions below            =
+    *==========================================================
+    */
+
+    async insertOne(obj) {
+        try {
+            const result = await this.app.db.collection('goodsReceipts').insertOne(obj);
+            return result.ops[0];
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on inserting goods receipt',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            });
+        }
+    }
+
+    /**
+    *===================================================
+    *=                Query functions                  =
+    *=        Put all the query functions below        =
+    *===================================================
+    */
+
     get(params, cb = () => { }) {
         const collection = this.app.db.collection('goodsReceipts');
         const pageNumber = _.get(params, 'pageNumber', 0);
@@ -149,6 +179,7 @@ class GoodsReceipt {
             }
         })
     }
+
 
     search(params, cb = () => { }) {
         const pageNumber = _.get(params, 'pageNumber', 0);

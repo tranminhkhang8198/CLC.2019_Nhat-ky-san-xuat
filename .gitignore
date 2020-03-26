@@ -1,7 +1,27 @@
+# documents
+docs/api
+
+# node modules
 node_modules
+dist
 
-./.vscode
+# environment files
+.env
 
+# user uploaded files
+backend/images
+
+# cache file
+.cache
+
+# logging
 *.log
 logs/
-./backend/images
+
+# test
+.nyc
+coverage
+
+# personal TODO
+TODO.md
+

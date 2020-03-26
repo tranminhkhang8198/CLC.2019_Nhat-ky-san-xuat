@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const upload = require("./models/multer");
-const { verifyUserV2 } = require("./middlewares/verifyUser");
-const { errorHandle, responseHandle } = require("./middlewares/lastHandler");
+const { verifyUserV2 } = require("./middleware/verifyUser");
+const { errorHandle, responseHandle } = require("./middleware/lastHandler");
 
 exports.routers = app => {
   /**
@@ -15,7 +15,7 @@ exports.routers = app => {
    * @param {callback function} cb
    * @returns {cb(err, permission<true|false>)}
    */
-  const verifyUser = (req, resource, cb = () => { }) => {
+  const verifyUser = (req, resource, cb = () => {}) => {
     //Verify token
     let token = req.get("authorization");
     if (!token) {
@@ -87,10 +87,11 @@ exports.routers = app => {
 
   /**
    * @api {post} /users Create new user
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName CreateUser
    * @apiGroup User
-   * @apiSampleRequest http://localhost:3001/api/users
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/users
    *
    * @apiHeader {String} authorization Token.
    *
@@ -177,10 +178,11 @@ exports.routers = app => {
 
   /**
    * @api {post} /api/login Login user
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName LoginUser
    * @apiGroup User
-   * @apiSampleRequest http://localhost:3001/api/login
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/login
    *
    *
    * @apiParam {String} phone So dien thoai cua nguoi su dung
@@ -241,10 +243,11 @@ exports.routers = app => {
 
   /**
    * @api {post} /api/auth/register User request creating new account
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName authRegister
    * @apiGroup Auth
-   * @apiSampleRequest http://localhost:3001/api/auth/register
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/auth/register
    *
    *
    * @apiParam {String} name Ten nguoi su dung
@@ -334,10 +337,11 @@ exports.routers = app => {
 
   /**
    * @api {post} /refresh_token Xac thuc lay access token moi
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PostToken
    * @apiGroup Token
-   * @apiSampleRequest http://localhost:3001/api/refresh_token
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/refresh_token
    *
    *
    * @apiParam {String} refresh_token refresh token cua nguoi dung
@@ -383,11 +387,12 @@ exports.routers = app => {
 
   /**
    * @api {get} /users/me Get user info from token
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName CheckToken
    * @apiGroup User
    *
-   * @apiSampleRequest http://localhost:3001/api/users/me
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/users/me
    *
    * @apiHeader {String} authorization Token.
    *
@@ -451,11 +456,12 @@ exports.routers = app => {
 
   /**
    * @api {get} /api/users/search Search user by name
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName SearchUser
    * @apiGroup User
    *
-   * @apiSampleRequest http://localhost:3001/api/users/search?keywords=nguyen van loi&pageNumber=1&resultNumber=1
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/users/search?keywords=nguyen van loi&pageNumber=1&resultNumber=1
    *
    * @apiHeader {String} authorization Token.
    *
@@ -512,12 +518,14 @@ exports.routers = app => {
 
   /**
    * @api {get} /users/:userId Get user info from id
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetUser
    * @apiGroup User
    *
-   * @apiSampleRequest http://localhost:3001/api/users/all
-   * @apiSampleRequest http://localhost:3001/api/users/fsdlkfjsdoeijfsdlsdfj
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/users/all
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/users/fsdlkfjsdoeijfsdlsdfj
    *
    * @apiHeader {String} authorization Token.
    *
@@ -582,11 +590,12 @@ exports.routers = app => {
 
   /**
    * @api {patch} /users Update users info
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PatchUsers
    * @apiGroup User
    *
-   * @apiSampleRequest http://localhost:3001/api/users
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/users
    *
    * @apiHeader {String} authorization Token.
    *
@@ -645,11 +654,12 @@ exports.routers = app => {
 
   /**
    * @api {post} /roles Them phuong thuc moi
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PostRole
    * @apiGroup Role
    *
-   * @apiSampleRequest http://localhost:3001/api/roles
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/roles
    *
    * @apiHeader {String} authorization Token.
    *
@@ -714,11 +724,12 @@ exports.routers = app => {
 
   /**
    * @api {post} /resources Them resource can quan ly quyen
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PostResource
    * @apiGroup Resource
    *
-   * @apiSampleRequest http://localhost:3001/api/resources
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/resources
    *
    * @apiHeader {String} authorization Token.
    *
@@ -809,7 +820,7 @@ exports.routers = app => {
 
   /**
    * @api {get} /api/cooperatives Tìm kiếm thông tin HTX.
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName SearchCooperatives
    * @apiGroup Cooperatives
    *
@@ -818,7 +829,8 @@ exports.routers = app => {
    * @apiParam {String} keyworks Dieu kien tim kiem.
    * @apiParam {Number} [resultNumber] so luong ket qua tra ve theo phan trang (tuy chon).
    * @apiParam {Number} [pageNumber] trang du lieu can tra ve theo phan trang (tuy chon).
-   * @apiSampleRequest http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&keyworks=Hop tac xa long thanh
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/cooperatives/search?pageNumber=0&resultNumber=1&keyworks=Hop tac xa long thanh
    *
    * @apiSuccess (Response Fileds) {Object[]} records Danh sach HTX.
    * @apiSuccess (Response Fileds) {String} records._id ID cua Hop tac xa.
@@ -888,11 +900,12 @@ exports.routers = app => {
 
   /**
    * @api {get} /api/cooperatives Get du lieu HTX theo phan trang.
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetCooperatives
    * @apiGroup Cooperatives
    *
-   * @apiSampleRequest http://localhost:3001/api/cooperatives?pageNumber=1&resultNumber=1
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/cooperatives?pageNumber=1&resultNumber=1
    *
    * @apiHeader {String} authorization Token.
    * @apiParam {Number} resultNumber so luong ket qua tra ve theo phan trang (tuy chon).
@@ -964,11 +977,12 @@ exports.routers = app => {
 
   /**
    * @api {get} /api/cooperatives/all Get thông tin HTX.
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetAllCooperatives
    * @apiGroup Cooperatives
    *
-   * @apiSampleRequest http://localhost:3001/api/cooperatives/all
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/cooperatives/all
    *
    * @apiHeader {String} authorization Token.
    *
@@ -1037,11 +1051,12 @@ exports.routers = app => {
 
   /**
    * @api {post} /api/cooperatives Thêm HTX mới
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PostCooperatives
    * @apiGroup Cooperatives
    *
-   * @apiSampleRequest http://localhost:3001/api/cooperatives
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/cooperatives
    *
    * @apiHeader {String} authorization Token.
    *
@@ -1148,7 +1163,7 @@ exports.routers = app => {
 
   /**
    * @api {patch} /api/cooperatives Cập nhật thông tin của HTX.
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PatchCooperatives
    * @apiGroup Cooperatives
    *
@@ -1171,7 +1186,8 @@ exports.routers = app => {
    * @apiParam (query) {String} representOffice Địa chỉ văn phòng đại diện của HTX (tùy chọn).
    * @apiParam (query) {String[]} docs Danh sách file liên quan của HTX (tùy chọn).
    *
-   * @apiSampleRequest http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf
    *
    * @apiParam (body) {String} _id ID của HTX trong CSDL (tùy chọn).
    * @apiParam (body) {String} name Tên của HTX (tùy chọn).
@@ -1229,7 +1245,7 @@ exports.routers = app => {
 
   /**
      * @api {delete} /api/cooperatives Xóa thông tin của HTX.
-     * @apiVersion 1.0.0
+     * @apiVersion 0.1.0
      * @apiName DeleteCooperatives
      * @apiGroup Cooperatives
      *
@@ -1254,7 +1270,8 @@ exports.routers = app => {
      * @apiParam (query) {String} representOffice Địa chỉ văn phòng đại diện của HTX (tùy chọn).
      * @apiParam (query) {String[]} docs Danh sách file liên quan của HTX (tùy chọn).
      *  
-     * @apiSampleRequest http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf
+     * @apiExample {curl} Example usage:
+     *     curl -X DELETE http://localhost:3001/api/cooperatives?_id=5df306ee040d111f9b9e56bf
      *
      * @apiSuccess {json} successMessage Thông báo đã xóa thành công dữ liệu.
      *
@@ -1288,7 +1305,7 @@ exports.routers = app => {
 
   /**
    * @api {get} /api/cooperatives/count Get tổng số HTX đang quản lí
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetCooperatives
    * @apiGroup Cooperatives
    *
@@ -1296,7 +1313,8 @@ exports.routers = app => {
    *
    * @apiHeader {String} authorization Token.
    *
-   * @apiSampleRequest http://localhost:3001/api/cooperatives/count
+   * @apiExample {curl} Example usage:
+   *     curl -X GET http://localhost:3001/api/cooperatives/count
    * @apiSuccess {Number} total Tổng số HTX đang quản lí.
    *
    * @apiSuccessExample Success-Response:
@@ -1324,7 +1342,7 @@ exports.routers = app => {
 
   /**
      * @api {post} /api/diaries Tạo nhật ký mới.
-     * @apiVersion 1.0.0
+     * @apiVersion 0.1.0
      * @apiName PostDiaries
      * @apiGroup Diaries
      *
@@ -1438,10 +1456,120 @@ exports.routers = app => {
     });
   });
 
+  /**
+   * @api {post} /api/goodsReceipts Thêm đơn nhập hàng mới.
+   * @apiVersion 0.1.0
+   * @apiName PostGoodsReceipts
+   * @apiGroup GoodsReceipts
+   *
+   *
+   * @apiHeader {String} authorization Token.
+   *
+   * @apiParam {String} cooperative_id ID của hợp tác xã
+   * @apiParam {String} product_id ID của sản phẩm
+   * @apiParam {String} product_type Loại sản phẩm được nhập
+   * @apiParam {Date} transDate Ngày mua
+   * @apiParam {Object[]} Detail Danh sách các lô đã mua
+   * @apiParam {String} Detail.patchCode Max số lô
+   * @apiParam {String} Detail.quantity Số lượng
+   * @apiParam {String} Detail.price Đơn giá
+   * @apiParam {String} Detail.expireDate Ngày hết hạn
+   * @apiParam {Date} inDate Ngày nhập kho
+   * @apiParam {String} notes Ghi chú
+   * @apiParamExample {json} Request-Example:
+   *  {
+   *      "cooperative_id": "sdfsdfsdf",
+   *      "transDate": "2019-10-12T07:40:00.000Z",
+   *      "product_id": "sdfsd",
+   *      "product_type": "plant",
+   *      "detail": [
+   *          {
+   *              "quantity": "200",
+   *              "price": 260000,
+   *              "patchCode": null,
+   *              "expireDate": "2019-12-30 15:30"
+   *          },
+   *          {
+   *              "quantity": "200",
+   *              "price": 260000,
+   *              "patchCode": null,
+   *              "expireDate": "2019-12-30 15:30"
+   *          }
+   *      ],
+   *      "inDate": "1970-01-01T00:00:00.000Z",
+   *      "notes": "dsfdfsd sfdf"
+   *  }
+   *
+   * @apiSuccess {String} cooperative_id ID của hợp tác xã
+   * @apiSuccess {String} product_id ID của sản phẩm
+   * @apiSuccess {String} product_type Loại sản phẩm được nhập
+   * @apiSuccess {Date} transDate Ngày mua
+   * @apiSuccess {Object[]} Detail Danh sách các lô đã mua
+   * @apiSuccess {String} Detail.patchCode Max số lô
+   * @apiSuccess {String} Detail.quantity Số lượng
+   * @apiSuccess {String} Detail.price Đơn giá
+   * @apiSuccess {String} Detail.expireDate Ngày hết hạn
+   * @apiSuccess {Date} inDate Ngày nhập kho
+   * @apiSuccess {String} notes Ghi chú
+   * @apiSuccess {String} _id ID của hóa đơn nhập hàng
+   * @apiSuccess {Date} createdDate Ngày khởi tạo
+   *
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 200 OK
+   *  {
+   *      "cooperative_id": "sdfsdfsdf",
+   *      "transDate": "2019-10-12T07:40:00.000Z",
+   *      "product_id": "sdfsd",
+   *      "product_type": "plant",
+   *      "detail": [
+   *          {
+   *              "quantity": "200",
+   *              "price": 260000,
+   *              "patchCode": null,
+   *              "expireDate": "2019-12-30 15:30"
+   *          },
+   *          {
+   *              "quantity": "200",
+   *              "price": 260000,
+   *              "patchCode": null,
+   *              "expireDate": "2019-12-30 15:30"
+   *          }
+   *      ],
+   *      "inDate": "1970-01-01T00:00:00.000Z",
+   *      "notes": "dsfdfsd sfdf",
+   *      "createdDate": "2020-01-03T10:17:17.697Z",
+   *      "_id": "5e0f14ad3d3b5928ff43fdff"
+   *  }
+   * @apiError Permission-denied Token khong hop le
+   * @apiError Ngay-giao-dich-khong-hop-le Ngày giao dịch không hợp lệ
+   * @apiError Product-ID-khong-hop-le Product ID không hợp lệ
+   * @apiError Product-type-khong-hop-le Product Type không hợp lệ
+   * @apiError Ma-so-lo-khong-hop-le Mã số lô không hợp lệ
+   * @apiError So-luong-khong-hop-le SỐ lượng không hợp lệ
+   * @apiError Don-gia-khong-hop-le Đơn giá không hợp lệ
+   * @apiError Ngay-het-han-khong-hop-le Ngày hết hạn không hợp lệ
+   * @apiError Ngay-nhap-kho-khong-hop-le Ngày nhập kho không hợp lệ
+   *
+   * @apiErrorExample Error-Response:
+   * HTTP/1.1 404 Not Found
+   *     {
+   *       "error": "Token không hợp lệ"
+   *     }
+   *
+   * @apiPermission manager-admin
+   */
+  app.post("/api/goodsReceipts", (req, res, next) => {
+    const body = req.body;
+    app.models.goodsReceipt.create(body, (err, result) => {
+      return err
+        ? errorHandle(res, err.errorMessage, err.errorCode)
+        : responseHandle(res, result);
+    });
+  });
 
   /**
    * @api {delete} /aip/goodsReceipts?queryParam Xóa thông tin của HTX
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName DeleteGoodsReceipts
    * @apiGroup GoodsReceipts
    *
@@ -1449,7 +1577,8 @@ exports.routers = app => {
    * @apiHeader {String} authorization Token.
    *
    * @apiParam {String} [_id] ID của hóa đơn
-   * @apiSampleRequest http://localhost:3001/api/goodsReceipts?_id=sdfklsdjfsdfje23kj
+   * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+   *     curl -i Delete http://localhost:3001/api/goodsReceipts?_id=sdfklsdjfsdfje23kj
    *
    * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
    *
@@ -1480,7 +1609,7 @@ exports.routers = app => {
 
   /**
    * @api {get} /aip/goodsReceipts?queryParam Tìm kiếm thông tin HTX
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetGoodsReceipts
    * @apiGroup GoodsReceipts
    *
@@ -1489,7 +1618,8 @@ exports.routers = app => {
    *
    * @apiParam {Number} [pageNumber] Số thứ tự trang cần tìm lấy bắt đầu từ 0
    * @apiParam {Number} [resulNumber] Số lượng dữ liệu mỗi trang
-   * @apiSampleRequest http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1
+   * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+   *     curl -i http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1
    *
    * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
    *
@@ -1543,7 +1673,7 @@ exports.routers = app => {
 
   /**
    * @api {get} /aip/goodsReceipts/search?queryParam Xóa thông tin của HTX
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetGoodsReceipts
    * @apiGroup GoodsReceipts
    *
@@ -1553,7 +1683,8 @@ exports.routers = app => {
    * @apiParam {Number} [pageNumber] Số thứ tự trang cần tìm lấy bắt đầu từ 0
    * @apiParam {Number} [resulNumber] Số lượng dữ liệu mỗi trang
    * @apiParam {String} _id Mã số hóa đơn nhập kho
-   * @apiSampleRequest http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf
+   * @apiExample {curl} Xóa hóa đơn nhập kho theo id:
+   *     curl -i http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf
    *
    * @apiSuccess {String} responseMessage Thông báo số lượng thông tin đã xóa
    *
@@ -1607,7 +1738,7 @@ exports.routers = app => {
 
   /**
    * @api {post} /api/employee Thêm nhân sự mới
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PostEmployee
    * @apiGroup Employee
    *
@@ -1698,7 +1829,7 @@ exports.routers = app => {
 
   /**
    * @api {get} /api/employee Get danh sách nhân sự
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName GetEmployee
    * @apiGroup Employee
    *
@@ -1709,7 +1840,8 @@ exports.routers = app => {
    * @apiParam {Number} [pageNumber] Số trang
    * @apiParam {Number} [resultNumber] Số lượng dữ liệu mỗi trang
    *
-   * @apiSampleRequest http://localhost:3001/api/employee?HTXId=fjdiejdnfjdjfjdiendjfkdmei&pageNumber=1&resultNumber=1
+   * @apiExample {curl} Example request
+   *  - curl -DELETE http://localhost:3001/api/employee?HTXId=fjdiejdnfjdjfjdiendjfkdmei&pageNumber=1&resultNumber=1
    *
    * @apiSuccess {String} Name Tên nhân sự
    * @apiSuccess {File} avatar Ảnh đại diện
@@ -1772,11 +1904,12 @@ exports.routers = app => {
 
   /**
    * @api {patch} /api/employee/:id Cập nhật thông tin nhân sự
-   * @apiVersion 1.0.0
+   * @apiVersion 0.1.0
    * @apiName PatchEmployee
    * @apiGroup Employee
    *
-   * @apiSampleRequest http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef
+   * @apiExample {curl} Cập nhật thông tin nhân sự:
+   *  - curl -i http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef
    * @apiHeader {String} authorization Token.
    *
    * @apiParam {Object} updateData Dữ liệu cần update
@@ -1831,8 +1964,8 @@ exports.routers = app => {
    * @api {get} /api/plant-protection-products Get all plant protection products
    * @apiName GetAllPlantProtectionProducts
    * @apiGroup PlantProtectionProducts
-   * @apiVersion 1.0.0
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20
+   * @apiExample {curl} Tìm kiếm thuốc bảo vệ thực vật:
+   *     curl -i http://localhost:3001/api/plant-protection-products?pageNumber=9&nPerPage=20
    *
    * @apiHeader {String} authorization Token.
    *
@@ -1964,12 +2097,13 @@ exports.routers = app => {
   /**
    * @api {get} /api/plant-protection-products Get plant protection product by query
    * @apiName GetPlantProtectionProductByQuery
-   * @apiVersion 1.0.0
    * @apiGroup PlantProtectionProducts
    *
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e
+   * @apiExample {curl} Tìm thuốc bảo vệ thực vật theo _id:
+   *     curl -i http://localhost:3001/api/plant-protection-products/query?_id=5dd6527842d8944aa7cef84e
    *
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC
+   * @apiExample {curl} Tìm thuốc bảo vệ thực vật theo tên:
+   *     curl -i http://localhost:3001/api/plant-protection-products/query?name=B52-usa 500EC
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2062,9 +2196,9 @@ exports.routers = app => {
   /**
    * @api {post} /api/plant-protection-products Create new plant protection product
    * @apiName CreatePlantProtectionProduct
-   * @apiVersion 1.0.0
    * @apiGroup PlantProtectionProducts
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/plant-protection-products
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2230,12 +2364,13 @@ exports.routers = app => {
   /**
    * @api {patch} /api/plant-protection-products Update plant protection product
    * @apiName UpdatePlantProtectionProduct
-   * @apiVersion 1.0.0
    * @apiGroup PlantProtectionProducts
    *
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products?_id=5df1d86fadb2472bffdde52c
+   * @apiExample {curl} Update thuốc bvtv theo _id:
+   *     curl -i http://localhost:3001/api/plant-protection-products?_id=5df1d86fadb2472bffdde52c
    *
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products?name=Alfatin 1.8EC
+   * @apiExample {curl} Update thuốc bvtv theo tên:
+   *     curl -i http://localhost:3001/api/plant-protection-products?name=Alfatin 1.8EC
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2381,12 +2516,13 @@ exports.routers = app => {
   /**
    * @api {delete} /api/plant-protection-products/ Delete plant protection product
    * @apiName DeletePlantProtectionProduct
-   * @apiVersion 1.0.0
    * @apiGroup PlantProtectionProducts
    *
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products?_id=5dd6527842d8944aa7cef4a1
+   * @apiExample {curl} Xóa thuốc bảo vệ thực vật theo _id:
+   *     curl -i http://localhost:3001/api/plant-protection-products?_id=5dd6527842d8944aa7cef4a1
    *
-   * @apiSampleRequest http://localhost:3001/api/plant-protection-products?name=Abagold 55EC
+   * @apiExample {curl} Xóa thuốc bảo vệ thực vật theo tên:
+   *     curl -i http://localhost:3001/api/plant-protection-products?name=Abagold 55EC
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2433,7 +2569,8 @@ exports.routers = app => {
    * @api {get} /api/fertilizers Get all fertilizers with pageNumber and nPerPage
    * @apiName GetAllFertilizers
    * @apiGroup Fertilizers
-   * @apiSampleRequest http://localhost:3001/api/fertilizers?pageNumber=9&nPerPage=20
+   * @apiExample {curl} Tìm kiếm phân bón:
+   *     curl -i http://localhost:3001/api/fertilizers?pageNumber=9&nPerPage=20
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2518,11 +2655,12 @@ exports.routers = app => {
   /**
    * @api {get} /api/fertilizers Get fertilizer by query
    * @apiName GetFertilizerByQuery
-   * @apiVersion 1.0.0
    * @apiGroup Fertilizers
    *
-   * @apiSampleRequest http://localhost:3001/api/fertilizers/query?_id=5de75a92f4e889141cc24ef5
-   * @apiSampleRequest http://localhost:3001/api/fertilizers/query?name=Phân bón Calcium Nitrate( Calcinit)
+   * @apiExample {curl} Tìm kiếm phân bón theo _id:
+   *     curl -i http://localhost:3001/api/fertilizers/query?_id=5de75a92f4e889141cc24ef5
+   * @apiExample {curl} Tìm kiếm phân bón theo tên:
+   *     curl -i http://localhost:3001/api/fertilizers/query?name=Phân bón Calcium Nitrate( Calcinit)
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2575,7 +2713,8 @@ exports.routers = app => {
    * @api {post} /api/fertilizers Create new fertilizer
    * @apiName CreateFertilizer
    * @apiGroup Fertilizers
-   * @apiSampleRequest http://localhost:3001/api/fertilizers
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/fertilizers
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2660,11 +2799,12 @@ exports.routers = app => {
   /**
    * @api {patch} /api/fertilizers Update fertilizer
    * @apiName UpdateFertilizer
-   * @apiVersion 1.0.0
    * @apiGroup Fertilizers
-   * @apiSampleRequest http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24f7d
+   * @apiExample {curl} Update phân bón theo _id:
+   *     curl -i http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24f7d
    *
-   * @apiSampleRequest http://localhost:3001/api/fertilizers?_name=Phân vi lượng TE MAX ( SUPER CHELATE)
+   * @apiExample {curl} Update phân bón theo tên:
+   *     curl -i http://localhost:3001/api/fertilizers?_name=Phân vi lượng TE MAX ( SUPER CHELATE)
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2740,12 +2880,13 @@ exports.routers = app => {
   /**
    * @api {delete} /api/fertilizers Delete fertilizer
    * @apiName DeleteFertilizer
-   * @apiVersion 1.0.0
    * @apiGroup Fertilizers
    *
-   * @apiSampleRequest http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24ef5
+   * @apiExample {curl} Xóa phân bón theo _id:
+   *     curl -i http://localhost:3001/api/fertilizers?_id=5de75a92f4e889141cc24ef5
    *
-   * @apiSampleRequest http://localhost:3001/api/fertilizers?name=Phân bón Calcium Nitrate( Calcinit)
+   * @apiExample {curl} Xóa phân báo theo tên:
+   *     curl -i http://localhost:3001/api/fertilizers?name=Phân bón Calcium Nitrate( Calcinit)
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2782,9 +2923,9 @@ exports.routers = app => {
   /**
    * @api {post} /goods-issues Create new goods issue
    * @apiName CreateGoodsIssue
-   * @apiVersion 1.0.0
    * @apiGroup GoodIssues
-   * @apiSampleRequest http://localhost:3001/api/goods-issues
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/goods-issues
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2889,9 +3030,9 @@ exports.routers = app => {
   /**
    * @api {get} /goods-issues Get all goods issue
    * @apiName GetAllGoodsIssue
-   * @apiVersion 1.0.0
    * @apiGroup GoodIssues
-   * @apiSampleRequest http://localhost:3001/api/goods-issues
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/goods-issues
    *
    * @apiHeader {String} authorization Token.
    *
@@ -2972,9 +3113,9 @@ exports.routers = app => {
   /**
    * @api {get} /goods-issues/:id Get goods issue by id
    * @apiName GetGoodsIssueById
-   * @apiVersion 1.0.0
    * @apiGroup GoodIssues
-   * @apiSampleRequest http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3036,9 +3177,9 @@ exports.routers = app => {
   /**
    * @api {delete} /goods-issues/:id Delete goods issue by id
    * @apiName DeleteGoodsIssueById
-   * @apiVersion 1.0.0
    * @apiGroup GoodIssues
-   * @apiSampleRequest http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3078,9 +3219,9 @@ exports.routers = app => {
   /**
    * @api {patch} /goods-issues Update goods issue by id
    * @apiName UpdateGoodsIssueById
-   * @apiVersion 1.0.0
    * @apiGroup GoodIssues
-   * @apiSample http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3199,9 +3340,9 @@ exports.routers = app => {
   /**
    * @api {post} /subcontractors Create new subcontractor
    * @apiName CreateNewSubcontractor
-   * @apiVersion 1.0.0
    * @apiGroup Subcontractors
-   * @apiSampleRequest http://localhost:3001/api/subcontractors
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/subcontractors
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3283,9 +3424,9 @@ exports.routers = app => {
   /**
    * @api {get} /subcontractors Get all subcontractors
    * @apiName GetAllSubcontractors
-   * @apiVersion 1.0.0
    * @apiGroup Subcontractors
-   * @apiSampleRequest http://localhost:3001/api/subcontractors?pageNumber=1&nPerPage=20
+   * @apiExample {curl} Get All Subcontractor with paginating:
+   *     curl -i http://localhost:3001/api/subcontractors?pageNumber=1&nPerPage=20
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3350,9 +3491,9 @@ exports.routers = app => {
   /**
    * @api {get} /subcontractors/:id Get subcontractor by id
    * @apiName GetSubcontractorById
-   * @apiVersion 1.0.0
    * @apiGroup Subcontractors
-   * @apiSampleRequest http://localhost:3001/api/subcontractors/5e0aac96e69e031c5fca8c8b
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/subcontractors/5e0aac96e69e031c5fca8c8b
    *
    *
    * @apiHeader {String} authorization Token.
@@ -3409,9 +3550,9 @@ exports.routers = app => {
   /**
    * @api {delete} /subcontractors/:id Update subcontractor by id
    * @apiName UpdateSubcontractorById
-   * @apiVersion 1.0.0
    * @apiGroup Subcontractors
-   * @apiSampleRequest http://localhost:3001/api/subcontractors/5e09757502716412c0b026d7
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/subcontractors/5e09757502716412c0b026d7
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3451,9 +3592,9 @@ exports.routers = app => {
   /**
    * @api {patch} /subcontractors Update subcontractor by id
    * @apiName updateSubcontractorById
-   * @apiVersion 1.0.0
    * @apiGroup Subcontractors
-   * @apiSampleRequest http://localhost:3001/api/subcontractors/5e0accdaf7cd082ea2431756
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/subcontractors/5e0accdaf7cd082ea2431756
    *
    * @apiHeader {String} authorization Token.
    *
@@ -3523,6 +3664,318 @@ exports.routers = app => {
     app.models.subcontractor.updateById(id, body, (err, info) => {
       return err
         ? errorHandle(res, err.errMessage, err.code)
+        : responseHandle(res, info);
+    });
+  });
+
+  // *************************************************************************** //
+  // ROUTES FOR WAREHOUSE
+
+  /**
+   * @api {post} /warehouses Create new warehouse
+   * @apiName CreateNewWarehouses
+   * @apiGroup Warehouses
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/warehouses
+   *
+   * @apiHeader {String} authorization Token.
+   *
+   * @apiParam {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+   * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+   * @apiParam {Number} quantity Số lượng
+   * @apiParam {ObjectId} goodsReceiptId Id hóa đơn nhập
+   * @apiParam {String} patchCode Số lô
+   *
+   *
+   * @apiParamExample {json} Request-Example:
+   *
+   *  {
+   *      "productId": "5e057818a1c1111795e29b75",
+   *      "productType": "Thuốc bvtv",
+   *      "quantity": "9",
+   *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+   *      "patchCode": "1234567890"
+   *  }
+   *
+   * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+   * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+   * @apiSuccess {Number} quantity Số lượng
+   * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+   * @apiSuccess {String} patchCode Số lô
+   * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+   *
+   *
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 201 Created
+   *
+   *  {
+   *      "productId": "5e057818a1c1111795e29b75",
+   *      "productType": "Thuốc bvtv",
+   *      "quantity": "9",
+   *      "goodsReceiptId": "1234567890",
+   *      "patchCode": "5e16a02767944a0c086f82a2",
+   *      "_id": "5e106cf39a2d430f0fda2557"
+   *  }
+   *
+   * @apiError productType-is-required Trường loại sản phẩm là bắt buộc
+   * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+   * @apiError productId-is-required Trường id sản phẩm là bắt buộc
+   * @apiError quantity-is-required Số lượng là bắt buộc
+   * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+   * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+   * @apiError productId-is-invalid Id sản phẩm không hợp lệ
+   * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+   * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
+   * @apiErrorExample productType is required:
+   *     HTTP/1.1 409 Conflict
+   *     {
+   *       "errorMessage": "Vui lòng nhập loại sản phẩm"
+   *     }
+   *
+   * @apiErrorExample productType does not exist:
+   *     HTTP/1.1 409 Conflict
+   *     {
+   *       "errorMessage": "Loại sản phẩm không tồn tại"
+   *     }
+   *
+   * @apiPermission none
+   */
+  app.post("/api/warehouses", (req, res, next) => {
+    const body = req.body;
+
+    app.models.warehouse.create(body, (err, info) => {
+      return err ? errorHandle(res, err) : responseHandle(res, info, 201);
+    });
+  });
+
+  /**
+   * @api {get} /warehouses Get All Warehouses
+   * @apiName GetAllWarehouses
+   * @apiGroup Warehouses
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/warehouses
+   *
+   * @apiHeader {String} authorization Token.
+   *
+   * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+   * @apiParam {Number} nPerPage Số lượng document kho thuốc trên mỗi trang
+   *
+   * @apiSuccess {Number} totalSubcontractors Tổng số document kho thuốc trong kho
+   * @apiSuccess {Number} totalPages Tổng số lượng trang
+   * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+   * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+   * @apiSuccess {Number} quantity Số lượng
+   * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+   * @apiSuccess {String} patchCode Số lô
+   * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+   *
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 200 OK
+   *
+   *  {
+   *      "totalWarehouses": 2,
+   *      "totalPages": 1,
+   *      "data": [
+   *          {
+   *              "_id": "5e106cf39a2d430f0fda2557",
+   *              "productId": "5e057818a1c1111795e29b75",
+   *              "productType": "Thuốc bvtv",
+   *              "quantity": "100",
+   *              "goodsReceiptId": "1234567890",
+   *              "patchCode": "1234567890"
+   *          },
+   *          {
+   *              "_id": "5e1075d453adfe17f413a130",
+   *              "productId": "5e057818a1c1111795e29b75",
+   *              "productType": "Thuốc bvtv",
+   *              "quantity": "9",
+   *              "goodsReceiptId": "5e10733dca9ed4129c70715c",
+   *              "patchCode": "1234567890"
+   *          }
+   *      ]
+   *  }
+   *
+   * @apiError Page-not-found Trang không tồn tại
+   * @apiErrorExample Page not found:
+   *     HTTP/1.1 404 Not found
+   *     {
+   *       "errorMessage": "Trang tìm kiếm không tồn tại"
+   *     }
+   *
+   * @apiPermission none
+   */
+  app.get("/api/warehouses", (req, res, next) => {
+    const query = req.query;
+
+    app.models.warehouse.find(query, (err, info) => {
+      return err ? errorHandle(res, err) : responseHandle(res, info);
+    });
+  });
+
+  /**
+   * @api {get} /warehouses Get Warehouse by Id
+   * @apiName GetWarehouseById
+   * @apiGroup Warehouses
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/warehouses
+   *
+   * @apiHeader {String} authorization Token.
+   *
+   * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+   * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+   * @apiSuccess {Number} quantity Số lượng
+   * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+   * @apiSuccess {String} patchCode Số lô
+   * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+   *
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 200 OK
+   *
+   *  {
+   *
+   *      "_id": "5e106cf39a2d430f0fda2557",
+   *      "productId": "5e057818a1c1111795e29b75",
+   *      "productType": "Thuốc bvtv",
+   *      "quantity": "100",
+   *      "goodsReceiptId": "1234567890",
+   *      "patchCode": "1234567890"
+   *
+   *  }
+   *
+   * @apiError Warehouse-document-not-found Document không tồn tại
+   * @apiError Invalid-id Id không hợp lệ
+   * @apiErrorExample Invalid id:
+   *     HTTP/1.1 500 Internal Server Error
+   *     {
+   *       "errorMessage": "Id không hợp lệ"
+   *     }
+   *
+   * @apiErrorExample Warehouse document not found
+   *     HTTP/1.1 404 Not Found
+   *     {
+   *       "errorMessage": "Document không tồn tại"
+   *     }
+   *
+   * @apiPermission none
+   */
+  app.get("/api/warehouses/:id", (req, res, next) => {
+    const id = req.params.id;
+
+    app.models.warehouse.findById(id, (err, info) => {
+      return err
+        ? errorHandle(res, err.errorMessage, err.code)
+        : responseHandle(res, info);
+    });
+  });
+
+  /**
+   * @api {delete} /warehouses Delete Warehouse by Id
+   * @apiName DeleteWarehouseById
+   * @apiGroup Warehouses
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/warehouses
+   *
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 200 OK
+   *
+   *  {
+   *      "successMessage": "Document kho thuốc đã được xóa thành công"
+   *  }
+   *
+   * @apiError Warehouse-document-not-found Document không tồn tại
+   * @apiError Invalid-id Id không hợp lệ
+   * @apiErrorExample Invalid id:
+   *     HTTP/1.1 500 Internal Server Error
+   *     {
+   *       "errorMessage": "Id không hợp lệ"
+   *     }
+   *
+   * @apiErrorExample Warehouse not found
+   *     HTTP/1.1 404 Not Found
+   *     {
+   *       "errorMessage": "Document không tồn tại"
+   *     }
+   *
+   * @apiPermission none
+   */
+  app.delete("/api/warehouses/:id", (req, res, next) => {
+    const id = req.params.id;
+
+    app.models.warehouse.deleteById(id, (err, info) => {
+      return err
+        ? errorHandle(res, err.errorMessage, err.code)
+        : responseHandle(res, info);
+    });
+  });
+
+  /**
+   * @api {patch} /warehouses Update warehouse by Id
+   * @apiName UpdateWarehouseById
+   * @apiGroup Warehouses
+   * @apiExample {curl} Example usage:
+   *     curl -i http://localhost:3001/api/warehouses
+   *
+   * @apiHeader {String} authorization Token.
+   *
+   * @apiParam {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+   * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+   * @apiParam {Number} quantity Số lượng
+   * @apiParam {ObjectId} goodsReceiptId Id hóa đơn nhập
+   * @apiParam {String} patchCode Số lô
+   *
+   *
+   * @apiParamExample {json} Request-Example:
+   *
+   *  {
+   *      "productId": "5e057818a1c1111795e29b75",
+   *      "productType": "Thuốc bvtv",
+   *      "quantity": "9999",
+   *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+   *      "patchCode": "999999999"
+   *  }
+   *
+   * @apiSuccess {ObjectId} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
+   * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+   * @apiSuccess {Number} quantity Số lượng
+   * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+   * @apiSuccess {String} patchCode Số lô
+   * @apiSuccess {ObjectId} _id Id của document vừa tạo thành công
+   *
+   *
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 200 OK
+   *
+   *  {
+   *      "_id": "5e106cf39a2d430f0fda2557",
+   *      "productId": "5e057818a1c1111795e29b75",
+   *      "productType": "Thuốc bvtv",
+   *      "quantity": "9999",
+   *      "goodsReceiptId": "5e16a02767944a0c086f82a2",
+   *      "patchCode": "999999999"
+   *  }
+   *
+   * @apiError productType-does-not-exist Trường loại sản phẩm không tồn tại (Loại sp phải là "Thuốc bvtv" || "Phân bón" || "Giống")
+   * @apiError quantity-is-positive-integer Số lượng phải là số nguyên dương
+   * @apiError productId-does-not-exist Sản phẩm không tồn tại trong danh mục
+   * @apiError productId-is-invalid Id sản phẩm không hợp lệ
+   * @apiError goodsReceiptId-does-not-exist Hóa đơn nhập không tồn tại
+   * @apiError goodsReceiptId-is-invalid Id hóa đơn nhập không tồn tại
+   *
+   * @apiErrorExample productType does not exist:
+   *     HTTP/1.1 409 Conflict
+   *     {
+   *       "errorMessage": "Loại sản phẩm không tồn tại"
+   *     }
+   *
+   * @apiPermission none
+   */
+  app.patch("/api/warehouses/:id", (req, res, next) => {
+    const id = req.params.id;
+    const update = req.body;
+
+    app.models.warehouse.updateById(id, update, (err, info) => {
+      return err
+        ? errorHandle(res, err.errorMessage, err.code)
         : responseHandle(res, info);
     });
   });
