@@ -35,6 +35,8 @@ class BorrowedTool {
       // init model
       this.initWithObject(obj);
 
+      delete this.model._id;
+
       const borrowedTool = await BorrowedTool.insertOne(this.model);
 
       return borrowedTool.ops[0];
