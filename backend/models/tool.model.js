@@ -17,7 +17,7 @@ class Tool {
 
   initWithObject(obj) {
     this.model.name = _.get(obj, "name", null);
-    this.model.total = _.get(obj, "total", null);
+    this.model.total = parseInt(_.get(obj, "total", null));
     this.model.available = parseInt(_.get(obj, "available", null));
     this.model.image = _.get(obj, "image", null);
     this.model.note = _.get(obj, "note", null);
@@ -30,6 +30,10 @@ class Tool {
 
       // init model
       this.initWithObject(obj);
+
+      delete this.model._id;
+
+      console.log(this.model);
 
       const tool = await Tool.insertOne(this.model);
 

@@ -61,6 +61,8 @@ exports.create = catchAsync(async (req, res, next) => {
 
   const newTool = await models.tool.create(filterBody);
 
+  console.log(newTool);
+
   return res.status(201).json(newTool);
 });
 
