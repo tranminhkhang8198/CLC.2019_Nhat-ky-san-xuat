@@ -9,13 +9,25 @@ const getProductCollection = (db, type) => {
   const collections = {
     "Thuốc bvtv": "plantProtectionProduct",
     "Phân bón": "fertilizer",
-    Giống: "cultivars"
+    "Giống": "cultivars"
   };
 
   const Collection = db.collection(collections[type]);
 
   return Collection;
 };
+
+const getProduct = async (db, type, id) => {
+  try {
+    const Product = getProductCollection(db, type);
+
+    const product = await Product.findOne({ _id: mongodb.ObjectID(id) });
+
+    return product;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 exports.create = catchAsync(async (req, res, next) => {
   const { models } = req.app;
@@ -48,7 +60,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
   delete query.nPerPage;
   delete query.pageNumber;
 
-  const warehouses = await models.warehouses.find(query);
+  const warehouses = await models.warehouse.find(query);
   const paginatedWarehouses = warehouses.slice(start, end);
 
   const totalPages =
@@ -61,17 +73,23 @@ exports.getAll = catchAsync(async (req, res, next) => {
   }
 
   for (warehouse of paginatedWarehouses) {
-    borrowedTool.toolName = tool.name;
-    borrowedTool.userBorrowedName = user.name;
+    const product = await getProduct(db, warehouse.productType, warehouse.productId);
 
-    delete borrowedTool.toolId;
-    delete borrowedTool.userBorrowedId;
+    if (!product) {
+      return res.status(404).json({
+        errorMessage: "Không tìm thấy thông tin sản phẩm."
+      });
+    }
+
+    warehouse.productName = product.name;
+
+    delete warehouse.productId;
   }
 
   return res.status(200).json({
-    totalBorrowedTools: borrowedTools.length,
+    totalWarehouseDocs: warehouses.length,
     totalPages,
-    data: paginatedBorrowedTools
+    data: paginatedWarehouses
   });
 });
 
@@ -79,24 +97,27 @@ exports.getOne = catchAsync(async (req, res, next) => {
   const { db, models } = req.app;
   const id = req.params.id;
 
-  const borrowedTool = await models.borrowedTool.findOne(id);
+  const warehouse = await models.warehouse.findOne(id);
 
-  const user = await getUserInfo(db, borrowedTool.userBorrowedId);
-  const tool = await models.tool.findOne(borrowedTool.toolId);
-
-  borrowedTool.toolName = tool.name;
-  borrowedTool.userBorrowedName = user.name;
-
-  delete borrowedTool.toolId;
-  delete borrowedTool.userBorrowedId;
-
-  if (!borrowedTool) {
+  if (!warehouse) {
     return res.status(404).json({
       errorMessage: `Không tìm thấy document.`
     });
   }
 
-  return res.status(200).json(borrowedTool);
+  const product = await getProduct(db, warehouse.productType, id);
+
+  if (!product) {
+    return res.status(404).json({
+      errorMessage: "Không tìm thấy thông tin sản phẩm."
+    });
+  }
+
+  warehouse.productName = product.name;
+
+  delete warehouse.productId;
+
+  return res.status(200).json(warehouse);
 });
 
 exports.update = catchAsync(async (req, res, next) => {
@@ -105,8 +126,8 @@ exports.update = catchAsync(async (req, res, next) => {
 
   const filterBody = filterObj(
     req.body,
-    "toolId",
-    "borrowedQuantity",
+    "productId",
+    "productType",
     "borrowedDate",
     "returnedDate",
     "image",
@@ -114,23 +135,6 @@ exports.update = catchAsync(async (req, res, next) => {
     "userBorrowedId",
     "cooperativeId"
   );
-
-  // check if image was posted
-  if (req.files) {
-    // Get file
-    const file = req.files[Object.keys(req.files)[0]];
-
-    const imgUrl = uploadImage(file);
-
-    filterBody.image = imgUrl;
-
-    // Remove old image
-    const borrowedTool = await models.borrowedTool.findOne(id);
-
-    if (borrowedTool.image != null) {
-      removeImage(borrowedTool.image);
-    }
-  }
 
   const borrowedTool = await models.borrowedTool.update(id, filterBody);
 
@@ -146,20 +150,4 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
   return res.status(200).json({
     successMessage: "Document được xoá thành công."
   });
-});
-
-exports.returnTool = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
-  const id = req.params.id;
-
-  const filterBody = filterObj(req.body, "returnedDate");
-
-  const borrowedTool = await models.borrowedTool.update(id, filterBody);
-
-  await models.tool.increaseAvailable(
-    borrowedTool.value.toolId,
-    borrowedTool.value.borrowedQuantity
-  );
-
-  return res.status(200).json(borrowedTool.value);
 });

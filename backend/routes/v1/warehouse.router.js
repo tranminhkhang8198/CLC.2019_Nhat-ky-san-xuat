@@ -3,14 +3,15 @@ const Router = require("express").Router();
 const {
   validateBeforeCreate
 } = require("../../validations/warehouse.validation");
-const { create } = require("../../controllers/warehouse.controller");
+const { create, getAll, getOne } = require("../../controllers/warehouse.controller");
 
 /**
+ * 
  * @api {post} /api/warehouses Create new warehouse document
+ * @apiSampleRequest http://localhost:3001/v1/api/warehouses/
+ * 
  * @apiName CreateNewWarehouse
  * @apiGroup Warehouses
- * @apiExample {curl} Example usage:
- *     curl -i http://localhost:3001/api/warehouses
  *
  * @apiHeader {String} authorization Token.
  *
@@ -83,5 +84,57 @@ const { create } = require("../../controllers/warehouse.controller");
  * @apiPermission none
  */
 Router.route("/").post(validateBeforeCreate, create);
+
+
+/**
+ * @api {post} /api/warehouses Get All Warehouse Doc
+ * @apiSampleRequest http://localhost:3001/v1/api/warehouses/
+ *
+ * @apiName GetAllWarehouseDocs
+ * @apiGroup Warehouses
+ *
+ * @apiHeader {String} authorization Token.
+ *
+ * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
+ * @apiParam {Number} nPerPage Số lượng document kho thuốc trên mỗi trang
+ *
+ * @apiSuccess {Number} totalSubcontractors Tổng số document kho thuốc trong kho
+ * @apiSuccess {Number} totalPages Tổng số lượng trang
+ * @apiSuccess {ObjectId} productName Tên của sản phẩm
+ * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
+ * @apiSuccess {Number} quantity Số lượng
+ * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
+ * @apiSuccess {String} patchCode Số lô
+ * @apiSuccess {ObjectId} _id Id của document
+ *
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *
+ *  {
+ *      "totalWarehouses": 2,
+ *      "totalPages": 1,
+ *      "data": [
+ *          {
+ *              "_id": "5e106cf39a2d430f0fda2557",
+ *              "productName": "Ababetter 1.8EC",
+ *              "productType": "Thuốc bvtv",
+ *              "quantity": "100",
+ *              "goodsReceiptId": "1234567890",
+ *              "patchCode": "1234567890"
+ *          },
+ *          {
+ *              "_id": "5e1075d453adfe17f413a130",
+ *              "productName": "Abagold 55EC",
+ *              "productType": "Thuốc bvtv",
+ *              "quantity": "9",
+ *              "goodsReceiptId": "5e10733dca9ed4129c70715c",
+ *              "patchCode": "1234567890"
+ *          }
+ *      ]
+ *  }
+*/
+Router.route("/").get(getAll);
+
+Router.route("/:id").get(getOne);
 
 module.exports = Router;

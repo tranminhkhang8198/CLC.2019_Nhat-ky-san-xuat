@@ -25,6 +25,8 @@ const handler = (error, req, res, next) => {
             delete response.errors;
         }
 
+        console.log(error);
+
         // end the request
         res.status(error.status);
         res.json(response);

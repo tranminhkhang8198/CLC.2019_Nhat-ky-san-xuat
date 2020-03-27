@@ -21,6 +21,7 @@ class Warehouse {
     this.model.productType = _.get(obj, "productType", null);
     this.model.price = _.get(obj, "price", null);
     this.model.quantity = _.get(obj, "quantity", null);
+    this.model.patchCode = _.get(obj, "patchCode", null);
     this.model.goodReceiptId = _.get(obj, "goodReceiptId", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
   }
@@ -54,13 +55,13 @@ class Warehouse {
 
   async findOne(id) {
     try {
-      const BorrowedTool = this.app.db.collection("borrowedTools");
+      const Warehouse = this.app.db.collection("warehouses");
 
-      const borrowedTool = await BorrowedTool.findOne({
+      const warehouse = await Warehouse.findOne({
         _id: mongodb.ObjectID(id)
       });
 
-      return borrowedTool;
+      return warehouse;
     } catch (err) {
       console.log(err);
     }
@@ -68,15 +69,15 @@ class Warehouse {
 
   async update(id, field) {
     try {
-      const BorrowedTool = this.app.db.collection("borrowedTools");
+      const Warehouse = this.app.db.collection("warehouses");
 
-      const borrowedTool = BorrowedTool.findOneAndUpdate(
+      const warehouse = Warehouse.findOneAndUpdate(
         { _id: mongodb.ObjectID(id) },
         { $set: field },
         { returnOriginal: false }
       );
 
-      return borrowedTool;
+      return warehouse;
     } catch (err) {
       console.log(err);
     }
@@ -84,9 +85,9 @@ class Warehouse {
 
   async delete(id) {
     try {
-      const BorrowedTool = this.app.db.collection("borrowedTools");
+      const Warehouse = this.app.db.collection("warehouses");
 
-      await BorrowedTool.deleteOne({ _id: mongodb.ObjectID(id) });
+      await Warehouse.deleteOne({ _id: mongodb.ObjectID(id) });
     } catch (err) {
       console.log(err);
     }

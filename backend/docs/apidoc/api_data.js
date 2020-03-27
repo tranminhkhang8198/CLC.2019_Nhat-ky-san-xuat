@@ -23,8 +23,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
-    "groupTitle": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "group": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "groupTitle": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
     "name": ""
   },
   {
