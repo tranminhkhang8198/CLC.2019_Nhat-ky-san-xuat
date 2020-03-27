@@ -17802,15 +17802,13 @@ define({ "api": [
     "type": "post",
     "url": "/api/warehouses",
     "title": "Create new warehouse document",
-    "name": "CreateNewWarehouse",
-    "group": "Warehouses",
-    "examples": [
+    "sampleRequest": [
       {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:3001/api/warehouses",
-        "type": "curl"
+        "url": "http://localhost:3001/v1/api/warehouses/"
       }
     ],
+    "name": "CreateNewWarehouse",
+    "group": "Warehouses",
     "header": {
       "fields": {
         "Header": [
@@ -18305,6 +18303,123 @@ define({ "api": [
     ],
     "version": "0.0.0",
     "filename": "./farm/router.js",
+    "groupTitle": "Warehouses"
+  },
+  {
+    "type": "post",
+    "url": "/api/warehouses",
+    "title": "Get All Warehouse Doc",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/v1/api/warehouses/"
+      }
+    ],
+    "name": "GetAllWarehouseDocs",
+    "group": "Warehouses",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng document kho thuốc trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalSubcontractors",
+            "description": "<p>Tổng số document kho thuốc trong kho</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "productName",
+            "description": "<p>Tên của sản phẩm</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "productType",
+            "description": "<p>Loại của sản phẩm (một trong 3 loại &quot;Thuốc bvtv&quot;, &quot;Phân bón&quot;, &quot;Giống&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "quantity",
+            "description": "<p>Số lượng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "goodsReceiptId",
+            "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "patchCode",
+            "description": "<p>Số lô</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"totalWarehouses\": 2,\n    \"totalPages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"5e106cf39a2d430f0fda2557\",\n            \"productName\": \"Ababetter 1.8EC\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"100\",\n            \"goodsReceiptId\": \"1234567890\",\n            \"patchCode\": \"1234567890\"\n        },\n        {\n            \"_id\": \"5e1075d453adfe17f413a130\",\n            \"productName\": \"Abagold 55EC\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"9\",\n            \"goodsReceiptId\": \"5e10733dca9ed4129c70715c\",\n            \"patchCode\": \"1234567890\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./routes/v1/warehouse.router.js",
     "groupTitle": "Warehouses"
   },
   {

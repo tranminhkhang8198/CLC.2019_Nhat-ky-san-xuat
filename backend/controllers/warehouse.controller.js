@@ -75,13 +75,13 @@ exports.getAll = catchAsync(async (req, res, next) => {
   for (warehouse of paginatedWarehouses) {
     const product = await getProduct(db, warehouse.productType, warehouse.productId);
 
-    if (!product) {
-      return res.status(404).json({
-        errorMessage: "Không tìm thấy thông tin sản phẩm."
-      });
-    }
+    console.log(product);
 
-    warehouse.productName = product.name;
+    if (!product) {
+      warehouse.productName = "Không tìm thấy thông tin sản phẩm từ danh mục."
+    } else {
+      warehouse.productName = product.name;
+    }
 
     delete warehouse.productId;
   }
