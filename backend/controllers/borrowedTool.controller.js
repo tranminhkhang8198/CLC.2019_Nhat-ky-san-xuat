@@ -138,20 +138,17 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
   const borrowedTool = await models.borrowedTool.findOne(id);
 
-  const user = await getUserInfo(db, borrowedTool.userBorrowedId);
-  const tool = await models.tool.findOne(borrowedTool.toolId);
-
-  borrowedTool.toolName = tool.name;
-  borrowedTool.userBorrowedName = user.name;
-
-  delete borrowedTool.toolId;
-  delete borrowedTool.userBorrowedId;
-
   if (!borrowedTool) {
     return res.status(404).json({
       errorMessage: `Không tìm thấy document.`
     });
   }
+
+  const user = await getUserInfo(db, borrowedTool.userBorrowedId);
+  const tool = await models.tool.findOne(borrowedTool.toolId);
+
+  borrowedTool.toolName = tool.name;
+  borrowedTool.userBorrowedName = user.name;
 
   return res.status(200).json(borrowedTool);
 });

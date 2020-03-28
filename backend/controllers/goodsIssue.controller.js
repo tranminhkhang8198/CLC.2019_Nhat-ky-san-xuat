@@ -144,3 +144,39 @@ exports.getAll = catchAsync(async (req, res, next) => {
     data: paginatedGoodIssues
   });
 });
+
+exports.getOne = catchAsync(async (req, res, next) => {
+  const { db, models } = req.app;
+  const id = req.params.id;
+
+  const goodsIssue = await models.goodsIssue.findOne(id);
+
+  if (!goodsIssue) {
+    return res.status(404).json({
+      errorMessage: `Không tìm thấy document.`
+    });
+  }
+
+  const product = await getProduct(
+    db,
+    goodsIssue.productType,
+    goodsIssue.productId
+  );
+
+  if (!product) {
+    goodsIssue.productName = "Không tìm thấy thông tin sản phẩm từ danh mục.";
+  } else {
+    goodsIssue.productName = product.name;
+  }
+
+  const user = await getUserInfo(db, goodsIssue.receiverId);
+
+  if (user) {
+    goodsIssue.receiverName = user.name;
+  } else {
+    goodsIssue.receiverName =
+      "Không tìm thấy thông tin người dùng từ cơ sở dữ liệu.";
+  }
+
+  return res.status(200).json(goodsIssue);
+});

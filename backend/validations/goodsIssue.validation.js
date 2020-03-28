@@ -4,6 +4,16 @@ const validator = require("validator");
 
 const catchAsync = require("../utils/catchAsync");
 
+exports.validateParamId = (req, res, next) => {
+  if (!mongodb.ObjectID.isValid(req.params.id)) {
+    return res.status(400).json({
+      errorMessage: "Id không hợp lệ"
+    });
+  }
+
+  next();
+};
+
 const validateCooperativeId = async (errors, db, id) => {
   try {
     const Cooperative = db.collection("cooperatives");
