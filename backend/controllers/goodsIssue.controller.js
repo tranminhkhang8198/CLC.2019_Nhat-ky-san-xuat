@@ -39,6 +39,14 @@ const getProduct = async (db, type, id) => {
   }
 };
 
+const isExist = async (db, id) => {
+  const goodsIssue = db
+    .collection("goodsIssues")
+    .findOne({ _id: mongodb.ObjectID(id) });
+
+  return goodsIssue;
+};
+
 exports.create = catchAsync(async (req, res, next) => {
   const { models, db } = req.app;
 
@@ -179,4 +187,23 @@ exports.getOne = catchAsync(async (req, res, next) => {
   }
 
   return res.status(200).json(goodsIssue);
+});
+
+exports.deleteOne = catchAsync(async (req, res, next) => {
+  const { models, db } = req.app;
+  const id = req.params.id;
+
+  const goodsIssue = await isExist(db, id);
+
+  if (!goodsIssue) {
+    return res.status(404).json({
+      errorMessage: "Không tìm thấy document."
+    });
+  }
+
+  await models.goodsIssue.delete(id);
+
+  return res.status(200).json({
+    successMessage: "Document được xoá thành công."
+  });
 });

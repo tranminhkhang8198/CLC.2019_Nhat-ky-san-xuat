@@ -5,6 +5,14 @@ const fs = require("fs");
 const filterObj = require("../utils/filterObj");
 const catchAsync = require("../utils/catchAsync");
 
+const isExist = async (db, id) => {
+  const borrowedTool = db
+    .collection("borrowedTools")
+    .findOne({ _id: mongodb.ObjectID(id) });
+
+  return borrowedTool;
+};
+
 const getUserInfo = async (db, id) => {
   try {
     const User = db.collection("user");
@@ -202,6 +210,14 @@ exports.update = catchAsync(async (req, res, next) => {
 exports.deleteOne = catchAsync(async (req, res, next) => {
   const { models } = req.app;
   const id = req.params.id;
+
+  const borrowedTool = await isExist(db, id);
+
+  if (!borrowedTool) {
+    return res.status(404).json({
+      errorMessage: "Không tìm thấy document."
+    });
+  }
 
   await models.borrowedTool.delete(id);
 
