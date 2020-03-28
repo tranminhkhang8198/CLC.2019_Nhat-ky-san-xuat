@@ -142,7 +142,6 @@ Router.route("/").post(validateBeforeCreate, create);
  */
 Router.route("/").get(getAll);
 
-c;
 /**
  * @api {get} /api/warehouses/:id Get Single Warehouse Doc
  * @apiSampleRequest http://localhost:3001/api/warehouses/5e10733dca9ed4129c70715c
