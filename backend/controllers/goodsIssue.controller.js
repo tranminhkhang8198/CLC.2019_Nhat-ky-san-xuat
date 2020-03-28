@@ -147,7 +147,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
   }
 
   return res.status(200).json({
-    totalGoodsIssueDocs: goodsIssue.length,
+    totalGoodsIssueDocs: goodsIssues.length,
     totalPages,
     data: paginatedGoodIssues
   });
