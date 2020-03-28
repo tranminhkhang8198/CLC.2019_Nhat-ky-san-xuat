@@ -9,7 +9,7 @@ const getProductCollection = (db, type) => {
   const collections = {
     "Thuốc bvtv": "plantProtectionProduct",
     "Phân bón": "fertilizer",
-    "Giống": "cultivars"
+    Giống: "cultivars"
   };
 
   const Collection = db.collection(collections[type]);
@@ -27,7 +27,15 @@ const getProduct = async (db, type, id) => {
   } catch (err) {
     console.log(err);
   }
-}
+};
+
+const isExistWarehouseDoc = async (db, id) => {
+  const warehouse = db
+    .collection("warehouses")
+    .findOne({ _id: mongodb.ObjectID(id) });
+
+  return warehouse;
+};
 
 exports.create = catchAsync(async (req, res, next) => {
   const { models } = req.app;
@@ -39,7 +47,8 @@ exports.create = catchAsync(async (req, res, next) => {
     "price",
     "quantity",
     "goodsReceiptId",
-    "cooperativeId"
+    "cooperativeId",
+    "patchCode"
   );
 
   const newWarehouse = await models.warehouse.create(filterBody);
@@ -73,12 +82,14 @@ exports.getAll = catchAsync(async (req, res, next) => {
   }
 
   for (warehouse of paginatedWarehouses) {
-    const product = await getProduct(db, warehouse.productType, warehouse.productId);
-
-    console.log(product);
+    const product = await getProduct(
+      db,
+      warehouse.productType,
+      warehouse.productId
+    );
 
     if (!product) {
-      warehouse.productName = "Không tìm thấy thông tin sản phẩm từ danh mục."
+      warehouse.productName = "Không tìm thấy thông tin sản phẩm từ danh mục.";
     } else {
       warehouse.productName = product.name;
     }
@@ -124,28 +135,43 @@ exports.update = catchAsync(async (req, res, next) => {
   const { models } = req.app;
   const id = req.params.id;
 
+  const warehouse = await models.warehouse.findOne(id);
+
+  if (!warehouse) {
+    return res.status(404).json({
+      errorMessage: `Không tìm thấy document.`
+    });
+  }
+
   const filterBody = filterObj(
     req.body,
     "productId",
     "productType",
-    "borrowedDate",
-    "returnedDate",
-    "image",
-    "note",
-    "userBorrowedId",
-    "cooperativeId"
+    "price",
+    "quantity",
+    "goodsReceiptId",
+    "cooperativeId",
+    "patchCode"
   );
 
-  const borrowedTool = await models.borrowedTool.update(id, filterBody);
+  const updatedWarehouse = await models.warehouse.update(id, filterBody);
 
-  return res.status(200).json(borrowedTool.value);
+  return res.status(200).json(updatedWarehouse.value);
 });
 
 exports.deleteOne = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
+  const { models, db } = req.app;
   const id = req.params.id;
 
-  await models.borrowedTool.delete(id);
+  const warehouse = await isExistWarehouseDoc(db, id);
+
+  if (!warehouse) {
+    return res.status(404).json({
+      errorMessage: "Không tìm thấy document."
+    });
+  }
+
+  await models.warehouse.delete(id);
 
   return res.status(200).json({
     successMessage: "Document được xoá thành công."

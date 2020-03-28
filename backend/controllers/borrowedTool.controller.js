@@ -107,8 +107,19 @@ exports.getAll = catchAsync(async (req, res, next) => {
     const user = await getUserInfo(db, borrowedTool.userBorrowedId);
     const tool = await models.tool.findOne(borrowedTool.toolId);
 
-    borrowedTool.toolName = tool.name;
-    borrowedTool.userBorrowedName = user.name;
+    if (user) {
+      borrowedTool.userBorrowedName = user.name;
+    } else {
+      borrowedTool.userBorrowedName =
+        "Không tìm thấy thông tin người dùng từ cơ sở dữ liệu.";
+    }
+
+    if (tool) {
+      borrowedTool.toolName = tool.name;
+    } else {
+      borrowedTool.toolName =
+        "Không tìm thấy thông tin sản phẩm từ cơ sở dữ liệu.";
+    }
 
     delete borrowedTool.toolId;
     delete borrowedTool.userBorrowedId;
@@ -149,6 +160,14 @@ exports.update = catchAsync(async (req, res, next) => {
   const { models } = req.app;
   const id = req.params.id;
 
+  const borrowedTool = models.borrowedTool.findOne(id);
+
+  if (!borrowedTool) {
+    return res.status(404).json({
+      errorMessage: `Không tìm thấy document.`
+    });
+  }
+
   const filterBody = filterObj(
     req.body,
     "toolId",
@@ -178,9 +197,9 @@ exports.update = catchAsync(async (req, res, next) => {
     }
   }
 
-  const borrowedTool = await models.borrowedTool.update(id, filterBody);
+  const updatedBorrowedTool = await models.borrowedTool.update(id, filterBody);
 
-  return res.status(200).json(borrowedTool.value);
+  return res.status(200).json(updatedBorrowedTool.value);
 });
 
 exports.deleteOne = catchAsync(async (req, res, next) => {

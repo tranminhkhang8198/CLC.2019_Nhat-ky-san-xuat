@@ -121,6 +121,16 @@ const validateCooperativeId = async (errors, db, id) => {
   }
 };
 
+exports.validateParamId = (req, res, next) => {
+  if (!mongodb.ObjectID.isValid(req.params.id)) {
+    return res.status(400).json({
+      errorMessage: "Id không hợp lệ sản phẩm không hợp lệ."
+    });
+  }
+
+  next();
+};
+
 exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
   const { models, db } = req.app;
 
@@ -192,6 +202,57 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
     errors.push({
       message: "Vui lòng nhập mã số lô."
     });
+  }
+
+  if (errors.length > 0) {
+    _.each(errors, err => {
+      messages.push(err.message);
+    });
+
+    const errorMessage = _.join(messages, "; ");
+
+    return res.status(400).json({
+      errorMessage
+    });
+  }
+
+  next();
+});
+
+exports.validateBeforeUpdate = catchAsync(async (req, res, next) => {
+  const { models, db } = req.app;
+
+  const {
+    productId,
+    productType,
+    price,
+    quantity,
+    patchCode,
+    goodsReceiptId,
+    cooperativeId
+  } = req.body;
+
+  const errors = [];
+  const messages = [];
+
+  if (productId) {
+    await validateProductId(errors, db, productId, productType);
+  }
+
+  if (price) {
+    validatePrice(errors, price);
+  }
+
+  if (quantity) {
+    validateQuantity(errors, quantity);
+  }
+
+  if (goodsReceiptId) {
+    await validateGoodsReceiptId(errors, db, goodsReceiptId);
+  }
+
+  if (cooperativeId) {
+    await validateCooperativeId(errors, db, cooperativeId);
   }
 
   if (errors.length > 0) {
