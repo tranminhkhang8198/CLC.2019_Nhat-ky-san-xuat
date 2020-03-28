@@ -92,13 +92,29 @@ const validateProductType = (errors, type) => {
   }
 };
 
-const validateQuantity = async (errors, quantity) => {
+const validateQuantity = async (
+  errors,
+  models,
+  productId,
+  cooperativeId,
+  quantity
+) => {
   const reg = /^[1-9]\d*$/;
 
   if (!reg.test(quantity)) {
     return errors.push({
       message: "Số lượng mượn phải là số nguyên dương lớn hơn 0."
     });
+  }
+
+  const warehouse = await models.warehouse.isExist(productId, cooperativeId);
+
+  if (warehouse) {
+    if (parseInt(quantity) > parseInt(warehouse.quantity)) {
+      errors.push({
+        message: "Số lượng xuất kho không thể lớn hơn số lượng hiện có."
+      });
+    }
   }
 };
 
@@ -114,6 +130,7 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
   const { models, db } = req.app;
 
   const {
+    productId,
     receiverId,
     productType,
     quantity,
@@ -151,7 +168,7 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
       message: "Vui lòng nhập số lượng nhập kho."
     });
   } else {
-    validateQuantity(errors, quantity);
+    validateQuantity(errors, models, productId, cooperativeId, quantity);
   }
 
   if (!issuedDate) {
