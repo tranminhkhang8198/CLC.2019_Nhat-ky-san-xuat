@@ -93,7 +93,6 @@ const validateQuantity = async (errors, quantity) => {
 };
 
 const validateIssuedDate = (errors, date) => {
-  console.log("Something");
   if (!validator.isISO8601(date)) {
     errors.push({
       message: "Định dạng ngày mượn không hợp lệ."

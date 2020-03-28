@@ -1,5 +1,43 @@
+const mongodb = require("mongodb");
+
 const catchAsync = require("../utils/catchAsync");
 const filterObj = require("../utils/filterObj");
+
+const getUserInfo = async (db, id) => {
+  try {
+    const User = db.collection("user");
+
+    const user = await User.findOne({ _id: mongodb.ObjectID(id) });
+
+    return user;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getProductCollection = (db, type) => {
+  const collections = {
+    "Thuốc bvtv": "plantProtectionProduct",
+    "Phân bón": "fertilizer",
+    Giống: "cultivars"
+  };
+
+  const Collection = db.collection(collections[type]);
+
+  return Collection;
+};
+
+const getProduct = async (db, type, id) => {
+  try {
+    const Product = getProductCollection(db, type);
+
+    const product = await Product.findOne({ _id: mongodb.ObjectID(id) });
+
+    return product;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 exports.create = catchAsync(async (req, res, next) => {
   const { models, db } = req.app;
@@ -50,4 +88,59 @@ exports.create = catchAsync(async (req, res, next) => {
   }
 
   return res.status(201).json(goodsIssue);
+});
+
+exports.getAll = catchAsync(async (req, res, next) => {
+  const { db, models } = req.app;
+  const query = { ...req.query };
+
+  const page = parseInt(query.pageNumber) || 1;
+  const nPerPage = parseInt(query.nPerPage) || 99;
+
+  const start = (page - 1) * nPerPage;
+  const end = page * nPerPage;
+
+  delete query.nPerPage;
+  delete query.pageNumber;
+
+  const goodsIssues = await models.goodsIssue.find(query);
+  const paginatedGoodIssues = goodsIssues.slice(start, end);
+
+  const totalPages =
+    (goodsIssues.length - (goodsIssues.length % nPerPage)) / nPerPage + 1;
+
+  if (paginatedGoodIssues.length == 0) {
+    return res.status(404).json({
+      errorMessage: "Trang tìm kiếm không tồn tại"
+    });
+  }
+
+  for (goodsIssue of paginatedGoodIssues) {
+    const product = await getProduct(
+      db,
+      goodsIssue.productType,
+      goodsIssue.productId
+    );
+
+    if (!product) {
+      goodsIssue.productName = "Không tìm thấy thông tin sản phẩm từ danh mục.";
+    } else {
+      goodsIssue.productName = product.name;
+    }
+
+    const user = await getUserInfo(db, goodsIssue.receiverId);
+
+    if (user) {
+      goodsIssue.receiverName = user.name;
+    } else {
+      goodsIssue.receiverName =
+        "Không tìm thấy thông tin người dùng từ cơ sở dữ liệu.";
+    }
+  }
+
+  return res.status(200).json({
+    totalGoodsIssueDocs: goodsIssue.length,
+    totalPages,
+    data: paginatedGoodIssues
+  });
 });
