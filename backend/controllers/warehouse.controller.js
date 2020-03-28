@@ -93,8 +93,6 @@ exports.getAll = catchAsync(async (req, res, next) => {
     } else {
       warehouse.productName = product.name;
     }
-
-    delete warehouse.productId;
   }
 
   return res.status(200).json({
@@ -125,8 +123,6 @@ exports.getOne = catchAsync(async (req, res, next) => {
   }
 
   warehouse.productName = product.name;
-
-  delete warehouse.productId;
 
   return res.status(200).json(warehouse);
 });
