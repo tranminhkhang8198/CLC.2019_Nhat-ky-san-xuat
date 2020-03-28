@@ -207,3 +207,33 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
     successMessage: "Document được xoá thành công."
   });
 });
+
+exports.update = catchAsync(async (req, res, next) => {
+  const { models } = req.app;
+  const id = req.params.id;
+
+  const goodsIssue = await models.goodsIssue.findOne(id);
+
+  if (!goodsIssue) {
+    return res.status(404).json({
+      errorMessage: `Không tìm thấy document.`
+    });
+  }
+
+  const filterBody = filterObj(
+    req.body,
+    "receiverId",
+    "productId",
+    "productType",
+    "quantity",
+    "issuedDate",
+    "receivedDate",
+    "goodsReceiptId",
+    "cooperativeId",
+    "note"
+  );
+
+  const updatedGoodsIssue = await models.goodsIssue.update(id, filterBody);
+
+  return res.status(200).json(updatedGoodsIssue.value);
+});

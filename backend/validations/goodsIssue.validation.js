@@ -4,6 +4,27 @@ const validator = require("validator");
 
 const catchAsync = require("../utils/catchAsync");
 
+const validateReceivedDate = async (errors, db, id, receivedDate) => {
+  if (!validator.isISO8601(receivedDate)) {
+    return errors.push({
+      message: "Định dạng ngày nhận không hợp lệ."
+    });
+  }
+  receivedDate = Date.parse(receivedDate);
+
+  const GoodsIssue = db.collection("goodsIssues");
+  const goodsIssue = await GoodsIssue.findOne({ _id: mongodb.ObjectID(id) });
+  if (goodsIssue) {
+    const issuedDate = Date.parse(goodsIssue.issuedDate);
+
+    if (parseInt(receivedDate) < parseInt(issuedDate)) {
+      errors.push({
+        message: "Ngày nhận không thể nhỏ hơn ngày xuất kho."
+      });
+    }
+  }
+};
+
 exports.validateParamId = (req, res, next) => {
   if (!mongodb.ObjectID.isValid(req.params.id)) {
     return res.status(400).json({
@@ -194,6 +215,73 @@ exports.validateBeforeCreate = catchAsync(async (req, res, next) => {
     });
   } else {
     await validateCooperativeId(errors, db, cooperativeId);
+  }
+
+  if (errors.length > 0) {
+    _.each(errors, err => {
+      messages.push(err.message);
+    });
+
+    const errorMessage = _.join(messages, "; ");
+
+    return res.status(400).json({
+      errorMessage
+    });
+  }
+
+  next();
+});
+
+exports.validateBeforeUpdate = catchAsync(async (req, res, next) => {
+  const { models, db } = req.app;
+  const id = req.params.id;
+
+  const {
+    productId,
+    receiverId,
+    productType,
+    quantity,
+    issuedDate,
+    receivedDate,
+    goodsReceiptId,
+    cooperativeId,
+    note
+  } = req.body;
+
+  let errors = [];
+  let messages = [];
+
+  // Validate receiverId
+  if (receiverId) {
+    await validateReceiverId(errors, db, receiverId);
+  }
+
+  // Validate productType
+  if (productType) {
+    validateProductType(errors, productType);
+  }
+
+  // Validate quantity
+  if (quantity) {
+    validateQuantity(errors, models, productId, cooperativeId, quantity);
+  }
+
+  if (issuedDate) {
+    validateIssuedDate(errors, issuedDate);
+  }
+
+  if (goodsReceiptId) {
+    await validateGoodsReceiptId(errors, db, goodsReceiptId);
+  }
+
+  // Validate cooperativeId
+  if (cooperativeId) {
+    await validateCooperativeId(errors, db, cooperativeId);
+  }
+
+  // Validate reuturnedDate
+  if (receivedDate) {
+    await validateReceivedDate(errors, db, id, receivedDate);
   }
 
   if (errors.length > 0) {

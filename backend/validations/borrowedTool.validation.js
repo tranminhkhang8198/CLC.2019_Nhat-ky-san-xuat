@@ -74,12 +74,15 @@ const validateReturnedDate = async (errors, returnedDate, models, id) => {
   returnedDate = Date.parse(returnedDate);
 
   const borrowedTool = await models.borrowedTool.findOne(id);
-  const borrowedDate = Date.parse(borrowedTool.borrowedDate);
 
-  if (parseInt(returnedDate) < parseInt(borrowedDate)) {
-    errors.push({
-      message: "Ngày trả không thể nhỏ hơn ngày mượn."
-    });
+  if (borrowedTool) {
+    const borrowedDate = Date.parse(borrowedTool.borrowedDate);
+
+    if (parseInt(returnedDate) < parseInt(borrowedDate)) {
+      errors.push({
+        message: "Ngày trả không thể nhỏ hơn ngày mượn."
+      });
+    }
   }
 };
 
