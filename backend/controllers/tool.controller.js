@@ -33,7 +33,9 @@ const removeImage = imgUrl => {
 };
 
 exports.create = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
+  const {
+    models
+  } = req.app;
 
   const filterBody = filterObj(
     req.body,
@@ -67,8 +69,12 @@ exports.create = catchAsync(async (req, res, next) => {
 });
 
 exports.getAll = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
-  const query = { ...req.query };
+  const {
+    models
+  } = req.app;
+  const query = {
+    ...req.query
+  };
 
   const page = parseInt(query.pageNumber) || 1;
   const nPerPage = parseInt(query.nPerPage) || 99;
@@ -98,7 +104,9 @@ exports.getAll = catchAsync(async (req, res, next) => {
 });
 
 exports.getOne = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
+  const {
+    models
+  } = req.app;
   const id = req.params.id;
 
   if (!mongodb.ObjectID.isValid(id)) {
@@ -119,7 +127,9 @@ exports.getOne = catchAsync(async (req, res, next) => {
 });
 
 exports.update = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
+  const {
+    models
+  } = req.app;
   const id = req.params.id;
 
   const filterBody = filterObj(
@@ -138,7 +148,9 @@ exports.update = catchAsync(async (req, res, next) => {
     });
   }
 
-  const isExist = await models.tool.isExist({ _id: mongodb.ObjectID(id) });
+  const isExist = await models.tool.isExist({
+    _id: mongodb.ObjectID(id)
+  });
 
   if (!isExist) {
     return res.status(404).json({
@@ -146,7 +158,7 @@ exports.update = catchAsync(async (req, res, next) => {
     });
   }
 
-  if (Object.keys(filterBody).length == 0) {
+  if (Object.keys(filterBody).length == 0 && !req.files) {
     return res.status(400).json({
       errorMessage: "Vui lòng nhập thông tin cần cập nhật"
     });
@@ -182,7 +194,9 @@ exports.update = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteOne = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
+  const {
+    models
+  } = req.app;
   const id = req.params.id;
 
   if (!mongodb.ObjectID.isValid(id)) {
@@ -191,7 +205,9 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
     });
   }
 
-  const isExist = await models.tool.isExist({ _id: mongodb.ObjectID(id) });
+  const isExist = await models.tool.isExist({
+    _id: mongodb.ObjectID(id)
+  });
 
   if (!isExist) {
     return res.status(404).json({
