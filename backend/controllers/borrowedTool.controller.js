@@ -230,7 +230,7 @@ exports.returnTool = catchAsync(async (req, res, next) => {
   const { models } = req.app;
   const id = req.params.id;
 
-  const filterBody = filterObj(req.body, "returnedDate");
+  const filterBody = filterObj(req.body, "returnedDate", "note");
 
   const borrowedTool = await models.borrowedTool.update(id, filterBody);
 
