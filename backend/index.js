@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const http = require('http');
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -8,8 +10,8 @@ const { dbName } = require('./config')
 const Model = require('./models')
 const morgan = require('morgan')
 const Router = require('./routes/v1');
-const PORT = 3001;
 
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 

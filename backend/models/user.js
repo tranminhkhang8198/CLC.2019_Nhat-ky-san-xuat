@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const { OrderedMap } = require('immutable');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 const httpStatus = require('http-status');
 
