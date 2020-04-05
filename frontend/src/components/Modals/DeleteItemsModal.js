@@ -13,6 +13,7 @@ import React, { Component } from 'react';
 import uuidv4 from 'uuid';
 import axios from 'axios';
 import httpStatus from 'http-status';
+import appConfig from '../../config/app.credential.config';
 
 class DeleteItemsModal extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class DeleteItemsModal extends Component {
       data: props.data,
       parrent: props.parentComponent,
       checkboxRefs: [],
+      serverDomain: `${appConfig.SERVER_HOST}:${appConfig.SERVER_PORT}`,
     };
 
     this.renderTypeTitle = this.renderTypeTitle.bind(this);
@@ -56,19 +58,22 @@ class DeleteItemsModal extends Component {
   }
 
   getApiURLByType(typeData) {
+    const {
+      serverDomain,
+    } = this.state;
     let apiUrl = '';
     switch (typeData) {
       case 'fertilizer':
-        apiUrl = 'http://localhost:3001/api/fertilizers';
+        apiUrl = `${serverDomain}/api/fertilizers`;
         break;
       case 'plantProductProtection':
-        apiUrl = 'http://localhost:3001/api/plant-protection-products';
+        apiUrl = `${serverDomain}/api/plant-protection-products`;
         break;
       case 'seed':
         apiUrl = '';
         break;
       case 'cooperative':
-        apiUrl = 'http://localhost:3001/api/cooperatives';
+        apiUrl = `${serverDomain}/api/cooperatives`;
         break;
       default:
         apiUrl = '';
