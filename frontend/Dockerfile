@@ -1,15 +1,11 @@
-FROM node:12.13.0-alpine
+FROM node:lts-slim
 
-# Create dir
-RUN mkdir -p /usr/src/app/src
-WORKDIR /usr/src/app/src
+RUN mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app
 
 COPY package.json .
 
 RUN npm install
 
 COPY . .
-
-EXPOSE 5000 
-
-CMD ["npm", "start"]

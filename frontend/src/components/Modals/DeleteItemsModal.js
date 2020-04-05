@@ -1,4 +1,6 @@
 /* eslint-disable no-alert */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint class-methods-use-this: [
   "error",
   { "exceptMethods":
@@ -241,9 +243,9 @@ class DeleteItemsModal extends Component {
             <div className="modal-body modal-add-body">
               <p>Chọn tên các dữ liệu bạn muốn xóa</p>
               {this.renderItemsToDelete(data)}
-              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
               <div className="mt-2">
                 <div className="form-check" key={uuidv4()}>
+
                   <label className="form-check-label" htmlFor="select-all" onClick={() => this.selectAll()}>
                     <input
                       className="form-check-input"
@@ -255,6 +257,7 @@ class DeleteItemsModal extends Component {
                   </label>
                 </div>
                 <div className="form-check" key={uuidv4()}>
+                  {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                   <label className="form-check-label" htmlFor="deselect-all" onClick={() => this.deSelectAll()}>
                     <input
                       className="form-check-input"
