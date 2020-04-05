@@ -15,7 +15,7 @@ exports.routers = app => {
    * @param {callback function} cb
    * @returns {cb(err, permission<true|false>)}
    */
-  const verifyUser = (req, resource, cb = () => {}) => {
+  const verifyUser = (req, resource, cb = () => { }) => {
     //Verify token
     let token = req.get("authorization");
     if (!token) {
@@ -1680,19 +1680,101 @@ exports.routers = app => {
    *
    * @apiPermission manager-admin
    */
-
+  /**
+   * @api {post} /api/employee Thêm nhân sự mới
+   * @apiSampleRequest http://localhost:3001/api/employee
+   * @apiVersion 1.0.1
+   * @apiName PostEmployee
+   * @apiGroup Employee
+   *
+   *
+   * @apiHeader {String} authorization Token.
+   *
+   * @apiParam {String} name Tên nhân sự
+   * @apiParam {File} avatar Ảnh đại diện
+   * @apiParam {String} personalId Số CMND của nhân sự
+   * @apiParam {String} address Địa chỉ.
+   * @apiParam {String} phone Số điện thoại.
+   * @apiParam {String} email Địa chỉ email.
+   * @apiParam {String} jobTitle chức vụ.
+   * @apiParam {String} HTXId ID của HTX.
+   * @apiParam {String} password Mật khẩu account của nhân sự.
+   *
+   * @apiParamExample {json} Request-Example:
+   *     {
+   *         "name": "Nguyễn Văn Lợi",
+   *         "avatar": "C:/avatar/image-1578136142752.png",
+   *         "personalId": "8182213312",
+   *         "address": "Cần Thơ",
+   *         "phone": "0836810267",
+   *         "email": "vanloi@gmail.com",
+   *         "jobTitle": "Manager",
+   *         "HTXId": "dfsdf",
+   *         "password": "123456",
+   *     }
+   *
+   * @apiSuccess {String} name Tên nhân sự
+   * @apiSuccess {File} avatar Ảnh đại diện
+   * @apiSuccess {String} personalId Số CMND của nhân sự
+   * @apiSuccess {String} address Địa chỉ.
+   * @apiSuccess {String} phone Số điện thoại.
+   * @apiSuccess {String} email Địa chỉ email.
+   * @apiSuccess {String} jobTitle chức vụ.
+   * @apiSuccess {String} HTXId ID của HTX.
+   * @apiSuccess {String} password Mật khẩu account của nhân sự.
+   * @apiSuccess {Date} created Ngày tạo.
+   * @apiSuccess {String} _id ID của nhân sự.
+   * @apiSuccessExample Success-Response:
+   *  HTTP/1.1 200 OK
+   *
+   *          {
+   *              "name": "Nguyễn Văn Lợi",
+   *              "avatar": "http://localhost:3001/avatar/image-1578136142752.png",
+   *              "personalId": "8182213312",
+   *              "address": "Cần Thơ",
+   *              "phone": "0836810267",
+   *              "email": "vanloi@gmail.com",
+   *              "jobTitle": "Manager",
+   *              "salary":"600",
+   *              "jobDesc":"",
+   *              "HTXId": "dfsdf",
+   *              "password": "123456",
+   *              "created": "2020-01-04T11:09:02.758Z",
+   *              "_id": "5e10724efde38921cd444999"
+   *          }
+   *
+   * @apiError Permission-denied Token khong hop le
+   * @apiError Ten-nhan-su-khong-hop-le Tên nhân sự không hợp lệ
+   * @apiError So-dien-thoai-khong-hop-le Số điện thoaij không hợp lệ
+   * @apiError Dia-chi-khong-hop-le Địa chỉ không hợp lệ
+   * @apiError Ten-chuc-vu-khong-hop-le Tên chức vụ không hợp lệ
+   *
+   * @apiErrorExample Error-Response:
+   * HTTP/1.1 404 Not Found
+   *     {
+   *       "error": "Số điện thoại không hợp lệ"
+   *     }
+   *
+   * @apiPermission manager-admin
+   */
   app.post("/api/employee", upload.single("avatar"), (req, res, next) => {
-    let avatar = "http://localhost:3001/avatar/default.png";
-    if (req.file) {
-      avatar = "http://localhost:3001/avatar/" + req.file.filename;
+    try {
+      let avatar = "http://localhost:3001/avatar/default.png";
+      if (req.file) {
+        avatar = "http://localhost:3001/avatar/" + req.file.filename;
+      }
+      const body = req.body;
+      _.set(body, "avatar", avatar);
+      console.log(req);
+      app.models.employee.create(body, (err, result) => {
+        return err
+          ? errorHandle(res, err.errorMessage, err.errorCode)
+          : responseHandle(res, result);
+      });
     }
-    const body = req.body;
-    _.set(body, "avatar", avatar);
-    app.models.employee.create(body, (err, result) => {
-      return err
-        ? errorHandle(res, err.errorMessage, err.errorCode)
-        : responseHandle(res, result);
-    });
+    catch (error) {
+      next(error);
+    }
   });
 
   /**
@@ -1764,60 +1846,6 @@ exports.routers = app => {
     const query = req.query;
     app.models.employee.getTotal(query, (err, result) => {
       return err
-        ? errorHandle(res, err.errorMessage, err.errorCode)
-        : responseHandle(res, result);
-    });
-  });
-
-  /**
-   * @api {patch} /api/employee/:id Cập nhật thông tin nhân sự
-   * @apiVersion 1.0.0
-   * @apiName PatchEmployee
-   * @apiGroup Employee
-   *
-   * @apiSampleRequest http://localhost:3001/api/employee/feffsgtrefscsvsfsdfeefef
-   * @apiHeader {String} authorization Token.
-   *
-   * @apiParam {Object} updateData Dữ liệu cần update
-   *
-   * @apiParamExample {json} Request-Example:
-   *     {
-   *         "name": "Nguyễn Văn Lợi",
-   *         "avatar": "C:/avatar/image-1578136142752.png",
-   *         "personalId": "8182213312",
-   *         "address": "Cần Thơ",
-   *         "phone": "0836810267",
-   *         "email": "vanloi@gmail.com",
-   *         "jobTitle": "Manager",
-   *         "HTXId": "dfsdf",
-   *     }
-   *
-   * @apiSuccess {String} responseMessage thông báo cập nhật thành công
-   * @apiSuccessExample Success-Response:
-   *  HTTP/1.1 200 OK
-   *     {
-   *          responseMessage:"Đã cập nhật 3 dữ liệu"
-   *     }
-   *
-   * @apiError Permission-denied Token khong hop le
-   * @apiError ServerError Lỗi trong quá trình cập nhật dữ liệu
-   * @apiError NotFound Không tìm thấy dữ liệu cần cập nhật
-   * @apiError BadRequest Mã nhân sự không hợp lệ
-   *
-   * @apiErrorExample Error-Response:
-   * HTTP/1.1 404 Not Found
-   *     {
-   *       "error": "Lỗi trong quá trình cập nhật dữ liệu"
-   *     }
-   *
-   * @apiPermission manager-admin
-   */
-  app.patch("/api/employee/:id", (req, res, next) => {
-    const _id = req.params.id;
-    const updateData = req.body;
-    _.unset(updateData, "tokenPayload");
-    app.models.employee.update(_id, updateData, (err, result) => {
-      err
         ? errorHandle(res, err.errorMessage, err.errorCode)
         : responseHandle(res, result);
     });
