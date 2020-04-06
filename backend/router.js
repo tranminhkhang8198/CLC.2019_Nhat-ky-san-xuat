@@ -2,7 +2,8 @@ const _ = require("lodash");
 const upload = require("./models/multer");
 const { verifyUserV2 } = require("./middlewares/verifyUser");
 const { errorHandle, responseHandle } = require("./middlewares/lastHandler");
-
+const httpStatus = require('http-status');
+const { ObjectID } = require('mongodb');
 exports.routers = app => {
   /**
    * @apiDefine set $set
@@ -430,23 +431,41 @@ exports.routers = app => {
    *     }
    * @apiPermission none
    */
-  app.get("/api/users/me", (req, res, next) => {
-    let tokenId = req.get("authorization");
-    if (!tokenId) {
-      tokenId = req.query.token;
-    }
-
-    if (!tokenId) {
-      return errorHandle(res, "Request without token", 505);
-    }
-
-    app.models.token.verify(tokenId, (err, result) => {
-      if (err) {
-        return errorHandle(res, err.errorMessage, 401);
-      } else {
-        return responseHandle(res, result, 200);
+  app.get("/api/users/me", async (req, res, next) => {
+    try {
+      let accessToken = req.get("authorization");
+      if (!accessToken) {
+        accessToken = req.query.token;
       }
-    });
+
+      if (!accessToken) {
+        return res.status(httpStatus.UNAUTHORIZED)
+          .json({
+            code: httpStatus.UNAUTHORIZED,
+            message: 'responseMessage'
+          })
+          .end();
+      }
+      const {
+        token,
+        user,
+      } = app.models;
+
+      const result = await token.verify(accessToken);
+      return res.status(httpStatus.OK)
+        .json({
+          code: httpStatus.OK,
+          message: 'Getting user information successfully',
+          result: result,
+        })
+        .end();
+
+
+
+    }
+    catch (error) {
+      next(error);
+    }
   });
 
   /**

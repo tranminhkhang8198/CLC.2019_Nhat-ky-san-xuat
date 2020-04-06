@@ -1,7 +1,14 @@
 const { responseHandle, errorHandle } = require("./lastHandler");
+const _ = require('lodash');
+
+function getAccessResource(path) {
+    const pathArr = path.split("/")
+    const apiIdx = _.indexOf(pathArr, 'api');
+    return pathArr[apiIdx + 1];
+}
 
 module.exports.verifyUserV2 = (req, res, next) => {
-    const resource = req.route.path.split("/")[2];
+    const resource = getAccessResource(req.route.path);
     const app = req.app;
     // console.log(route);
     // const resource = "cooperatives";

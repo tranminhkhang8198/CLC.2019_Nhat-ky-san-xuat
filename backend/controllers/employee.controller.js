@@ -57,3 +57,80 @@ module.exports.updateEmployeeByID = async (req, res, next) => {
         next(error);
     }
 }
+
+module.exports.removeEmpFromCoop = async (req, res, next) => {
+    try {
+        const {
+            empID,
+            coopID,
+        } = req.params;
+
+        const {
+            employee,
+        } = req.app.models;
+
+        console.log(employee);
+
+        const result = await employee.removeFromCoop(new ObjectID(empID), new ObjectID(coopID));
+        if (!result) {
+            return res.status(httpStatus.NOT_FOUND)
+                .json({
+                    code: httpStatus.NOT_FOUND,
+                    message: 'Employee is not found'
+                })
+                .end();
+        }
+
+        return res.status(httpStatus.OK)
+            .json({
+                code: httpStatus.OK,
+                message: 'Remove employee from cooperative successfully',
+                result: result,
+            })
+            .end();
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports.searchEmployee = async (req, res, next) => {
+    try {
+        const {
+            employee,
+        } = req.app.models;
+
+        const {
+            pageSize,
+            pageNumber,
+            name,
+        } = req.query;
+
+        const pagination = {
+            pageSize: pageSize ? parseInt(pageSize) : 10,
+            pageNumber: pageNumber ? parseInt(pageNumber) - 1 : 0,
+        }
+        const searchResult = await employee.searchByName(name, pagination, { password: 0 });
+        if (!searchResult || searchResult.records.length <= 0) {
+            return res.status(httpStatus.NOT_FOUND)
+                .json({
+                    code: httpStatus.NOT_FOUND,
+                    message: 'Employee are not found',
+                })
+                .end();
+        }
+        return res.status(httpStatus.OK)
+            .json({
+                code: httpStatus.OK,
+                message: 'Search employe by name successfully',
+                pagination: {
+                    pageSize: pagination.pageSize,
+                    pageNumber: pagination.pageNumber + 1,
+                },
+                result: searchResult,
+            })
+            .end();
+    } catch (error) {
+        next(error);
+    }
+}

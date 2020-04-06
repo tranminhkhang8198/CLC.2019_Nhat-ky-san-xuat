@@ -5163,12 +5163,12 @@
   },
   {
     "type": "patch",
-    "url": "/v1/api/employee/:empID",
+    "url": "/v1/api/cooperatives/:coopID/employee/:empID",
     "title": "Update employee information",
     "version": "1.0.0",
     "sampleRequest": [
       {
-        "url": "http://localhost:3001/v1/api/employee/5e89c41d36b4634f8171ad5a"
+        "url": "http://localhost:3001/v1/api/cooperatives/5df316d55818ad286c993446/employee/5e89c41d36b4634f8171ad5a"
       }
     ],
     "name": "PatchEmployee",
@@ -5248,6 +5248,112 @@
             "optional": false,
             "field": "HTXId",
             "description": "<p>Employee's cooperactions ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Code",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Response code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>response massage</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.name",
+            "description": "<p>Employee name</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "File",
+            "optional": false,
+            "field": "result.avatar",
+            "description": "<p>Employee avatar</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.personalID",
+            "description": "<p>Employee personal ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.address",
+            "description": "<p>Employee address</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.phone",
+            "description": "<p>Employee phone</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.email",
+            "description": "<p>Employee email</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "\"user\"",
+              "\"manager\""
+            ],
+            "optional": false,
+            "field": "result.jobTitle",
+            "description": "<p>Employee jobs</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.HTXId",
+            "description": "<p>Employee's cooperactions ID</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response ",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 200,\n    \"message\": \"Updating employee information successfully\",\n    \"result\": {\n        \"_id\": \"5e89c41d36b4634f8171ad5a\",\n        \"name\": \"Trinh Quoc Tuan\",\n        \"avatar\": \"http://localhost:3001/avatar/default.png\",\n        \"personalId\": \"381823821\",\n        \"address\": \"Can THO\",\n        \"phone\": \"0836810225\",\n        \"email\": \"vanloiidk@gmail.com\",\n        \"user\": \"user\",\n        \"HTXId\": \"df12ew\",\n        \"created\": \"2020-04-05T11:42:21.868Z\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "404 Not Found": [
+          {
+            "group": "404 Not Found",
+            "optional": false,
+            "field": "EmployeeIsNotFound",
+            "description": "<p>Employee is not found</p>"
           }
         ]
       }
@@ -6081,6 +6187,188 @@
       }
     ],
     "filename": "./farm/router.js",
+    "groupTitle": "Employee"
+  },
+  {
+    "type": "delete",
+    "url": "/v1/api/cooperatives/:coopID/employee/:empID",
+    "title": "remove employee from cooperatives",
+    "version": "1.0.0",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/v1/api/cooperatives/5df316d55818ad286c993446/employee/5e89c41d36b4634f8171ad5a"
+      }
+    ],
+    "name": "removeEmpFromCoop",
+    "group": "Employee",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Access token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Code",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Response code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Response object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result._id",
+            "description": "<p>Employee id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.name",
+            "description": "<p>Employee name</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.avatar",
+            "description": "<p>Employee avatar</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.personalId",
+            "description": "<p>Employee personal ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.address",
+            "description": "<p>Employee address</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.phone",
+            "description": "<p>Employee phone number</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.email",
+            "description": "<p>Employee email</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.user",
+            "description": "<p>Employee role</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.HTXId",
+            "description": "<p>Cooperatives ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "result.createdDate",
+            "description": "<p>Created Date</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 200,\n    \"message\": \"Remove employee from cooperative successfully\",\n    \"result\": {\n        \"_id\": \"5e84b5fbfb664211daab0a61\",\n        \"name\": \"Huynh Quoc Tuan\",\n        \"avatar\": \"http://localhost:3003/default.png\",\n        \"personalId\": \"384736273\",\n        \"address\": \"Ninh Kieu, Can Tho\",\n        \"phone\": \"093827463\",\n        \"email\": \"admin@gmail.com\",\n        \"user\": \"user\",\n        \"HTXId\": null,\n        \"created\": \"2020-04-01T15:40:43.584Z\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/employee.router.js",
+    "groupTitle": "Employee"
+  },
+  {
+    "type": "get",
+    "url": "/v1/api/cooperatives/:coopID/employee/search",
+    "title": "Search employee by name",
+    "version": "1.0.0",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/v1/api/cooperatives/5df316d55818ad286c993446/employee/search"
+      }
+    ],
+    "name": "searchEmployee",
+    "group": "Employee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Keyword</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>Pagination page size</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Pagination page number</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 200,\n    \"message\": \"Search employe by name successfully\",\n    \"pagination\": {\n        \"pageSize\": 1,\n        \"pageNumber\": 1\n    },\n    \"result\": {\n        \"total\": 2,\n        \"records\": [\n            {\n                \"_id\": \"5e84b5fbfb664211daab0a61\",\n                \"name\": \"Huynh Quoc Tuan\",\n                \"avatar\": \"http://localhost:3003/default.png\",\n                \"personalId\": \"384736273\",\n                \"address\": \"Ninh Kieu, Can Tho\",\n                \"phone\": \"093827463\",\n                \"email\": \"admin@gmail.com\",\n                \"user\": \"user\",\n                \"HTXId\": null,\n                \"created\": \"2020-04-01T15:40:43.584Z\"\n            }\n        ]\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/employee.router.js",
     "groupTitle": "Employee"
   },
   {
