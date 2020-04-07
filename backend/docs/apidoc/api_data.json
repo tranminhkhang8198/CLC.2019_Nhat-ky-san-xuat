@@ -23,8 +23,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
-    "groupTitle": "/Users/loiidk/webWorkspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "group": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "groupTitle": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
     "name": ""
   },
   {
@@ -5248,6 +5248,105 @@
             "optional": false,
             "field": "HTXId",
             "description": "<p>Employee's cooperactions ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Code",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Response code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>response massage</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.name",
+            "description": "<p>Employee name</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "File",
+            "optional": false,
+            "field": "result.avatar",
+            "description": "<p>Employee avatar</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.personalID",
+            "description": "<p>Employee personal ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.address",
+            "description": "<p>Employee address</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.phone",
+            "description": "<p>Employee phone</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.email",
+            "description": "<p>Employee email</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "\"user\"",
+              "\"manager\""
+            ],
+            "optional": false,
+            "field": "result.jobTitle",
+            "description": "<p>Employee jobs</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.HTXId",
+            "description": "<p>Employee's cooperactions ID</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response ",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 200,\n    \"message\": \"Updating employee information successfully\",\n    \"result\": {\n        \"_id\": \"5e89c41d36b4634f8171ad5a\",\n        \"name\": \"Trinh Quoc Tuan\",\n        \"avatar\": \"http://localhost:3001/avatar/default.png\",\n        \"personalId\": \"381823821\",\n        \"address\": \"Can THO\",\n        \"phone\": \"0836810225\",\n        \"email\": \"vanloiidk@gmail.com\",\n        \"user\": \"user\",\n        \"HTXId\": \"df12ew\",\n        \"created\": \"2020-04-05T11:42:21.868Z\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "404 Not Found": [
+          {
+            "group": "404 Not Found",
+            "optional": false,
+            "field": "EmployeeIsNotFound",
+            "description": "<p>Employee is not found</p>"
           }
         ]
       }

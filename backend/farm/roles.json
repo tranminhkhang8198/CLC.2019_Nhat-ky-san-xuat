@@ -1,4 +1,14 @@
-{"_id":"D","method":"DELETE","created":{"$date":{"$numberLong":"1577161371336"}}}
-{"_id":"P","method":"POST","created":{"$date":{"$numberLong":"1577161401849"}}}
-{"_id":"U","method":"PATCH","created":{"$date":{"$numberLong":"1577161417777"}}}
-{"_id":"G","method":"GET","created":{"$date":{"$numberLong":"1577162078798"}}}
+[
+  {
+    "method": "DELETE"
+  },
+  {
+    "method": "POST"
+  },
+  {
+    "method": "PATCH"
+  },
+  {
+    "method": "GET"
+  }
+]

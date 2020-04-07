@@ -1,6 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
-// const url = "mongodb://localhost:27017/";
-const url = "mongodb+srv://htx:vrC115qG5M0DV8VH@cluster0-4e7a2.mongodb.net/";
+const url = "mongodb://localhost:27017/";
+// const url = "mongodb+srv://htx:vrC115qG5M0DV8VH@cluster0-4e7a2.mongodb.net/";
 const fs = require("fs");
 const _ = require("lodash");
 const path = require("path");
@@ -16,7 +16,7 @@ class PlantProtectionProduct {
     this.db = db;
   }
 
-  createRegistrationInfo(id, registrationInfo, cb = () => {}) {
+  createRegistrationInfo(id, registrationInfo, cb = () => { }) {
     const collection = this.db.collection("registrationInfo");
 
     let obj = {
@@ -44,7 +44,7 @@ class PlantProtectionProduct {
     });
   }
 
-  createScopeOfUse(id, scopeOfUse, cb = () => {}) {
+  createScopeOfUse(id, scopeOfUse, cb = () => { }) {
     const collection = this.db.collection("scopeOfUse");
 
     let obj = [];
@@ -73,7 +73,7 @@ class PlantProtectionProduct {
   }
 
   // CREATE NEW PLANT PROTECTION PRODUCT
-  create(plantProtectionProduct = {}, cb = () => {}) {
+  create(plantProtectionProduct = {}, cb = () => { }) {
     const collection = this.db.collection("plantProtectionProduct");
     var response = {};
 
@@ -134,7 +134,7 @@ class PlantProtectionProduct {
   }
 }
 
-MongoClient.connect(url, function(err, db) {
+MongoClient.connect(url, function (err, db) {
   if (err) throw err;
   var dbo = db.db("farm");
 

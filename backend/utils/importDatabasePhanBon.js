@@ -17,7 +17,7 @@ class Fertilizer {
   }
 
   // CREATE NEW PLANT PROTECTION PRODUCT
-  create(fertilizer = {}, cb = () => {}) {
+  create(fertilizer = {}, cb = () => { }) {
     const collection = this.db.collection("fertilizer");
     var response = {};
 
@@ -45,7 +45,7 @@ class Fertilizer {
   }
 }
 
-MongoClient.connect(url, function(err, db) {
+MongoClient.connect(url, function (err, db) {
   if (err) throw err;
   var dbo = db.db("farm");
 
