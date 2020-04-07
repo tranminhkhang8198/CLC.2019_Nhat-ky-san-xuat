@@ -22,6 +22,10 @@ const Router = require('../routes/v1');
 
 const error = require('../middlewares/error');
 
+const { connect } = require('../db')
+
+const { dbName } = require('../config')
+
 /**
  * Middlewares
  */
@@ -51,6 +55,15 @@ app.use(cors());
 // logger for APIs accesses
 app.use(morgan(log, { stream: logger.stream }));
 
+//connect to mongodb
+connect((err, client) => {
+
+    if (err) {
+        throw err;
+    }
+
+    app.db = client.db(dbName);
+});
 
 // static folders
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

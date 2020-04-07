@@ -14,6 +14,6 @@ Router.use("/api/borrowedTools", borrowedToolRouter);
 Router.use("/api/warehouses", warehouseRouter);
 Router.use("/v1/api/goodsReceipt", goodsReceipt);
 Router.use("/api/goods-issues", goodsIssueRouter);
-Router.use("/v1/api/employee/", employeeRouter);
+Router.use("/v1/api/cooperatives/", employeeRouter);
 
 module.exports = Router;

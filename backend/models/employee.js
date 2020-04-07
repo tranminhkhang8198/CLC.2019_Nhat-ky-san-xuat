@@ -203,12 +203,13 @@ class Employee {
                 {
                     $set: updateData,
 
-                }, {
-                returnOriginal: false,
-                projection: {
-                    password: 0,
                 },
-            }
+                {
+                    returnOriginal: false,
+                    projection: {
+                        password: 0,
+                    },
+                }
             );
             return result;
 
@@ -222,6 +223,38 @@ class Employee {
             })
         }
     }
+    async searchByName(name, pagination, projection = {}) {
+        try {
+            const collection = this.app.db.collection('user');
+            const result = await collection.find(
+                {
+                    name: new RegExp(`${name}`, "igm"),
+                },
+                {
+                    projection: projection
+                },
+            );
+            const count = await result.count();
+            const resultArr = await result.skip(pagination.pageNumber * pagination.pageSize)
+                .limit(pagination.pageSize)
+                .toArray();
+            return {
+                total: count,
+                records: resultArr
+            };
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on updating employee information',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
+        }
+    }
+
+
     getTotal(params, cb = () => { }) {
         const collection = this.app.db.collection('user');
         const HTXId = _.get(params, 'HTXId', '');
@@ -241,6 +274,46 @@ class Employee {
                 return cb(null, { total: result });
             }
         })
+    }
+
+    /**
+    *=========================================================
+    *=                Deletion functions                     =
+    *=        Put all the deletion functions below       	  =
+    *=========================================================
+    */
+
+    async removeFromCoop(empID, HTXId) {
+        try {
+
+            const result = await this.app.db.collection('user').findOneAndUpdate(
+                {
+                    _id: empID,
+                    HTXId: HTXId,
+                },
+                {
+                    $set: {
+                        HTXId: null,
+                    }
+                },
+                {
+                    returnOriginal: false,
+                    projection: {
+                        password: 0,
+                    }
+                }
+            );
+            return result.value;
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failded on removing employee from Corperatives',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
+        }
     }
 
 
