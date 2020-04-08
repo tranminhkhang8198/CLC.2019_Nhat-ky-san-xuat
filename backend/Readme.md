@@ -62,3 +62,18 @@ npm run apidoc
 ```
 npm run postdoc
 ```
+
+## Migrate database
+
+* #### Import data for testing
+
+```bash
+cd backend
+npm run migrate_up
+```
+
+* #### Remove all testing data
+```bash
+cd backend
+npm run migrate_down
+```
