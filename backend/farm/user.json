@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Nguyen Van Tan",
+        "personalId": "381823821",
+        "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+        "phone": "0836810223",
+        "email": "nvtan@gmail.com",
+        "user": "user",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$tLavRp8.KFIcD8Rk4BBn7eR1qtfzBJsM6kUcNEyB5N.fLfZldXPoi"
+    },
+    {
+        "name": "Nguyen Quang Khai",
+        "personalId": "381823821",
+        "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+        "phone": "0836810112",
+        "email": "nqkhai@gmail.com",
+        "user": "manager",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$cSEMVFBaMUB0lDVLcauWI.p6qSXb48SoKDNo.zehlIEHy1B9yKQvC"
+    },
+    {
+        "name": "Nguyen Van Loi",
+        "personalId": "381823828",
+        "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+        "phone": "0836810116",
+        "email": "vanloi10c@gmail.com",
+        "user": "manager",
+        "HTXId": "HTXUMH",
+        "password": "$2b$10$9RrOItTqjpM5Ayx9ZKNeAOxzBSKesTIyk3ydk93Ux2UsSltzpl4pm"
+    },
+    {
+        "name": "Tran Minh Khang",
+        "personalId": "381823828",
+        "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+        "phone": "0836810117",
+        "email": "vanloi10c@gmail.com",
+        "user": "manager",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$djlRdCzWi.XhR7IlwQ1Gh.cALLQZ.EAQNGnSMJoYPrYt7hJWIjKkm"
+    },
+    {
+        "name": "Huynh Minh Nhat",
+        "personalId": "381823828",
+        "address": "14/132, 3/2 street, Ninh Kieu, Can Tho",
+        "phone": "0836810118",
+        "email": "vanloi10c@gmail.com",
+        "user": "user",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$Otxb5krpijjBkgHv5Jz6vOc/vGcw8jNBlY0dW3rcFGcXmtd0fLfXi"
+    },
+    {
+        "name": "Nguyen Minh Toan",
+        "avatar": "",
+        "personalId": "381823821",
+        "address": "Can Tho",
+        "phone": "0836810221",
+        "email": "vanloi1010@gmail.com",
+        "user": "user",
+        "HTXId": "HTXUMH",
+        "password": "$2b$10$A3VZFApokCD//E15a8Q9t.8335cepWNNgC9jNbeU2LCIQUB6eGdw2"
+    },
+    {
+        "name": "Nguyen Hoang Huynh",
+        "avatar": "",
+        "personalId": "381823821",
+        "address": "Can Tho",
+        "phone": "0836810229",
+        "email": "vanloi1010@gmail.com",
+        "user": "user",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$OSqQf0mwvU6QAoBZuUC5E.X8w2/yeWCAP0wTdm0Et8HAhC3mDxrKK"
+    },
+    {
+        "name": "Nguyen Thai Ngoc",
+        "avatar": "",
+        "personalId": "381823821",
+        "address": "Can Tho",
+        "phone": "0836810230",
+        "email": "vanloi1010@gmail.com",
+        "user": "user",
+        "HTXId": "HTXUMH",
+        "password": "$2b$10$fVUmgtxJ2tnqVws47YzzT.0BXtcaTacP2S0AXmaG/Lxd7hAZ/zNjy"
+    },
+    {
+        "name": "Dang Huynh Phuc Hau",
+        "avatar": "",
+        "personalId": "381823821",
+        "address": "Can Tho",
+        "phone": "0836810231",
+        "email": "vanloi1010@gmail.com",
+        "user": "user",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$smSHtfpbo8B6yXmL.kdLAug5lqFd0IE4GV/ZW9km85DSFNnlMMSqi"
+    },
+    {
+        "name": "Nguyen Nhat Quang",
+        "avatar": "",
+        "personalId": "381823821",
+        "address": "Can Tho",
+        "phone": "0836810232",
+        "email": "vanloi1010@gmail.com",
+        "user": "user",
+        "HTXId": "HTXNN",
+        "password": "$2b$10$ONCrp0AKwipfM.qCbPZyM.iNFaEeVwXmOPdT5ZQ3V7ZAGdxzosQVK"
+    }
+]

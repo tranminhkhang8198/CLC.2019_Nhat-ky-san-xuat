@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const { OrderedMap } = require('immutable');
 const { ObjectID } = require('mongodb');
 const config = require('./config/tokenConfig');
-
-
+const APIError = require('../utils/APIError');
+const httpStatus = require('http-status');
 class Token {
 
     constructor(app) {
@@ -77,45 +77,21 @@ class Token {
      * @param {string} tokenId 
      * @param {callback function} cb 
      */
-    verify(token, cb = () => { }) {
+    async verify(token) {
+        try {
+            console.log(token);
+            const payload = await jwt.verify(token, config.secret);
+            return payload;
 
-        // Find token in cache
-        const inCache = this.Tokens.get(token);
-        // console.log("incache", inCache);
-
-        if (inCache) {
-            // Get user info
-            const userId = inCache.userId.toString();
-            this.app.models.user.load(userId, (err, user) => {
-                if (err) {
-                    return cb(err, null);
-                }
-                else {
-                    inCache.user = user
-                    return cb(null, inCache);
-                }
-            });
+        } catch (error) {
+            throw new APIError({
+                message: 'Unauthorized',
+                status: httpStatus.UNAUTHORIZED,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
         }
-        else {
-            // Find token in database
-            // let tokenObjId;
-            // try{
-            //     tokenObjId = new ObjectID(tokenId);
-            // }
-            // catch(e){
-            //     return cb({error:"Token is invalid"}, null);
-            // }
-            let decoded;
-            try {
-                decoded = jwt.verify(token, config.secret);
-            } catch (error) {
-                return cb({ errorMessage: "Token khong dung hoac da het han" }, null);
-            }
-            _.unset(decoded, 'password');
-            return cb(null, decoded);
-
-        }
-
 
     }
 

@@ -11,6 +11,7 @@
 const httpStatus = require('http-status');
 const _ = require('lodash')
 const { ObjectID } = require('mongodb')
+const APIError = require('../utils/APIError')
 class Employee {
 
     constructor(app) {
@@ -193,36 +194,67 @@ class Employee {
                 }
             })
     }
-    update(target, rawData, cb = () => { }) {
-        const collection = this.app.db.collection('user')
-        rawData.user = rawData.jobTitle;
-        delete rawData['jobTitle']
+    async updateByEmpID(_id, updateData) {
         try {
-            target = new ObjectID(target);
-        } catch (error) {
-            return cb({ errorMessage: "Mã số nhân sự không hợp lệ", errorCode: 404 }, null);
-        }
-        this.validate(rawData, (err, validObj) => {
-            if (err) {
-                return cb(err, null);
-            }
-            else {
-                const updateData = {
-                    $set: validObj
-                }
-                collection.updateOne({ "_id": `${target}` }, updateData, (err, result) => {
-                    if (err || result.result.nModified == 0) {
-                        return err
-                            ? cb({ errorMessage: "Lỗi trong quá trình cập nhật dữ liệu", errorCode: 500 }, null)
-                            : cb({ errorMessage: "Không tìm thấy dữ liệu cần cập nhật", errorCode: 400 }, null);
+            const result = await this.app.db.collection('user').findOneAndUpdate(
+                {
+                    _id: _id,
+                },
+                {
+                    $set: updateData,
 
-                    } else {
-                        return cb(null, { responseMessage: `Đã cập nhật ${result.result.nModified} dữ liệu` });
-                    }
-                })
-            }
-        })
+                },
+                {
+                    returnOriginal: false,
+                    projection: {
+                        password: 0,
+                    },
+                }
+            );
+            return result;
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on updating employee information',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
+        }
     }
+    async searchByName(name, pagination, projection = {}) {
+        try {
+            const collection = this.app.db.collection('user');
+            const result = await collection.find(
+                {
+                    name: new RegExp(`${name}`, "igm"),
+                },
+                {
+                    projection: projection
+                },
+            );
+            const count = await result.count();
+            const resultArr = await result.skip(pagination.pageNumber * pagination.pageSize)
+                .limit(pagination.pageSize)
+                .toArray();
+            return {
+                total: count,
+                records: resultArr
+            };
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on updating employee information',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
+        }
+    }
+
+
     getTotal(params, cb = () => { }) {
         const collection = this.app.db.collection('user');
         const HTXId = _.get(params, 'HTXId', '');
@@ -242,6 +274,46 @@ class Employee {
                 return cb(null, { total: result });
             }
         })
+    }
+
+    /**
+    *=========================================================
+    *=                Deletion functions                     =
+    *=        Put all the deletion functions below       	  =
+    *=========================================================
+    */
+
+    async removeFromCoop(empID, HTXId) {
+        try {
+
+            const result = await this.app.db.collection('user').findOneAndUpdate(
+                {
+                    _id: empID,
+                    HTXId: HTXId,
+                },
+                {
+                    $set: {
+                        HTXId: null,
+                    }
+                },
+                {
+                    returnOriginal: false,
+                    projection: {
+                        password: 0,
+                    }
+                }
+            );
+            return result.value;
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failded on removing employee from Corperatives',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
+        }
     }
 
 

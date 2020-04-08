@@ -5,6 +5,7 @@ const { OrderedMap } = require('immutable');
 const bcrypt = require('bcryptjs');
 const { ObjectID } = require('mongodb');
 const httpStatus = require('http-status');
+const APIError = require('../utils/APIError');
 
 const salt = 10;
 
@@ -357,6 +358,29 @@ class User {
                 return cb(null, result);
             }
         })
+    }
+
+    async getByID(_id, projection = {}) {
+        try {
+            const result = await this.app.db.collection('user').findOne(
+                {
+                    _id: _id,
+                },
+                {
+                    projection: projection,
+                }
+            );
+            return result;
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on getting user by ID',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors
+            })
+        }
     }
     validateUpdate(user) {
 

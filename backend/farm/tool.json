@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Dụng cụ y tế",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXNN"
+    },
+    {
+        "name": "Máy cắt cỏ",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXNN"
+    },
+    {
+        "name": "Máy gặt đập liên hợp",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXUMH"
+    },
+    {
+        "name": "Bao lúa",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXNN"
+    },
+    {
+        "name": "Cuốc",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXNN"
+    },
+    {
+        "name": "Xẻng",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXUMH"
+    },
+    {
+        "name": "Bao tay y tế",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXUMH"
+    },
+    {
+        "name": "Bình xịt",
+        "total": "500",
+        "available": "500",
+        "image": "",
+        "note": "",
+        "cooperativeid": "HTXNN"
+    }
+]

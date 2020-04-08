@@ -1,0 +1,10 @@
+[
+  {
+    "name": "user",
+    "role": { "user": "GUDP", "manager": "GUDP", "administrator": "GUDP" }
+  },
+  {
+    "name": "cooperatives",
+    "role": { "user": "GUDP", "manager": "GUDP", "administrator": "GUDP" }
+  }
+]

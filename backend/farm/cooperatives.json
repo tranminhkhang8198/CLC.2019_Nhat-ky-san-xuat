@@ -1,0 +1,36 @@
+[
+    {
+        "name": "Hop tac xa u minh ha",
+        "foreignName": "Hop tac xa u minh ha",
+        "abbreviationName": "UMH",
+        "logo": "",
+        "status": "Dang hoat dong",
+        "cooperativeID": "HTXUMH",
+        "tax": "NN23446",
+        "surrgate": "Nguyen Tan Vu",
+        "director": "Huynh Van Tan",
+        "address": "",
+        "phone": "0836738224",
+        "fax": "NN344",
+        "website": "nn.com",
+        "representOffice": "",
+        "docs": ""
+    },
+    {
+        "name": "Hop tac xa nga nam",
+        "foreignName": "Hop tac xa nga nam",
+        "abbreviationName": "NN",
+        "logo": "",
+        "status": "Dang hoat dong",
+        "cooperativeID": "HTXNN",
+        "tax": "NN23446",
+        "surrgate": "Nguyen Tan Vu",
+        "director": "Huynh Van Tan",
+        "address": "",
+        "phone": "0836738224",
+        "fax": "NN344",
+        "website": "nn.com",
+        "representOffice": "",
+        "docs": ""
+    }
+]

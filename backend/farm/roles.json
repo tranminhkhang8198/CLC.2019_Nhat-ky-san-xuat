@@ -1,0 +1,14 @@
+[
+  {
+    "method": "DELETE"
+  },
+  {
+    "method": "POST"
+  },
+  {
+    "method": "PATCH"
+  },
+  {
+    "method": "GET"
+  }
+]
