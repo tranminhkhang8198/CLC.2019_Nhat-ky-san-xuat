@@ -16,6 +16,7 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 import axios from 'axios';
+import appConfig from '../../config/app.credential.config';
 
 import {
   validatePPPInput,
@@ -38,7 +39,7 @@ class AddItemModal extends Component {
 
     this.state = {
       data: {},
-      serverDomain: 'http://localhost:3001',
+      serverDomain: `${appConfig.SERVER_HOST}:${appConfig.SERVER_PORT}`,
       ppp: {
         currentScopeOfUse: 1,
       },

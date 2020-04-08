@@ -1,4 +1,6 @@
 /* eslint-disable no-alert */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint class-methods-use-this: [
   "error",
   { "exceptMethods":
@@ -13,6 +15,7 @@ import React, { Component } from 'react';
 import uuidv4 from 'uuid';
 import axios from 'axios';
 import httpStatus from 'http-status';
+import appConfig from '../../config/app.credential.config';
 
 class DeleteItemsModal extends Component {
   constructor(props) {
@@ -23,6 +26,7 @@ class DeleteItemsModal extends Component {
       data: props.data,
       parrent: props.parentComponent,
       checkboxRefs: [],
+      serverDomain: `${appConfig.SERVER_HOST}:${appConfig.SERVER_PORT}`,
     };
 
     this.renderTypeTitle = this.renderTypeTitle.bind(this);
@@ -56,19 +60,22 @@ class DeleteItemsModal extends Component {
   }
 
   getApiURLByType(typeData) {
+    const {
+      serverDomain,
+    } = this.state;
     let apiUrl = '';
     switch (typeData) {
       case 'fertilizer':
-        apiUrl = 'http://localhost:3001/api/fertilizers';
+        apiUrl = `${serverDomain}/api/fertilizers`;
         break;
       case 'plantProductProtection':
-        apiUrl = 'http://localhost:3001/api/plant-protection-products';
+        apiUrl = `${serverDomain}/api/plant-protection-products`;
         break;
       case 'seed':
         apiUrl = '';
         break;
       case 'cooperative':
-        apiUrl = 'http://localhost:3001/api/cooperatives';
+        apiUrl = `${serverDomain}/api/cooperatives`;
         break;
       default:
         apiUrl = '';
@@ -236,9 +243,9 @@ class DeleteItemsModal extends Component {
             <div className="modal-body modal-add-body">
               <p>Chọn tên các dữ liệu bạn muốn xóa</p>
               {this.renderItemsToDelete(data)}
-              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
               <div className="mt-2">
                 <div className="form-check" key={uuidv4()}>
+
                   <label className="form-check-label" htmlFor="select-all" onClick={() => this.selectAll()}>
                     <input
                       className="form-check-input"
@@ -250,6 +257,7 @@ class DeleteItemsModal extends Component {
                   </label>
                 </div>
                 <div className="form-check" key={uuidv4()}>
+                  {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                   <label className="form-check-label" htmlFor="deselect-all" onClick={() => this.deSelectAll()}>
                     <input
                       className="form-check-input"

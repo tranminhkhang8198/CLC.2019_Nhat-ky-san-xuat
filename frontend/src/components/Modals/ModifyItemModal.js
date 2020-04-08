@@ -14,6 +14,7 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid';
 import axios from 'axios';
+import appConfig from '../../config/app.credential.config';
 
 class ModifyItemModal extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class ModifyItemModal extends Component {
 
     this.state = {
       data: {},
-      serverDomain: 'http://localhost:3001',
+      serverDomain: `${appConfig.SERVER_HOST}:${appConfig.SERVER_PORT}`,
     };
 
     this.handleInputOnChange = this.handleInputOnChange.bind(this);

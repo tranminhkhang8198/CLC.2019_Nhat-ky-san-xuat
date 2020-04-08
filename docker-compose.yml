@@ -1,0 +1,32 @@
+version: '3'
+services:
+    web:
+        container_name: HTX-UI
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        image: htx/ui:v1
+        ports: 
+            - '5001:5000'
+        command: npm start
+        depends_on: 
+            - api
+    api:
+        env_file:
+            - ./backend/.env
+        container_name: HTX-API
+        environment: 
+            - MONGO_URL=mongodb://mongo:27017/farm
+        restart: always
+        build: ./backend
+        image: htx/api:v1
+        ports: 
+            - '3001:3001'
+        depends_on: 
+            - mongo
+        command: npm start
+    mongo:
+        container_name: HTX-DB
+        image: mongo:4.2
+        ports: 
+            - '27018:27017'

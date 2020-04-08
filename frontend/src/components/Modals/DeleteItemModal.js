@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import httpStatus from 'http-status';
 import uuidv4 from 'uuid/v4';
+import appConfig from '../../config/app.credential.config';
 
 class DeleteItemModal extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class DeleteItemModal extends Component {
     this.state = {
       type: props.type,
       parentComponent: props.parentComponent,
-      serverDomain: 'http://localhost:3001',
+      serverDomain: `${appConfig.SERVER_HOST}:${appConfig.SERVER_PORT}`,
     };
   }
 

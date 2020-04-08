@@ -16,6 +16,31 @@
 - Mobile App: React Native
 
 -----
+## How to start
+### In host machine
+```
+1. Start API server
+$ cd backend
+$ npm start
+
+2. Start UI server
+$ cd frontend
+$ npm start
+```
+
+### Dockerization
+```
+1. Start both services
+$ docker-compose up
+
+2. Stop services
+$ docker-compose up
+
+$ docker rmi htx/ui:v1
+$ docker rmi htx/api:v1
+```
+
+-----
 ## Project structure
 ```
 | docs/
