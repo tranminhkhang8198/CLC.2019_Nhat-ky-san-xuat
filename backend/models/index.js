@@ -17,7 +17,6 @@ const Subcontractor = require("./subcontractor");
 const Warehouse = require("./warehouse.model");
 const Test = require("./test.model");
 const BorrowedTool = require("./borrowedTool.model");
-const RiceSeed = require('./rice');
 
 class Model {
   constructor(app) {
@@ -41,7 +40,6 @@ class Model {
     this.warehouse = new Warehouse(app);
     this.test = new Test(app);
     this.borrowedTool = new BorrowedTool(app);
-    this.RiceSeed = new RiceSeed(app);
   }
 }
 module.exports = Model;

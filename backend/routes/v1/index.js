@@ -7,6 +7,7 @@ const warehouseRouter = require("./warehouse.router");
 const goodsReceipt = require("../v1/goodsReceipt.route");
 const goodsIssueRouter = require("./goodsIssue.router");
 const employeeRouter = require("../v1/employee.router");
+const riceRoute = require('./rice.route');
 
 Router.use("/v1/api/test", testRoute);
 Router.use("/api/tools", toolRouter);
@@ -15,5 +16,6 @@ Router.use("/api/warehouses", warehouseRouter);
 Router.use("/v1/api/goodsReceipt", goodsReceipt);
 Router.use("/api/goods-issues", goodsIssueRouter);
 Router.use("/v1/api/cooperatives/", employeeRouter);
+Router.use("/v1/api/rice/", riceRoute);
 
 module.exports = Router;
