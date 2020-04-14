@@ -49,16 +49,23 @@ Start node server
 ```
 npm start
 ```
+
 ### Generate api docs
+
 ## Generate api docs and open
+
 ```
 npm run docs
 ```
+
 ## Generate api docs
+
 ```
 npm run apidoc
 ```
+
 ## Open api doc
+
 ```
 npm run postdoc
 ```

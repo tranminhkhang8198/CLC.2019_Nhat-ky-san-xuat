@@ -13,7 +13,7 @@ class BorrowedTool {
       image: null,
       note: null,
       userBorrowedId: null,
-      cooperativeId: null
+      cooperativeId: null,
     };
   }
 
@@ -62,7 +62,7 @@ class BorrowedTool {
       const BorrowedTool = this.app.db.collection("borrowedTools");
 
       const borrowedTool = await BorrowedTool.findOne({
-        _id: mongodb.ObjectID(id)
+        _id: mongodb.ObjectID(id),
       });
 
       return borrowedTool;
