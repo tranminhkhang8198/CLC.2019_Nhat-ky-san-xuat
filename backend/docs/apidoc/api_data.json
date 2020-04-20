@@ -23,8 +23,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/apidoc/main.js",
-    "group": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
-    "groupTitle": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "group": "/mnt/e/Workspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
+    "groupTitle": "/mnt/e/Workspace/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
     "name": ""
   },
   {
@@ -2454,6 +2454,80 @@
   },
   {
     "type": "get",
+    "url": "/api/cooperatives/count",
+    "title": "Get tổng số HTX đang quản lí",
+    "version": "0.1.0",
+    "name": "GetCooperatives",
+    "group": "Cooperatives",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -X GET http://localhost:3001/api/cooperatives/count",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>Tổng số HTX đang quản lí.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"total\": \"4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Permission-denied",
+            "description": "<p>Token khong hop le</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Lỗi trong quá trình truy xuất dữ liệu\"\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "manager-admin"
+      }
+    ],
+    "filename": "./farm/router.js",
+    "groupTitle": "Cooperatives"
+  },
+  {
+    "type": "get",
     "url": "/api/cooperatives",
     "title": "Get du lieu HTX theo phan trang.",
     "version": "0.1.0",
@@ -2651,80 +2725,6 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"ID không hợp lệ\"\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "manager-admin"
-      }
-    ],
-    "filename": "./farm/router.js",
-    "groupTitle": "Cooperatives"
-  },
-  {
-    "type": "get",
-    "url": "/api/cooperatives/count",
-    "title": "Get tổng số HTX đang quản lí",
-    "version": "0.1.0",
-    "name": "GetCooperatives",
-    "group": "Cooperatives",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization",
-            "description": "<p>Token.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -X GET http://localhost:3001/api/cooperatives/count",
-        "type": "curl"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "total",
-            "description": "<p>Tổng số HTX đang quản lí.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"total\": \"4\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Permission-denied",
-            "description": "<p>Token khong hop le</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"errorMessage\": \"Lỗi trong quá trình truy xuất dữ liệu\"\n    }",
           "type": "json"
         }
       ]
@@ -6961,6 +6961,149 @@
     "title": "Get all fertilizers with pageNumber and nPerPage",
     "name": "GetAllFertilizers",
     "group": "Fertilizers",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/api/fertilizers?pageNumber=9&nPerPage=20"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalProducts",
+            "description": "<p>Tổng số phân bón trong danh mục</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "totalPages",
+            "description": "<p>Tổng số lượng trang</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ministry",
+            "description": "<p>Bộ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "province",
+            "description": "<p>Tỉnh</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "enterprise",
+            "description": "<p>Tên doanh nghiệp</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên phân bón</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "ingredient",
+            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "lawDocument",
+            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "isoCertOrganization",
+            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "manufactureAndImport",
+            "description": "<p>Nhập khẩu, xuất khẩu</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"totalProducts\": 14152,\n    \"totalPages\": 708,\n    \"data\": [\n        {\n            \"_id\": \"5de75a92f4e889141cc24ee8\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)\",\n            \"ingredient\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n            \"lawDocument\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.952Z\"\n        },\n        {\n            \"_id\": \"5de75a92f4e889141cc24efd\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân bón NPK 15-9-20+TE\",\n            \"ingredient\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n            \"lawDocument\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.956Z\"\n        },\n        {\n            \"_id\": \"5de75a92f4e889141cc24f7d\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n            \"ingredient\": \"\",\n            \"lawDocument\": \"\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.974Z\"\n        },\n        ...\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./router.js",
+    "groupTitle": "Fertilizers"
+  },
+  {
+    "type": "get",
+    "url": "/api/fertilizers",
+    "title": "Get all fertilizers with pageNumber and nPerPage",
+    "name": "GetAllFertilizers",
+    "group": "Fertilizers",
     "examples": [
       {
         "title": "Tìm kiếm phân bón:",
@@ -7098,149 +7241,6 @@
     ],
     "version": "0.0.0",
     "filename": "./farm/router.js",
-    "groupTitle": "Fertilizers"
-  },
-  {
-    "type": "get",
-    "url": "/api/fertilizers",
-    "title": "Get all fertilizers with pageNumber and nPerPage",
-    "name": "GetAllFertilizers",
-    "group": "Fertilizers",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:3001/api/fertilizers?pageNumber=9&nPerPage=20"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "authorization",
-            "description": "<p>Token.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "pageNumber",
-            "description": "<p>Số thứ tự trang cần lấy</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "nPerPage",
-            "description": "<p>Số lượng thuốc bvtv trên mỗi trang</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "totalProducts",
-            "description": "<p>Tổng số phân bón trong danh mục</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "totalPages",
-            "description": "<p>Tổng số lượng trang</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "ministry",
-            "description": "<p>Bộ</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "province",
-            "description": "<p>Tỉnh</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "enterprise",
-            "description": "<p>Tên doanh nghiệp</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>Loại phân bón</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>Tên phân bón</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "ingredient",
-            "description": "<p>Thành phần, hàm lượng chất dinh dưỡng</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lawDocument",
-            "description": "<p>Căn cứ, tiêu chuẩn, quy định</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "isoCertOrganization",
-            "description": "<p>Tổ chức chứng nhận hợp quy</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "manufactureAndImport",
-            "description": "<p>Nhập khẩu, xuất khẩu</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"totalProducts\": 14152,\n    \"totalPages\": 708,\n    \"data\": [\n        {\n            \"_id\": \"5de75a92f4e889141cc24ee8\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân bón NPK Kristalon Scarlet (7.5-12-36+TE)\",\n            \"ingredient\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n            \"lawDocument\": \"Nts: 7,5%; P2O5hh: 12%; K2Ohh: 36%; S: 4%; B: 0,025%; Cu: 0,01%; Fe: 0,07%; Zn: 0,025%; Mn: 0,04%; Mo: 0,004%; Độ ẩm: 0,8%\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.952Z\"\n        },\n        {\n            \"_id\": \"5de75a92f4e889141cc24efd\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH YARA Việt Nam\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân bón NPK 15-9-20+TE\",\n            \"ingredient\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n            \"lawDocument\": \"Nts: 15%; P2O5hh: 9%; K2Ohh: 20%; MgO: 1,8%; S: 3,8%; B: 0,015%; Mn: 0,02%; Zn: 0,02%; Độ ẩm 0,8%\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.956Z\"\n        },\n        {\n            \"_id\": \"5de75a92f4e889141cc24f7d\",\n            \"ministry\": \"Công thương\",\n            \"province\": \"Bà Rịa - Vũng Tàu\",\n            \"enterprise\": \"Công ty TNHH Sản xuất NGÔI SAO VÀNG\",\n            \"type\": \"Phân vô cơ\",\n            \"name\": \"Phân vi lượng TE MAX ( SUPER CHELATE)\",\n            \"ingredient\": \"\",\n            \"lawDocument\": \"\",\n            \"isoCertOrganization\": \"\",\n            \"manufactureAndImport\": \"\",\n            \"created\": \"2019-12-04T07:04:50.974Z\"\n        },\n        ...\n    ]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "none"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "./router.js",
     "groupTitle": "Fertilizers"
   },
   {
@@ -9090,8 +9090,8 @@
   },
   {
     "type": "get",
-    "url": "/aip/goodsReceipts?queryParam",
-    "title": "Tìm kiếm thông tin HTX",
+    "url": "/aip/goodsReceipts/search?queryParam",
+    "title": "Xóa thông tin của HTX",
     "version": "1.0.0",
     "name": "GetGoodsReceipts",
     "group": "GoodsReceipts",
@@ -9124,13 +9124,20 @@
             "optional": true,
             "field": "resulNumber",
             "description": "<p>Số lượng dữ liệu mỗi trang</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Mã số hóa đơn nhập kho</p>"
           }
         ]
       }
     },
     "sampleRequest": [
       {
-        "url": "http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1"
+        "url": "http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf"
       }
     ],
     "success": {
@@ -9188,8 +9195,8 @@
   },
   {
     "type": "get",
-    "url": "/aip/goodsReceipts/search?queryParam",
-    "title": "Xóa thông tin của HTX",
+    "url": "/aip/goodsReceipts?queryParam",
+    "title": "Tìm kiếm thông tin HTX",
     "version": "1.0.0",
     "name": "GetGoodsReceipts",
     "group": "GoodsReceipts",
@@ -9222,20 +9229,13 @@
             "optional": true,
             "field": "resulNumber",
             "description": "<p>Số lượng dữ liệu mỗi trang</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "_id",
-            "description": "<p>Mã số hóa đơn nhập kho</p>"
           }
         ]
       }
     },
     "sampleRequest": [
       {
-        "url": "http://localhost:3001/api/goodsReceipts/search?_id=sdfsdjfsfowie2eqdjjf"
+        "url": "http://localhost:3001/api/goodsReceipts?pageNumber=1&resultNumber=1"
       }
     ],
     "success": {
