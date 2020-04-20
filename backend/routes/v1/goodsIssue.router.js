@@ -5,6 +5,8 @@ const {
   validateParamId,
   validateBeforeUpdate,
 } = require("../../validations/goodsIssue.validation");
+
+const { postValidator } = require("../../validations/goodsIssueV2.validation");
 const {
   create,
   getAll,
@@ -112,7 +114,7 @@ const {
  *     }
  * @apiPermission none
  */
-Router.route("/").post(validateBeforeCreate, create);
+Router.route("/").post(postValidator, create);
 
 /**
  * @api {get} /goods-issues Get all goods issue
