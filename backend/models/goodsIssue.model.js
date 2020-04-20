@@ -23,7 +23,7 @@ class GoodsIssue {
     this.model.productType = _.get(obj, "productType", null);
     this.model.issuedDate = _.get(obj, "issuedDate", null);
     this.model.receivedDate = _.get(obj, "receivedDate", null);
-    this.model.receivedStatus = _.get(obj, "receivedStatus", null);
+    this.model.receivedStatus = _.get(obj, "receivedStatus", false);
     this.model.receiverId = _.get(obj, "receiverId", null);
     this.model.goodsReceiptInfo = _.get(obj, "goodsReceiptInfo", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);

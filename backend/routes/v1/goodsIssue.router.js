@@ -27,10 +27,10 @@ const {
  * @apiParam {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
  * @apiParam {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
  * @apiParam {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
- * @apiParam {Number} quantity Số lượng
  * @apiParam {Date} issuedDate Ngày xuất kho (ISO 8601 format)
- * @apiParam {Date} receivedDate Ngày nhận sản phẩm (ISO 8601 format)
- * @apiParam {String} goodsReceiptId Id hóa đơn nhập
+ * @apiParam {Object} goodsReceiptInfo Thông tin hoá đơn nhập của sản phẩm được xuất kho
+ * @apiParam {Object} goodsReceiptInfo.id Id hóa đơn nhập
+ * @apiParam {Object} goodsReceiptInfo.quanity Số lượng xuất kho tương ứng với hoá đơn nhập
  * @apiParam {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
  * @apiParam {String} note Ghi chú
  *
@@ -40,11 +40,18 @@ const {
  *  {
  *      "receiverId": "5e058f0f089c052958b35c59",
  *      "productId": "5e057818a1c1111795e29b76",
- *      "quantity": "2",
  *      "issuedDate": "2019-12-12",
- *      "receivedDate": "2019-12-12",
  *      "productType": "Thuốc bvtv",
- *      "goodsReceiptId": "21893453567654",
+ *      "goodsReceiptId": [
+ *          {
+ *              "id": "5e9d706632edb33e22870d4a",
+ *              "quantity": 19
+ *          },
+ *          {
+ *              "id": "5e9d706e32edb33e22870d4c",
+ *              "quantity": 37
+ *          }
+ *      ],
  *      "cooperativeId": "HTXNN",
  *      "note": "Just note something you want"
  *  }
@@ -52,10 +59,10 @@ const {
  * @apiSuccess {String} receiverId Id của người nhận (dựa trên _id lúc tạo user)
  * @apiSuccess {String} productId Id của sản phẩm (có thể là id của Thuốc bvtv hoặc Phân bón hoặc Giống)
  * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
- * @apiSuccess {Number} quantity Số lượng
  * @apiSuccess {Date} issuedDate Ngày xuất kho (ISO 8601 format)
- * @apiSuccess {Date} receivedDate Ngày nhận thuốc (ISO 8601 format)
- * @apiSuccess {String} goodsReceiptId Id hóa đơn nhập
+ * @apiSuccess {Object} goodsReceiptInfo Thông tin hoá đơn nhập của sản phẩm được xuất kho
+ * @apiSuccess {Object} goodsReceiptInfo.id Id hóa đơn nhập
+ * @apiSuccess {Object} goodsReceiptInfo.quanity Số lượng xuất kho tương ứng với hoá đơn nhập
  * @apiSuccess {String} cooperativeId Id hợp tác xã (trường cooperativeID trong document chứ kp _id)
  * @apiSuccess {String} note Ghi chú
  * @apiSuccess {String} _id Id của document vừa tạo thành công
@@ -67,14 +74,20 @@ const {
  *  {
  *      "receiverId": "5e058f0f089c052958b35c59",
  *      "productId": "5e057818a1c1111795e29b76",
- *      "productType": "Thuốc bvtv",
- *      "quantity": "2",
  *      "issuedDate": "2019-12-12",
- *      "receivedDate": "2019-12-12",
- *      "goodsReceiptId": "21893453567654",
+ *      "productType": "Thuốc bvtv",
+ *      "goodsReceiptId": [
+ *          {
+ *              "id": "5e9d706632edb33e22870d4a",
+ *              "quantity": 19
+ *          },
+ *          {
+ *              "id": "5e9d706e32edb33e22870d4c",
+ *              "quantity": 37
+ *          }
+ *      ],
  *      "cooperativeId": "HTXNN",
  *      "note": "Just note something you want",
- *      "created_at": "2019-12-30T02:35:32.306Z",
  *      "_id": "5e0962f326b7b011c825789c"
  *  }
  *

@@ -42,15 +42,10 @@ const joiGoodsIssueSchema = {
         "any.only": `Loại sản phẩm phải là một trong ba loại "Thuốc btvt", "Phân bón", "Giống"`,
         "any.required": "Vui lòng nhập loại sản phẩm",
       }),
-    goodsReceiptInfo: Joi.object({
-      goodsReceiptId: Joi.string(),
-      quantity: Joi.number(),
-    })
-      .required()
-      .messages({
-        "any.required":
-          "Vui lòng nhập thông tin hoá đơn nhập của sản phẩm cần xuất kho.",
-      }),
+    goodsReceiptInfo: Joi.array().required().messages({
+      "any.required":
+        "Vui lòng nhập thông tin hoá đơn nhập của sản phẩm cần xuất kho.",
+    }),
   }),
 };
 
@@ -64,16 +59,9 @@ exports.postValidator = async (req, res, next) => {
     error.details = [];
   }
 
-  // Validate diary id
-  const productId = req.body.productId;
-  if (productId) {
-    await validateProductId(error.details, req, productId);
-  }
+  // TODO: Validate product
 
-  // Validate quantity
-  if (goodsReceiptInfo) {
-    await validateQuantity(error.details, db, goodsReceiptInfo);
-  }
+  // TODO: Validate quantity
 
   if (error.details.length == 0) {
     next();

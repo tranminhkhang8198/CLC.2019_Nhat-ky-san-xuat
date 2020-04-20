@@ -72,6 +72,21 @@ exports.create = catchAsync(async (req, res, next) => {
   }
 
   // TODO: decrease quantiy in warehouse
+  const Warehouse = db.collection("warehouses");
+  for (let goodsReceipt of filterBody.goodsReceiptInfo) {
+    const warehouse = await Warehouse.updateOne(
+      {
+        goodsReceiptInfo: {
+          $elemMatch: { id: mongodb.ObjectID(goodsReceipt.id) },
+        },
+      },
+      {
+        $inc: {
+          "goodsReceiptInfo.$.quantity": -parseInt(goodsReceipt.quantity),
+        },
+      }
+    );
+  }
 
   return res.status(201).json(goodsIssue);
 });
