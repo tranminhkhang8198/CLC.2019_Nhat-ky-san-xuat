@@ -286,7 +286,7 @@ Router.route("/:id").delete(validateParamId, deleteOne);
  * @apiName UpdateGoodsIssueById
  * @apiVersion 1.0.0
  * @apiGroup GoodIssues
- * @apiSample http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
+ * @apiSampleRequest http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7
  *
  * @apiHeader {String} authorization Token.
  *

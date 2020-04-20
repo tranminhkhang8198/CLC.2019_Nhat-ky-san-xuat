@@ -2,145 +2,193 @@
   {
     "startDate": "1/5/2020",
     "endDate": "2/5/2020",
-    "type": " xử lý ốc bưu vàng đánh rãnh",
-    "stage": "CV khác"
+    "name": "Trục đất, xử lý ốc bưu vàng đánh rãnh",
+    "type": "CV khác",
+    "stage": "Làm đất",
+    "note": ""
   },
   {
     "startDate": "1/5/2020",
     "endDate": "6/5/2020",
+    "name": "Diệt cỏ nếu có",
     "type": "CV khác",
-    "stage": "Làm đất"
+    "stage": "Làm đất",
+    "note": ""
   },
   {
     "startDate": "1/5/2020",
     "endDate": "3/5/2020",
+    "name": "Ủ giống 24h",
     "type": "CV khác",
-    "stage": "Chuẩn bị giống"
+    "stage": "Chuẩn bị giống",
+    "note": ""
   },
   {
     "startDate": "4/5/2020",
     "endDate": "6/5/2020",
+    "name": "Ủ thêm 2 ngày",
     "type": "CV khác",
-    "stage": "Chuẩn bị giống"
+    "stage": "Chuẩn bị giống",
+    "note": ""
   },
   {
     "startDate": "7/5/2020",
     "endDate": "8/5/2020",
+    "name": "Gieo sạ lúa",
     "type": "CV khác",
-    "stage": "Gieo sạ"
+    "stage": "Gieo sạ",
+    "note": ""
   },
   {
     "startDate": "9/5/2020",
     "endDate": "9/5/2020",
+    "name": "Phun thuốc cỏ",
     "type": "Phun Thuốc",
-    "stage": "Gieo sạ"
+    "stage": "Gieo sạ",
+    "note": ""
   },
   {
     "startDate": "13/5/2020",
     "endDate": "14/5/2020",
+    "name": "Bón Phân bón lá ",
     "type": "Bón Phân",
-    "stage": "Giai đoạn cây con"
+    "stage": "Giai đoạn cây con",
+    "note": ""
   },
   {
     "startDate": "15/5/2020",
     "endDate": "16/5/2020",
+    "name": "Điều chỉnh lượng nước",
     "type": "Nước",
-    "stage": "Giai đoạn cây con"
+    "stage": "Giai đoạn cây con",
+    "note": ""
   },
   {
     "startDate": "15/5/2020",
     "endDate": "16/5/2020",
+    "name": "Phun thuốc duyệt ốc bưu vàng",
     "type": "Phun Thuốc",
-    "stage": "Giai đoạn cây con"
+    "stage": "Giai đoạn cây con",
+    "note": ""
   },
   {
     "startDate": "16/5/2020",
     "endDate": "17/5/2020",
+    "name": "Cấy dặm",
     "type": "CV khác",
-    "stage": "Giai đoạn cây con"
+    "stage": "Giai đoạn cây con",
+    "note": ""
   },
   {
     "startDate": "17/5/2020",
     "endDate": "19/5/2020",
+    "name": "Bón phân thúc đợt 1",
     "type": "Bón Phân",
-    "stage": "Giai đoạn cây con"
+    "stage": "Giai đoạn cây con",
+    "note": ""
   },
   {
     "startDate": "1/6/2020",
     "endDate": "1/6/2020",
+    "name": "Lúa ngưng rẻ nhánh",
     "type": "CV khác",
-    "stage": "Giai đoạn cây con"
+    "stage": "Giai đoạn cây con",
+    "note": ""
   },
   {
     "startDate": "2/6/2020",
     "endDate": "4/6/2020",
+    "name": "Phun phân bón lá",
     "type": "Bón phân",
-    "stage": "Giai đoạn tăng trưởng"
+    "stage": "Giai đoạn tăng trưởng",
+    "note": ""
   },
   {
     "startDate": "2/6/2020",
     "endDate": "5/6/2020",
+    "name": "Bón phân thúc đợt 2",
     "type": "Bón phân",
-    "stage": "Giai đoạn tăng trưởng"
+    "stage": "Giai đoạn tăng trưởng",
+    "note": ""
   },
   {
     "startDate": "25/6/2020",
     "endDate": "25/6/2020",
+    "name": "Khi lúa đứng cái",
     "type": "CV khác",
-    "stage": "Giai đoạn tăng trưởng"
+    "stage": "Giai đoạn tăng trưởng",
+    "note": ""
   },
   {
     "startDate": "26/6/2020",
     "endDate": "27/6/2020",
+    "name": "Phun phân bón lá",
     "type": "Bón Phân",
-    "stage": "Giai đoạn đòng"
+    "stage": "Giai đoạn đòng",
+    "note": ""
   },
   {
     "startDate": "30/6/2020",
     "endDate": "1/7/2020",
+    "name": "Bón phân nuôi đòng khi thấy tim đèn",
     "type": "Bón Phân",
-    "stage": "Giai đoạn đòng"
+    "stage": "Giai đoạn đòng",
+    "note": ""
   },
   {
     "startDate": "13/7/2020",
     "endDate": "14/7/2020",
+    "name": "Phun trừ đạo ôn trước khi lúa trổ",
     "type": "Phun Thuốc",
-    "stage": "Giai đoạn đòng"
+    "stage": "Giai đoạn đòng",
+    "note": ""
   },
   {
     "startDate": "6/7/2020",
     "endDate": "7/7/2020",
+    "name": "Bón thúc đồng (nếu có)",
     "type": "Bón Phân",
-    "stage": "Giai đoạn đòng"
+    "stage": "Giai đoạn đòng",
+    "note": ""
   },
   {
     "startDate": "20/7/2020",
     "endDate": "20/7/2020",
+    "name": "Lúa trổ",
     "type": "CV khác",
-    "stage": "Giai đoạn đòng"
+    "stage": "Giai đoạn đòng",
+    "note": ""
   },
   {
     "startDate": "23/7/2020",
     "endDate": "24/7/2020",
+    "name": "Phun phân bón lá",
     "type": "Bón Phân",
-    "stage": "Giai đoạn trổ và chín"
+    "stage": "Giai đoạn trổ và chín",
+    "note": ""
   },
   {
     "startDate": "27/7/2020",
     "endDate": "28/7/2020",
+    "name": "Phun ngừa đạo ôn sau khi trổ",
     "type": "Phun Thuốc",
-    "stage": "Giai đoạn trổ và chín"
+    "stage": "Giai đoạn trổ và chín",
+    "note": ""
   },
   {
     "startDate": "30/7/2020",
     "endDate": "31/7/2020",
+    "name": "Bón nuôi hạt (nếu cần)",
     "type": "Bón Phân",
-    "stage": "Giai đoạn trổ và chín"
+    "stage": "Giai đoạn trổ và chín",
+    "note": ""
   },
   {
     "startDate": "24/8/2020",
     "endDate": "25/8/2020",
+    "name": "Lúa chín-thu hoạch",
     "type": "CV khác",
-    "stage": "Giai đoạn trổ và chín"
+    "stage": "Giai đoạn trổ và chín",
+    "note": ""
   }
 ]

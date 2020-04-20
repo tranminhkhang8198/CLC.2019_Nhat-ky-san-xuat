@@ -2731,6 +2731,881 @@
   },
   {
     "type": "post",
+    "url": "/api/crop-tasks",
+    "title": "Create new task for crop",
+    "name": "CreateNewCropTask",
+    "group": "CropTasks",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/crop-tasks",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên công việc, tác vụ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Ngày bắt đầu công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Ngày kết thúc công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của mùa vụ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công việc (một trong bốn loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "stage",
+            "description": "<p>Giai đoạn phát triển</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"startDate\": \"2/6/2020\",\n  \"endDate\": \"5/6/2020\",\n  \"name\": \"Bón phân thúc đợt 2\",\n  \"type\": \"Bón phân\",\n  \"stage\": \"Giai đoạn tăng trưởng\",\n  \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n  \"note\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên công việc, tác vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Ngày bắt đầu công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Ngày kết thúc công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của mùa vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công việc (một trong bốn loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "stage",
+            "description": "<p>Giai đoạn phát triển</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n   {\n     \"startDate\": \"2/6/2020\",\n     \"endDate\": \"5/6/2020\",\n     \"name\": \"Bón phân thúc đợt 2\",\n     \"type\": \"Bón phân\",\n     \"stage\": \"Giai đoạn tăng trưởng\",\n     \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n     \"note\": \"\",\n     \"cooperativeId\": \"HTXUMH3\",\n     \"_id\": \"5dedd6f7a4b891348bc0a83d\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "name-is-required",
+            "description": "<p>Trường tên công việc, tác vụ là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "diaryId-is-required",
+            "description": "<p>Id nhật ký chung của mùa vụ là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "diaryId-doesnt-exist",
+            "description": "<p>Id nhật ký chung của mùa vụ không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "type-is-invalid",
+            "description": "<p>Loại công việc phải là một trong 4 loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "startDate-must-be-ISO-8601-format",
+            "description": "<p>Ngày bắt đầu công việc phải thuộc định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "endDate-must-be-ISO-8601-format",
+            "description": "<p>Ngày kết thúc công việc phải thuộc định dạng ISO 8601</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "cooperative does not exist:",
+          "content": "HTTP/1.1 400 Bad request\n{\n  \"errorMessage\": \"Loại công việc phải là một trong bốn loại \"Bón Phân\", \"Phun Thuốc\", \"Nước\", \"CV khác\".; Ngày kết thúc công việc không hợp lệ.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./routes/v1/cropTask.router.js",
+    "groupTitle": "CropTasks"
+  },
+  {
+    "type": "post",
+    "url": "/api/create-sample-template",
+    "title": "Create sample task template for crop",
+    "name": "CreateSampleTemplate",
+    "group": "CropTasks",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/create-sample-template",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của vụ mùa</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Create\n   {\n     \"successMessage\": \"Qui trình cho vụ mùa được tạo thành công.\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "diaryId-is-required",
+            "description": "<p>Id nhật ký chung của mùa vụ là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "diaryId-doesnt-exist",
+            "description": "<p>Id nhật ký chung của mùa vụ không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "cooperative does not exist:",
+          "content": "HTTP/1.1 400 Bad request\n{\n  \"errorMessage\": \"Id nhật ký chung của mùa vụ không tồn tại.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./routes/v1/cropTask.router.js",
+    "groupTitle": "CropTasks"
+  },
+  {
+    "type": "delete",
+    "url": "/api/crop-tasks/:id",
+    "title": "Delete task of crop",
+    "name": "DeleteCropTask",
+    "group": "CropTasks",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/crop-tasks/5e09757502716412c0b026d7",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"successMessage\": \"Document được xóa thành công\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "event-not-found",
+            "description": "<p>Document không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Document not found",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./routes/v1/cropTask.router.js",
+    "groupTitle": "CropTasks"
+  },
+  {
+    "type": "get",
+    "url": "/api/crop-tasks",
+    "title": "Get all task of crop",
+    "name": "GetAllCropTasks",
+    "group": "CropTasks",
+    "examples": [
+      {
+        "title": "Get all task of crop with paginating:",
+        "content": "curl -i http://localhost:3001/api/crop-tasks?cooperativeId=HTXNN&pageNumber=1&nPerPage=20",
+        "type": "curl"
+      },
+      {
+        "title": "Get all task of crop with paginating and specific diary:",
+        "content": "curl -i http://localhost:3001/api/crop-tasks?cooperativeId=HTXNN&diaryId=5e75c38c40019a40362038ff&pageNumber=1&nPerPage=20",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pageNumber",
+            "description": "<p>Số thứ tự trang cần lấy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "nPerPage",
+            "description": "<p>Số lượng sản phẩm trên mỗi trang</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên công việc, tác vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Ngày bắt đầu công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Ngày kết thúc công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của mùa vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công việc (một trong bốn loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "stage",
+            "description": "<p>Giai đoạn phát triển</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 Ok\n\n{\n     \"totalCropTasks\": 24,\n     \"totalPages\": 1,\n     \"data\": [\n          {\n             \"startDate\": \"2/6/2020\",\n             \"endDate\": \"5/6/2020\",\n             \"name\": \"Bón phân thúc đợt 2\",\n             \"type\": \"Bón phân\",\n             \"stage\": \"Giai đoạn tăng trưởng\",\n             \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n             \"note\": \"\",\n             \"cooperativeId\": \"HTXUMH3\",\n             \"_id\": \"5dedd6f7a4b891348bc0a83d\"\n          },\n          {\n             \"startDate\": \"25/6/2020\",\n             \"endDate\": \"25/6/2020\",\n             \"name\": \"Khi lúa đứng cái\",\n             \"type\": \"CV khác\",\n             \"stage\": \"Giai đoạn tăng trưởng\",\n             \"note\": \"\"\n             \"cooperativeId\": \"HTXUMH3\",\n             \"_id\": \"5dedd6f7a4b891348bc0a83d\"\n          }\n          ...\n     ]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Page-not-found",
+            "description": "<p>Trang không tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Page not found:",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Trang tìm kiếm không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./routes/v1/cropTask.router.js",
+    "groupTitle": "CropTasks"
+  },
+  {
+    "type": "get",
+    "url": "/api/crop-tasks/:id",
+    "title": "Get task of crop",
+    "name": "GetCropTask",
+    "group": "CropTasks",
+    "examples": [
+      {
+        "title": "Get crop task:",
+        "content": "curl -i http://localhost:3001/api/crop-tasks/5e7713bc31d4d0077efd283d",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên công việc, tác vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Ngày bắt đầu công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Ngày kết thúc công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của mùa vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công việc (một trong bốn loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "stage",
+            "description": "<p>Giai đoạn phát triển</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n   {\n     \"startDate\": \"2/6/2020\",\n     \"endDate\": \"5/6/2020\",\n     \"name\": \"Bón phân thúc đợt 2\",\n     \"type\": \"Bón phân\",\n     \"stage\": \"Giai đoạn tăng trưởng\",\n     \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n     \"note\": \"\",\n     \"cooperativeId\": \"HTXUMH3\",\n     \"_id\": \"5dedd6f7a4b891348bc0a83d\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Page-not-found",
+            "description": "<p>Trang không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Invalid-id",
+            "description": "<p>Id không hợp lệ</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Invalid id:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"errorMessage\": \"Id không hợp lệ\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Document not found:",
+          "content": "HTTP/1.1 404 Not found\n{\n  \"errorMessage\": \"Document không tồn tại\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./routes/v1/cropTask.router.js",
+    "groupTitle": "CropTasks"
+  },
+  {
+    "type": "patch",
+    "url": "/api/crop-tasks",
+    "title": "Update task of crop",
+    "name": "UpdateCropTask",
+    "group": "CropTasks",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:3001/api/crop-tasks/5dedd6f7a4b891348bc0a83d",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Token.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên công việc, tác vụ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Ngày bắt đầu công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Ngày kết thúc công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của mùa vụ</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công việc (một trong bốn loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "stage",
+            "description": "<p>Giai đoạn phát triển</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"startDate\": \"01/01/2020\",\n  \"endDate\": \"12/12/2020\",\n  \"name\": \"Updated\",\n  \"type\": \"Bón phân\",\n  \"stage\": \"Updated\",\n  \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n  \"note\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên công việc, tác vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "startDate",
+            "description": "<p>Ngày bắt đầu công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>Ngày kết thúc công việc (ISO 8601 format)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "diaryId",
+            "description": "<p>Id nhật ký chung của mùa vụ</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Loại công việc (một trong bốn loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "stage",
+            "description": "<p>Giai đoạn phát triển</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "note",
+            "description": "<p>Ghi chú</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Id của document vừa tạo thành công</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n   {\n     \"startDate\": \"01/01/2020\",\n     \"endDate\": \"12/12/2020\",\n     \"name\": \"Updated\",\n     \"type\": \"Bón phân\",\n     \"stage\": \"Updated\",\n     \"diaryId\": \"5dedd6f7a4b891348bc0a83d\"\n     \"note\": \"\",\n     \"cooperativeId\": \"HTXUMH3\",\n     \"_id\": \"5dedd6f7a4b891348bc0a83d\"\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "name-is-required",
+            "description": "<p>Trường tên công việc, tác vụ là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "diaryId-is-required",
+            "description": "<p>Id nhật ký chung của mùa vụ là bắt buộc</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "diaryId-doesnt-exist",
+            "description": "<p>Id nhật ký chung của mùa vụ không tồn tại</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "type-is-invalid",
+            "description": "<p>Loại công việc phải là một trong 4 loại &quot;Bón Phân&quot;, &quot;Phun Thuốc&quot;, &quot;Nước&quot;, &quot;CV khác&quot;</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "startDate-must-be-ISO-8601-format",
+            "description": "<p>Ngày bắt đầu công việc phải thuộc định dạng ISO 8601</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "endDate-must-be-ISO-8601-format",
+            "description": "<p>Ngày kết thúc công việc phải thuộc định dạng ISO 8601</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "cooperative does not exist:",
+          "content": "HTTP/1.1 400 Bad request\n{\n  \"errorMessage\": \"Loại công việc phải là một trong bốn loại \"Bón Phân\", \"Phun Thuốc\", \"Nước\", \"CV khác\".; Ngày kết thúc công việc không hợp lệ.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "./routes/v1/cropTask.router.js",
+    "groupTitle": "CropTasks"
+  },
+  {
+    "type": "post",
     "url": "/api/diaries",
     "title": "Tạo nhật ký mới.",
     "version": "1.0.0",
@@ -5648,8 +6523,8 @@
     "url": "/goods-issues",
     "title": "Create new goods issue",
     "name": "CreateGoodsIssue",
-    "group": "GoodIssues",
     "version": "1.0.0",
+    "group": "GoodIssues",
     "sampleRequest": [
       {
         "url": "http://localhost:3001/api/goods-issues"
@@ -5965,13 +6840,13 @@
     "url": "/goods-issues/:id",
     "title": "Delete goods issue by id",
     "name": "DeleteGoodsIssueById",
+    "version": "1.0.0",
     "group": "GoodIssues",
     "sampleRequest": [
       {
         "url": "http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7"
       }
     ],
-    "version": "1.0.0",
     "header": {
       "fields": {
         "Header": [
@@ -6037,8 +6912,8 @@
     "url": "/goods-issues",
     "title": "Get all goods issue",
     "name": "GetAllGoodsIssue",
-    "group": "GoodIssues",
     "version": "1.0.0",
+    "group": "GoodIssues",
     "sampleRequest": [
       {
         "url": "http://localhost:3001/api/goods-issues"
@@ -6206,13 +7081,13 @@
     "url": "/goods-issues/:id",
     "title": "Get goods issue by id",
     "name": "GetGoodsIssueById",
+    "version": "1.0.0",
+    "group": "GoodIssues",
     "sampleRequest": [
       {
         "url": "http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7"
       }
     ],
-    "version": "1.0.0",
-    "group": "GoodIssues",
     "header": {
       "fields": {
         "Header": [
@@ -6352,8 +7227,8 @@
     "url": "/goods-issues",
     "title": "Update goods issue by id",
     "name": "UpdateGoodsIssueById",
-    "group": "GoodIssues",
     "version": "1.0.0",
+    "group": "GoodIssues",
     "sampleRequest": [
       {
         "url": "http://localhost:3001/api/goods-issues/5e09757502716412c0b026d7"

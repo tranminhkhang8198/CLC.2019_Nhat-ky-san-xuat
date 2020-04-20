@@ -103,7 +103,7 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
 });
 
 exports.update = catchAsync(async (req, res, next) => {
-  const { models } = req.app;
+  const { db, models } = req.app;
   const id = req.params.id;
 
   const cropTask = await models.cropTask.findOne(id);
@@ -124,6 +124,12 @@ exports.update = catchAsync(async (req, res, next) => {
     "stage",
     "diaryId"
   );
+
+  const cooperativeId = await getCooperativeId(db, filterBody.diaryId);
+
+  if (cropTask.cooperativeId != cooperativeId) {
+    filterBody.cooperativeId = cooperativeId;
+  }
 
   const updatedCropTask = await models.cropTask.update(id, filterBody);
 
