@@ -1,0 +1,7 @@
+version: '3'
+services:
+    mobile-api:
+        container_name: HTX-MOBILE-API-TEST
+        command: npm test
+        environment: 
+            - NODE_ENV=test

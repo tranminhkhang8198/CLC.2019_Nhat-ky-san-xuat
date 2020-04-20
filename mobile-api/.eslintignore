@@ -1,0 +1,9 @@
+/docs/**
+
+/build/**
+
+/src/api/tests
+
+/src/migration
+
+/src/config/logger.js
