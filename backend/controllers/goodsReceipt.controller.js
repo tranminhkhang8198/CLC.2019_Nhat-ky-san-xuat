@@ -1,5 +1,7 @@
 const httpStatus = require('http-status');
 const _ = require('lodash');
+const { ObjectID } = require('mongodb');
+const { formatTimeIn8601 } = require('../helpers/date');
 module.exports.insertOne = async (req, res, next) => {
     try {
         // sys consts
@@ -9,25 +11,30 @@ module.exports.insertOne = async (req, res, next) => {
         } = req.app.models
 
         const {
-            cooperativeID,
+            productId,
+            productType,
             transDate,
-            product_id,
-            product_type,
-            detail,
             inDate,
-            notes,
+            patchCode,
+            quantity,
             price,
+            expireDate,
+            cooperativeId,
         } = req.body;
 
         const receiptObj = {
-            cooperativeID: cooperativeID,
-            transDate: transDate,
-            product_id: product_id,
-            product_type: product_type,
-            price: price,
-            detail: detail,
-            inDate: inDate,
-            notes: notes ? notes : '',
+            productId: productId ? new ObjectID(productId.trim()) : null,
+            productType: productType ? productType.trim() : '',
+            transDate: transDate ? formatTimeIn8601(parseInt(transDate)) : new Date().toISOString(),
+            inDate: inDate ? formatTimeIn8601(parseInt(inDate)) : new Date().toISOString(),
+            patchCode: patchCode ? patchCode.trim() : '',
+            quantity: quantity ? parseInt(quantity) : 0,
+            price: price ? parseFloat(price) : 0.0,
+            expireDate: expireDate ? formatTimeIn8601(parseInt(expireDate)) : new Date().toISOString(),
+            cooperativeId: cooperativeId ? new ObjectID(cooperativeId.trim()) : null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+
         };
 
         const result = await goodsReceipt.insertOne(receiptObj);
@@ -39,22 +46,28 @@ module.exports.insertOne = async (req, res, next) => {
                 }).end();
         }
 
-        let productQuantity = 0;
-        for (let i in receiptObj.detail) {
-            productQuantity += parseInt(receiptObj.detail[i].quantity)
-        }
+        // let productQuantity = 0;
+        // for (let i in receiptObj.detail) {
+        //     productQuantity += parseInt(receiptObj.detail[i].quantity)
+        // }
         const warehouseObj = {
-            productId: receiptObj.product_id,
-            productType: receiptObj.product_type,
-            quantity: productQuantity,
-            price: receiptObj.price,
-            cooperativeId: receiptObj.cooperativeId,
+            productId: result.productId,
+            productType: result.productType,
+            goodsReceiptInfo:
+                [
+                    {
+                        id: result._id,
+                        quantity: result.quantity,
+                    },
+                ],
+            cooperativeId: result.cooperativeId,
         }
-        console.log(warehouseObj);
-        const isExist = await warehouse.isExist(warehouseObj.productId, warehouseObj.cooperativeID);
+        // const updateWarehouse = await warehouse.pushReceipt(warehouseObj);
+        // console.log(warehouseObj);
+        const isExist = await warehouse.isExist(warehouseObj.productId, warehouseObj.cooperativeId);
         if (!isExist || isExist === null || isExist === undefined) {
 
-            const wareInsertOne = await warehouse.create(warehouseObj);
+            const wareInsertOne = await warehouse.insertOne(warehouseObj);
             if (!wareInsertOne) {
                 return res.status(httpStatus.INTERNAL_SERVER_ERROR)
                     .json({
@@ -64,9 +77,7 @@ module.exports.insertOne = async (req, res, next) => {
             }
         }
         else {
-            console.log('is', warehouseObj)
-
-            const updateWarehouse = await warehouse.updateQuantity(warehouseObj.productId, warehouseObj.cooperativeID, parseInt(warehouseObj.quantity));
+            const updateWarehouse = await warehouse.pushReceipt(warehouseObj.productId, warehouseObj.goodsReceiptInfo[0]);
             if (!updateWarehouse) {
                 return res.status(httpStatus.INTERNAL_SERVER_ERROR)
                     .json({

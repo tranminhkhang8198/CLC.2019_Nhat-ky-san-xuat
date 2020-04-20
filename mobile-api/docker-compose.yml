@@ -1,0 +1,20 @@
+version: '3'
+services:
+    mobile-api:
+        env_file: ./.env
+        environment: 
+            - DB_URL=mongodb://mongo:27017/knowllipop-api
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes: 
+            - ".:/usr/src/app"
+        ports: 
+            - '3003:3003'
+        depends_on: 
+            - mongo
+    mongo:
+        container_name: HTX-MOBILE-DB
+        image: mongo:4.2
+        ports: 
+            - '27019:27017'

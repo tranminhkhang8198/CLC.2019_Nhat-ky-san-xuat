@@ -1,0 +1,7 @@
+version: '3'
+services:
+    mobile-api:
+        container_name: HTX-MOBILE-API-DEV
+        command: npm run dev
+        environment: 
+            - NODE_ENV=development

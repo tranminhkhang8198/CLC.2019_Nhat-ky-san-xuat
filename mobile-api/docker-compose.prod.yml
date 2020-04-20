@@ -1,0 +1,7 @@
+version: '3'
+services:
+    mobile-api:
+        container_name: HTX-MOBILE-API-PROD
+        command: npm start
+        environment: 
+            - NODE_ENV=prod

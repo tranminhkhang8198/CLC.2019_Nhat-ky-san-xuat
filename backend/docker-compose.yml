@@ -1,24 +1,23 @@
-version: '3'
+version: "3"
 services:
-    htx-api:
-        env_file:
-            - ./.env
-        container_name: HTX-API
-        volumes: 
-            - ".:/usr/src/app"
-        environment: 
-            - DB_URI=mongodb://mongo:27017/farm
-        restart: always
+    htx_api:
         build:
             context: .
             dockerfile: ./Dockerfile
-        ports: 
-            - '3001:3001'
-        depends_on: 
+        env_file:
+            - ./.env
+        environment:
+            - DB_URI=mongodb://mongo:27017/farm
+        volumes: 
+            - ".:/usr/src/htx/app"
+        restart: always
+        ports:
+            - "3001:3001"
+        links:
             - mongo
-        command: npm start
     mongo:
-        container_name: HTX-DB
+        restart: always
+        container_name: htx_db
         image: mongo:4.2
-        ports: 
-            - '27017:27017'
+        ports:
+            - "27017:27017"

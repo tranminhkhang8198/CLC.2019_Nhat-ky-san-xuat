@@ -9,7 +9,7 @@ const getProductCollection = (db, type) => {
   const collections = {
     "Thuốc bvtv": "plantProtectionProduct",
     "Phân bón": "fertilizer",
-    Giống: "cultivars"
+    Giống: "cultivars",
   };
 
   const Collection = db.collection(collections[type]);
@@ -77,7 +77,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
 
   if (paginatedWarehouses.length == 0) {
     return res.status(404).json({
-      errorMessage: "Trang tìm kiếm không tồn tại"
+      errorMessage: "Trang tìm kiếm không tồn tại",
     });
   }
 
@@ -93,12 +93,23 @@ exports.getAll = catchAsync(async (req, res, next) => {
     } else {
       warehouse.productName = product.name;
     }
+
+    let quantity = 0;
+    if (warehouse.goodsReceiptInfo.length > 0) {
+      for (let goodReceipt of warehouse.goodsReceiptInfo) {
+        quantity += goodReceipt.quantity;
+      }
+
+      warehouse.quantity = quantity;
+
+      delete warehouse.goodsReceiptInfo;
+    }
   }
 
   return res.status(200).json({
     totalWarehouseDocs: warehouses.length,
     totalPages,
-    data: paginatedWarehouses
+    data: paginatedWarehouses,
   });
 });
 
@@ -110,7 +121,7 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
   if (!warehouse) {
     return res.status(404).json({
-      errorMessage: `Không tìm thấy document.`
+      errorMessage: `Không tìm thấy document.`,
     });
   }
 
@@ -118,7 +129,7 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
   if (!product) {
     return res.status(404).json({
-      errorMessage: "Không tìm thấy thông tin sản phẩm."
+      errorMessage: "Không tìm thấy thông tin sản phẩm.",
     });
   }
 
@@ -135,7 +146,7 @@ exports.update = catchAsync(async (req, res, next) => {
 
   if (!warehouse) {
     return res.status(404).json({
-      errorMessage: `Không tìm thấy document.`
+      errorMessage: `Không tìm thấy document.`,
     });
   }
 
@@ -163,13 +174,13 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
 
   if (!warehouse) {
     return res.status(404).json({
-      errorMessage: "Không tìm thấy document."
+      errorMessage: "Không tìm thấy document.",
     });
   }
 
   await models.warehouse.delete(id);
 
   return res.status(200).json({
-    successMessage: "Document được xoá thành công."
+    successMessage: "Document được xoá thành công.",
   });
 });

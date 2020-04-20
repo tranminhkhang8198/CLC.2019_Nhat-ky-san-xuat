@@ -1,0 +1,7 @@
+version: "3"
+services:
+    htx_api:
+        container_name: htx_api_prod
+        environment:
+            - NODE_ENV=production
+        command: node index.js

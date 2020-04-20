@@ -6,26 +6,26 @@ class GoodsIssue {
     this.app = app;
 
     this.model = {
-      receiverId: null,
       productId: null,
       productType: null,
-      quantity: null,
       issuedDate: null,
       receivedDate: null,
-      goodsReceiptId: null,
+      receivedStatus: null,
+      receiverId: null,
+      goodsReceiptInfo: null,
       cooperativeId: null,
-      note: null
+      note: null,
     };
   }
 
   initWithObject(obj) {
-    this.model.receiverId = _.get(obj, "receiverId", null);
     this.model.productId = _.get(obj, "productId", null);
     this.model.productType = _.get(obj, "productType", null);
-    this.model.quantity = _.get(obj, "quantity", null);
     this.model.issuedDate = _.get(obj, "issuedDate", null);
     this.model.receivedDate = _.get(obj, "receivedDate", null);
-    this.model.goodsReceiptId = _.get(obj, "goodsReceiptId", null);
+    this.model.receivedStatus = _.get(obj, "receivedStatus", false);
+    this.model.receiverId = _.get(obj, "receiverId", null);
+    this.model.goodsReceiptInfo = _.get(obj, "goodsReceiptInfo", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
     this.model.note = _.get(obj, "note", null);
   }

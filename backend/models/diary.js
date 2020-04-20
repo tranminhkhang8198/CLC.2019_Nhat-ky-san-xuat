@@ -12,7 +12,8 @@
 
 const _ = require('lodash');
 const { ObjectID } = require('mongodb')
-
+const APIError = require('../utils/APIError')
+const httpStatus = require('http-status');
 class Diary {
     constructor(app) {
         this.app = app;
@@ -144,6 +145,29 @@ class Diary {
             }
         })
     }
+    async getByID(_id, projection = {}) {
+        try {
+            const result = await this.app.db.collection('diaries').findOne(
+                {
+                    _id: _id,
+                },
+                {
+                    projection: projection,
+                }
+            );
+
+            return result ? result : null;
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on getting diary information',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            })
+        }
+    }
 
     create(params, cb = () => { }) {
 
@@ -173,6 +197,21 @@ class Diary {
                 })
             }
         })
+    }
+    async insertOne(obj) {
+        try {
+            const result = await this.app.db.collection('diaries').insertOne(obj);
+            return result.ops[0] ? result.ops[0] : null;
+
+        } catch (error) {
+            throw new APIError({
+                message: 'Failed on creating diary',
+                status: httpStatus.INTERNAL_SERVER_ERROR,
+                stack: error.stack,
+                isPublic: false,
+                errors: error.errors,
+            });
+        }
     }
 
 
