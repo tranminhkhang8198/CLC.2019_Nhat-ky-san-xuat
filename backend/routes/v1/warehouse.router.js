@@ -3,14 +3,14 @@ const Router = require("express").Router();
 const {
   validateBeforeCreate,
   validateParamId,
-  validateBeforeUpdate
+  validateBeforeUpdate,
 } = require("../../validations/warehouse.validation");
 const {
   create,
   getAll,
   getOne,
   update,
-  deleteOne
+  deleteOne,
 } = require("../../controllers/warehouse.controller");
 
 /**
@@ -105,13 +105,12 @@ Router.route("/").post(validateBeforeCreate, create);
  * @apiParam {Number} pageNumber Số thứ tự trang cần lấy
  * @apiParam {Number} nPerPage Số lượng document kho thuốc trên mỗi trang
  *
- * @apiSuccess {Number} totalSubcontractors Tổng số document kho thuốc trong kho
+ * @apiSuccess {Number} totalWarehouseDocs Tổng số document kho thuốc trong kho
  * @apiSuccess {Number} totalPages Tổng số lượng trang
- * @apiSuccess {ObjectId} productName Tên của sản phẩm
+ * @apiSuccess {ObjectId} productId Id của sản phẩm
+ * @apiSuccess {String} productName Tên của sản phẩm
  * @apiSuccess {String} productType Loại của sản phẩm (một trong 3 loại "Thuốc bvtv", "Phân bón", "Giống")
- * @apiSuccess {Number} quantity Số lượng
- * @apiSuccess {ObjectId} goodsReceiptId Id hóa đơn nhập
- * @apiSuccess {String} patchCode Số lô
+ * @apiSuccess {ObjectId} cooperativeId Id của hợp tác xã
  * @apiSuccess {ObjectId} _id Id của document
  *
  * @apiSuccessExample Success-Response:
@@ -121,22 +120,15 @@ Router.route("/").post(validateBeforeCreate, create);
  *      "totalWarehouses": 2,
  *      "totalPages": 1,
  *      "data": [
- *          {
- *              "_id": "5e106cf39a2d430f0fda2557",
- *              "productName": "Ababetter 1.8EC",
- *              "productType": "Thuốc bvtv",
- *              "quantity": "100",
- *              "goodsReceiptId": "1234567890",
- *              "patchCode": "1234567890"
- *          },
- *          {
- *              "_id": "5e1075d453adfe17f413a130",
- *              "productName": "Abagold 55EC",
- *              "productType": "Thuốc bvtv",
- *              "quantity": "9",
- *              "goodsReceiptId": "5e10733dca9ed4129c70715c",
- *              "patchCode": "1234567890"
- *          }
+ *         {
+ *           "_id": "5e9d706732edb33e22870d4b",
+ *           "productId": "5e7c1c3f751c4639f9d9f6c9",
+ *           "productType": "Thuốc bvtv",
+ *           "cooperativeId": "5e0f14ad3d3b5928ff43fdff",
+ *           "productName": "Agbamex 3.6EC",
+ *           "quantity": 340
+ *         }
+ *         ...
  *      ]
  *  }
  */

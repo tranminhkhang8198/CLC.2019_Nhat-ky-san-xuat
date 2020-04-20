@@ -1,5 +1,7 @@
 const _ = require("lodash");
 const mongodb = require("mongodb");
+const APIError = require('../utils/APIError');
+const httpStatus = require('http-status');
 
 class Warehouse {
   constructor(app) {
@@ -8,22 +10,35 @@ class Warehouse {
     this.model = {
       productId: null,
       productType: null,
-      price: null,
-      quantity: null,
-      patchCode: null,
-      goodReceiptId: null,
-      cooperativeId: null
+      goodReceiptInfo: null,
+      cooperativeId: null,
     };
   }
 
   initWithObject(obj) {
     this.model.productId = _.get(obj, "productId", null);
     this.model.productType = _.get(obj, "productType", null);
-    this.model.price = _.get(obj, "price", null);
-    this.model.quantity = _.get(obj, "quantity", null);
-    this.model.patchCode = _.get(obj, "patchCode", null);
-    this.model.goodReceiptId = _.get(obj, "goodReceiptId", null);
+    this.model.goodReceiptInfo = _.get(obj, "goodReceiptInfo", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
+  }
+
+  async insertOne(obj) {
+    try {
+      const result = await this.app.db.collection('warehouses').insertOne(
+        obj,
+      );
+
+      return result ? result.ops : null;
+
+    } catch (error) {
+      throw new APIError({
+        message: 'Failed on inserting warehouse document',
+        status: httpStatus.INTERNAL_SERVER_ERROR,
+        stack: error.stack,
+        isPublic: false,
+        errors: error.errors,
+      })
+    }
   }
 
   async create(obj) {
@@ -32,6 +47,8 @@ class Warehouse {
 
       // init model
       this.initWithObject(obj);
+
+      delete this.model._id;
 
       const warehouse = await Warehouse.insertOne(this.model);
 
@@ -58,7 +75,7 @@ class Warehouse {
       const Warehouse = this.app.db.collection("warehouses");
 
       const warehouse = await Warehouse.findOne({
-        _id: mongodb.ObjectID(id)
+        _id: mongodb.ObjectID(id),
       });
 
       return warehouse;
@@ -99,7 +116,7 @@ class Warehouse {
 
       const warehouse = await Warehouse.findOne({
         productId,
-        cooperativeId
+        cooperativeId,
       });
 
       return warehouse;
@@ -119,6 +136,34 @@ class Warehouse {
       return warehouse;
     } catch (err) {
       console.log(err);
+    }
+  }
+  async pushReceipt(productId, goodsReceiptInfo) {
+    try {
+      const result = await this.app.db.collection('warehouses').findOneAndUpdate(
+        {
+          productId: productId,
+        },
+        {
+          $push: {
+            goodsReceiptInfo: goodsReceiptInfo,
+          }
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      console.log(result);
+      return result;
+
+    } catch (error) {
+      throw new APIError({
+        message: 'Failed on pushing receipt to warehouse',
+        status: httpStatus.INTERNAL_SERVER_ERROR,
+        stack: error.stack,
+        isPublic: false,
+        errors: error.errors,
+      })
     }
   }
 }

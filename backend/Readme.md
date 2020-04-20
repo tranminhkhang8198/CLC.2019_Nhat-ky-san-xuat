@@ -49,16 +49,39 @@ Start node server
 ```
 npm start
 ```
+
 ### Generate api docs
+
 ## Generate api docs and open
+
 ```
 npm run docs
 ```
+
 ## Generate api docs
+
 ```
 npm run apidoc
 ```
+
 ## Open api doc
+
 ```
 npm run postdoc
+```
+
+## Migrate database
+
+- #### Import data for testing
+
+```bash
+cd backend
+npm run migrate_up
+```
+
+- #### Remove all testing data
+
+```bash
+cd backend
+npm run migrate_down
 ```

@@ -6,7 +6,7 @@ const path = require('path');
 const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
 
-const { routers } = require('../router')
+const { routers } = require('../routes/router')
 
 // const favicon = require('serve-favicon');
 

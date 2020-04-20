@@ -25,7 +25,7 @@ const getUserInfo = async (db, id) => {
   }
 };
 
-const uploadImage = file => {
+const uploadImage = (file) => {
   const filename = "image-" + Date.now();
   const extname = file.name.split(".").slice(-1)[0];
   const img = filename + "." + extname;
@@ -38,7 +38,7 @@ const uploadImage = file => {
   return imgUrl;
 };
 
-const removeImage = imgUrl => {
+const removeImage = (imgUrl) => {
   try {
     const filename = imgUrl.split("/").slice(-1)[0];
 
@@ -107,7 +107,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
 
   if (paginatedBorrowedTools.length == 0) {
     return res.status(404).json({
-      errorMessage: "Trang tìm kiếm không tồn tại"
+      errorMessage: "Trang tìm kiếm không tồn tại",
     });
   }
 
@@ -136,7 +136,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
   return res.status(200).json({
     totalBorrowedTools: borrowedTools.length,
     totalPages,
-    data: paginatedBorrowedTools
+    data: paginatedBorrowedTools,
   });
 });
 
@@ -148,7 +148,7 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
   if (!borrowedTool) {
     return res.status(404).json({
-      errorMessage: `Không tìm thấy document.`
+      errorMessage: `Không tìm thấy document.`,
     });
   }
 
@@ -165,11 +165,11 @@ exports.update = catchAsync(async (req, res, next) => {
   const { models } = req.app;
   const id = req.params.id;
 
-  const borrowedTool = models.borrowedTool.findOne(id);
+  const borrowedTool = await models.borrowedTool.findOne(id);
 
   if (!borrowedTool) {
     return res.status(404).json({
-      errorMessage: `Không tìm thấy document.`
+      errorMessage: `Không tìm thấy document.`,
     });
   }
 
@@ -215,14 +215,14 @@ exports.deleteOne = catchAsync(async (req, res, next) => {
 
   if (!borrowedTool) {
     return res.status(404).json({
-      errorMessage: "Không tìm thấy document."
+      errorMessage: "Không tìm thấy document.",
     });
   }
 
   await models.borrowedTool.delete(id);
 
   return res.status(200).json({
-    successMessage: "Document được xoá thành công."
+    successMessage: "Document được xoá thành công.",
   });
 });
 
