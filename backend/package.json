@@ -21,7 +21,9 @@
     "apidoc": "apidoc -i ./routes ./router.js -e \"node_modules/\" -o docs/apidoc/",
     "postdoc": "open-cli docs//apidoc/index.html",
     "migrate_up": "./node_modules/.bin/migrate-mongo up --file ./config/migrate-mongo-config.js",
-    "migrate_down": "./node_modules/.bin/migrate-mongo down --file ./config/migrate-mongo-config.js"
+    "migrate_down": "./node_modules/.bin/migrate-mongo down --file ./config/migrate-mongo-config.js",
+    "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "docker:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d"
   },
   "author": "vanloiidk@gmail.com",
   "license": "ISC",

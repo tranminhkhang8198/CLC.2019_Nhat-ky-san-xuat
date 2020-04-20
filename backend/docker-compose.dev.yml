@@ -1,0 +1,7 @@
+version: "3"
+services:
+    htx_api:
+        container_name: htx_api_dev
+        environment:
+            - NODE_ENV=development
+        command: nodemon index.js
