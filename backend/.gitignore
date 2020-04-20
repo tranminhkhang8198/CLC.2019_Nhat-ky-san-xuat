@@ -1,5 +1,5 @@
 # documents
-docs/apidoc
+./docs/apidoc/
 
 # node modules
 node_modules
