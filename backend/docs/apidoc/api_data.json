@@ -6667,13 +6667,6 @@
           },
           {
             "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "quantity",
-            "description": "<p>Số lượng</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Date",
             "optional": false,
             "field": "issuedDate",
@@ -6681,17 +6674,24 @@
           },
           {
             "group": "Parameter",
-            "type": "Date",
+            "type": "Object",
             "optional": false,
-            "field": "receivedDate",
-            "description": "<p>Ngày nhận sản phẩm (ISO 8601 format)</p>"
+            "field": "goodsReceiptInfo",
+            "description": "<p>Thông tin hoá đơn nhập của sản phẩm được xuất kho</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Object",
             "optional": false,
-            "field": "goodsReceiptId",
+            "field": "goodsReceiptInfo.id",
             "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "goodsReceiptInfo.quanity",
+            "description": "<p>Số lượng xuất kho tương ứng với hoá đơn nhập</p>"
           },
           {
             "group": "Parameter",
@@ -6712,7 +6712,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"quantity\": \"2\",\n    \"issuedDate\": \"2019-12-12\",\n    \"receivedDate\": \"2019-12-12\",\n    \"productType\": \"Thuốc bvtv\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\"\n}",
+          "content": "\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"issuedDate\": \"2019-12-12\",\n    \"productType\": \"Thuốc bvtv\",\n    \"goodsReceiptId\": [\n        {\n            \"id\": \"5e9d706632edb33e22870d4a\",\n            \"quantity\": 19\n        },\n        {\n            \"id\": \"5e9d706e32edb33e22870d4c\",\n            \"quantity\": 37\n        }\n    ],\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\"\n}",
           "type": "json"
         }
       ]
@@ -6743,13 +6743,6 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "quantity",
-            "description": "<p>Số lượng</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "Date",
             "optional": false,
             "field": "issuedDate",
@@ -6757,17 +6750,24 @@
           },
           {
             "group": "Success 200",
-            "type": "Date",
+            "type": "Object",
             "optional": false,
-            "field": "receivedDate",
-            "description": "<p>Ngày nhận thuốc (ISO 8601 format)</p>"
+            "field": "goodsReceiptInfo",
+            "description": "<p>Thông tin hoá đơn nhập của sản phẩm được xuất kho</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Object",
             "optional": false,
-            "field": "goodsReceiptId",
+            "field": "goodsReceiptInfo.id",
             "description": "<p>Id hóa đơn nhập</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "goodsReceiptInfo.quanity",
+            "description": "<p>Số lượng xuất kho tương ứng với hoá đơn nhập</p>"
           },
           {
             "group": "Success 200",
@@ -6795,7 +6795,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"productType\": \"Thuốc bvtv\",\n    \"quantity\": \"2\",\n    \"issuedDate\": \"2019-12-12\",\n    \"receivedDate\": \"2019-12-12\",\n    \"goodsReceiptId\": \"21893453567654\",\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\",\n    \"created_at\": \"2019-12-30T02:35:32.306Z\",\n    \"_id\": \"5e0962f326b7b011c825789c\"\n}",
+          "content": "HTTP/1.1 201 Created\n\n{\n    \"receiverId\": \"5e058f0f089c052958b35c59\",\n    \"productId\": \"5e057818a1c1111795e29b76\",\n    \"issuedDate\": \"2019-12-12\",\n    \"productType\": \"Thuốc bvtv\",\n    \"goodsReceiptId\": [\n        {\n            \"id\": \"5e9d706632edb33e22870d4a\",\n            \"quantity\": 19\n        },\n        {\n            \"id\": \"5e9d706e32edb33e22870d4c\",\n            \"quantity\": 37\n        }\n    ],\n    \"cooperativeId\": \"HTXNN\",\n    \"note\": \"Just note something you want\",\n    \"_id\": \"5e0962f326b7b011c825789c\"\n}",
           "type": "json"
         }
       ]
@@ -12561,7 +12561,7 @@
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "totalSubcontractors",
+            "field": "totalWarehouseDocs",
             "description": "<p>Tổng số document kho thuốc trong kho</p>"
           },
           {
@@ -12575,6 +12575,13 @@
             "group": "Success 200",
             "type": "ObjectId",
             "optional": false,
+            "field": "productId",
+            "description": "<p>Id của sản phẩm</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
             "field": "productName",
             "description": "<p>Tên của sản phẩm</p>"
           },
@@ -12587,24 +12594,10 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "quantity",
-            "description": "<p>Số lượng</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "ObjectId",
             "optional": false,
-            "field": "goodsReceiptId",
-            "description": "<p>Id hóa đơn nhập</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "patchCode",
-            "description": "<p>Số lô</p>"
+            "field": "cooperativeId",
+            "description": "<p>Id của hợp tác xã</p>"
           },
           {
             "group": "Success 200",
@@ -12618,7 +12611,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n\n{\n    \"totalWarehouses\": 2,\n    \"totalPages\": 1,\n    \"data\": [\n        {\n            \"_id\": \"5e106cf39a2d430f0fda2557\",\n            \"productName\": \"Ababetter 1.8EC\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"100\",\n            \"goodsReceiptId\": \"1234567890\",\n            \"patchCode\": \"1234567890\"\n        },\n        {\n            \"_id\": \"5e1075d453adfe17f413a130\",\n            \"productName\": \"Abagold 55EC\",\n            \"productType\": \"Thuốc bvtv\",\n            \"quantity\": \"9\",\n            \"goodsReceiptId\": \"5e10733dca9ed4129c70715c\",\n            \"patchCode\": \"1234567890\"\n        }\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n\n{\n    \"totalWarehouses\": 2,\n    \"totalPages\": 1,\n    \"data\": [\n       {\n         \"_id\": \"5e9d706732edb33e22870d4b\",\n         \"productId\": \"5e7c1c3f751c4639f9d9f6c9\",\n         \"productType\": \"Thuốc bvtv\",\n         \"cooperativeId\": \"5e0f14ad3d3b5928ff43fdff\",\n         \"productName\": \"Agbamex 3.6EC\",\n         \"quantity\": 340\n       }\n       ...\n    ]\n}",
           "type": "json"
         }
       ]
