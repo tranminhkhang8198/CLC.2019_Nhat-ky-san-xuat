@@ -1,33 +1,5 @@
 define({ "api": [
   {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./docs/apidoc/main.js",
-    "group": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
-    "groupTitle": "/Users/minhkhang/Projects/CLC.2019_Nhat-ky-san-xuat/backend/docs/apidoc/main.js",
-    "name": ""
-  },
-  {
     "type": "post",
     "url": "/api/auth/register",
     "title": "User request creating new account",
@@ -4820,6 +4792,34 @@ define({ "api": [
     ],
     "filename": "./farm/router.js",
     "groupTitle": "Diaries"
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./docs/apidoc/main.js",
+    "group": "E:\\Workspace\\CLC.2019_Nhat-ky-san-xuat\\backend\\docs\\apidoc\\main.js",
+    "groupTitle": "E:\\Workspace\\CLC.2019_Nhat-ky-san-xuat\\backend\\docs\\apidoc\\main.js",
+    "name": ""
   },
   {
     "type": "get",
@@ -12767,6 +12767,252 @@ define({ "api": [
     ],
     "filename": "./farm/router.js",
     "groupTitle": "Resource"
+  },
+  {
+    "type": "post",
+    "url": "/v1/api/rice",
+    "title": "Create data",
+    "version": "1.0.0",
+    "name": "Create",
+    "group": "Rice",
+    "parameter": {
+      "fields": {
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Mã giống lúa</p>"
+          },
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên giống lúa</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "   HTTP/1.1 200 OK\n{\n    \"message\": \"Thành công tạo mới giống lúa\",\n    \"code\": 200,\n    \"riceseed\": {\n        \"_id\": \"5e8ea84a0cda071a10ba949f\",\n        \"name\": \"lua 2\",\n        \"code\": \"6\"\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "409 Conflict": [
+          {
+            "group": "409 Conflict",
+            "optional": false,
+            "field": "DuplicatedNameOrCode",
+            "description": "<p>Giá trị <code>name</code> hoặc <code>code</code> đã tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "409-DuplicatedNameOrCode:",
+          "content": "HTTP/1.1 409 Conflict\n    {\n      message: 'Tên giống lúa đã tồn tại',\n      code: 409,\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/rice.route.js",
+    "groupTitle": "Rice"
+  },
+  {
+    "type": "delete",
+    "url": "/v1/api/rice/:id",
+    "title": "Delete by Id",
+    "version": "1.0.0",
+    "name": "DeleteById",
+    "group": "Rice",
+    "parameter": {
+      "fields": {
+        "Request Path": [
+          {
+            "group": "Request Path",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Id dữ liệu trong cơ sở dữ liệu.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "HTTP/1.1 204 No content",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/rice.route.js",
+    "groupTitle": "Rice"
+  },
+  {
+    "type": "get",
+    "url": "/v1/api/rice/:id",
+    "title": "Get data by id",
+    "version": "1.0.0",
+    "name": "GetById",
+    "group": "Rice",
+    "parameter": {
+      "fields": {
+        "Request Path": [
+          {
+            "group": "Request Path",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Mã giống lúa</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "   HTTP/1.1 200 OK\n{\n    \"message\": \"OK\",\n    \"code\": 200,\n    \"pageNumber\": 1,\n    \"pageSize\": 3,\n    \"totalRiceseed\": 3,\n    \"totalPage\": 1,\n    \"riceseed\": [\n        {\n            \"_id\": \"5e8ea84a0cda071a10ba949f\",\n            \"name\": \"lua 2\",\n            \"code\": \"6\"\n        },\n        {\n            \"_id\": \"5e8ea8440cda071a10ba949e\",\n            \"name\": \"lua 3\",\n            \"code\": \"5\"\n        },\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/rice.route.js",
+    "groupTitle": "Rice"
+  },
+  {
+    "type": "get",
+    "url": "/v1/api/rice/:id",
+    "title": "Get data by id",
+    "version": "1.0.0",
+    "name": "GetById",
+    "group": "Rice",
+    "parameter": {
+      "fields": {
+        "Request Path": [
+          {
+            "group": "Request Path",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Mã giống lúa</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "   HTTP/1.1 200 OK\n{\n    \"message\": \"OK\",\n    \"code\": 200,\n    \"riceseed\": {\n        \"_id\": \"5e8ea84a0cda071a10ba949f\",\n        \"name\": \"lua 2\",\n        \"code\": \"6\"\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "404 Not Found": [
+          {
+            "group": "404 Not Found",
+            "optional": false,
+            "field": "NoDataFound",
+            "description": "<p>Không tìm thấy dữ liêu jtương ứng với <code>id</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "404-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      message: 'Không tìm thấy giống lúa trong cơ sở dữ liệu',\n      code: 404,\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/rice.route.js",
+    "groupTitle": "Rice"
+  },
+  {
+    "type": "put",
+    "url": "/v1/api/rice/:code",
+    "title": "Replace or create rice seed",
+    "version": "1.0.0",
+    "name": "ReplaceDataByCode",
+    "group": "Rice",
+    "parameter": {
+      "fields": {
+        "Request Path": [
+          {
+            "group": "Request Path",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Mã giống lúa</p>"
+          }
+        ],
+        "Request Body": [
+          {
+            "group": "Request Body",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Tên mới của giống lúa ứng với mã code</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "   HTTP/1.1 200 OK\n{\n    \"message\": \"Cập nhật thông tin giống lúa thành công\",\n    \"code\": 200,\n    \"riceseed\": {\n        \"_id\": \"5e8ea84a0cda071a10ba949f\",\n        \"name\": \"lua 2\",\n        \"code\": \"6\"\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "404 Not Found": [
+          {
+            "group": "404 Not Found",
+            "optional": false,
+            "field": "NoCodeMatch",
+            "description": "<p>Không tìm thấy dữ liêu jtương ứng với <code>code</code></p>"
+          }
+        ],
+        "409 Conflict": [
+          {
+            "group": "409 Conflict",
+            "optional": false,
+            "field": "DuplicatedName",
+            "description": "<p>Giá trị <code>name</code> đã tồn tại</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "404-Response:",
+          "content": "HTTP/1.1 404 Not Found\n    {\n      message: 'Không tìm thấy giống lúa trong cơ sở dữ liệu',\n      code: 404,\n    }",
+          "type": "json"
+        },
+        {
+          "title": "409-Response:",
+          "content": "HTTP/1.1 409 Conflict\n    {\n      message: 'Tên giống lúa đã tồn tại',\n      code: 409,\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./routes/v1/rice.route.js",
+    "groupTitle": "Rice"
   },
   {
     "type": "post",
