@@ -1,33 +1,5 @@
 [
   {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./docs/apidoc/main.js",
-    "group": "/Users/minhkhang/apidoc/docs/apidoc/main.js",
-    "groupTitle": "/Users/minhkhang/apidoc/docs/apidoc/main.js",
-    "name": ""
-  },
-  {
     "type": "post",
     "url": "/api/auth/register",
     "title": "User request creating new account",
@@ -197,7 +169,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Auth"
   },
   {
@@ -427,7 +399,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/borrowedTool.router.js",
+    "filename": "routes/v1/borrowedTool.router.js",
     "groupTitle": "BorrowedTools"
   },
   {
@@ -501,7 +473,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/borrowedTool.router.js",
+    "filename": "routes/v1/borrowedTool.router.js",
     "groupTitle": "BorrowedTools"
   },
   {
@@ -656,7 +628,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/borrowedTool.router.js",
+    "filename": "routes/v1/borrowedTool.router.js",
     "groupTitle": "BorrowedTools"
   },
   {
@@ -797,7 +769,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/borrowedTool.router.js",
+    "filename": "routes/v1/borrowedTool.router.js",
     "groupTitle": "BorrowedTools"
   },
   {
@@ -964,7 +936,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/borrowedTool.router.js",
+    "filename": "routes/v1/borrowedTool.router.js",
     "groupTitle": "BorrowedTools"
   },
   {
@@ -1207,7 +1179,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/borrowedTool.router.js",
+    "filename": "routes/v1/borrowedTool.router.js",
     "groupTitle": "BorrowedTools"
   },
   {
@@ -1409,7 +1381,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -1598,7 +1570,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -1807,7 +1779,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -1879,7 +1851,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -2202,7 +2174,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -2503,7 +2475,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -2726,7 +2698,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Cooperatives"
   },
   {
@@ -2941,7 +2913,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/cropTask.router.js",
+    "filename": "routes/v1/cropTask.router.js",
     "groupTitle": "CropTasks"
   },
   {
@@ -3030,7 +3002,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/cropTask.router.js",
+    "filename": "routes/v1/cropTask.router.js",
     "groupTitle": "CropTasks"
   },
   {
@@ -3104,7 +3076,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/cropTask.router.js",
+    "filename": "routes/v1/cropTask.router.js",
     "groupTitle": "CropTasks"
   },
   {
@@ -3252,7 +3224,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/cropTask.router.js",
+    "filename": "routes/v1/cropTask.router.js",
     "groupTitle": "CropTasks"
   },
   {
@@ -3386,7 +3358,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/cropTask.router.js",
+    "filename": "routes/v1/cropTask.router.js",
     "groupTitle": "CropTasks"
   },
   {
@@ -3601,73 +3573,219 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/cropTask.router.js",
+    "filename": "routes/v1/cropTask.router.js",
     "groupTitle": "CropTasks"
   },
   {
-    "type": "post",
-    "url": "/api/diaries",
-    "title": "Tạo nhật ký mới.",
+    "type": "get",
+    "url": "/v1/api/diary/:diaryID",
+    "title": "Get Diary info by ID",
     "version": "1.0.0",
-    "name": "PostDiaries",
-    "group": "Diaries",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/v1/api/diary/5e9d5e59c1722f38c42088ea"
+      }
+    ],
+    "name": "GetDiaryByID",
+    "group": "Diary",
     "header": {
       "fields": {
         "Header": [
           {
             "group": "Header",
-            "type": "String",
             "optional": false,
             "field": "authorization",
-            "description": "<p>Token.</p>"
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Code",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Response code</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Response message</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Objec",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Result object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.plantID",
+            "description": "<p>Plant unique ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "field": "result.fields",
+            "description": "<p>List of fields</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.HTX_id",
+            "description": "<p>Cooperatives ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "result.begin",
+            "description": "<p>Farming begin date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "result.end",
+            "description": "<p>Farming end date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "\"farming\"",
+              "\"finished\""
+            ],
+            "optional": false,
+            "field": "result.status",
+            "description": "<p>Diary status</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.name",
+            "description": "<p>Diary name</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.description",
+            "description": "<p>Diary description</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result._id",
+            "description": "<p>Diary ID</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 200,\n    \"message\": \"Get diary infomation successfully\",\n    \"result\": {\n        \"plantID\": \"5dedc93ebad8e32650d38789\",\n        \"fields\": [\n            \"5dedc932bad8e32650d38788\",\n            \"5dedc93ebad8e32650d38789\"\n        ],\n        \"HTX_id\": \"5dedc93ebad8e32650d38789\",\n        \"begin\": \"1970-01-01T08:32:50+08:00\",\n        \"end\": \"1970-01-01T08:32:50+08:00\",\n        \"status\": \"active\",\n        \"name\": \"Vu he thu\",\n        \"description\": \"\",\n        \"_id\": \"5e9d5bc8f643a83766c86cff\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "routes/v1/diary.router.js",
+    "groupTitle": "Diary"
+  },
+  {
+    "type": "post",
+    "url": "/v1/api/diary/",
+    "title": "Create new diary",
+    "version": "1.0.0",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/v1/api/diary"
+      }
+    ],
+    "name": "postNewDiary",
+    "group": "Diary",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "optional": false,
+            "field": "authorization",
+            "description": ""
           }
         ]
       }
     },
     "parameter": {
       "fields": {
-        "body": [
+        "Parameter": [
           {
-            "group": "body",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "plant_id",
-            "description": "<p>ID của loại cây trồng.</p>"
+            "field": "plantID",
+            "description": "<p>Plant unique ID</p>"
           },
           {
-            "group": "body",
+            "group": "Parameter",
             "type": "String[]",
             "optional": false,
-            "field": "area_id",
-            "description": "<p>ID của khu vực gieo trồng.</p>"
+            "field": "fields",
+            "description": "<p>List of fields</p>"
           },
           {
-            "group": "body",
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "HTX_id",
-            "description": "<p>ID của HTX.</p>"
+            "description": "<p>Cooperatives ID</p>"
           },
           {
-            "group": "body",
-            "type": "Number",
+            "group": "Parameter",
+            "type": "Date",
             "optional": false,
             "field": "begin",
-            "description": "<p>Thời gian bắt đầu mùa vụ (dạng ISO-8601)).</p>"
+            "description": "<p>Farming begin date</p>"
           },
           {
-            "group": "body",
-            "type": "Number",
+            "group": "Parameter",
+            "type": "Date",
             "optional": false,
             "field": "end",
-            "description": "<p>Thời gian kết thúc mùa vụ (dạng ISO-8601)).</p>"
+            "description": "<p>Farming end date</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Diary name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Diary description</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Request-Example:",
-          "content": "{\n\t\"plant_id\":\"dfejdkfsdh\",\n\t\"fields\":[\"5dedc932bad8e32650d38788\",\"5dedc93ebad8e32650d38789\"],\n\t\"HTX_id\":\"UM\",\n\t\"begin\":\"2019-12-13 04:14\",\n\t\"end\":\"2019-12-15 17:20\"\n}",
+          "title": "Request-Example",
+          "content": "HTTP/1.1\n    {\n        \"plantID\": \"5dedc93ebad8e32650d38789\",\n        \"fields\": [\n            \"5dedc932bad8e32650d38788\",\n            \"5dedc93ebad8e32650d38789\"\n        ],\n        \"HTX_id\": \"5dedc93ebad8e32650d38789\",\n        \"begin\": \"1970-01-01T08:32:50+08:00\",\n        \"end\": \"1970-01-01T08:32:50+08:00\",\n        \"status\": \"active\",\n        \"name\": \"Vu he thu\",\n        \"description\": \"\",\n    }",
           "type": "json"
         }
       ]
@@ -3677,124 +3795,104 @@
         "Success 200": [
           {
             "group": "Success 200",
+            "type": "Code",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Response code</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "plant_id",
-            "description": "<p>ID của loại cây trồng.</p>"
+            "field": "message",
+            "description": "<p>Response message</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Objec",
+            "optional": false,
+            "field": "result",
+            "description": "<p>Result object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.plantID",
+            "description": "<p>Plant unique ID</p>"
           },
           {
             "group": "Success 200",
             "type": "String[]",
             "optional": false,
-            "field": "area_id",
-            "description": "<p>ID của khu vực gieo trồng.</p>"
+            "field": "result.fields",
+            "description": "<p>List of fields</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "HTX_id",
-            "description": "<p>ID của HTX.</p>"
+            "field": "result.HTX_id",
+            "description": "<p>Cooperatives ID</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Date",
             "optional": false,
-            "field": "begin",
-            "description": "<p>Thời gian bắt đầu mùa vụ (dạng ISO-8601)).</p>"
+            "field": "result.begin",
+            "description": "<p>Farming begin date</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "Date",
             "optional": false,
-            "field": "end",
-            "description": "<p>Thời gian kết thúc mùa vụ (dạng ISO-8601)).</p>"
+            "field": "result.end",
+            "description": "<p>Farming end date</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "allowedValues": [
+              "\"farming\"",
+              "\"finished\""
+            ],
+            "optional": false,
+            "field": "result.status",
+            "description": "<p>Diary status</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "_id",
-            "description": "<p>ID của nhật ký trong CSDL.</p>"
+            "field": "result.name",
+            "description": "<p>Diary name</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result.description",
+            "description": "<p>Diary description</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result._id",
+            "description": "<p>Diary ID</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"plant_id\": \"dfejdkfsdh\",\n    \"fields\": [\n        \"5dedc932bad8e32650d38788\",\n        \"5dedc93ebad8e32650d38789\"\n    ],\n    \"HTX_id\": \"UM\",\n    \"begin\": \"2019-12-12T21:14:00.000Z\",\n    \"end\": \"2019-12-15T10:20:00.000Z\",\n    \"_id\": \"5df32bce13f76d331d8fa1ec\"\n}",
+          "title": "Success-Response",
+          "content": "HTTP/1.1 201 CREATED\n{\n    \"code\": 201,\n    \"message\": \"Create new diary successfully\",\n    \"result\": {\n        \"plantID\": \"5dedc93ebad8e32650d38789\",\n        \"fields\": [\n            \"5dedc932bad8e32650d38788\",\n            \"5dedc93ebad8e32650d38789\"\n        ],\n        \"HTX_id\": \"5dedc93ebad8e32650d38789\",\n        \"begin\": \"1970-01-01T08:32:50+08:00\",\n        \"end\": \"1970-01-01T08:32:50+08:00\",\n        \"status\": \"active\",\n        \"name\": \"Vu he thu\",\n        \"description\": \"\",\n        \"_id\": \"5e9d5bc8f643a83766c86cff\"\n    }\n}",
           "type": "json"
         }
       ]
     },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Permission-denied",
-            "description": "<p>Token không hợp lệ.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Loai-cay-trong-khong-hop-le",
-            "description": "<p>Loại cây trồng không hợp lệ.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Khu-vuc-khong-hop-le",
-            "description": "<p>Khu vực không hợp lệ.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "HTX-khong-hop-le",
-            "description": "<p>Hợp tác xã không hợp lệ.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Ngay-bat-dau-khong-hop-le",
-            "description": "<p>Ngày bắt đầu không hợp lệ</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Ngay-ket-thuc-khong-hop-le",
-            "description": "<p>Ngày kết thúc không hợp lệ</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Thua-",
-            "description": "<p>{}-Dang-duoc-su-dung thửa đang được sử dụng</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "Loi-trong-qua-trinh-them-vao-CSDL",
-            "description": "<p>Lỗi trong qúa trình thêm vào CSDL</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n    {\n      \"error\": \"Lỗi trong qúa trình thêm vào CSDL\"\n    }",
-          "type": "json"
-        }
-      ]
-    },
-    "permission": [
-      {
-        "name": "manager-admin"
-      }
-    ],
-    "filename": "./router.js",
-    "groupTitle": "Diaries"
+    "filename": "routes/v1/diary.router.js",
+    "groupTitle": "Diary"
   },
   {
     "type": "get",
@@ -3962,7 +4060,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Employee"
   },
   {
@@ -4162,7 +4260,7 @@
         ]
       }
     },
-    "filename": "./routes/v1/employee.router.js",
+    "filename": "routes/v1/employee.router.js",
     "groupTitle": "Employee"
   },
   {
@@ -4404,7 +4502,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Employee"
   },
   {
@@ -4641,7 +4739,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Employee"
   },
   {
@@ -4772,7 +4870,7 @@
         }
       ]
     },
-    "filename": "./routes/v1/employee.router.js",
+    "filename": "routes/v1/employee.router.js",
     "groupTitle": "Employee"
   },
   {
@@ -4823,7 +4921,7 @@
         }
       ]
     },
-    "filename": "./routes/v1/employee.router.js",
+    "filename": "routes/v1/employee.router.js",
     "groupTitle": "Employee"
   },
   {
@@ -5088,7 +5186,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/event.router.js",
+    "filename": "routes/v1/event.router.js",
     "groupTitle": "Events"
   },
   {
@@ -5162,7 +5260,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/event.router.js",
+    "filename": "routes/v1/event.router.js",
     "groupTitle": "Events"
   },
   {
@@ -5338,7 +5436,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/event.router.js",
+    "filename": "routes/v1/event.router.js",
     "groupTitle": "Events"
   },
   {
@@ -5500,7 +5598,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/event.router.js",
+    "filename": "routes/v1/event.router.js",
     "groupTitle": "Events"
   },
   {
@@ -5765,7 +5863,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/event.router.js",
+    "filename": "routes/v1/event.router.js",
     "groupTitle": "Events"
   },
   {
@@ -5980,7 +6078,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Fertilizers"
   },
   {
@@ -6054,7 +6152,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Fertilizers"
   },
   {
@@ -6197,7 +6295,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Fertilizers"
   },
   {
@@ -6318,7 +6416,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Fertilizers"
   },
   {
@@ -6515,7 +6613,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Fertilizers"
   },
   {
@@ -6832,7 +6930,7 @@
         "name": "none"
       }
     ],
-    "filename": "./routes/v1/goodsIssue.router.js",
+    "filename": "routes/v1/goodsIssue.router.js",
     "groupTitle": "GoodIssues"
   },
   {
@@ -6904,7 +7002,7 @@
         "name": "none"
       }
     ],
-    "filename": "./routes/v1/goodsIssue.router.js",
+    "filename": "routes/v1/goodsIssue.router.js",
     "groupTitle": "GoodIssues"
   },
   {
@@ -7073,7 +7171,7 @@
         "name": "none"
       }
     ],
-    "filename": "./routes/v1/goodsIssue.router.js",
+    "filename": "routes/v1/goodsIssue.router.js",
     "groupTitle": "GoodIssues"
   },
   {
@@ -7219,7 +7317,7 @@
         "name": "none"
       }
     ],
-    "filename": "./routes/v1/goodsIssue.router.js",
+    "filename": "routes/v1/goodsIssue.router.js",
     "groupTitle": "GoodIssues"
   },
   {
@@ -7522,7 +7620,7 @@
         "name": "none"
       }
     ],
-    "filename": "./routes/v1/goodsIssue.router.js",
+    "filename": "routes/v1/goodsIssue.router.js",
     "groupTitle": "GoodIssues"
   },
   {
@@ -7613,7 +7711,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "GoodsReceipts"
   },
   {
@@ -7711,7 +7809,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "GoodsReceipts"
   },
   {
@@ -7816,7 +7914,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "GoodsReceipts"
   },
   {
@@ -7851,21 +7949,21 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "cooperative_id",
+            "field": "cooperativeId",
             "description": "<p>ID của hợp tác xã</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "product_id",
+            "field": "productId",
             "description": "<p>ID của sản phẩm</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "product_type",
+            "field": "productType",
             "description": "<p>Loại sản phẩm được nhập</p>"
           },
           {
@@ -7877,37 +7975,30 @@
           },
           {
             "group": "Parameter",
-            "type": "Object[]",
-            "optional": false,
-            "field": "Detail",
-            "description": "<p>Danh sách các lô đã mua</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Detail.patchCode",
+            "field": "patchCode",
             "description": "<p>Max số lô</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Detail.quantity",
+            "field": "quantity",
             "description": "<p>Số lượng</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Detail.price",
+            "field": "price",
             "description": "<p>Đơn giá</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Detail.expireDate",
+            "field": "expireDate",
             "description": "<p>Ngày hết hạn</p>"
           },
           {
@@ -7916,20 +8007,13 @@
             "optional": false,
             "field": "inDate",
             "description": "<p>Ngày nhập kho</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "notes",
-            "description": "<p>Ghi chú</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"cooperative_id\": \"sdfsdfsdf\",\n    \"transDate\": \"2019-10-12T07:40:00.000Z\",\n    \"product_id\": \"sdfsd\",\n    \"product_type\": \"plant\",\n    \"price\": 900000,\n    \"detail\": [\n        {\n            \"quantity\": \"200\",\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        },\n        {\n            \"quantity\": \"200\",\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        }\n    ],\n    \"inDate\": \"1970-01-01T00:00:00.000Z\",\n    \"notes\": \"dsfdfsd sfdf\"\n}",
+          "content": "{\n    \"cooperativeId\": \"sdfsdfsdf\",\n    \"transDate\": \"2019-10-12T07:40:00.000Z\",\n    \"productId\": \"sdfsd\",\n    \"productType\": \"plant\",\n    \"price\": 900000,\n    \"quantity\": \"200\",\n    \"patchCode\": null,\n    \"expireDate\": \"2019-12-30 15:30\"\n    \"inDate\": \"1970-01-01T00:00:00.000Z\",\n}",
           "type": "json"
         }
       ]
@@ -7941,21 +8025,21 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "cooperative_id",
+            "field": "cooperativeId",
             "description": "<p>ID của hợp tác xã</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "product_id",
+            "field": "productId",
             "description": "<p>ID của sản phẩm</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "product_type",
+            "field": "productType",
             "description": "<p>Loại sản phẩm được nhập</p>"
           },
           {
@@ -7967,37 +8051,30 @@
           },
           {
             "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "Detail",
-            "description": "<p>Danh sách các lô đã mua</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "Detail.patchCode",
+            "field": "patchCode",
             "description": "<p>Max số lô</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "Detail.quantity",
+            "field": "quantity",
             "description": "<p>Số lượng</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "Detail.price",
+            "field": "price",
             "description": "<p>Đơn giá</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "Detail.expireDate",
+            "field": "expireDate",
             "description": "<p>Ngày hết hạn</p>"
           },
           {
@@ -8006,13 +8083,6 @@
             "optional": false,
             "field": "inDate",
             "description": "<p>Ngày nhập kho</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "notes",
-            "description": "<p>Ghi chú</p>"
           },
           {
             "group": "Success 200",
@@ -8033,7 +8103,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"cooperative_id\": \"sdfsdfsdf\",\n    \"transDate\": \"2019-10-12T07:40:00.000Z\",\n    \"product_id\": \"sdfsd\",\n    \"product_type\": \"plant\",\n    \"price\": 900000,\n    \"detail\": [\n        {\n            \"quantity\": 200,\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        },\n        {\n            \"quantity\": 200,\n            \"patchCode\": null,\n            \"expireDate\": \"2019-12-30 15:30\"\n        }\n    ],\n    \"inDate\": \"1970-01-01T00:00:00.000Z\",\n    \"notes\": \"dsfdfsd sfdf\",\n    \"createdDate\": \"2020-01-03T10:17:17.697Z\",\n    \"_id\": \"5e0f14ad3d3b5928ff43fdff\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"cooperativeId\": \"sdfsdfsdf\",\n    \"transDate\": \"2019-10-12T07:40:00.000Z\",\n    \"productId\": \"sdfsd\",\n    \"productType\": \"plant\",\n    \"price\": 900000,\n    \"quantity\": 200,\n    \"patchCode\": null,\n    \"expireDate\": \"2019-12-30 15:30\"\n    \"inDate\": \"1970-01-01T00:00:00.000Z\",\n    \"notes\": \"dsfdfsd sfdf\",\n    \"createdDate\": \"2020-01-03T10:17:17.697Z\",\n    \"_id\": \"5e0f14ad3d3b5928ff43fdff\"\n}",
           "type": "json"
         }
       ]
@@ -8047,7 +8117,7 @@
         }
       ]
     },
-    "filename": "./routes/v1/goodsReceipt.route.js",
+    "filename": "routes/v1/goodsReceipt.route.js",
     "groupTitle": "GoodsReceipts"
   },
   {
@@ -8415,7 +8485,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "PlantProtectionProducts"
   },
   {
@@ -8489,7 +8559,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "PlantProtectionProducts"
   },
   {
@@ -8711,7 +8781,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "PlantProtectionProducts"
   },
   {
@@ -8922,7 +8992,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "PlantProtectionProducts"
   },
   {
@@ -9245,7 +9315,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "PlantProtectionProducts"
   },
   {
@@ -9413,7 +9483,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Resource"
   },
   {
@@ -9532,7 +9602,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Role"
   },
   {
@@ -9735,7 +9805,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Subcontractors"
   },
   {
@@ -9883,7 +9953,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Subcontractors"
   },
   {
@@ -10008,7 +10078,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Subcontractors"
   },
   {
@@ -10080,7 +10150,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Subcontractors"
   },
   {
@@ -10266,8 +10336,100 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Subcontractors"
+  },
+  {
+    "type": "post",
+    "url": "/refresh_token",
+    "title": "Xac thuc lay access token moi",
+    "version": "1.0.1",
+    "name": "PostToken",
+    "group": "Token",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3001/api/refresh_token"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "refreshToken",
+            "description": "<p>refresh token cua nguoi dung</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"refreshToken\": \"fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "refreshToken",
+            "description": "<p>refresh token moi</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>access token moi</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"refreshToken\": \"fsjdoiwukmvwafojf9wa4rrjirhfelkfsarwjijgerhggjh8reighoighergelrgsfhg\",\n    \"token\": \"sdfhwefdfbnbvsuerisbcfuhriufbwfjbskfheiurhkjfiurtherwgfkjsdhfsg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Verify-JWT-token-failed",
+            "description": "<p>refresh token khong hop le</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "Request-without-refresh-token",
+            "description": "<p>Khong tim thay refresh token tren request</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"error\": \"Request without refresh token\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "filename": "routes/router.js",
+    "groupTitle": "Token"
   },
   {
     "type": "post",
@@ -10358,7 +10520,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "Token"
   },
   {
@@ -10563,7 +10725,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/tool.router.js",
+    "filename": "routes/v1/tool.router.js",
     "groupTitle": "Tools"
   },
   {
@@ -10637,7 +10799,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/tool.router.js",
+    "filename": "routes/v1/tool.router.js",
     "groupTitle": "Tools"
   },
   {
@@ -10792,7 +10954,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/tool.router.js",
+    "filename": "routes/v1/tool.router.js",
     "groupTitle": "Tools"
   },
   {
@@ -10919,7 +11081,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/tool.router.js",
+    "filename": "routes/v1/tool.router.js",
     "groupTitle": "Tools"
   },
   {
@@ -11118,7 +11280,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/tool.router.js",
+    "filename": "routes/v1/tool.router.js",
     "groupTitle": "Tools"
   },
   {
@@ -11267,7 +11429,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "User"
   },
   {
@@ -11495,7 +11657,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "User"
   },
   {
@@ -11651,7 +11813,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "User"
   },
   {
@@ -11756,7 +11918,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "User"
   },
   {
@@ -11888,7 +12050,7 @@
         "name": "manager-admin"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "User"
   },
   {
@@ -12050,7 +12212,7 @@
         "name": "none"
       }
     ],
-    "filename": "./router.js",
+    "filename": "routes/router.js",
     "groupTitle": "User"
   },
   {
@@ -12286,7 +12448,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/warehouse.router.js",
+    "filename": "routes/v1/warehouse.router.js",
     "groupTitle": "Warehouses"
   },
   {
@@ -12344,7 +12506,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/warehouse.router.js",
+    "filename": "routes/v1/warehouse.router.js",
     "groupTitle": "Warehouses",
     "name": "DeleteApiWarehousesId"
   },
@@ -12462,7 +12624,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./routes/v1/warehouse.router.js",
+    "filename": "routes/v1/warehouse.router.js",
     "groupTitle": "Warehouses"
   },
   {
@@ -12545,7 +12707,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./routes/v1/warehouse.router.js",
+    "filename": "routes/v1/warehouse.router.js",
     "groupTitle": "Warehouses"
   },
   {
@@ -12751,7 +12913,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "./routes/v1/warehouse.router.js",
+    "filename": "routes/v1/warehouse.router.js",
     "groupTitle": "Warehouses"
   }
 ]

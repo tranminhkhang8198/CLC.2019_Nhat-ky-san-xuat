@@ -79,7 +79,6 @@ class Token {
      */
     async verify(token) {
         try {
-            console.log(token);
             const payload = await jwt.verify(token, config.secret);
             return payload;
 
@@ -131,7 +130,6 @@ class Token {
                                 return cb({ errorMessage: "user is not found" }, null)
                             } else {
 
-                                console.log(user);
                                 // Create new token from user
                                 let signOptions = {
                                     expiresIn: config.tokenLife

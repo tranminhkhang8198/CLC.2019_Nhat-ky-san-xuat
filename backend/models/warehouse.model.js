@@ -1,5 +1,7 @@
 const _ = require("lodash");
 const mongodb = require("mongodb");
+const APIError = require('../utils/APIError');
+const httpStatus = require('http-status');
 
 class Warehouse {
   constructor(app) {
@@ -18,6 +20,25 @@ class Warehouse {
     this.model.productType = _.get(obj, "productType", null);
     this.model.goodReceiptInfo = _.get(obj, "goodReceiptInfo", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
+  }
+
+  async insertOne(obj) {
+    try {
+      const result = await this.app.db.collection('warehouses').insertOne(
+        obj,
+      );
+
+      return result ? result.ops : null;
+
+    } catch (error) {
+      throw new APIError({
+        message: 'Failed on inserting warehouse document',
+        status: httpStatus.INTERNAL_SERVER_ERROR,
+        stack: error.stack,
+        isPublic: false,
+        errors: error.errors,
+      })
+    }
   }
 
   async create(obj) {
@@ -115,6 +136,34 @@ class Warehouse {
       return warehouse;
     } catch (err) {
       console.log(err);
+    }
+  }
+  async pushReceipt(productId, goodsReceiptInfo) {
+    try {
+      const result = await this.app.db.collection('warehouses').findOneAndUpdate(
+        {
+          productId: productId,
+        },
+        {
+          $push: {
+            goodsReceiptInfo: goodsReceiptInfo,
+          }
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      console.log(result);
+      return result;
+
+    } catch (error) {
+      throw new APIError({
+        message: 'Failed on pushing receipt to warehouse',
+        status: httpStatus.INTERNAL_SERVER_ERROR,
+        stack: error.stack,
+        isPublic: false,
+        errors: error.errors,
+      })
     }
   }
 }
