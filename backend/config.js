@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV == "development") {
+if (process.env.NODE_ENV == "production") {
   exports.mongodbUrl =
     process.env.MONGO_URL ||
     "mongodb+srv://htx:vrC115qG5M0DV8VH@cluster0-4e7a2.mongodb.net/farm";

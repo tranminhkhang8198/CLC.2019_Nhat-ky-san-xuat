@@ -1,7 +1,7 @@
 const _ = require("lodash");
-const upload = require("./models/multer");
-const { verifyUserV2 } = require("./middlewares/verifyUser");
-const { errorHandle, responseHandle } = require("./middlewares/lastHandler");
+const upload = require("../models/multer");
+const { verifyUserV2 } = require("../middlewares/verifyUser");
+const { errorHandle, responseHandle } = require("../middlewares/lastHandler");
 const httpStatus = require('http-status');
 const { ObjectID } = require('mongodb');
 exports.routers = app => {
@@ -236,7 +236,8 @@ exports.routers = app => {
     const body = req.body;
 
     app.models.user.login(body, (err, result) => {
-      return err ? errorHandle(res, err, 504) : responseHandle(res, result);
+      console.log(err);
+      return err ? errorHandle(res, err, 404) : responseHandle(res, result);
     });
   });
 
@@ -321,7 +322,8 @@ exports.routers = app => {
   });
 
   app.delete("/api/token", (req, res, next) => {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.query;
+
     if (refreshToken) {
       app.db.models.token.remove(refreshToken, (err, result) => {
         if (err) {
@@ -366,6 +368,39 @@ exports.routers = app => {
    *     }
    * @apiPermission none
    */
+  /**
+ * @api {post} /refresh_token Xac thuc lay access token moi
+ * @apiVersion 1.0.1
+ * @apiName PostToken
+ * @apiGroup Token
+ * @apiSampleRequest http://localhost:3001/api/refresh_token
+ *
+ *
+ * @apiParam {String} refreshToken refresh token cua nguoi dung
+ * @apiParamExample {json} Request-Example:
+ *     {
+ *       "refreshToken": "fsfsdhfwrtwjf34yrwi4rjfweoifhefjwpuwfseo.oiehskdlwhwsfoiwdfsj3ljdnvkjdbfwoh"
+ *     }
+ *
+ * @apiSuccess {String} refreshToken refresh token moi
+ * @apiSuccess {String} token access token moi
+ *
+ * @apiSuccessExample Success-Response:
+ *  HTTP/1.1 200 OK
+ *  {
+ *      "refreshToken": "fsjdoiwukmvwafojf9wa4rrjirhfelkfsarwjijgerhggjh8reighoighergelrgsfhg",
+ *      "token": "sdfhwefdfbnbvsuerisbcfuhriufbwfjbskfheiurhkjfiurtherwgfkjsdhfsg"
+ *  }
+ *
+ * @apiError Verify-JWT-token-failed refresh token khong hop le
+ * @apiError Request-without-refresh-token Khong tim thay refresh token tren request
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Request without refresh token"
+ *     }
+ * @apiPermission none
+ */
   app.post("/api/refresh_token", (req, res, next) => {
     const { refreshToken } = req.body;
     if (refreshToken) {
@@ -1338,89 +1373,6 @@ exports.routers = app => {
       return err
         ? errorHandle(res, err.errorMessage, err.errorCode)
         : responseHandle(res, result);
-    });
-  });
-
-  /**
-     * @api {post} /api/diaries Tạo nhật ký mới.
-     * @apiVersion 1.0.0
-     * @apiName PostDiaries
-     * @apiGroup Diaries
-     *
-     *
-     * @apiHeader {String} authorization Token.
-     * 
-     * @apiParam (body) {String} plant_id ID của loại cây trồng.
-     * @apiParam (body) {String[]} area_id ID của khu vực gieo trồng.
-     * @apiParam (body) {String} HTX_id ID của HTX.
-     * @apiParam (body) {Number} begin Thời gian bắt đầu mùa vụ (dạng ISO-8601)).
-     * @apiParam (body) {Number} end Thời gian kết thúc mùa vụ (dạng ISO-8601)).  
-     * 
-     * @apiParamExample {json} Request-Example:
-     *  {
-     *  	"plant_id":"dfejdkfsdh",
-     *  	"fields":["5dedc932bad8e32650d38788","5dedc93ebad8e32650d38789"],
-     *  	"HTX_id":"UM",
-     *  	"begin":"2019-12-13 04:14",
-     *  	"end":"2019-12-15 17:20"
-     *  }
-
-     *
-     * @apiSuccess {String} plant_id ID của loại cây trồng.
-     * @apiSuccess {String[]} area_id ID của khu vực gieo trồng.
-     * @apiSuccess {String} HTX_id ID của HTX.
-     * @apiSuccess {Number} begin Thời gian bắt đầu mùa vụ (dạng ISO-8601)).
-     * @apiSuccess {Number} end Thời gian kết thúc mùa vụ (dạng ISO-8601)). 
-     * @apiSuccess {String} _id ID của nhật ký trong CSDL.
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "plant_id": "dfejdkfsdh",
-     *      "fields": [
-     *          "5dedc932bad8e32650d38788",
-     *          "5dedc93ebad8e32650d38789"
-     *      ],
-     *      "HTX_id": "UM",
-     *      "begin": "2019-12-12T21:14:00.000Z",
-     *      "end": "2019-12-15T10:20:00.000Z",
-     *      "_id": "5df32bce13f76d331d8fa1ec"
-     *  }
-     * @apiError Permission-denied Token không hợp lệ.
-     * @apiError Loai-cay-trong-khong-hop-le Loại cây trồng không hợp lệ.
-     * @apiError Khu-vuc-khong-hop-le Khu vực không hợp lệ.
-     * @apiError HTX-khong-hop-le Hợp tác xã không hợp lệ.
-     * @apiError Ngay-bat-dau-khong-hop-le Ngày bắt đầu không hợp lệ
-     * @apiError Ngay-ket-thuc-khong-hop-le Ngày kết thúc không hợp lệ
-     * @apiError Khu-vuc-khong-hop-le Khu vực không hợp lệ
-     * @apiError Thua-{}-Dang-duoc-su-dung thửa đang được sử dụng
-     * @apiError Loi-trong-qua-trinh-them-vao-CSDL Lỗi trong qúa trình thêm vào CSDL
-     *
-     * 
-     * @apiErrorExample Error-Response:
-     * HTTP/1.1 404 Not Found
-     *     {
-     *       "error": "Lỗi trong qúa trình thêm vào CSDL"
-     *     }
-     * 
-     * @apiPermission manager-admin
-     */
-  app.post("/api/diaries", (req, res, next) => {
-    const body = req.body;
-    app.models.diary.create(body, (err, result) => {
-      return err
-        ? errorHandle(res, err.errorMessage, 400)
-        : responseHandle(res, result);
-    });
-  });
-
-  app.get("/api/diaries", (req, res, next) => {
-    const body = req.body;
-    app.models.diary.search(body, (err, result) => {
-      if (err) {
-        return errorHandle(res, err.errorMessage, 404);
-      } else {
-        return responseHandle(res, result);
-      }
     });
   });
 
