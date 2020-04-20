@@ -18,6 +18,7 @@ const Warehouse = require("./warehouse.model");
 const Test = require("./test.model");
 const BorrowedTool = require("./borrowedTool.model");
 const Event = require("./event.model");
+const CropTask = require("./cropTask.model");
 
 class Model {
   constructor(app) {
@@ -42,6 +43,7 @@ class Model {
     this.test = new Test(app);
     this.borrowedTool = new BorrowedTool(app);
     this.event = new Event(app);
+    this.cropTask = new CropTask(app);
   }
 }
 module.exports = Model;

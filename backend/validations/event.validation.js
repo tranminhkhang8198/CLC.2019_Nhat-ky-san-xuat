@@ -106,6 +106,7 @@ const joiEventSchema = {
       "date.format": "Ngày tập huấn không hợp lệ.",
     }),
     note: Joi.string(),
+    cooperativeId: Joi.string(),
   }),
 };
 

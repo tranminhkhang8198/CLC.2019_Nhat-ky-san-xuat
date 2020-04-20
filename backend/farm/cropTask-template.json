@@ -1,0 +1,146 @@
+[
+  {
+    "startDate": "1/5/2020",
+    "endDate": "2/5/2020",
+    "type": " xử lý ốc bưu vàng đánh rãnh",
+    "stage": "CV khác"
+  },
+  {
+    "startDate": "1/5/2020",
+    "endDate": "6/5/2020",
+    "type": "CV khác",
+    "stage": "Làm đất"
+  },
+  {
+    "startDate": "1/5/2020",
+    "endDate": "3/5/2020",
+    "type": "CV khác",
+    "stage": "Chuẩn bị giống"
+  },
+  {
+    "startDate": "4/5/2020",
+    "endDate": "6/5/2020",
+    "type": "CV khác",
+    "stage": "Chuẩn bị giống"
+  },
+  {
+    "startDate": "7/5/2020",
+    "endDate": "8/5/2020",
+    "type": "CV khác",
+    "stage": "Gieo sạ"
+  },
+  {
+    "startDate": "9/5/2020",
+    "endDate": "9/5/2020",
+    "type": "Phun Thuốc",
+    "stage": "Gieo sạ"
+  },
+  {
+    "startDate": "13/5/2020",
+    "endDate": "14/5/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn cây con"
+  },
+  {
+    "startDate": "15/5/2020",
+    "endDate": "16/5/2020",
+    "type": "Nước",
+    "stage": "Giai đoạn cây con"
+  },
+  {
+    "startDate": "15/5/2020",
+    "endDate": "16/5/2020",
+    "type": "Phun Thuốc",
+    "stage": "Giai đoạn cây con"
+  },
+  {
+    "startDate": "16/5/2020",
+    "endDate": "17/5/2020",
+    "type": "CV khác",
+    "stage": "Giai đoạn cây con"
+  },
+  {
+    "startDate": "17/5/2020",
+    "endDate": "19/5/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn cây con"
+  },
+  {
+    "startDate": "1/6/2020",
+    "endDate": "1/6/2020",
+    "type": "CV khác",
+    "stage": "Giai đoạn cây con"
+  },
+  {
+    "startDate": "2/6/2020",
+    "endDate": "4/6/2020",
+    "type": "Bón phân",
+    "stage": "Giai đoạn tăng trưởng"
+  },
+  {
+    "startDate": "2/6/2020",
+    "endDate": "5/6/2020",
+    "type": "Bón phân",
+    "stage": "Giai đoạn tăng trưởng"
+  },
+  {
+    "startDate": "25/6/2020",
+    "endDate": "25/6/2020",
+    "type": "CV khác",
+    "stage": "Giai đoạn tăng trưởng"
+  },
+  {
+    "startDate": "26/6/2020",
+    "endDate": "27/6/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn đòng"
+  },
+  {
+    "startDate": "30/6/2020",
+    "endDate": "1/7/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn đòng"
+  },
+  {
+    "startDate": "13/7/2020",
+    "endDate": "14/7/2020",
+    "type": "Phun Thuốc",
+    "stage": "Giai đoạn đòng"
+  },
+  {
+    "startDate": "6/7/2020",
+    "endDate": "7/7/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn đòng"
+  },
+  {
+    "startDate": "20/7/2020",
+    "endDate": "20/7/2020",
+    "type": "CV khác",
+    "stage": "Giai đoạn đòng"
+  },
+  {
+    "startDate": "23/7/2020",
+    "endDate": "24/7/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn trổ và chín"
+  },
+  {
+    "startDate": "27/7/2020",
+    "endDate": "28/7/2020",
+    "type": "Phun Thuốc",
+    "stage": "Giai đoạn trổ và chín"
+  },
+  {
+    "startDate": "30/7/2020",
+    "endDate": "31/7/2020",
+    "type": "Bón Phân",
+    "stage": "Giai đoạn trổ và chín"
+  },
+  {
+    "startDate": "24/8/2020",
+    "endDate": "25/8/2020",
+    "type": "CV khác",
+    "stage": "Giai đoạn trổ và chín"
+  }
+]

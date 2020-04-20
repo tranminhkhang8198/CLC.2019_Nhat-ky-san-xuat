@@ -8,21 +8,15 @@ class Warehouse {
     this.model = {
       productId: null,
       productType: null,
-      price: null,
-      quantity: null,
-      patchCode: null,
-      goodReceiptId: null,
-      cooperativeId: null
+      goodReceiptInfo: null,
+      cooperativeId: null,
     };
   }
 
   initWithObject(obj) {
     this.model.productId = _.get(obj, "productId", null);
     this.model.productType = _.get(obj, "productType", null);
-    this.model.price = _.get(obj, "price", null);
-    this.model.quantity = _.get(obj, "quantity", null);
-    this.model.patchCode = _.get(obj, "patchCode", null);
-    this.model.goodReceiptId = _.get(obj, "goodReceiptId", null);
+    this.model.goodReceiptInfo = _.get(obj, "goodReceiptInfo", null);
     this.model.cooperativeId = _.get(obj, "cooperativeId", null);
   }
 
@@ -32,6 +26,8 @@ class Warehouse {
 
       // init model
       this.initWithObject(obj);
+
+      delete this.model._id;
 
       const warehouse = await Warehouse.insertOne(this.model);
 
@@ -58,7 +54,7 @@ class Warehouse {
       const Warehouse = this.app.db.collection("warehouses");
 
       const warehouse = await Warehouse.findOne({
-        _id: mongodb.ObjectID(id)
+        _id: mongodb.ObjectID(id),
       });
 
       return warehouse;
@@ -99,7 +95,7 @@ class Warehouse {
 
       const warehouse = await Warehouse.findOne({
         productId,
-        cooperativeId
+        cooperativeId,
       });
 
       return warehouse;
