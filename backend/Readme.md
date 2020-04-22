@@ -50,6 +50,11 @@ Start node server
 npm start
 ```
 
+Start server on Docker container
+```
+npm run docker:dev
+```
+
 ### Generate api docs
 
 ## Generate api docs and open
