@@ -68,7 +68,15 @@ $ docker rmi htx/api:v1
 3. Nguyen Quang Khai
 4. Nguyen Hoang Huynh
 
+## Phân tích chức năng
+### Quản lý hệ thống
+<img src="https://github.com/CTU-CICT/CLC.2019_Nhat-ky-san-xuat/blob/master/docs/srs/UC%20diagram/Actor%20-%20Quan%20ly%20he%20thong.png" width=60%>
 
+### Quản lý HTX
+<img src="https://github.com/CTU-CICT/CLC.2019_Nhat-ky-san-xuat/blob/master/docs/srs/UC%20diagram/Actor%20-%20Quan%20ly%20HTX.png" width=85%>
+
+### Nông dân
+<img src="https://github.com/CTU-CICT/CLC.2019_Nhat-ky-san-xuat/blob/master/docs/srs/UC%20diagram/Actor%20-%20Nong%20dan.png" width=70%>
 
 ## Project Roadmap
 
