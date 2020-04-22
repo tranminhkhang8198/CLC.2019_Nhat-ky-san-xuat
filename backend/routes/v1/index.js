@@ -10,6 +10,7 @@ const employeeRouter = require("../v1/employee.router");
 const eventRouter = require("./event.router");
 const cropTaskRouter = require("./cropTask.router");
 const diaryRouter = require('../v1/diary.router');
+const farmerDiaryRouter = require('../v1/farmerDiary.router');
 
 Router.use("/v1/api/test", testRoute);
 Router.use("/api/tools", toolRouter);
@@ -21,5 +22,6 @@ Router.use("/v1/api/cooperatives/", employeeRouter);
 Router.use("/api/events", eventRouter);
 Router.use("/api/crop-tasks", cropTaskRouter);
 Router.use('/v1/api/diary', diaryRouter);
+Router.use('/v1/api/farmer-diary', farmerDiaryRouter);
 
 module.exports = Router;
