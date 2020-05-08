@@ -75,6 +75,9 @@ $ docker rmi htx/api:v1
 ### Quản lý HTX
 <img src="https://github.com/CTU-CICT/CLC.2019_Nhat-ky-san-xuat/blob/master/docs/srs/UC%20diagram/Actor%20-%20Quan%20ly%20HTX.png" width=85%>
 
+- Bổ sung chức năng (UC) quản lý template mùa vụ
+
+
 ### Nông dân
 <img src="https://github.com/CTU-CICT/CLC.2019_Nhat-ky-san-xuat/blob/master/docs/srs/UC%20diagram/Actor%20-%20Nong%20dan.png" width=70%>
 
