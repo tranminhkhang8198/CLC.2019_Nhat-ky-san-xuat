@@ -78,6 +78,16 @@ $ docker rmi htx/api:v1
 ### Nông dân
 <img src="https://github.com/CTU-CICT/CLC.2019_Nhat-ky-san-xuat/blob/master/docs/srs/UC%20diagram/Actor%20-%20Nong%20dan.png" width=70%>
 
+#### Đã hoàn thành
+- Đăng nhập
+- 
+
+#### Chưa hoàn thành
+- Quản lý VTNN đã nhận: Kho => Vật tư đã nhận: bao gồm DS chưa xác nhận và đã xác nhận.
+- Thông báo
+- 
+
+
 ## Project Roadmap
 
 ### APIs
